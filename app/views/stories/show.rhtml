@@ -1,0 +1,28 @@
+<p>
+  <b>Summary:</b>
+  <%=h @story.summary %>
+</p>
+
+<p>
+  <b>Description:</b>
+  <%=h @story.description %>
+</p>
+
+<p>
+  <b>Points:</b>
+  <%=h @story.points %>
+</p>
+
+<p>
+  <b>Position:</b>
+  <%=h @story.position %>
+</p>
+
+<p>
+  <b>Complete:</b>
+  <%=h @story.complete %>
+</p>
+
+
+<%= link_to 'Edit', edit_story_path(@story) %> |
+<%= link_to 'Back', stories_path %>

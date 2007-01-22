@@ -1,0 +1,25 @@
+<div class="section">
+  <table class="section_header" cellspacing="0" cellpadding="0">
+    <tr>
+      <td>Stories</td>
+      <td align="right"><%= link_to 'New story', new_story_path %></td>
+    </tr>
+  </table>
+
+
+  <div id="stories" class="section_content">
+  <% for story in @stories %>
+    <table id="story_<%= story.id %>" class="draggable" cellspacing="0" cellpadding="0" width="100%">
+      <tr>
+        <td>
+          <%=h story.summary %>
+          (<%= story.points ? h( story.points ) : "&infin;" %>)
+          - <%= story.complete? ? "Complete" : "Incomplete" %></td>
+        <td align="right"><%= link_to 'Show', story_path(story) %> | <%= link_to 'Edit', edit_story_path(story) %> | <%= link_to 'Destroy', story_path(story), :confirm => 'Are you sure?', :method => :delete %></td>
+      </tr>
+     </table>
+  <% end %>
+  </div>
+  <%= sortable_element "stories", :tag => 'table', :url => reorder_stories_path %>
+</div>
+

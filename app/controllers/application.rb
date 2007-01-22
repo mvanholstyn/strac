@@ -1,7 +1,21 @@
-# Filters added to this controller apply to all controllers in the application.
-# Likewise, all the methods added will be available for all controllers.
-
 class ApplicationController < ActionController::Base
-  # Pick a unique cookie name to distinguish our session data from others'
   session :session_key => '_strac_session_id'
+
+  def render_error msg
+    render :update do |page|
+      page[:error].replace_html msg
+      page[:notice].hide
+      page.visual_effect :highlight, :error
+      yield page if block_given?
+    end
+  end
+
+  def render_notice msg
+    render :update do |page|
+      page[:notice].replace_html msg
+      page[:error].hide
+      page.visual_effect :highlight, :notice
+      yield page if block_given?
+    end
+  end
 end

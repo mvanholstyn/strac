@@ -1,0 +1,37 @@
+<h1>Editing story</h1>
+
+<%= error_messages_for :story %>
+
+<% form_for(:story, :url => story_path(@story), :html => { :method => :put }) do |f| %>
+  <p>
+    <b>Summary</b><br />
+    <%= f.text_field :summary %>
+  </p>
+
+  <p>
+    <b>Description</b><br />
+    <%= f.text_area :description %>
+  </p>
+
+  <p>
+    <b>Points</b><br />
+    <%= f.text_field :points %>
+  </p>
+
+  <p>
+    <b>Position</b><br />
+    <%= f.text_field :position %>
+  </p>
+
+  <p>
+    <b>Complete</b><br />
+    <%= f.check_box :complete %>
+  </p>
+
+  <p>
+    <%= submit_tag "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', story_path(@story) %> |
+<%= link_to 'Back', stories_path %>
