@@ -9,13 +9,15 @@
 
   <div id="stories" class="section_content">
   <% for story in @stories %>
-    <table id="story_<%= story.id %>" class="draggable" cellspacing="0" cellpadding="0" width="100%">
+    <table id="story_<%= story.id %>" class="draggable <%= story.complete? ? "complete" : "incomplete" %>" cellspacing="0" cellpadding="0" width="100%">
       <tr>
-        <td>
+        <td nowrap="nowrap">
+          <%= link_to 'show', story_path(story) %> |
+          <%= link_to 'edit', edit_story_path(story) %> |
+          <%= link_to 'destroy', story_path(story), :confirm => 'Are you sure?', :method => :delete %>
           <%=h story.summary %>
           (<%= story.points ? h( story.points ) : "&infin;" %>)
-          - <%= story.complete? ? "Complete" : "Incomplete" %></td>
-        <td align="right"><%= link_to 'Show', story_path(story) %> | <%= link_to 'Edit', edit_story_path(story) %> | <%= link_to 'Destroy', story_path(story), :confirm => 'Are you sure?', :method => :delete %></td>
+        </td>
       </tr>
      </table>
   <% end %>

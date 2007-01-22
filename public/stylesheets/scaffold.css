@@ -80,6 +80,10 @@ a:hover {
   cursor: move;
 }
 
+.complete {
+  background-color: #7ae7a8;
+}
+
 .section {
 
 }
