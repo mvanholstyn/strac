@@ -72,6 +72,10 @@ img {
   display: inline;
 }
 
+.inplaceeditor-field {
+  cursor: pointer;
+}
+
 #notice {
   color:green;
 }
