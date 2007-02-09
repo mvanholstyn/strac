@@ -68,6 +68,10 @@ img {
   border: none;
 }
 
+.inplaceeditor-form {
+  display: inline;
+}
+
 #notice {
   color:green;
 }
