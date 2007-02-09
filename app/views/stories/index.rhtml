@@ -2,13 +2,12 @@
   <table class="section_header" cellspacing="0" cellpadding="0">
     <tr>
       <td>Stories</td>
-      <td align="right"><%= link_to 'New story', new_story_path %></td>
+      <td align="right"><%= link_to 'create', new_story_path %></td>
     </tr>
   </table>
 
-
   <div id="stories" class="section_content">
-  <% for story in @stories %>
+  <% for story in @stories -%>
     <table id="story_<%= story.id %>" class="<%= story.complete? ? "complete" : "incomplete" %>" cellspacing="0" cellpadding="0" width="100%">
       <tr>
         <td nowrap="nowrap">
@@ -17,15 +16,12 @@
           <%= link_to image_tag( 'delete.gif' ), story_path(story), :confirm => 'Are you sure?', :method => :delete %>
           <%= image_tag "move.gif", :class => 'draggable' %>
           <b>Points:</b>
-          <span id="story_<%= story.id %>_points">
-            <%= story.points ? h( story.points ) : "&infin;" %>
-          </span>
-          - <%=h story.summary %>
-          <%= in_place_editor "story_#{story.id}_points" unless story.complete? -%>
+          <span id="story_<%= story.id %>_points" class="inplaceeditor-field"><%= story.points ? h( story.points ) : "&infin;" %></span> - <%=h story.summary %>
+          <%= in_place_editor "story_#{story.id}_points" %>
         </td>
       </tr>
      </table>
-  <% end %>
+  <% end -%>
   </div>
   <%= sortable_element "stories", :tag => 'table', :handle => 'draggable', :url => reorder_stories_path %>
 </div>
