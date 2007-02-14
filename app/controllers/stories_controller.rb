@@ -2,7 +2,7 @@ class StoriesController < ApplicationController
   # GET /stories
   # GET /stories.xml
   def index
-    @stories = Story.find(:all, :order => :position)
+    @stories = Story.find(:all, :order => 'complete = 1, position' )
 
     respond_to do |format|
       format.html # index.rhtml
@@ -111,6 +111,30 @@ class StoriesController < ApplicationController
         format.js do
           render_error %("#{@story.summary}" was not successfully updated.) do |page|
             page["story_#{@story.id}_points"].replace_html( @story.reload.points || "&infin;" )
+          end
+        end
+      end
+    end
+  end
+
+  # PUT /stories/1;update_complete
+  def update_complete
+    @story = Story.find(params[:id])
+    @story.complete = params[:story][:complete]
+
+    respond_to do |format|
+      if @story.save
+        @stories = Story.find(:all, :order =>  'complete = 1, position')
+        format.js do
+          render_notice %("#{@story.summary}" has been marked #{@story.complete? ? "" : "in" }complete.) do |page|
+            page['stories'].replace_html :partial => 'list'
+          end
+        end
+      else
+        format.js do
+          render_error %("#{@story.summary}" was not successfully updated.) do |page|
+            #TODO: Why does this cause a double check to be necessary?
+            page["story_#{@story.id}_complete"].checked = @story.reload.complete? ? "checked" : ""
           end
         end
       end
