@@ -128,6 +128,7 @@ class StoriesController < ApplicationController
         @stories = Story.find( :all, :order => :position )
         format.js do
           render_notice %("#{@story.summary}" has been marked #{@story.complete? ? "" : "in" }complete.) do |page|
+            #TODO: This breaks drag/drop reordering
             page['stories'].replace_html :partial => 'list'
           end
         end
