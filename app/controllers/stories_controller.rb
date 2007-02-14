@@ -80,6 +80,7 @@ class StoriesController < ApplicationController
   # PUT /stories/reorder
   def reorder
     respond_to do |format|
+      #TODO: This will fail if complete stories are hidden..."
       if Story.reorder params[:stories]
         format.html { render_notice "Priorities have been successfully updated." }
         format.xml { head :ok }
