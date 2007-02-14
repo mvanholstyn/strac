@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
     render :update do |page|
       page[:error].replace_html msg
       page[:notice].hide
+      page[:error].show
       page.visual_effect :highlight, :error
       yield page if block_given?
     end
@@ -14,6 +15,7 @@ class ApplicationController < ActionController::Base
     render :update do |page|
       page[:notice].replace_html msg
       page[:error].hide
+      page[:notice].show
       page.visual_effect :highlight, :notice
       yield page if block_given?
     end
