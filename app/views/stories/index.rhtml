@@ -17,11 +17,13 @@
           <%= image_tag "move.gif", :class => 'draggable' %>
           <b>Points:</b>
           <span id="story_<%= story.id %>_points" class="inplaceeditor-field"><%= story.points ? h( story.points ) : "&infin;" %></span> - <%=h story.summary %>
-          <%= in_place_editor "story_#{story.id}_points" %>
+          <%= in_place_editor "story_#{story.id}_points", :url => update_points_story_path( story ), :param_name => 'story[points]',
+                                                          :ajax_options => { :method => :put }, :eval_scripts => true,
+                                                          :ok_button => false, :size => 3 %>
         </td>
       </tr>
      </table>
   <% end -%>
   </div>
-  <%= sortable_element "stories", :tag => 'table', :handle => 'draggable', :url => reorder_stories_path %>
+  <%= sortable_element "stories", :tag => 'table', :handle => 'draggable', :url => reorder_stories_path, :method => :put %>
 </div>
