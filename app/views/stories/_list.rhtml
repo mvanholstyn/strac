@@ -1,0 +1,21 @@
+<% for story in @stories -%>
+  <table id="story_<%= story.id %>" class="<%= story.complete? ? "complete" : "incomplete" %>" cellspacing="0" cellpadding="0" width="100%">
+    <tr>
+      <td nowrap="nowrap">
+        <%= link_to image_tag( 'show.gif' ), story_path(story) %>
+        <%= link_to image_tag( 'edit.gif' ), edit_story_path(story) %>
+        <%= link_to image_tag( 'delete.gif' ), story_path(story), :confirm => 'Are you sure?', :method => :delete %>
+        <%= image_tag "move.gif", :class => 'draggable' %>
+        <%= check_box :story, :complete, :object => story, :id => "story_#{story.id}_complete" %>
+        <b>Points:</b>
+        <span id="story_<%= story.id %>_points" class="inplaceeditor-field"><%= story.points ? h( story.points ) : "&infin;" %></span> - <%=h story.summary %>
+        <%= in_place_editor "story_#{story.id}_points", :url => update_points_story_path( story ), :param_name => 'story[points]',
+                                                        :ajax_options => { :method => :put }, :eval_scripts => true,
+                                                        :ok_button => false, :size => 3 %>
+        <%= observe_field "story_#{story.id}_complete",
+                          :url => update_complete_story_path( story ), :method => :put,
+                          :with => "element.name + '=' + value" %>
+      </td>
+    </tr>
+   </table>
+<% end -%>
