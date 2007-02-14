@@ -2,7 +2,7 @@ class StoriesController < ApplicationController
   # GET /stories
   # GET /stories.xml
   def index
-    @stories = Story.find(:all, :order => 'complete = 1, position' )
+    @stories = Story.find( :all, :order => :position )
 
     respond_to do |format|
       format.html # index.rhtml
@@ -124,7 +124,7 @@ class StoriesController < ApplicationController
 
     respond_to do |format|
       if @story.save
-        @stories = Story.find(:all, :order =>  'complete = 1, position')
+        @stories = Story.find( :all, :order => :position )
         format.js do
           render_notice %("#{@story.summary}" has been marked #{@story.complete? ? "" : "in" }complete.) do |page|
             page['stories'].replace_html :partial => 'list'
