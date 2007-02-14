@@ -38,7 +38,7 @@ class StoriesController < ApplicationController
 
     respond_to do |format|
       if @story.save
-        flash[:notice] = 'Story was successfully created.'
+        flash[:notice] = %("#{@story.summary}" was successfully created.)
         format.html { redirect_to params[:redirect_to] || stories_url }
         format.xml  { head :created, :location => story_url(@story) }
       else
@@ -55,7 +55,7 @@ class StoriesController < ApplicationController
 
     respond_to do |format|
       if @story.update_attributes(params[:story])
-        flash[:notice] = 'Story was successfully updated.'
+        flash[:notice] = %("#{@story.summary}" was successfully updated.)
         format.html { redirect_to stories_url }
         format.xml  { head :ok }
       else
@@ -77,7 +77,7 @@ class StoriesController < ApplicationController
     end
   end
 
-  # POST /stories/reorder
+  # PUT /stories/reorder
   def reorder
     respond_to do |format|
       if Story.reorder params[:stories]
@@ -94,4 +94,27 @@ class StoriesController < ApplicationController
       end
     end
   end
+
+  # PUT /stories/1;update_points
+  def update_points
+    @story = Story.find(params[:id])
+    @story.points = params[:story][:points]
+
+    respond_to do |format|
+      if @story.save
+        format.js do
+          render_notice %("#{@story.summary}" was successfully updated.) do |page|
+            page["story_#{@story.id}_points"].replace_html( @story.points || "&infin;" )
+          end
+        end
+      else
+        format.js do
+          render_error %("#{@story.summary}" was not successfully updated.) do |page|
+            page["story_#{@story.id}_points"].replace_html( @story.reload.points || "&infin;" )
+          end
+        end
+      end
+    end
+  end
+
 end
