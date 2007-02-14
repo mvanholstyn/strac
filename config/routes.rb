@@ -1,7 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :stories,
                 :collection => { :reorder => :put },
-                :member => { :update_points => :put }
+                :member => { :update_points => :put, :update_complete => :put }
 
   # The priority is based upon order of creation: first created -> highest priority.
 
