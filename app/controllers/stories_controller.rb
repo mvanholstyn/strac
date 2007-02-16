@@ -2,7 +2,7 @@ class StoriesController < ApplicationController
   # GET /stories
   # GET /stories.xml
   def index
-    @stories = Story.find( :all, :order => :position )
+    @stories = Story.find( :all, :include => :tags, :order => :position )
 
     respond_to do |format|
       format.html # index.rhtml
@@ -13,7 +13,7 @@ class StoriesController < ApplicationController
   # GET /stories/1
   # GET /stories/1.xml
   def show
-    @story = Story.find(params[:id])
+    @story = Story.find(params[:id], :include => :tags)
 
     respond_to do |format|
       format.html # show.rhtml
@@ -28,7 +28,7 @@ class StoriesController < ApplicationController
 
   # GET /stories/1;edit
   def edit
-    @story = Story.find(params[:id])
+    @story = Story.find(params[:id], :include => :tags)
   end
 
   # POST /stories
@@ -51,7 +51,7 @@ class StoriesController < ApplicationController
   # PUT /stories/1
   # PUT /stories/1.xml
   def update
-    @story = Story.find(params[:id])
+    @story = Story.find(params[:id], :include => :tags)
 
     respond_to do |format|
       if @story.update_attributes(params[:story])
@@ -68,7 +68,7 @@ class StoriesController < ApplicationController
   # DELETE /stories/1
   # DELETE /stories/1.xml
   def destroy
-    @story = Story.find(params[:id])
+    @story = Story.find(params[:id], :include => :tags)
     @story.destroy
 
     respond_to do |format|
@@ -98,7 +98,7 @@ class StoriesController < ApplicationController
 
   # PUT /stories/1;update_points
   def update_points
-    @story = Story.find(params[:id])
+    @story = Story.find(params[:id], :include => :tags)
     @story.points = params[:story][:points]
 
     respond_to do |format|
@@ -120,12 +120,12 @@ class StoriesController < ApplicationController
 
   # PUT /stories/1;update_complete
   def update_complete
-    @story = Story.find(params[:id])
+    @story = Story.find(params[:id], :include => :tags)
     @story.complete = params[:story][:complete]
 
     respond_to do |format|
       if @story.save
-        @stories = Story.find( :all, :order => :position )
+        @stories = Story.find( :all, :include => :tags, :order => :position )
         format.js do
           render_notice %("#{@story.summary}" has been marked #{@story.complete? ? "" : "in" }complete.) do |page|
             #TODO: This breaks drag/drop reordering
