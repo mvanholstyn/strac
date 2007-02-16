@@ -3,6 +3,7 @@ class Story < ActiveRecord::Base
 
   acts_as_list :scope => :iteration_id
   acts_as_taggable
+  acts_as_textiled :description
 
   validates_presence_of :summary
   validates_numericality_of :points, :position, :allow_nil => true

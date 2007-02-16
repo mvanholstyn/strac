@@ -19,7 +19,7 @@ class StoryTest < Test::Unit::TestCase
 
     story.reload
     assert_equal 'Summary', story.summary
-    assert_equal 'Description', story.description
+    assert_equal 'Description', story.description_source
     assert_equal 1, story.points
     assert_equal false, story.complete
     assert_equal 'tag', story.tag_list
