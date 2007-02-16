@@ -3,6 +3,28 @@ require File.dirname(__FILE__) + '/../test_helper'
 class StoryTest < Test::Unit::TestCase
   fixtures :stories
 
+  def teardown
+    Story.delete_all
+  end
+
+  def test_creating_a_story
+    story = Story.new( :summary=>"Summary",
+                          :description=>"Description",
+                          :points=>"1",
+                          :complete=>false,
+                          :tag_list=>'tag' )
+    count = Story.count
+    assert story.save
+    assert_equal count+1, Story.count
+
+    story.reload
+    assert_equal 'Summary', story.summary
+    assert_equal 'Description', story.description
+    assert_equal 1, story.points
+    assert_equal false, story.complete
+    assert_equal 'tag', story.tag_list
+  end
+
   def test_summary_attribute_should_be_required
     story = Story.new
     story.valid?
@@ -74,4 +96,16 @@ class StoryTest < Test::Unit::TestCase
     assert_equal 1, Story.find( 1 ).position
     assert_equal 0, Story.find( 2 ).position
   end
+
+  def test_story_should_support_tags
+    tag_list = 'tag1, tag2, tag3'
+    story = Story.create( :summary => "Summary",
+                          :description => "Description",
+                          :tag_list => tag_list )
+    assert tag_list == story.tag_list
+    story.reload
+    assert tag_list == story.tag_list
+  end
+
 end
+

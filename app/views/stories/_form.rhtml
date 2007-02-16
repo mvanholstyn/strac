@@ -1,0 +1,23 @@
+  <p>
+    <b>Summary</b><br />
+    <%= form.text_field :summary %>
+  </p>
+
+  <p>
+    <b>Description</b><br />
+    <%= form.text_area :description %>
+  </p>
+
+  <p>
+    <b>Points</b><br />
+    <%= form.text_field :points %>
+  </p>
+
+  <p>
+    <b>Complete</b><br />
+    <%= form.check_box :complete %>
+  </p>
+  
+  <p>
+    <b>Tags:</b> <%= form.text_field :tag_list %> <i>(tags are comma separated)</i>
+  </p>
