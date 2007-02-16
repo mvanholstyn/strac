@@ -112,3 +112,8 @@ img {
 .section_content {
   padding: 5px;
 }
+
+.tags {
+  color: #868686;
+  font-style: italic;
+}
