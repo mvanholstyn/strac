@@ -3,7 +3,8 @@
   <div id="story_<%= story.id %>" class="<%= story.complete? ? "complete" : "incomplete" %>" width="100%">
     <%= link_to image_tag( 'show.gif' ), story_path(story) %>
     <%= link_to image_tag( 'edit.gif' ), edit_story_path(story) %>
-    <%= link_to image_tag( 'delete.gif' ), story_path(story), :confirm => 'Are you sure?', :method => :delete %>
+    <%= link_to image_tag( 'delete.gif' ), story_path(story), :method => :delete,
+                :confirm => "Are you sure you would like to delete the story \"#{story.summary}\"?" %>
     <%= image_tag "move.gif", :class => 'draggable' %>
     <%= check_box :story, :complete, :object => story, :id => "story_#{story.id}_complete" %>
     <b>Points:</b>

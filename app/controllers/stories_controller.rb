@@ -40,8 +40,10 @@ class StoriesController < ApplicationController
 
     respond_to do |format|
       if @story.save
-        flash[:notice] = %("#{@story.summary}" was successfully created.)
-        format.html { redirect_to params[:redirect_to] || stories_url }
+        format.html do
+          flash[:notice] = %("#{@story.summary}" was successfully created.)
+          redirect_to params[:redirect_to] || stories_url
+        end
         format.xml  { head :created, :location => story_url(@story) }
       else
         format.html { load_iterations; render :action => "new" }
@@ -57,8 +59,10 @@ class StoriesController < ApplicationController
 
     respond_to do |format|
       if @story.update_attributes(params[:story])
-        flash[:notice] = %("#{@story.summary}" was successfully updated.)
-        format.html { redirect_to stories_url }
+        format.html do
+          flash[:notice] = %("#{@story.summary}" was successfully updated.)
+          redirect_to stories_url
+        end
         format.xml  { head :ok }
       else
         format.html { load_iterations; render :action => "edit" }
@@ -74,7 +78,10 @@ class StoriesController < ApplicationController
     @story.destroy
 
     respond_to do |format|
-      format.html { redirect_to stories_url }
+      format.html do
+        flash[:notice] = %("#{@story.summary}" was successfully destroyed.)
+        redirect_to stories_url
+      end
       format.xml  { head :ok }
     end
   end
