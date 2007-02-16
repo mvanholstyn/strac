@@ -58,9 +58,9 @@ class StoriesControllerTest < Test::Unit::TestCase
 
   #TODO: This could be far more robust
   def test_post_to_reorder_should_attempt_to_reorder
-    Story.expects( :reorder ).with( [ 2, 1 ] ).returns( true )
+    Story.expects( :reorder ).with( [ 2, 1 ], :iteration_id => nil ).returns( true )
 
-    post :reorder, :stories => [ 2, 1 ]
+    post :reorder, :iteration_nil => [ 2, 1 ]
     assert_response :success
   end
 end

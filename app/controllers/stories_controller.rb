@@ -1,8 +1,10 @@
 class StoriesController < ApplicationController
+  before_filter :load_iterations
+
   # GET /stories
   # GET /stories.xml
   def index
-    @stories = Story.find( :all, :include => :tags, :order => :position )
+    @stories = Story.find( :all, :include => [ :tags, :iteration ], :order => :position ).group_by( &:iteration )
 
     respond_to do |format|
       format.html # index.rhtml
@@ -81,7 +83,9 @@ class StoriesController < ApplicationController
   def reorder
     respond_to do |format|
       #TODO: This will fail if complete stories are hidden..."
-      if Story.reorder params[:stories]
+      param_to_use = params.select { |k,v| k =~ /^iteration_(\d+|nil)$/ }.first
+      if Story.reorder( param_to_use.last,
+                        :iteration_id => eval( param_to_use.first.scan( /^iteration_(\d+|nil)$/ ).flatten.first ) )
         format.html { render_notice "Priorities have been successfully updated." }
         format.xml { head :ok }
       else
@@ -125,11 +129,10 @@ class StoriesController < ApplicationController
 
     respond_to do |format|
       if @story.save
-        @stories = Story.find( :all, :include => :tags, :order => :position )
+        stories = Story.find( :all, :include => [ :tags, :iteration ], :conditions => { :iteration_id => @story.iteration }, :order => :position )
         format.js do
           render_notice %("#{@story.summary}" has been marked #{@story.complete? ? "" : "in" }complete.) do |page|
-            #TODO: This breaks drag/drop reordering
-            page['stories'].replace_html :partial => 'list'
+            page["story_#{@story.id}"].className = @story.complete? ? "complete" : "incomplete"
           end
         end
       else
@@ -143,4 +146,8 @@ class StoriesController < ApplicationController
     end
   end
 
+  private
+  def load_iterations
+    @iterations = Iteration.find :all
+  end
 end

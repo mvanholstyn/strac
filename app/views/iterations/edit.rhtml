@@ -1,0 +1,22 @@
+<h1>Editing iteration</h1>
+
+<%= error_messages_for :iteration %>
+
+<% form_for(:iteration, :url => iteration_path(@iteration), :html => { :method => :put }) do |f| %>
+  <p>
+    <b>Start date</b><br />
+    <%= f.date_select :start_date %>
+  </p>
+
+  <p>
+    <b>End</b><br />
+    <%= f.date_select :end_date %>
+  </p>
+
+  <p>
+    <%= submit_tag "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', iteration_path(@iteration) %> |
+<%= link_to 'Back', iterations_path %>

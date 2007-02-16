@@ -1,21 +1,13 @@
-<% for story in @stories -%>
-  <div id="story_<%= story.id %>" class="<%= story.complete? ? "complete" : "incomplete" %>" width="100%">
-    <%= link_to image_tag( 'show.gif' ), story_path(story) %>
-    <%= link_to image_tag( 'edit.gif' ), edit_story_path(story) %>
-    <%= link_to image_tag( 'delete.gif' ), story_path(story), :confirm => 'Are you sure?', :method => :delete %>
-    <%= image_tag "move.gif", :class => 'draggable' %>
-    <%= check_box :story, :complete, :object => story, :id => "story_#{story.id}_complete" %>
-    <b>Points:</b>
-    <span id="story_<%= story.id %>_points" class="inplaceeditor-field"><%= story.points ? h( story.points ) : "&infin;" %></span>
-     - <%=h story.summary %>
-    <% unless story.tags.empty? -%>
-      <span class="tags">(<%=h story.tag_list %>)</span>
-    <% end-%>
-    <%= in_place_editor "story_#{story.id}_points", :url => update_points_story_path( story ), :param_name => 'story[points]',
-                                                    :ajax_options => { :method => :put }, :eval_scripts => true,
-                                                    :ok_button => false, :size => 3 %>
-    <%= observe_field "story_#{story.id}_complete",
-                      :url => update_complete_story_path( story ), :method => :put,
-                      :with => "element.name + '=' + value" %>
+<% for iteration in @iterations + [ nil ] -%>
+  <b><%=h iteration ? iteration.name : "Whenever..." %></b>
+  <div id="iteration_<%= iteration ? iteration.id : "nil" %>">
+    <%= render :partial  => 'iteration', :locals => { :stories => @stories[iteration] || [] } %>
   </div>
+  <br />
+<% end -%>
+<% iteration_list_ids = ( @iterations + [ nil ] ).map{ |i| "iteration_#{i ? i.id : "nil"}" } -%>
+<% for iteration in iteration_list_ids -%>
+  <%= sortable_element iteration,
+                       :url => reorder_stories_path, :method => :put,
+                       :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => iteration_list_ids -%>
 <% end -%>

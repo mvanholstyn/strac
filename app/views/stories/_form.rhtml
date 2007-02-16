@@ -14,10 +14,11 @@
   </p>
 
   <p>
-    <b>Complete</b><br />
-    <%= form.check_box :complete %>
+    <b>Iteration</b><br />
+    <%= form.collection_select :iteration_id, @iterations, :id, :name, :include_blank => true %>
   </p>
-  
+
   <p>
-    <b>Tags:</b> <%= form.text_field :tag_list %> <i>(tags are comma separated)</i>
+    <b>Tags:</b><br />
+     <%= form.text_field :tag_list %> <i>(tags are comma separated)</i>
   </p>

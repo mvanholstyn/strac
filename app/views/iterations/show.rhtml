@@ -1,0 +1,13 @@
+<p>
+  <b>Start date:</b>
+  <%=h @iteration.start_date %>
+</p>
+
+<p>
+  <b>End:</b>
+  <%=h @iteration.end_date %>
+</p>
+
+
+<%= link_to 'Edit', edit_iteration_path(@iteration) %> |
+<%= link_to 'Back', iterations_path %>

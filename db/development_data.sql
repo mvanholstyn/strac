@@ -16,13 +16,24 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Dumping data for table `iterations`
+--
+
+
+/*!40000 ALTER TABLE `iterations` DISABLE KEYS */;
+LOCK TABLES `iterations` WRITE;
+INSERT INTO `iterations` VALUES (1,'2007-02-05','2007-02-09'),(2,'2007-02-12','2007-02-16');
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `iterations` ENABLE KEYS */;
+
+--
 -- Dumping data for table `schema_info`
 --
 
 
 /*!40000 ALTER TABLE `schema_info` DISABLE KEYS */;
 LOCK TABLES `schema_info` WRITE;
-INSERT INTO `schema_info` VALUES (1);
+INSERT INTO `schema_info` VALUES (4);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `schema_info` ENABLE KEYS */;
 
@@ -33,9 +44,31 @@ UNLOCK TABLES;
 
 /*!40000 ALTER TABLE `stories` DISABLE KEYS */;
 LOCK TABLES `stories` WRITE;
-INSERT INTO `stories` VALUES (5,'CRUD Stories','Users should be able CRUD Stories.\r\n\r\nAttributes:\r\n * summary, string\r\n * description, text\r\n * points, integer\r\n * posi\ntion, integer\r\n * complete, boolean',1,0,1),(6,'drag/drop reordering of stories','Stories should be able to be reordered by a drag/drop interface',2,1,1),(7,'inplace editing of story point values','Users should be able to update the point value of a story in place in the listing page.',2,3,1),(8,'CRUD Iterations','Users should be able to create iterations.\nIterations have start date, end date, and a name. \r\n\r\nQuestion: Should iterations be allowed to overlap?',2,8,0),(9,'Link Stories/Iterations','Stories should be able to be assi\ngned to iterations. This should be optional.',1,9,0),(10,'Textarea input should allow formatting','Some type of formatting should be added to text areas. This could be either a WYS\r\nIWYG or some type of formatting language like textile.',2,7,0),(11,'Add/edit/view stories from listing page','User should be able to add stories from the listing page, rather than\nhaving to go to a separate page.',4,6,0),(12,'Add filtering to story listing','The story listing should be able to be filtered by iteration (any, none, specific)',1,20,0),(13,'Add sorting/grouping on story listing','The story listing should be storted/grouped by iteration. \r\n\r\nThis will also involve updating the the drag/drop reordering interface to allow\n drag/drop between iterations. \r\n * update the positions AND iteration_id of the stories.\r\n * Stories should be updated to be positioned within their iteration',2,21,0),(14,'Update format of story listing','The story listing page should visually indicate whether a story is complete or incomplete.\r\n\r\nPoints should be displayed in a uniform location.\r\nn\r\nImprove visual relationship between the story summary and the Show/Edit/Destroy links',3,2,1),(15,'Allow marking stories complete from listing','As a user, I would like to be able to click a check box from the listing page to mark a story complete.',1,4,1),(16,'CRUD Projects','',2,10,0),(17,'Link Projects/Iterations','',2,11,0),(18,'Link Projects/Stories','Stories currently can belong to iterations. Stories should also belong to a project so that stories which are not yet placed into an iteration can be diaplayed',3,12,0),(19,'CRUD Users','',2,13,0),(20,'CRUD Companies','',2,15,0),(21,'Link Users/Companies','',1,16,0),(22,'Setup authentication','use lwt authentication system',2,14,0),(23,'Allow stories to be assigned a responsibly party','This can be a company or a user',3,17,0),(24,'Add comments to stories','Stories should be able to have comments',3,18,0),(25,'CRUD files','Files should be able to be uploaded to a project. These should be versioned',3,19,0),(26,'Look into UJS','The story listing page is already looking cluttered with javascript. UJS should be seriously looked into. This would allow much cleaner html pages, as well as possible speed benefits from have lighterweight pages.',4,5,0);
+INSERT INTO `stories` VALUES (5,'CRUD Stories','Users should be able CRUD Stories.\r\n\r\nAttributes:\r\n * summary, string\r\n * description, text\r\n * points, integer\r\n * posi\r\ntion, integer\r\n * complete, boolean',1,0,1,1),(6,'drag/drop reordering of stories','Stories should be able to be reordered by a drag/drop interface',2,1,1,1),(7,'inplace editing of story point values','Users should be able to update the point value of a story in place in the listing page.',2,0,1,2),(8,'CRUD Iterations','Users should be able to create iterations.\r\nIterations have start date, end date, and a name. \r\n\r\nQuestion: Should iterations be allowed to overlap?',2,3,1,2),(9,'Link Stories/Iterations','Stories should be able to be assi\ngned to iterations. This should be optional.',1,4,1,2),(10,'Textarea input should allow formatting','Some type of formatting should be added to text areas. This could be either a WYS\r\nIWYG or some type of formatting language like textile.',2,3,0,NULL),(11,'Add/edit/view stories from listing page','User should be able to add stories from the listing page, rather than\nhaving to go to a separate page.',4,4,0,NULL),(12,'Add filtering to story listing','The story listing should be able to be filtered by iteration (any, none, specific)',2,16,0,NULL),(13,'Add sorting/grouping on story listing','The story listing should be storted/grouped by iteration. \r\n\r\nThis will also involve updating the the drag/drop reordering interface to allow\n drag/drop between iterations. \r\n * update the positions AND iteration_id of the stories.\r\n * Stories should be updated to be positioned within their iteration',2,17,0,NULL),(14,'Update format of story listing','The story listing page should visually indicate whether a story is complete or incomplete.\r\n\r\nPoints should be displayed in a uniform location.\r\nn\r\nImprove visual relationship between the story summary and the Show/Edit/Destroy links',3,2,1,1),(15,'Allow marking stories complete from listing','As a user, I would like to be able to click a check box from the listing page to mark a story complete.',1,1,1,2),(16,'CRUD Projects','',2,5,0,NULL),(17,'Link Projects/Iterations','',2,6,0,NULL),(18,'Link Projects/Stories','Stories currently can belong to iterations. Stories should also belong to a project so that stories which are not yet placed into an iteration can be diaplayed',3,14,0,NULL),(19,'CRUD Users','',2,7,0,NULL),(20,'CRUD Companies','',2,9,0,NULL),(21,'Link Users/Companies','',1,10,0,NULL),(22,'Setup authentication','use lwt authentication system',2,8,0,NULL),(23,'Allow stories to be assigned a responsibly party','This can be a company or a user',3,11,0,NULL),(24,'Add comments to stories','Stories should be able to have comments',3,15,0,NULL),(25,'CRUD files','Files should be able to be uploaded to a project. These should be versioned',3,12,0,NULL),(26,'Look into UJS','The story listing page is already looking cluttered with javascript. UJS should be seriously looked into. This would allow much cleaner html pages, as well as possible speed benefits from have lighterweight pages.',4,13,0,NULL),(27,'Allow stories to be tagged','Stroies should be able to be assigned tags. These should who up in the list page after the summary.',2,2,1,2),(28,'Allow inline editing of tags','tags should be editable in the list view',2,1,0,NULL),(29,'Allow inline editing of story summary','Stories summaries should be editable from the list view',2,0,0,NULL),(30,'Tag text fields should be auto completers','When typing in a tag text field, it should auto complete with tags that already exist in the system',3,2,0,NULL);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `stories` ENABLE KEYS */;
+
+--
+-- Dumping data for table `taggings`
+--
+
+
+/*!40000 ALTER TABLE `taggings` DISABLE KEYS */;
+LOCK TABLES `taggings` WRITE;
+INSERT INTO `taggings` VALUES (1,1,26,'Story'),(2,2,27,'Story'),(4,4,5,'Story'),(5,5,5,'Story'),(6,6,6,'Story'),(7,2,28,'Story'),(8,2,30,'Story');
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `taggings` ENABLE KEYS */;
+
+--
+-- Dumping data for table `tags`
+--
+
+
+/*!40000 ALTER TABLE `tags` DISABLE KEYS */;
+LOCK TABLES `tags` WRITE;
+INSERT INTO `tags` VALUES (1,'javascript'),(2,'tags'),(3,'crud stories'),(4,'crud'),(5,'stories'),(6,'priority');
+UNLOCK TABLES;
+/*!40000 ALTER TABLE `tags` ENABLE KEYS */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

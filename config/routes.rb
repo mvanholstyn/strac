@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :iterations
+
   map.resources :stories,
                 :collection => { :reorder => :put },
                 :member => { :update_points => :put, :update_complete => :put }
