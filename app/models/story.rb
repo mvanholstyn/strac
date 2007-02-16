@@ -2,7 +2,7 @@ class Story < ActiveRecord::Base
   acts_as_list
   acts_as_taggable
 
-  validates_presence_of :summary, :description
+  validates_presence_of :summary
   validates_numericality_of :points, :position, :allow_nil => true
 
   #TODO: Make this one SQL statement. Return true/false based on whether or not this was successful

@@ -37,18 +37,6 @@ class StoryTest < Test::Unit::TestCase
     assert_nil story.errors.on( :summary )
   end
 
-  def test_description_attribute_should_be_required
-    story = Story.new
-    story.valid?
-
-    assert_instance_of String, story.errors.on( :description )
-
-    story.description = "My Description"
-    story.valid?
-
-    assert_nil story.errors.on( :description )
-  end
-
   def test_points_attribute_should_not_be_required
     story = Story.new
     story.valid?
