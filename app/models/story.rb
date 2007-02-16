@@ -7,11 +7,19 @@ class Story < ActiveRecord::Base
   validates_presence_of :summary
   validates_numericality_of :points, :position, :allow_nil => true
 
-  #TODO: Make this one SQL statement. Return true/false based on whether or not this was successful
+  #TODO: Is there a better way to put this into a single SQL statement?
   def self.reorder ids, attributes = {}
+    attribute_names = attributes.merge( :id => nil, :position => nil ).keys
+    sql = "INSERT INTO #{self.table_name}(#{attribute_names.join( ",")}) VALUES"
+    sql_values, values = [], []
     ids.each_with_index do |story_id, index|
-      Story.update story_id, attributes.merge( :position => index )
+      attributes = attributes.merge( :id => story_id, :position => index )
+      sql_values << "(#{attribute_names.map { "?" }.join( "," )})"
+      values.push( *attribute_names.map { |a| attributes[a] } )
     end
+    sql << sql_values.join( "," ) << " ON DUPLICATE KEY UPDATE " <<
+      "#{attribute_names.map { |a| "#{a}=VALUES(#{a})" }.join( "," )}"
+    connection.insert( sanitize_sql( [ sql ] + values ) )
     true
   rescue Exception => e
     logger.error "Rescued Exception in Story.reorder: #{e.to_s}\n\t#{e.backtrace.join("\n\t")}"
