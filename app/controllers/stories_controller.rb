@@ -79,28 +79,26 @@ class StoriesController < ApplicationController
     end
   end
 
-  # PUT /stories/reorder
+  # PUT /stories/reorder.js
   def reorder
     respond_to do |format|
       #TODO: This will fail if complete stories are hidden..."
       param_to_use = params.select { |k,v| k =~ /^iteration_(\d+|nil)$/ }.first
       if Story.reorder( param_to_use.last,
                         :iteration_id => eval( param_to_use.first.scan( /^iteration_(\d+|nil)$/ ).flatten.first ) )
-        format.html { render_notice "Priorities have been successfully updated." }
-        format.xml { head :ok }
+        format.js { render_notice "Priorities have been successfully updated." }
       else
-        format.html do
+        format.js do
           render_error "There was an error while updating priorties. If the problem persists, please contact technical support." do |page|
             #TODO: If unsuccessful, replace the stories list
             #page.replace_html "stories", ""
           end
         end
-        format.xml { render :xml => "" }
       end
     end
   end
 
-  # PUT /stories/1;update_points
+  # PUT /stories/1;update_points.js
   def update_points
     @story = Story.find(params[:id], :include => :tags)
     @story.points = params[:story][:points]
@@ -122,7 +120,7 @@ class StoriesController < ApplicationController
     end
   end
 
-  # PUT /stories/1;update_complete
+  # PUT /stories/1;update_complete.js
   def update_complete
     @story = Story.find(params[:id], :include => :tags)
     @story.complete = params[:story][:complete]
