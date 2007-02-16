@@ -1,5 +1,5 @@
 class StoriesController < ApplicationController
-  before_filter :load_iterations
+  before_filter :load_iterations, :only => [ :index, :new, :edit ]
 
   # GET /stories
   # GET /stories.xml
@@ -44,7 +44,7 @@ class StoriesController < ApplicationController
         format.html { redirect_to params[:redirect_to] || stories_url }
         format.xml  { head :created, :location => story_url(@story) }
       else
-        format.html { render :action => "new" }
+        format.html { load_iterations; render :action => "new" }
         format.xml  { render :xml => @story.errors.to_xml }
       end
     end
@@ -61,7 +61,7 @@ class StoriesController < ApplicationController
         format.html { redirect_to stories_url }
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
+        format.html { load_iterations; render :action => "edit" }
         format.xml  { render :xml => @story.errors.to_xml }
       end
     end
@@ -122,12 +122,11 @@ class StoriesController < ApplicationController
 
   # PUT /stories/1;update_complete.js
   def update_complete
-    @story = Story.find(params[:id], :include => :tags)
+    @story = Story.find(params[:id], :include => [ :tags, :iteration ] )
     @story.complete = params[:story][:complete]
 
     respond_to do |format|
       if @story.save
-        stories = Story.find( :all, :include => [ :tags, :iteration ], :conditions => { :iteration_id => @story.iteration }, :order => :position )
         format.js do
           render_notice %("#{@story.summary}" has been marked #{@story.complete? ? "" : "in" }complete.) do |page|
             page["story_#{@story.id}"].className = @story.complete? ? "complete" : "incomplete"
