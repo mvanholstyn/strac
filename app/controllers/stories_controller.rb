@@ -148,6 +148,6 @@ class StoriesController < ApplicationController
 
   private
   def load_iterations
-    @iterations = Iteration.find :all
+    @iterations = Iteration.find :all, :order => 'start_date'
   end
 end
