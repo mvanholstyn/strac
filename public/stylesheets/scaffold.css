@@ -117,3 +117,18 @@ img {
   color: #868686;
   font-style: italic;
 }
+
+.story_card {
+  margin-bottom: 3px;
+}
+
+.story_card .header {
+  border: solid #94bad5 1px;
+  background-image: url(/images/notecard.png);
+}
+
+.story_card .content {
+  border: solid #94bad5 1px;
+  border-top: none;
+  background-image: url(/images/notecard.png);
+}

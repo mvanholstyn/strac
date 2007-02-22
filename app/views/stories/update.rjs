@@ -1,0 +1,6 @@
+page[:notice].replace_html %("#{@story.summary}" was successfully updated.)
+page[:error].hide
+page[:notice].show
+page.visual_effect :highlight, :notice
+
+page["story_#{@story.id}_list"].replace_html :partial => 'story'

@@ -31,6 +31,11 @@ class StoriesController < ApplicationController
   # GET /stories/1;edit
   def edit
     @story = Story.find(params[:id], :include => :tags)
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # POST /stories
@@ -44,10 +49,10 @@ class StoriesController < ApplicationController
           flash[:notice] = %("#{@story.summary}" was successfully created.)
           redirect_to params[:redirect_to] || stories_url
         end
-        format.xml  { head :created, :location => story_url(@story) }
+        format.xml { head :created, :location => story_url(@story) }
       else
         format.html { load_iterations; render :action => "new" }
-        format.xml  { render :xml => @story.errors.to_xml }
+        format.xml { render :xml => @story.errors.to_xml }
       end
     end
   end
@@ -63,10 +68,12 @@ class StoriesController < ApplicationController
           flash[:notice] = %("#{@story.summary}" was successfully updated.)
           redirect_to stories_url
         end
-        format.xml  { head :ok }
+        format.js
+        format.xml { head :ok }
       else
         format.html { load_iterations; render :action => "edit" }
-        format.xml  { render :xml => @story.errors.to_xml }
+        format.js { load_iterations; render :action => "edit" }
+        format.xml { render :xml => @story.errors.to_xml }
       end
     end
   end

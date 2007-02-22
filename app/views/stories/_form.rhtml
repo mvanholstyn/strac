@@ -1,24 +1,54 @@
-  <p>
-    <b>Summary</b><br />
-    <%= form.text_field :summary %>
-  </p>
-
-  <p>
-    <b>Description</b><br />
-    <%= form.text_area :description %>
-  </p>
-
-  <p>
-    <b>Points</b><br />
-    <%= form.text_field :points %>
-  </p>
-
-  <p>
-    <b>Iteration</b><br />
-    <%= form.collection_select :iteration_id, @iterations, :id, :name, :include_blank => true %>
-  </p>
-
-  <p>
-    <b>Tags:</b><br />
-     <%= form.text_field :tag_list %> <i>(tags are comma separated)</i>
-  </p>
+<table>
+  <tr>
+    <td>
+      <table>
+        <tr>
+          <td>
+            <b>Description</b>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <%= form.text_area :description %>
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td valign="top">
+      <table>
+        <tr>
+          <td>
+            <b>Summary</b>
+          </td>
+          <td>
+            <%= form.text_field :summary %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <b>Points</b>
+          </td>
+          <td>
+            <%= form.text_field :points %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <b>Iteration</b>
+          </td>
+          <td>
+            <%= form.collection_select :iteration_id, @iterations, :id, :name, :include_blank => true %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <b>Tags</b>
+          </td>
+          <td>
+            <%= form.text_field :tag_list %> <i>(tags are comma separated)</i>
+          </td>
+        </tr>
+      <table>
+    </td>
+  </tr>
+</table>

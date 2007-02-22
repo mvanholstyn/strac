@@ -1,0 +1,2 @@
+page["story_#{@story.id}_edit"].replace_html :partial => 'edit'
+page["story_#{@story.id}_edit"].show

@@ -1,0 +1,19 @@
+<%= link_to_remote image_tag( 'edit.gif' ), :url => edit_story_path(story), :method => :get %>
+<%= link_to image_tag( 'delete.gif' ), story_path(story), :method => :delete,
+            :confirm => "Are you sure you would like to delete the story \"#{story.summary}\"?" %>
+<%= image_tag "move.gif", :class => 'draggable' %>
+<%= link_to image_tag( 'time.png' ) %>
+<%= check_box :story, :complete, :object => story, :id => "story_#{story.id}_complete" %>
+<b>Points:</b>
+<span id="story_<%= story.id %>_points" class="inplaceeditor-field"><%= story.points ? h( story.points ) : "&infin;" %></span>
+ -
+<%=h story.summary %>
+<% unless story.tags.empty? -%>
+  <span class="tags">(<%=h story.tag_list %>)</span>
+<% end-%>
+<%= in_place_editor "story_#{story.id}_points", :url => update_points_story_path( story ), :param_name => 'story[points]',
+                                                :ajax_options => { :method => :put }, :eval_scripts => true,
+                                                :ok_button => false, :size => 3 %>
+<%= observe_field "story_#{story.id}_complete",
+                  :url => update_complete_story_path( story ), :method => :put,
+                  :with => "element.name + '=' + value" %>
