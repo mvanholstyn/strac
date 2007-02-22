@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  session :session_key => '_strac_session_id'
+  session :session_key => '_strac_session_id', :secret => "MHS"
 
   def render_error msg
     render :update do |page|
