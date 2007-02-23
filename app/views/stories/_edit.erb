@@ -1,7 +1,7 @@
 <%= error_messages_for :story %>
 
 <% remote_form_for(:story, :url => story_path(@project, @story), :html => { :method => :put }) do |form| %>
-  <%= render :partial=>'stories/form', :locals=>{ :form => form } %>
+  <%= render :partial => 'form', :locals => { :form => form } %>
   <p>
     <%= submit_tag "Update" %> or <%= link_to( "cancel", "#", :onclick => update_page { |page| page["story_#{@story.id}_view"].hide; page << "return false;" } ) %>
   </p>

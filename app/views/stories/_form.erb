@@ -33,20 +33,12 @@
           </td>
         </tr>
         <tr>
-          <td>
-            <b>Project</b>
-          </td>
-          <td>
-            <%=h @project.name %>
-            <%= form.hidden_field :project_id %>
-          </td>
-        </tr>
         <tr>
           <td>
             <b>Iteration</b>
           </td>
           <td>
-            <%= form.collection_select :iteration_id, @project.iterations, :id, :name, :include_blank => true %>
+            <%= form.collection_select :iteration_id, @project.iterations.ordered, :id, :name, :include_blank => true %>
           </td>
         </tr>
         <tr>

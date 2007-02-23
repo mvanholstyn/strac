@@ -4,11 +4,6 @@
 
 <% form_for(:iteration, :url => iteration_path(@project, @iteration), :html => { :method => :put }) do |f| %>
   <p>
-    <b>Project</b><br />
-    <%= f.select :project_id, [[]] + Project.find( :all ).map { |p| [ p.name, p.id ] } %>
-  </p>
-
-  <p>
     <b>Start date</b><br />
     <%= f.date_select :start_date %>
   </p>

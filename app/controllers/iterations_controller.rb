@@ -25,7 +25,7 @@ class IterationsController < ApplicationController
 
   # GET /iterations/new
   def new
-    @iteration = Iteration.new
+    @iteration = @project.iterations.build
   end
 
   # GET /iterations/1;edit
@@ -36,7 +36,7 @@ class IterationsController < ApplicationController
   # POST /iterations
   # POST /iterations.xml
   def create
-    @iteration = Iteration.new(params[:iteration])
+    @iteration = @project.iterations.build( params[:iteration] )
 
     respond_to do |format|
       if @iteration.save

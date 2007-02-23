@@ -2,8 +2,8 @@
 
 <%= error_messages_for :story %>
 
-<% form_for :story, :url => stories_path( @project ) do |f| %>
-  <%= render :partial=>'stories/form', :locals=>{ :form=>f } %>
+<% form_for :story, :url => stories_path( @project ) do |form| %>
+  <%= render :partial => 'form', :locals => { :form => form } %>
   <p>
     <%= submit_tag "Create" %>
     <%= submit_tag "Create & Add another", :onclick => "this.form.action += '?redirect_to=#{new_story_path( @project )}'" %>
