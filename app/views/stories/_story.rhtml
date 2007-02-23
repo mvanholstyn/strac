@@ -1,0 +1,54 @@
+<table>
+  <tr>
+    <td>
+      <table>
+        <tr>
+          <td>
+            <b>Description</b>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <%= @story.description %>
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td valign="top">
+      <table>
+        <tr>
+          <td>
+            <b>Summary</b>
+          </td>
+          <td>
+            <%=h @story.summary %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <b>Points</b>
+          </td>
+          <td>
+            <%=h @story.points %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <b>Iteration</b>
+          </td>
+          <td>
+            <%=h @story.iteration.name %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <b>Tags</b>
+          </td>
+          <td>
+            <%=h @story.tag_list %>
+          </td>
+        </tr>
+      <table>
+    </td>
+  </tr>
+</table>
