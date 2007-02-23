@@ -3,6 +3,6 @@
 <% remote_form_for(:story, :url => story_path(@story), :html => { :method => :put }) do |form| %>
   <%= render :partial=>'stories/form', :locals=>{ :form => form } %>
   <p>
-    <%= submit_tag "Update" %> or <%= link_to( "cancel", "#", :onclick => update_page { |page| page["story_#{@story.id}_edit"].hide; page << "return false;" } ) %>
+    <%= submit_tag "Update" %> or <%= link_to( "cancel", "#", :onclick => update_page { |page| page["story_#{@story.id}"].hide; page << "return false;" } ) %>
   </p>
 <% end %>
