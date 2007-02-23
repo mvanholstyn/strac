@@ -1,0 +1,47 @@
+<h1>Editing user</h1>
+
+<%= error_messages_for :user %>
+
+<% form_for(:user, :url => user_path(@user), :html => { :method => :put }) do |f| %>
+  <p>
+    <b>Username</b><br />
+    <%= f.text_field :username %>
+  </p>
+
+  <p>
+    <b>Password</b><br />
+    <%= f.text_field :password %>
+  </p>
+
+  <p>
+    <b>Password confirmation</b><br />
+    <%= f.text_field :password_confirmation %>
+  </p>
+
+  <p>
+    <b>First name</b><br />
+    <%= f.text_field :first_name %>
+  </p>
+
+  <p>
+    <b>Last name</b><br />
+    <%= f.text_field :last_name %>
+  </p>
+
+  <p>
+    <b>Email address</b><br />
+    <%= f.text_field :email_address %>
+  </p>
+
+  <p>
+    <b>Group</b><br />
+    <%= f.text_field :group_id %>
+  </p>
+
+  <p>
+    <%= submit_tag "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', user_path(@user) %> |
+<%= link_to 'Back', users_path %>
