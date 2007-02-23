@@ -2,12 +2,25 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 7) do
+ActiveRecord::Schema.define(:version => 9) do
+
+  create_table "groups", :force => true do |t|
+    t.column "name", :string
+  end
+
+  create_table "groups_privileges", :force => true do |t|
+    t.column "group_id",     :integer
+    t.column "privilege_id", :integer
+  end
 
   create_table "iterations", :force => true do |t|
     t.column "start_date", :date
     t.column "end_date",   :date
     t.column "project_id", :integer
+  end
+
+  create_table "privileges", :force => true do |t|
+    t.column "name", :string
   end
 
   create_table "projects", :force => true do |t|
@@ -32,6 +45,15 @@ ActiveRecord::Schema.define(:version => 7) do
 
   create_table "tags", :force => true do |t|
     t.column "name", :string
+  end
+
+  create_table "users", :force => true do |t|
+    t.column "username",      :string
+    t.column "password_hash", :string
+    t.column "first_name",    :string
+    t.column "last_name",     :string
+    t.column "email_address", :string
+    t.column "group_id",      :integer
   end
 
 end

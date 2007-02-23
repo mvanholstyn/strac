@@ -12,16 +12,9 @@ class AddLwtAuthenticationSystem < ActiveRecord::Migration
       t.column :group_id, :integer
       t.column :privilege_id, :integer
     end
-
-    create_table :users do |t|
-      t.column :username, :string
-      t.column :password_hash, :string
-      t.column :group_id, :integer
-    end
   end
 
   def self.down
-    drop_table :users
     drop_table :groups_privileges
     drop_table :privileges
     drop_table :groups
