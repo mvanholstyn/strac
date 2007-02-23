@@ -134,9 +134,7 @@ class StoriesController < ApplicationController
     respond_to do |format|
       if @story.save
         format.js do
-          render_notice %("#{@story.summary}" has been marked #{@story.complete? ? "" : "in" }complete.) do |page|
-            page["story_#{@story.id}"].className = @story.complete? ? "complete" : "incomplete"
-          end
+          render_notice %("#{@story.summary}" has been marked #{@story.complete? ? "" : "in" }complete.)
         end
       else
         format.js do
@@ -152,6 +150,6 @@ class StoriesController < ApplicationController
   private
 
   def find_project
-    @project = Project.find( params[:project_id], :include => { :iterations => { :stories => :tags } } )
+    @project = Project.find( params[:project_id] )#, :include => { :iterations => { :stories => :tags } } )
   end
 end

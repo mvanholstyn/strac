@@ -3,19 +3,15 @@
 <table>
   <tr>
     <th>Username</th>
-    <th>Password</th>
-    <th>Password confirmation</th>
     <th>First name</th>
     <th>Last name</th>
     <th>Email address</th>
     <th>Group</th>
   </tr>
-  
+
 <% for user in @users %>
   <tr>
     <td><%=h user.username %></td>
-    <td><%=h user.password %></td>
-    <td><%=h user.password_confirmation %></td>
     <td><%=h user.first_name %></td>
     <td><%=h user.last_name %></td>
     <td><%=h user.email_address %></td>

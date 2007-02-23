@@ -1,8 +1,8 @@
-<% for iteration in @project.iterations -%>
+<% for iteration in @project.iterations.ordered -%>
   <b><%=h iteration.name %></b>
   <div id="iteration_<%= iteration.id %>">
     <hr />
-    <%= render :partial  => 'list', :locals => { :stories => iteration.stories } %>
+    <%= render :partial  => 'list', :locals => { :stories => iteration.stories.ordered } %>
   </div>
   <br />
 <% end -%>
