@@ -1,3 +1,4 @@
+<%= link_to_remote image_tag( 'show.gif' ), :url => story_path(story), :method => :get %>
 <%= link_to_remote image_tag( 'edit.gif' ), :url => edit_story_path(story), :method => :get %>
 <%= link_to image_tag( 'delete.gif' ), story_path(story), :method => :delete,
             :confirm => "Are you sure you would like to delete the story \"#{story.summary}\"?" %>

@@ -19,7 +19,8 @@ class StoriesController < ApplicationController
 
     respond_to do |format|
       format.html # show.rhtml
-      format.xml  { render :xml => @story.to_xml }
+      format.js # show.rjs
+      format.xml { render :xml => @story.to_xml }
     end
   end
 
@@ -33,8 +34,8 @@ class StoriesController < ApplicationController
     @story = Story.find(params[:id], :include => :tags)
 
     respond_to do |format|
-      format.html
-      format.js
+      format.html # edit.rhtml
+      format.js # edit.rjs
     end
   end
 
@@ -68,7 +69,7 @@ class StoriesController < ApplicationController
           flash[:notice] = %("#{@story.summary}" was successfully updated.)
           redirect_to stories_url
         end
-        format.js
+        format.js # update.rjs
         format.xml { head :ok }
       else
         format.html { load_iterations; render :action => "edit" }
