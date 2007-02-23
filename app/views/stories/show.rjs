@@ -1,3 +1,3 @@
-page["story_#{@story.id}"].replace_html :partial => 'story'
-page["story_#{@story.id}"].show
+page["story_#{@story.id}_view"].replace_html :partial => 'story'
+page["story_#{@story.id}_view"].show
 

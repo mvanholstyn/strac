@@ -5,11 +5,10 @@
   </div>
   <br />
 <% end -%>
-  <b>Whenever...</b>
-  <div id="iteration_nil">
-    <%= render :partial  => 'iteration', :locals => { :stories => @project.stories.without_iteration } %>
-  </div>
-  <br />
+<b>Whenever...</b>
+<div id="iteration_nil">
+  <%= render :partial  => 'iteration', :locals => { :stories => @project.stories.without_iteration } %>
+</div>
 
 <% iteration_list_ids = [ "iteration_nil" ] + @project.iterations.map{ |i| "iteration_#{i.id}" } -%>
 <% for iteration in iteration_list_ids -%>
