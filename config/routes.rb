@@ -1,11 +1,12 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :projects
+  map.resources :projects do |project_map|
+    project_map.resources :iterations
 
-  map.resources :iterations
+    project_map.resources :stories,
+                          :collection => { :reorder => :put },
+                          :member => { :update_points => :put, :update_complete => :put }
 
-  map.resources :stories,
-                :collection => { :reorder => :put },
-                :member => { :update_points => :put, :update_complete => :put }
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
 
@@ -25,7 +26,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # You can have the root of your site routed by hooking up ''
   # -- just remember to delete public/index.html.
-  map.connect '', :controller => "stories"
+  # map.connect '', :controller => "stories"
 
   # Allow downloading Web Service WSDL as a file with an extension
   # instead of a file named 'wsdl'

@@ -1,11 +1,12 @@
 class Story < ActiveRecord::Base
   belongs_to :iteration
+  belongs_to :project
 
   acts_as_list :scope => :iteration_id
   acts_as_taggable
   acts_as_textiled :description
 
-  validates_presence_of :summary
+  validates_presence_of :summary, :project
   validates_numericality_of :points, :position, :allow_nil => true
 
   #TODO: Is there a better way to put this into a single SQL statement?

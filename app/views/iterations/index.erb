@@ -10,13 +10,13 @@
   <tr>
     <td><%=h iteration.start_date %></td>
     <td><%=h iteration.end_date %></td>
-    <td><%= link_to 'Show', iteration_path(iteration) %></td>
-    <td><%= link_to 'Edit', edit_iteration_path(iteration) %></td>
-    <td><%= link_to 'Destroy', iteration_path(iteration), :confirm => 'Are you sure?', :method => :delete %></td>
+    <td><%= link_to 'Show', iteration_path(@project, iteration) %></td>
+    <td><%= link_to 'Edit', edit_iteration_path(@project, iteration) %></td>
+    <td><%= link_to 'Destroy', iteration_path(@project, iteration), :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
 
-<%= link_to 'New iteration', new_iteration_path %>
+<%= link_to 'New iteration', new_iteration_path( @project ) %>

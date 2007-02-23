@@ -2,11 +2,12 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 5) do
+ActiveRecord::Schema.define(:version => 7) do
 
   create_table "iterations", :force => true do |t|
     t.column "start_date", :date
     t.column "end_date",   :date
+    t.column "project_id", :integer
   end
 
   create_table "projects", :force => true do |t|
@@ -20,6 +21,7 @@ ActiveRecord::Schema.define(:version => 5) do
     t.column "position",     :integer
     t.column "complete",     :boolean
     t.column "iteration_id", :integer
+    t.column "project_id",   :integer
   end
 
   create_table "taggings", :force => true do |t|

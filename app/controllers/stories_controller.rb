@@ -1,11 +1,9 @@
 class StoriesController < ApplicationController
-  before_filter :load_iterations, :only => [ :index, :new, :edit ]
+  before_filter :find_project
 
   # GET /stories
   # GET /stories.xml
   def index
-    @stories = Story.find( :all, :include => [ :tags, :iteration ], :order => :position ).group_by( &:iteration )
-
     respond_to do |format|
       format.html # index.rhtml
       format.xml  { render :xml => @stories.to_xml }
@@ -15,7 +13,7 @@ class StoriesController < ApplicationController
   # GET /stories/1
   # GET /stories/1.xml
   def show
-    @story = Story.find(params[:id], :include => :tags)
+    @story = @project.stories.find(params[:id], :include => :tags)
 
     respond_to do |format|
       format.js # show.rjs
@@ -30,7 +28,7 @@ class StoriesController < ApplicationController
 
   # GET /stories/1;edit
   def edit
-    @story = Story.find(params[:id], :include => :tags)
+    @story = @project.stories.find(params[:id], :include => :tags)
 
     respond_to do |format|
       format.js # edit.rjs
@@ -40,17 +38,17 @@ class StoriesController < ApplicationController
   # POST /stories
   # POST /stories.xml
   def create
-    @story = Story.new(params[:story])
+    @story = @project.stories.build(params[:story])
 
     respond_to do |format|
       if @story.save
         format.html do
           flash[:notice] = %("#{@story.summary}" was successfully created.)
-          redirect_to params[:redirect_to] || stories_url
+          redirect_to params[:redirect_to] || stories_url( @project )
         end
-        format.xml { head :created, :location => story_url(@story) }
+        format.xml { head :created, :location => story_url(@project, @story) }
       else
-        format.html { load_iterations; render :action => "new" }
+        format.html { render :action => "new" }
         format.xml { render :xml => @story.errors.to_xml }
       end
     end
@@ -59,14 +57,14 @@ class StoriesController < ApplicationController
   # PUT /stories/1
   # PUT /stories/1.xml
   def update
-    @story = Story.find(params[:id], :include => :tags)
+    @story = @project.stories.find(params[:id], :include => :tags)
 
     respond_to do |format|
       if @story.update_attributes(params[:story])
         format.js # update.rjs
         format.xml { head :ok }
       else
-        format.js { load_iterations; render :action => "edit" }
+        format.js { render :action => "edit" }
         format.xml { render :xml => @story.errors.to_xml }
       end
     end
@@ -75,13 +73,13 @@ class StoriesController < ApplicationController
   # DELETE /stories/1
   # DELETE /stories/1.xml
   def destroy
-    @story = Story.find(params[:id], :include => :tags)
+    @story = @project.stories.find(params[:id], :include => :tags)
     @story.destroy
 
     respond_to do |format|
       format.html do
         flash[:notice] = %("#{@story.summary}" was successfully destroyed.)
-        redirect_to stories_url
+        redirect_to stories_url( @project )
       end
       format.xml  { head :ok }
     end
@@ -108,7 +106,7 @@ class StoriesController < ApplicationController
 
   # PUT /stories/1;update_points.js
   def update_points
-    @story = Story.find(params[:id], :include => :tags)
+    @story = @project.stories.find(params[:id], :include => :tags)
     @story.points = params[:story][:points]
 
     respond_to do |format|
@@ -130,7 +128,7 @@ class StoriesController < ApplicationController
 
   # PUT /stories/1;update_complete.js
   def update_complete
-    @story = Story.find(params[:id], :include => [ :tags, :iteration ] )
+    @story = @project.stories.find(params[:id], :include => [ :tags, :iteration ] )
     @story.complete = params[:story][:complete]
 
     respond_to do |format|
@@ -152,7 +150,8 @@ class StoriesController < ApplicationController
   end
 
   private
-  def load_iterations
-    @iterations = Iteration.find :all, :order => 'start_date'
+
+  def find_project
+    @project = Project.find( params[:project_id], :include => { :iterations => { :stories => :tags } } )
   end
 end
