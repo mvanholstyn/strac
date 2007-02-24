@@ -1,6 +1,4 @@
 class ApplicationController < ActionController::Base
-  session :session_key => '_strac_session_id', :secret => "_strac_session_secret"
-
   restrict_to :user, :except => { :users => [ :login, :logout ] }
 
   private
