@@ -1,5 +1,7 @@
-<%= link_to_remote image_tag( 'show.gif' ), :url => story_path(@project, story), :method => :get %>
-<%= link_to_remote image_tag( 'edit.gif' ), :url => edit_story_path(@project, story), :method => :get %>
+<%= link_to_remote image_tag( 'show.gif' ), :url => story_path(@project, story), :method => :get, 
+	:before => toggle_hide_show_with_smart_loading( "story_#{story.id}_view", "story_#{story.id}_edit" ) %>
+<%= link_to_remote image_tag( 'edit.gif' ), :url => edit_story_path(@project, story), :method => :get, 
+	:before =>toggle_hide_show_with_smart_loading( "story_#{story.id}_edit", "story_#{story.id}_view" ) %>
 <%= link_to image_tag( 'delete.gif' ), story_path(@project,story), :method => :delete,
             :confirm => "Are you sure you would like to delete the story \"#{story.summary}\"?" %>
 <%= image_tag "move.gif", :class => 'draggable' %>
