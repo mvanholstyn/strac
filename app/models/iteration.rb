@@ -9,6 +9,6 @@ class Iteration < ActiveRecord::Base
   validates_presence_of :start_date, :end_date, :project
 
   def name
-    start_date.strftime( "%Y-%m-%d" ) + " thru " + end_date.strftime( "%Y-%m-%d" )
+    start_date.strftime( "%Y-%m-%d" ) + " through " + end_date.strftime( "%Y-%m-%d" )
   end
 end

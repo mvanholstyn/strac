@@ -88,11 +88,25 @@ ul#navigation {
 }
 
 #notice {
-  color:green;
+  color: #fff;
+	font-weight: bold;
+	position: fixed;
+	right: 0px;
+	top: 0px;
+	z-index: 100;
+	background-color: green;
+	padding: 2px;
 }
 
 #error {
-  color: red;
+  color: #fff;
+	font-weight: bold;
+	position: fixed;
+	right: 0px;
+	top: 0px;
+	z-index: 100;
+	background-color: red;
+	padding: 2px;
 }
 
 .hidden {
