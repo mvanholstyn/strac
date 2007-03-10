@@ -124,7 +124,7 @@ ul#navigation {
   padding: 5px;
 }
 
-.tags {
+.responsible_party {
   color: #868686;
   font-style: italic;
 }
@@ -154,4 +154,21 @@ ul#navigation {
 
 .user_option {
 	padding-left: 15px;
+}
+
+.auto_complete_results ul {
+	list-style: none;
+	padding: 0px;
+	margin: 0px;
+	background-color: #fff;
+	border: 1px solid #000;
+}
+
+.auto_complete_results ul li	 {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.auto_complete_results ul li.selected	 {
+	background-color: #ffb;
 }

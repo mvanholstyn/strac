@@ -10,8 +10,8 @@
 <span id="story_<%= story.id %>_points" class="inplaceeditor-field"><%= story.points ? h( story.points ) : "&infin;" %></span>
  -
 <%=h story.summary %>
-<% unless story.tags.empty? -%>
-  <span class="tags">(<%=h story.tag_list %>)</span>
+<% if story.responsible_party -%>
+  <span class="responsible_party">(<%=h story.responsible_party.name %>)</span>
 <% end-%>
 <%= in_place_editor "story_#{story.id}_points", :url => update_points_story_path( @project, story ), :param_name => 'story[points]',
                                                 :ajax_options => { :method => :put }, :eval_scripts => true,

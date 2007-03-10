@@ -1,4 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :tags, :collection => { :auto_complete => :any }
+
+  
   map.resources :companies
 
   map.resources :users, :collection => { :login => :any, :logout => :post }

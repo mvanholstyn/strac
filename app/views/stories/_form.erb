@@ -45,7 +45,9 @@
             <b>Tags</b>
           </td>
           <td>
-            <%= form.text_field :tag_list %> <i>(tags are comma separated)</i>
+            <%= form.text_field :tag_list, :id => "story_#{@story.id || "nil"}_tag_list" %> <i>(tags are comma separated)</i>
+						<div id="story_<%= @story.id || "nil" %>_tag_list_auto_complete" class="auto_complete_results"></div>
+						<%= auto_complete_field "story_#{@story.id || "nil"}_tag_list", :url => auto_complete_tags_path, :tokens => ",", :param_name => 'tag' %>
           </td>
         </tr>
         <tr>
