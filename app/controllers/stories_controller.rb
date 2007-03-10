@@ -6,7 +6,7 @@ class StoriesController < ApplicationController
   def index
     respond_to do |format|
       format.html # index.rhtml
-      format.xml  { render :xml => @stories.to_xml }
+      format.xml  { render :xml => @project.stories.to_xml }
     end
   end
 
@@ -62,6 +62,7 @@ class StoriesController < ApplicationController
 
     respond_to do |format|
       if @story.update_attributes(params[:story])
+        #TODO: If this stories iteration is changed, then something should happen
         format.js # update.rjs
         format.xml { head :ok }
       else
