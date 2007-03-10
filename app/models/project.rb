@@ -9,5 +9,9 @@ class Project < ActiveRecord::Base
     def ordered
       find :all, :order => 'start_date, end_date'
     end
+    
+    def current
+      find :first, :conditions => [ "? BETWEEN start_date AND end_date", Date.today ]
+    end
   end
 end

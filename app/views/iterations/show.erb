@@ -1,13 +1,1 @@
-<p>
-  <b>Start date:</b>
-  <%=h @iteration.start_date %>
-</p>
-
-<p>
-  <b>End:</b>
-  <%=h @iteration.end_date %>
-</p>
-
-
-<%= link_to 'Edit', edit_iteration_path(@project, @iteration) %> |
-<%= link_to 'Back', iterations_path( @project ) %>
+<b>Iteration:</b> <%=h @iteration.name %>

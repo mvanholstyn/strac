@@ -1,15 +1,9 @@
-<h1>Listing iterations</h1>
+<h1>Iterations</h1>
 
 <table>
-  <tr>
-    <th>Start date</th>
-    <th>End date</th>
-  </tr>
-
 <% for iteration in @iterations %>
   <tr>
-    <td><%=h iteration.start_date %></td>
-    <td><%=h iteration.end_date %></td>
+    <td><%=h iteration.name %></td>
     <td><%= link_to 'Show', iteration_path(@project, iteration) %></td>
     <td><%= link_to 'Edit', edit_iteration_path(@project, iteration) %></td>
     <td><%= link_to 'Destroy', iteration_path(@project, iteration), :confirm => 'Are you sure?', :method => :delete %></td>

@@ -4,7 +4,7 @@ class IterationsController < ApplicationController
   # GET /iterations
   # GET /iterations.xml
   def index
-    @iterations = @project.iterations.find(:all)
+    @iterations = @project.iterations.find(:all, :order => "start_date DESC")
 
     respond_to do |format|
       format.html # index.rhtml
@@ -77,6 +77,10 @@ class IterationsController < ApplicationController
       format.html { redirect_to iterations_url( @project ) }
       format.xml  { head :ok }
     end
+  end
+  
+  def current
+    redirect_to iteration_url( @project, @project.iterations.current )
   end
 
   private
