@@ -1,0 +1,15 @@
+page[:notice].replace_html %("#{@story.summary}" was successfully created.)
+page[:error].hide
+page[:notice].show
+page.visual_effect :highlight, :notice
+
+iteration_id = "iteration_#{@story.iteration ? @story.iteration.id : 'nil'}"
+page.insert_html :bottom, iteration_id, :partial => 'list', :locals => { :stories => [ @story ] }
+
+
+iteration_list_ids = [ "iteration_nil" ] + @project.iterations.ordered.map{ |i| "iteration_#{i.id}" }
+page.sortable iteration_id, :url => reorder_stories_path(@project), :method => :put,
+                            :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => iteration_list_ids
+
+@story = nil # we want a fresh form
+page["story_new"].replace_html :partial => 'new'

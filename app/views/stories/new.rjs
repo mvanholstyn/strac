@@ -1,0 +1,2 @@
+page["story_new"].replace_html :partial => 'new'
+page.visual_effect :blind_down, "story_new", :duration => 0.3

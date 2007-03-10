@@ -2,8 +2,8 @@
 	:before => "if( !toggle_hide_show_with_smart_loading( 'story_#{story.id}_view', [ 'story_#{story.id}_edit' ] ) ) { return false; }" %>
 <%= link_to_remote image_tag( 'edit.gif' ), :url => edit_story_path(@project, story), :method => :get, 
 	:before => "if( !toggle_hide_show_with_smart_loading( 'story_#{story.id}_edit', [ 'story_#{story.id}_view' ] ) ) { return false; }" %>
-<%= link_to image_tag( 'delete.gif' ), story_path(@project,story), :method => :delete,
-            :confirm => "Are you sure you would like to delete the story \"#{story.summary}\"?" %>
+<%= link_to_remote image_tag( 'delete.gif' ), :url => story_path(@project,story), :method => :delete,
+  :confirm => "Are you sure you would like to delete the story \"#{story.summary}\"?" %>
 <%= image_tag "move.gif", :class => 'draggable' %>
 <%= link_to image_tag( 'time.png' ) %>
 <%= check_box :story, :complete, :object => story, :id => "story_#{story.id}_complete" %>

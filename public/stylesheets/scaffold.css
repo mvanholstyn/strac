@@ -68,6 +68,17 @@ img {
   border: none;
 }
 
+ul#navigation {
+	list-style: none;
+	display: inline;
+	margin-left: 0;
+	padding-left: 0;
+}
+
+#navigation li {
+	display: inline;
+}
+
 .inplaceeditor-form {
   display: inline;
 }
@@ -124,10 +135,15 @@ img {
 
 .story_card .header {
   border: solid #94bad5 1px;
-  background-image: url(/images/notecard.png);
+	background-color: #ffff88;
 }
 
 .story_card .content {
   border: solid #94bad5 1px;
-  background-image: url(/images/notecard.png);
+	background-color: #ffff88;
+	padding: 5px;
+}
+
+.story_card .content p {
+	margin: 0px;
 }

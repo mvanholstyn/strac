@@ -2,11 +2,12 @@
   <table class="section_header" cellspacing="0" cellpadding="0">
     <tr>
       <td>Stories</td>
-      <td align="right"><%= link_to 'create', new_story_path( @project ) %></td>
+      <td align="right"><%= link_to_remote 'create', :url => new_story_path( @project ), :method => :get %></td>
     </tr>
   </table>
 
   <div id="stories" class="section_content">
+		<div id="story_new"></div>
     <%= render :partial => 'iterations' %>
   </div>
 </div>

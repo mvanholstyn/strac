@@ -1,7 +1,3 @@
-#page << "if( ! $('story_#{@story.id}_edit').visible() ) {"
-  page["story_#{@story.id}_edit"].replace_html :partial => 'edit'
-  page.visual_effect :blind_up, "story_#{@story.id}_view", :duration => 0.3
-  page.visual_effect :blind_down, "story_#{@story.id}_edit", :duration => 0.3
-#page << "} else {"
-#  page.visual_effect :blind_up, "story_#{@story.id}_edit", :duration => 0.3
-#page << "}"
+page["story_#{@story.id}_edit"].replace_html :partial => 'edit'
+page.visual_effect :blind_up, "story_#{@story.id}_view", :duration => 0.3
+page.visual_effect :blind_down, "story_#{@story.id}_edit", :duration => 0.3

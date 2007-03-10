@@ -24,6 +24,10 @@ class StoriesController < ApplicationController
   # GET /stories/new
   def new
     @story = @project.stories.build
+    
+    respond_to do |format|
+      format.js # new.rjs
+    end
   end
 
   # GET /stories/1;edit
@@ -42,13 +46,10 @@ class StoriesController < ApplicationController
 
     respond_to do |format|
       if @story.save
-        format.html do
-          flash[:notice] = %("#{@story.summary}" was successfully created.)
-          redirect_to params[:redirect_to] || stories_url( @project )
-        end
+        format.js # create.rjs
         format.xml { head :created, :location => story_url(@project, @story) }
       else
-        format.html { render :action => "new" }
+        format.js { render :action => "new" }
         format.xml { render :xml => @story.errors.to_xml }
       end
     end
@@ -77,6 +78,7 @@ class StoriesController < ApplicationController
     @story.destroy
 
     respond_to do |format|
+      format.js # destroy.rjs
       format.html do
         flash[:notice] = %("#{@story.summary}" was successfully destroyed.)
         redirect_to stories_url( @project )
