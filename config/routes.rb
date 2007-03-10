@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :companies
+
   map.resources :users, :collection => { :login => :any, :logout => :post }
 
   map.resources :projects do |project_map|

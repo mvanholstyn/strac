@@ -35,7 +35,12 @@
 
   <p>
     <b>Group</b><br />
-    <%= f.text_field :group_id %>
+    <%= f.select :group_id, Group.find( :all ).map { |c| [ c.name, c.id ] } %>
+  </p>
+
+  <p>
+    <b>Company</b><br />
+    <%= f.select :company_id, Company.find( :all ).map { |c| [ c.name, c.id ] } %>
   </p>
 
   <p>

@@ -12,6 +12,7 @@
 		<li><%= link_to "dashboard", dashboard_path %></li>
 		<li><%= link_to "projects", projects_path %></li>
 		<li><%= link_to "users", users_path %></li>
+		<li><%= link_to "companies", companies_path %></li>
 		<% if @project and @project.id -%>
 		<li><%= link_to "iterations", iterations_path( @project ) %></li>
 		<li><%= link_to "stories", stories_path( @project ) %></li>

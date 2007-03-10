@@ -7,6 +7,7 @@
     <th>Last name</th>
     <th>Email address</th>
     <th>Group</th>
+    <th>Company</th>
   </tr>
 
 <% for user in @users %>
@@ -15,7 +16,8 @@
     <td><%=h user.first_name %></td>
     <td><%=h user.last_name %></td>
     <td><%=h user.email_address %></td>
-    <td><%=h user.group_id %></td>
+    <td><%=h user.group.name if user.group %></td>
+    <td><%=h user.company.name if user.company %></td>
     <td><%= link_to 'Show', user_path(user) %></td>
     <td><%= link_to 'Edit', edit_user_path(user) %></td>
     <td><%= link_to 'Destroy', user_path(user), :confirm => 'Are you sure?', :method => :delete %></td>
