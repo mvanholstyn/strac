@@ -1,9 +1,3 @@
 <% for story in stories -%>
-  <div id="story_<%= story.id %>" class="story_card">
-    <div id="story_<%= story.id %>_mini" class="header" width="100%">
-      <%= render :partial => 'mini_story', :locals => { :story => story } %>
-    </div>
-    <div id="story_<%= story.id %>_view" class="content" style="display:none;"></div>
-    <div id="story_<%= story.id %>_edit" class="content" style="display:none;"></div>
-  </div>
+  <%= render :partial => 'story', :locals => { :story => story } %>
 <% end -%>
