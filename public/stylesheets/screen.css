@@ -147,3 +147,11 @@ ul#navigation {
 .story_card .content p {
 	margin: 0px;
 }
+
+.company_option {
+	font-weight: bold;
+}
+
+.user_option {
+	padding-left: 15px;
+}

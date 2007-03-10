@@ -1,6 +1,7 @@
 class Story < ActiveRecord::Base
   belongs_to :iteration
   belongs_to :project
+  belongs_to :responsible_party, :polymorphic => true
 
   acts_as_list :scope => :iteration_id
   acts_as_taggable
@@ -8,6 +9,16 @@ class Story < ActiveRecord::Base
 
   validates_presence_of :summary, :project
   validates_numericality_of :points, :position, :allow_nil => true
+  
+  def responsible_party_type_id
+    responsible_party ? "#{responsible_party.class.name.downcase}_#{responsible_party.id}" : ""
+  end
+  
+  def responsible_party_type_id=( type_id )
+    type, id = type_id.scan( /^(\w+)_(\d+)$/ ).flatten
+    self.responsible_party_id = id
+    self.responsible_party_type = type ? type.camelize : nil
+  end
 
   #TODO: Is there a better way to put this into a single SQL statement?
   def self.reorder ids, attributes = {}
