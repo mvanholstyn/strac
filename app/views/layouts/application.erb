@@ -16,7 +16,7 @@
 		<li><%= link_to "iterations", iterations_path( @project ) %></li>
 		<li><%= link_to "stories", stories_path( @project ) %></li>
 		<% end -%>
-		<li><%= link_to "logout", logout_users_path %></li>
+		<li><%= link_to "logout", logout_users_path, :method => :post %></li>
 	</ul>
 	
   <div id="notice"<%= flash[:notice].blank? ? ' class="hidden"' : "" %>><%= flash[:notice] %></div>
