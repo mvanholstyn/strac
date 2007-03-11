@@ -6,15 +6,25 @@ class StoryTest < Test::Unit::TestCase
   def teardown
     Story.delete_all
   end
-
-  def test_creating_a_story
-    story = Story.new( :summary=>"Summary",
+  
+  def create_story( options={} )
+    Project.expects(:find).with( 1, :conditions=>nil, :include=>nil ).returns(Project.new)
+    
+    default_options = { :summary=>"Summary",
                           :description=>"Description",
                           :points=>"1",
                           :complete=>false,
-                          :tag_list=>'tag' )
-    count = Story.count
+                          :tag_list=>'tag',
+                          :project_id=>1 }
+    options.reverse_merge!( default_options )
+    story = Story.new(options) 
     assert story.save
+    story
+  end
+
+  def test_creating_a_story
+    count = Story.count    
+    story = create_story    
     assert_equal count+1, Story.count
 
     story.reload
@@ -87,9 +97,8 @@ class StoryTest < Test::Unit::TestCase
 
   def test_story_should_support_tags
     tag_list = 'tag1, tag2, tag3'
-    story = Story.create( :summary => "Summary",
-                          :description => "Description",
-                          :tag_list => tag_list )
+    story = create_story( :tag_list => tag_list )
+
     assert tag_list == story.tag_list
     story.reload
     assert tag_list == story.tag_list
