@@ -8,8 +8,6 @@ class StoryTest < Test::Unit::TestCase
   end
   
   def create_story( options={} )
-    Project.expects(:find).with( 1, :conditions=>nil, :include=>nil ).returns(Project.new)
-    
     default_options = { :summary=>"Summary",
                           :description=>"Description",
                           :points=>"1",

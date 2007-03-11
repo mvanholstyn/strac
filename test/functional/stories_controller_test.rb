@@ -52,15 +52,6 @@ class StoriesControllerTest < Test::Unit::TestCase
     assert_response :success
   end
 
-  def test_should_destroy_story
-    old_count = Story.count
-    delete :destroy, :id => 1, :project_id=>@project.id
-    assert_equal old_count-1, Story.count
-    
-    assert_template 'destroy.rjs'
-    assert_response :success
-  end
-
   #TODO: This could be far more robust
   def test_post_to_reorder_should_attempt_to_reorder
     Story.expects( :reorder ).with( [ 2, 1 ], :iteration_id => nil ).returns( true )
