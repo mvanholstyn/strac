@@ -5,7 +5,6 @@ one:
   description: MyText
   points: 1
   position: 0
-  complete: false
   project_id: 1
 two:
   id: 2
@@ -13,5 +12,4 @@ two:
   description: MyText
   points: 1
   position: 1
-  complete: false
   project_id: 1

@@ -58,6 +58,14 @@
             <%= select_tag "story[responsible_party_type_id]", options_for_responsible_parties( @story.responsible_party_type_id ) %>
           </td>
         </tr>
+        <tr>
+          <td>
+            <b>Status</b>
+          </td>
+          <td>
+						<%= form.select :status_id, @statuses %>
+          </td>
+        </tr>
       <table>
     </td>
   </tr>

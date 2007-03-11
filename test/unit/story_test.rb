@@ -11,7 +11,6 @@ class StoryTest < Test::Unit::TestCase
     default_options = { :summary=>"Summary",
                           :description=>"Description",
                           :points=>"1",
-                          :complete=>false,
                           :tag_list=>'tag',
                           :project_id=>1 }
     options.reverse_merge!( default_options )
@@ -29,7 +28,6 @@ class StoryTest < Test::Unit::TestCase
     assert_equal 'Summary', story.summary
     assert_equal 'Description', story.description_source
     assert_equal 1, story.points
-    assert_equal false, story.complete
     assert_equal 'tag', story.tag_list
   end
 
@@ -101,6 +99,10 @@ class StoryTest < Test::Unit::TestCase
     story.reload
     assert tag_list == story.tag_list
   end
-
+  
+  def test_story_should_have_status_id
+    story = Story.new
+    assert story.respond_to?( :status_id )
+  end
 end
 

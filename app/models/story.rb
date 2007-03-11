@@ -1,6 +1,7 @@
 class Story < ActiveRecord::Base
   belongs_to :iteration
   belongs_to :project
+  belongs_to :status
   belongs_to :responsible_party, :polymorphic => true
 
   acts_as_list :scope => :iteration_id

@@ -1,5 +1,6 @@
 class StoriesController < ApplicationController
   before_filter :find_project
+  before_filter :find_statuses, :only => [ :new, :edit ]
 
   # GET /stories
   # GET /stories.xml
@@ -46,10 +47,16 @@ class StoriesController < ApplicationController
 
     respond_to do |format|
       if @story.save
-        format.js # create.rjs
+        format.js do
+          find_statuses
+          render :action => "create.rjs"
+        end
         format.xml { head :created, :location => story_url(@project, @story) }
       else
-        format.js { render :action => "new" }
+        format.js do
+          find_statuses
+          render :action => "new"
+        end
         format.xml { render :xml => @story.errors.to_xml }
       end
     end
@@ -66,7 +73,10 @@ class StoriesController < ApplicationController
         format.js # update.rjs
         format.xml { head :ok }
       else
-        format.js { render :action => "edit" }
+        format.js do
+          find_statuses
+          render :action => "edit.rjs"
+        end
         format.xml { render :xml => @story.errors.to_xml }
       end
     end
@@ -129,28 +139,11 @@ class StoriesController < ApplicationController
     end
   end
 
-  # PUT /stories/1;update_complete.js
-  def update_complete
-    @story = @project.stories.find(params[:id], :include => [ :tags, :iteration ] )
-    @story.complete = params[:story][:complete]
-
-    respond_to do |format|
-      if @story.save
-        format.js do
-          render_notice %("#{@story.summary}" has been marked #{@story.complete? ? "" : "in" }complete.)
-        end
-      else
-        format.js do
-          render_error %("#{@story.summary}" was not successfully updated.) do |page|
-            #TODO: Why does this cause a double check to be necessary?
-            page["story_#{@story.id}_complete"].checked = @story.reload.complete? ? "checked" : ""
-          end
-        end
-      end
-    end
-  end
-
   private
+  
+  def find_statuses
+    @statuses = Status.find( :all ).map{ |s| [ s.name, s.id ] }.unshift []
+  end
 
   def find_project
     @project = Project.find( params[:project_id] )#, :include => { :iterations => { :stories => :tags } } )
