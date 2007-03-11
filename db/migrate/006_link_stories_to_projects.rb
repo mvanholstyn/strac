@@ -4,6 +4,6 @@ class LinkStoriesToProjects < ActiveRecord::Migration
   end
 
   def self.down
-    add_column :stories, :project_id
+    remove_column :stories, :project_id
   end
 end
