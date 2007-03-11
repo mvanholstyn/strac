@@ -11,7 +11,7 @@
 	<ul id="navigation">
 		<li><%= link_to "dashboard", dashboard_path %></li>
 		<% if @project and @project.id -%>
-		<li><%= link_to "current iteration", iteration_url( @project, @project.iterations.current ) %></li>
+		<li><%= link_to "current iteration", current_iterations_url( @project ) %></li>
 		<li><%= link_to "iterations", iterations_path( @project ) %></li>
 		<li><%= link_to "stories", stories_path( @project ) %></li>
 		<% end -%>

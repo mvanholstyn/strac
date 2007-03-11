@@ -11,6 +11,8 @@ class ProjectsControllerTest < Test::Unit::TestCase
     @controller = ProjectsController.new
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
+    
+    login_as 'mvanholstyn'
   end
 
   def test_should_get_index

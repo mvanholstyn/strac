@@ -1,5 +1,5 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-one:
+mvanholstyn:
   id: 1
   username: mvanholstyn
   password_hash: <%= User.hash_password 'password' %>
@@ -8,7 +8,7 @@ one:
   email_address: MyString
   group_id: 1
   
-two:
+zdennis:
   id: 2
   username: zdennis
   password_hash: <%= User.hash_password 'password' %>

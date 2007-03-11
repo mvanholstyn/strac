@@ -11,6 +11,8 @@ class CompaniesControllerTest < Test::Unit::TestCase
     @controller = CompaniesController.new
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
+    
+    login_as( 'mvanholstyn' )
   end
 
   def test_should_get_index
@@ -26,7 +28,7 @@ class CompaniesControllerTest < Test::Unit::TestCase
   
   def test_should_create_company
     old_count = Company.count
-    post :create, :company => { }
+    post :create, :company => { :name=>"JoeCompany" }
     assert_equal old_count+1, Company.count
     
     assert_redirected_to company_path(assigns(:company))

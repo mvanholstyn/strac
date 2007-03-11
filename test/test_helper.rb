@@ -26,4 +26,11 @@ class Test::Unit::TestCase
   self.use_instantiated_fixtures  = false
 
   # Add more helper methods to be used by all tests here...
+  
+  # fixtures required for login purposes
+  fixtures :users, :groups, :privileges, :groups_privileges
+  
+  def login_as( username )
+     @request.session[:current_user_id] = users( username )
+  end
 end
