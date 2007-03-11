@@ -6,7 +6,7 @@ class StoryTest < Test::Unit::TestCase
   def teardown
     Story.delete_all
   end
-  
+
   def create_story( options={} )
     default_options = { :summary=>"Summary",
                           :description=>"Description",
@@ -14,14 +14,14 @@ class StoryTest < Test::Unit::TestCase
                           :tag_list=>'tag',
                           :project_id=>1 }
     options.reverse_merge!( default_options )
-    story = Story.new(options) 
+    story = Story.new(options)
     assert story.save
     story
   end
 
   def test_creating_a_story
-    count = Story.count    
-    story = create_story    
+    count = Story.count
+    story = create_story
     assert_equal count+1, Story.count
 
     story.reload
@@ -99,10 +99,16 @@ class StoryTest < Test::Unit::TestCase
     story.reload
     assert tag_list == story.tag_list
   end
-  
+
   def test_story_should_have_status_id
     story = Story.new
     assert story.respond_to?( :status_id )
   end
+
+  def test_story_should_have_priority_id
+    story = Story.new
+    assert story.respond_to?( :priority_id )
+  end
+
 end
 

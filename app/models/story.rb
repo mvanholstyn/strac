@@ -2,6 +2,7 @@ class Story < ActiveRecord::Base
   belongs_to :iteration
   belongs_to :project
   belongs_to :status
+  belongs_to :priority
   belongs_to :responsible_party, :polymorphic => true
 
   acts_as_list :scope => :iteration_id
@@ -10,11 +11,11 @@ class Story < ActiveRecord::Base
 
   validates_presence_of :summary, :project_id
   validates_numericality_of :points, :position, :allow_nil => true
-  
+
   def responsible_party_type_id
     responsible_party ? "#{responsible_party.class.name.downcase}_#{responsible_party.id}" : ""
   end
-  
+
   def responsible_party_type_id=( type_id )
     type, id = type_id.scan( /^(\w+)_(\d+)$/ ).flatten
     self.responsible_party_id = id
