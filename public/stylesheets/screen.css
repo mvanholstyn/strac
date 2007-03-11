@@ -70,9 +70,9 @@ img {
 
 ul#navigation {
 	list-style: none;
-	display: inline;
 	margin-left: 0;
 	padding-left: 0;
+	border-bottom: 1px dashed #000;
 }
 
 #navigation li {
@@ -150,6 +150,7 @@ ul#navigation {
 .story_card .header {
   border: solid #94bad5 1px;
 	background-color: #ffff88;
+	padding: 5px;
 }
 
 .story_card .content {
