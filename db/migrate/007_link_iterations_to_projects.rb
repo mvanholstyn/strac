@@ -4,6 +4,6 @@ class LinkIterationsToProjects < ActiveRecord::Migration
   end
 
   def self.down
-    add_column :iterations, :project_id
+    remove_column :iterations, :project_id
   end
 end
