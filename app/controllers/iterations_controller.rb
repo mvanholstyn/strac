@@ -80,7 +80,7 @@ class IterationsController < ApplicationController
   end
   
   def current
-    redirect_to iteration_url( @project, @project.iterations.current )
+    @iterations = @project.iterations.find( :all, :conditions => [ "start_date >= :today OR end_date >= :today", { :today => Date.today } ] )
   end
 
   private

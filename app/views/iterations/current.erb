@@ -1,8 +1,8 @@
-<% for iteration in @project.iterations.ordered -%>
+<% for iteration in @iterations -%>
   <b><%=h iteration.name %></b>
   <div id="iteration_<%= iteration.id %>">
     <hr />
-    <%= render :partial  => 'list', :locals => { :stories => iteration.stories.ordered } %>
+    <%= render :partial  => 'stories/list', :locals => { :stories => iteration.stories.ordered } %>
   </div>
   <br />
 <% end -%>
@@ -13,7 +13,7 @@
 	  <%= render :partial  => 'stories/list', :locals => { :stories => @project.stories.without_iteration } %>
 	</div>
 
-	<% iteration_list_ids = [ "iteration_nil" ] + @project.iterations.ordered.map{ |i| "iteration_#{i.id}" } -%>
+	<% iteration_list_ids = [ "iteration_nil" ] + @iterations.map{ |i| "iteration_#{i.id}" } -%>
 	<% for iteration in iteration_list_ids -%>
 	  <%= sortable_element iteration,
 	                       :url => reorder_stories_path(@project), :method => :put,
