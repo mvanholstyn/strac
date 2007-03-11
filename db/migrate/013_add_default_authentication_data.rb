@@ -10,7 +10,7 @@ class AddDefaultAuthenticationData < ActiveRecord::Migration
     customer_group = Group.create! :name => 'Customer'
     customer_group.privileges << user_privilege << customer_privilege
     
-    administrator = User.create! :username ='admin', :password => 'password', :password_confirmation => 'password'
+    administrator = User.create! :username =>'admin', :password => 'password', :password_confirmation => 'password'
   end
 
   def self.down
