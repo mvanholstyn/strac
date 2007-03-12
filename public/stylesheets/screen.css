@@ -109,10 +109,6 @@ ul#navigation {
 	padding: 2px;
 }
 
-.hidden {
-  display; none;
-}
-
 .draggable {
   cursor: move;
 }
