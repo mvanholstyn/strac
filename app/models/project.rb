@@ -1,4 +1,7 @@
 class Project < ActiveRecord::Base
+  
+  has_many :time_entries
+  
   has_many :stories do
     def without_iteration
       find( :all, :conditions => { :iteration_id => nil } )
