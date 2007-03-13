@@ -1,1 +1,14 @@
 <b>Project:</b> <%=h @project.name %>
+
+<br /><br />
+
+<table>
+<% Activity.find( :all, :order => "created_at DESC" ).each do |activity| -%>
+	<tr>
+		<td><b><%= activity.affected.name %></b></td>
+		<td><%= activity.action %> by</td>
+		<td><b><%= activity.actor.full_name %></b></td>
+		<td>on <b><%= activity.created_at.strftime( "%A %B %d, %Y at %I:%M:%S %p" ) %></b></td>
+	</tr>
+<% end -%>
+</table>

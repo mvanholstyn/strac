@@ -5,6 +5,7 @@ class Story < ActiveRecord::Base
   belongs_to :priority
   belongs_to :responsible_party, :polymorphic => true
   has_many :time_entries, :as => :timeable
+  has_many :activities, :as => :affected
 
   acts_as_list :scope => :iteration_id
   acts_as_taggable
@@ -12,6 +13,10 @@ class Story < ActiveRecord::Base
 
   validates_presence_of :summary, :project_id
   validates_numericality_of :points, :position, :allow_nil => true
+
+  def name
+    summary
+  end
 
   def responsible_party_type_id
     responsible_party ? "#{responsible_party.class.name.downcase}_#{responsible_party.id}" : ""
