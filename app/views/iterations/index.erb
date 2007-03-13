@@ -3,7 +3,9 @@
 <table>
 <% for iteration in @iterations %>
   <tr>
-    <td><%=h iteration.name %></td>
+    <td>
+			<%=h iteration.name ? "#{iteration.name} (" : "" %><%=h iteration.start_date.strftime( "%Y-%m-%d" ) + " through " + iteration.end_date.strftime( "%Y-%m-%d" ) %><%=h iteration.name ? ")" : "" %>
+		</td>
     <td><%= link_to 'Show', iteration_path(@project, iteration) %></td>
     <td><%= link_to 'Edit', edit_iteration_path(@project, iteration) %></td>
     <td><%= link_to 'Destroy', iteration_path(@project, iteration), :confirm => 'Are you sure?', :method => :delete %></td>

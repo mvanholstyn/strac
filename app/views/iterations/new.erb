@@ -4,12 +4,17 @@
 
 <% form_for :iteration, :url => iterations_path( @project ) do |f| %>
   <p>
+    <b>Name</b><br />
+    <%= f.text_field :name %>
+  </p>
+
+  <p>
     <b>Start date</b><br />
     <%= f.date_select :start_date %>
   </p>
 
   <p>
-    <b>End</b><br />
+    <b>End date</b><br />
     <%= f.date_select :end_date %>
   </p>
 
