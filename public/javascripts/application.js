@@ -4,17 +4,17 @@ function toggle_hide_show_with_smart_loading( id_to_show, ids_to_hide ) {
 		new Effect.BlindUp( id_to_show, { duration: 0.3 } );
 		return false;
 	} else if( id_to_show.innerHTML != '' ) {
+		effects = [
+			new Effect.BlindDown( id_to_show, { sync: true } ), 
+			new Effect.ScrollPage( id_to_show, { syne: true } ) 
+		];
 		ids_to_hide.each( 
-			function( id_to_hide ) { 
-				new Effect.BlindUp( id_to_hide, { duration: 0.3 } ); 
+			function( id_to_hide ) {
+				effects.unshift( new Effect.BlindUp( id_to_hide, { sync: true } ) ); 
 			}
 		);
-		
-		new Effect.Parallel(
-			[	new Effect.BlindDown( id_to_show, { sync: true } ), 
-				new Effect.ScrollPage( id_to_show, { syne: true } ) ],
-			{ duration: 0.3 }
-		);
+
+		new Effect.Parallel( effects, { duration: 0.3 } );
 		
 		if( arguments[2] ) {
 			Selector.findChildElements( id_to_show, $A( [ "form" ] ) ).each( 
