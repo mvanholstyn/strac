@@ -1,4 +1,4 @@
-function toggle_hide_show_with_smart_loading( id_to_show, ids_to_hide ) {
+function toggle_hide_show_with_smart_loading( id_to_show, ids_to_hide, focus_form ) {
 	id_to_show = $(id_to_show);
 	if( id_to_show.visible() ) {
 		new Effect.BlindUp( id_to_show, { duration: 0.3 } );
@@ -14,23 +14,20 @@ function toggle_hide_show_with_smart_loading( id_to_show, ids_to_hide ) {
 			}
 		);
 
-		new Effect.Parallel( effects, { duration: 0.3 } );
-		
-		if( arguments[2] ) {
-			Selector.findChildElements( id_to_show, $A( [ "form" ] ) ).each( 
-				function( form ) { 
-					setTimeout( 
-						function() { 
-							form.focusFirstElement(); 
-						}, 500 ); 
+		new Effect.Parallel( effects, 
+			{ duration: 0.3, 
+				afterFinish: function() {
+					if( focus_form ) {
+						id_to_show.getElementsBySelector( "form" ).first().focusFirstElement();
 					}
-			);
-		}
+				}
+			} 
+		);
+		
 		return false;
 	}
 	return true;
 }
-
 
 Effect.ScrollPage = Class.create();
 Object.extend(Object.extend(Effect.ScrollPage.prototype, Effect.Base.prototype), {
