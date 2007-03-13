@@ -119,7 +119,7 @@ class StoriesController < ApplicationController
 
   # PUT /stories/1;update_points.js
   def update_points
-    @story = @project.stories.find(params[:id], :include => :tags)
+    @story = @project.stories.find(params[:id])
     @story.points = params[:story][:points]
 
     respond_to do |format|
@@ -137,6 +137,22 @@ class StoriesController < ApplicationController
         end
       end
     end
+  end
+  
+  def time
+    @story = @project.stories.find(params[:id])
+    @time_entry = @project.time_entries.build( params[:time_entry] )
+    
+    if request.post?
+      @time_entry.timeable = @story
+      if @time_entry.save
+        format.js do
+          #render_notice %(Time entry was successfully created.) do |page|
+          #  page["story_#{@story.id}_time_list"].replace_html( @story.points || "&infin;" )
+          #end
+        end
+      end
+    end    
   end
 
   private

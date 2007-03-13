@@ -11,7 +11,7 @@ ActionController::Routing::Routes.draw do |map|
 
     project_map.resources :stories,
                           :collection => { :reorder => :put },
-                          :member => { :update_points => :put }
+                          :member => { :update_points => :put, :time => :any }
 
   end
 

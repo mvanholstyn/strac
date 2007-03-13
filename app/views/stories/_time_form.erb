@@ -1,0 +1,15 @@
+<%= error_messages_for :time_entry %>
+<% remote_form_for :time_entry, :url => time_story_path( @project, @story ), :html => { :id => "story_#{@story.id}_time_form" } do |form| -%>
+	<table>
+		<tr>
+			<td><b>Hours</b></td>
+			<td><%= form.text_field :hours, :size => 5 %></td>
+			<td><b>Date</b></td>
+			<td><%= form.date_select :date %></td>
+			<td><%= submit_tag "add entry" %></td>
+		</tr>
+		<tr>
+			<td><b>Comment</b></td>
+			<td colspan="4"><%= form.text_field :comment, :size => 75 %></td>
+		</tr>
+<% end -%>
