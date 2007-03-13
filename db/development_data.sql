@@ -16,6 +16,17 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `companies`
+--
+
+DROP TABLE IF EXISTS `companies`;
+CREATE TABLE `companies` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
 -- Dumping data for table `companies`
 --
 
@@ -24,6 +35,17 @@ LOCK TABLES `companies` WRITE;
 INSERT INTO `companies` VALUES (1,'MHS'),(2,'Fusionary');
 /*!40000 ALTER TABLE `companies` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `groups`
+--
+
+DROP TABLE IF EXISTS `groups`;
+CREATE TABLE `groups` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `groups`
@@ -36,6 +58,18 @@ INSERT INTO `groups` VALUES (6,'Developer'),(7,'Customer');
 UNLOCK TABLES;
 
 --
+-- Table structure for table `groups_privileges`
+--
+
+DROP TABLE IF EXISTS `groups_privileges`;
+CREATE TABLE `groups_privileges` (
+  `id` int(11) NOT NULL auto_increment,
+  `group_id` int(11) default NULL,
+  `privilege_id` int(11) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
 -- Dumping data for table `groups_privileges`
 --
 
@@ -44,6 +78,20 @@ LOCK TABLES `groups_privileges` WRITE;
 INSERT INTO `groups_privileges` VALUES (1,1,1),(2,4,10),(3,4,8),(4,5,10),(5,5,9),(6,6,13),(7,6,11),(8,7,13),(9,7,12);
 /*!40000 ALTER TABLE `groups_privileges` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `iterations`
+--
+
+DROP TABLE IF EXISTS `iterations`;
+CREATE TABLE `iterations` (
+  `id` int(11) NOT NULL auto_increment,
+  `start_date` date default NULL,
+  `end_date` date default NULL,
+  `project_id` int(11) default NULL,
+  `name` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `iterations`
@@ -56,6 +104,17 @@ INSERT INTO `iterations` VALUES (1,'2007-02-05','2007-02-11',1,NULL),(2,'2007-02
 UNLOCK TABLES;
 
 --
+-- Table structure for table `priorities`
+--
+
+DROP TABLE IF EXISTS `priorities`;
+CREATE TABLE `priorities` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
 -- Dumping data for table `priorities`
 --
 
@@ -64,6 +123,17 @@ LOCK TABLES `priorities` WRITE;
 INSERT INTO `priorities` VALUES (1,'Low'),(2,'Medium'),(3,'High');
 /*!40000 ALTER TABLE `priorities` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `privileges`
+--
+
+DROP TABLE IF EXISTS `privileges`;
+CREATE TABLE `privileges` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `privileges`
@@ -76,6 +146,17 @@ INSERT INTO `privileges` VALUES (11,'developer'),(12,'customer'),(13,'user');
 UNLOCK TABLES;
 
 --
+-- Table structure for table `projects`
+--
+
+DROP TABLE IF EXISTS `projects`;
+CREATE TABLE `projects` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
 -- Dumping data for table `projects`
 --
 
@@ -84,6 +165,15 @@ LOCK TABLES `projects` WRITE;
 INSERT INTO `projects` VALUES (1,'strac'),(2,'JoeCartoon');
 /*!40000 ALTER TABLE `projects` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `schema_info`
+--
+
+DROP TABLE IF EXISTS `schema_info`;
+CREATE TABLE `schema_info` (
+  `version` int(11) default NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `schema_info`
@@ -96,6 +186,17 @@ INSERT INTO `schema_info` VALUES (17),(17),(17),(17),(17);
 UNLOCK TABLES;
 
 --
+-- Table structure for table `statuses`
+--
+
+DROP TABLE IF EXISTS `statuses`;
+CREATE TABLE `statuses` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
 -- Dumping data for table `statuses`
 --
 
@@ -104,6 +205,26 @@ LOCK TABLES `statuses` WRITE;
 INSERT INTO `statuses` VALUES (1,'defined'),(2,'in progress'),(3,'complete'),(4,'rejected'),(5,'blocked');
 /*!40000 ALTER TABLE `statuses` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `stories`
+--
+
+DROP TABLE IF EXISTS `stories`;
+CREATE TABLE `stories` (
+  `id` int(11) NOT NULL auto_increment,
+  `summary` varchar(255) default NULL,
+  `description` text,
+  `points` int(11) default NULL,
+  `position` int(11) default NULL,
+  `iteration_id` int(11) default NULL,
+  `project_id` int(11) default NULL,
+  `responsible_party_id` int(11) default NULL,
+  `responsible_party_type` varchar(255) default NULL,
+  `status_id` int(11) default NULL,
+  `priority_id` int(11) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `stories`
@@ -116,6 +237,19 @@ INSERT INTO `stories` VALUES (5,'CRUD Stories','Users should be able CRUD Storie
 UNLOCK TABLES;
 
 --
+-- Table structure for table `taggings`
+--
+
+DROP TABLE IF EXISTS `taggings`;
+CREATE TABLE `taggings` (
+  `id` int(11) NOT NULL auto_increment,
+  `tag_id` int(11) default NULL,
+  `taggable_id` int(11) default NULL,
+  `taggable_type` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
 -- Dumping data for table `taggings`
 --
 
@@ -124,6 +258,17 @@ LOCK TABLES `taggings` WRITE;
 INSERT INTO `taggings` VALUES (1,1,26,'Story'),(2,2,27,'Story'),(4,4,5,'Story'),(6,6,6,'Story'),(8,2,30,'Story'),(11,7,7,'Story'),(12,9,33,'Story'),(13,11,34,'Story'),(14,12,35,'Story'),(16,14,51,'Story'),(17,14,23,'Story'),(18,5,50,'Story'),(19,15,8,'Story'),(20,15,9,'Story'),(21,5,10,'Story'),(23,5,5,'Story');
 /*!40000 ALTER TABLE `taggings` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `tags`
+--
+
+DROP TABLE IF EXISTS `tags`;
+CREATE TABLE `tags` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tags`
@@ -136,6 +281,22 @@ INSERT INTO `tags` VALUES (1,'javascript'),(2,'tags'),(3,'crud stories'),(4,'cru
 UNLOCK TABLES;
 
 --
+-- Table structure for table `time_entries`
+--
+
+DROP TABLE IF EXISTS `time_entries`;
+CREATE TABLE `time_entries` (
+  `id` int(11) NOT NULL auto_increment,
+  `hours` decimal(10,2) default NULL,
+  `comment` varchar(255) default NULL,
+  `date` date default NULL,
+  `project_id` int(11) default NULL,
+  `timeable_id` int(11) default NULL,
+  `timeable_type` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
 -- Dumping data for table `time_entries`
 --
 
@@ -143,6 +304,23 @@ LOCK TABLES `time_entries` WRITE;
 /*!40000 ALTER TABLE `time_entries` DISABLE KEYS */;
 /*!40000 ALTER TABLE `time_entries` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL auto_increment,
+  `username` varchar(255) default NULL,
+  `password_hash` varchar(255) default NULL,
+  `first_name` varchar(255) default NULL,
+  `last_name` varchar(255) default NULL,
+  `email_address` varchar(255) default NULL,
+  `group_id` int(11) default NULL,
+  `company_id` int(11) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
@@ -163,4 +341,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2007-03-13  2:16:00
+-- Dump completed on 2007-03-13  2:18:04
