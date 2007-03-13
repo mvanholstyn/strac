@@ -21,8 +21,8 @@
 		<li><%= link_to "logout", logout_users_path, :method => :post %></li>
 	</ul>
 	
-  <div id="notice"<%= flash[:notice].blank? ? ' class="hidden"' : "" %>><%= flash[:notice] %></div>
-  <div id="error"<%= flash[:error].blank? ? ' class="hidden"' : "" %>><%= flash[:error] %></div>
+  <div id="notice"<%= flash[:notice].blank? ? ' style="display:none"' : "" %>><%= flash[:notice] %></div>
+  <div id="error"<%= flash[:error].blank? ? ' style="display:none"' : "" %>><%= flash[:error] %></div>
   <%= yield -%>
 </body>
 </html>
