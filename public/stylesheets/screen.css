@@ -197,3 +197,9 @@ ul#navigation {
 .auto_complete_results ul li.selected	 {
 	background-color: #ffb;
 }
+
+.story_list {
+	border-top: 1px dashed #000;
+	padding-top: 5px;
+	min-height: 5px;
+}

@@ -10,7 +10,7 @@
   </table>
 	<div id="iteration_<%= iteration.id %>_story_new"></div>
 
-  <div id="iteration_<%= iteration.id %>" style="min-height: 1px;">
+  <div id="iteration_<%= iteration.id %>" class="story_list">
     <%= render :partial  => 'list', :locals => { :stories => iteration.stories.ordered } %>
   </div>
   <br />
@@ -26,7 +26,7 @@
     </tr>
   </table>
 	<div id="iteration_nil_story_new"></div>
-	<div id="iteration_nil">
+	<div id="iteration_nil" class="story_list">
 	  <%= render :partial  => 'stories/list', :locals => { :stories => @project.stories.without_iteration } %>
 	</div>
 
