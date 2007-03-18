@@ -1,0 +1,2 @@
+module TextileHelper
+end

@@ -144,15 +144,29 @@ ul#navigation {
 }
 
 .story_card .header {
-  border: solid #94bad5 1px;
-	background-color: #ffff88;
-	padding: 5px;
+  border: solid #000 1px;
+	background-color: #FFFF99;
+	padding: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	-moz-border-radius: 15px;
+	-moz-border-radius-bottomleft: 0px;
+	-moz-border-radius-bottomright: 0px;
+	line-height: 15px;
+}
+
+.story_card .header img {
+	vertical-align: middle;
 }
 
 .story_card .content {
-  border: solid #94bad5 1px;
-	background-color: #ffff88;
+  border: solid #000 1px;
+  border-top: none;
+	background-color: #FFFF66;
 	padding: 5px;
+	-moz-border-radius: 15px;
+	-moz-border-radius-topleft: 0px;
+	-moz-border-radius-topright: 0px;
 }
 
 .story_card .content p {

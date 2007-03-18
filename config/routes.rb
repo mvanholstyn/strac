@@ -1,7 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :tags, :collection => { :auto_complete => :any }
 
-  
   map.resources :companies
 
   map.resources :users, :collection => { :login => :any, :logout => :post }
@@ -14,6 +13,8 @@ ActionController::Routing::Routes.draw do |map|
                           :member => { :update_points => :put, :time => :any }
 
   end
+  
+  map.textile_preview 'textile/preview', :controller => 'textile', :action => 'preview'
 
   # The priority is based upon order of creation: first created -> highest priority.
 

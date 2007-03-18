@@ -1,7 +1,15 @@
 <% for iteration in @project.iterations.ordered -%>
-  <b>			<%=h iteration.name ? "#{iteration.name} (" : "" %><%=h iteration.start_date.strftime( "%Y-%m-%d" ) + " through " + iteration.end_date.strftime( "%Y-%m-%d" ) %><%=h iteration.name ? ")" : "" %></b>
-  <div id="iteration_<%= iteration.id %>">
-    <hr />
+	
+  <table width="100%">
+    <tr>
+      <td>
+      	<b><%=h !iteration.name.blank? ? "#{iteration.name} (" : "" %><%=h iteration.start_date.strftime( "%Y-%m-%d" ) + " through " + iteration.end_date.strftime( "%Y-%m-%d" ) %><%=h !iteration.name.blank? ? ")" : "" %></b>
+      </td>
+      <td align="right"><%= link_to_remote "create story", :url => new_story_path( @project ), :method => :get %></td>
+    </tr>
+  </table>
+
+  <div id="iteration_<%= iteration.id %>" style="min-height: 1px;">
     <%= render :partial  => 'list', :locals => { :stories => iteration.stories.ordered } %>
   </div>
   <br />

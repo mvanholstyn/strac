@@ -4,32 +4,50 @@
       <table>
         <tr>
           <td>
-            <b>Description</b>
+            <b>Summary</b>
+          </td>
+				</tr>
+				<tr>
+          <td>
+            <%= form.text_field :summary, :size => 41 %>
           </td>
         </tr>
         <tr>
           <td>
-            <%= form.text_area :description %>
+            <b>Description</b>
+						<%= check_box_tag "", 2, false %> show preview
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <%= form.text_area :description, :id => "story_#{@story.id}_description" %>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <b>Tags</b> <i>(comma separated)</i>
+          </td>
+				</tr>
+				<tr>
+          <td>
+						<%= form.text_field :tag_list, :size => 41, :id => "story_#{@story.id || "nil"}_tag_list" %>
+						<div id="story_<%= @story.id || "nil" %>_tag_list_auto_complete" class="auto_complete_results"></div>
+						<%= auto_complete_field "story_#{@story.id || "nil"}_tag_list", :url => auto_complete_tags_path, :tokens => ",", :param_name => 'tag' %>
           </td>
         </tr>
       </table>
     </td>
     <td valign="top">
       <table>
-        <tr>
-          <td>
-            <b>Summary</b>
-          </td>
-          <td>
-            <%= form.text_field :summary %>
-          </td>
-        </tr>
+				<tr>
+					<td colspan="2" id="<%= "story_#{@story.id}_description_preview" %>"></td>
+				</tr>
         <tr>
           <td>
             <b>Points</b>
           </td>
           <td>
-            <%= form.text_field :points %>
+            <%= form.text_field :points, :size => 3 %>
           </td>
         </tr>
         <tr>
@@ -38,16 +56,6 @@
           </td>
           <td>
             <%= form.collection_select :iteration_id, @project.iterations.ordered, :id, :name, :include_blank => true %>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <b>Tags</b>
-          </td>
-          <td>
-            <%= form.text_field :tag_list, :id => "story_#{@story.id || "nil"}_tag_list" %> <i>(tags are comma separated)</i>
-                                                <div id="story_<%= @story.id || "nil" %>_tag_list_auto_complete" class="auto_complete_results"></div>
-                                                <%= auto_complete_field "story_#{@story.id || "nil"}_tag_list", :url => auto_complete_tags_path, :tokens => ",", :param_name => 'tag' %>
           </td>
         </tr>
         <tr>
@@ -63,7 +71,7 @@
             <b>Status</b>
           </td>
           <td>
-                                                <%= form.select :status_id, @statuses %>
+						<%= form.select :status_id, @statuses %>
           </td>
         </tr>
         <tr>
@@ -71,11 +79,12 @@
             <b>Priority</b>
           </td>
           <td>
-                                                <%= form.select :priority_id, @priorities %>
+						<%= form.select :priority_id, @priorities %>
           </td>
         </tr>
-
       <table>
     </td>
   </tr>
 </table>
+<%= observe_field "story_#{@story.id}_description", :url => textile_preview_path, :update => "story_#{@story.id}_description_preview", 
+ 																										:with => "'textile=' + value", :frequency => 1 %>
