@@ -25,6 +25,7 @@ class StoriesController < ApplicationController
   # GET /stories/new
   def new
     @story = @project.stories.build
+    @story.iteration_id = params[:iteration_id]
 
     respond_to do |format|
       format.js # new.rjs

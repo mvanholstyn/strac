@@ -3,11 +3,12 @@
   <table width="100%">
     <tr>
       <td>
-      	<b><%=h !iteration.name.blank? ? "#{iteration.name} (" : "" %><%=h iteration.start_date.strftime( "%Y-%m-%d" ) + " through " + iteration.end_date.strftime( "%Y-%m-%d" ) %><%=h !iteration.name.blank? ? ")" : "" %></b>
+      	<b><%=h iteration.display_name %></b>
       </td>
-      <td align="right"><%= link_to_remote "create story", :url => new_story_path( @project ), :method => :get %></td>
+      <td align="right"><%= link_to_remote "create story", :url => new_story_path( :project_id => @project, :iteration_id => iteration ), :method => :get %></td>
     </tr>
   </table>
+	<div id="iteration_<%= iteration.id %>_story_new"></div>
 
   <div id="iteration_<%= iteration.id %>" style="min-height: 1px;">
     <%= render :partial  => 'list', :locals => { :stories => iteration.stories.ordered } %>
@@ -15,9 +16,17 @@
   <br />
 <% end -%>
 <% unless @project.stories.without_iteration.empty? -%>
-	<b>Backlog</b>
+
+  <table width="100%">
+    <tr>
+      <td>
+      	<b>Backlog</b>
+      </td>
+      <td align="right"><%= link_to_remote "create story", :url => new_story_path( @project ), :method => :get %></td>
+    </tr>
+  </table>
+	<div id="iteration_nil_story_new"></div>
 	<div id="iteration_nil">
-	  <hr />
 	  <%= render :partial  => 'stories/list', :locals => { :stories => @project.stories.without_iteration } %>
 	</div>
 

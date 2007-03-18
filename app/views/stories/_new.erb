@@ -6,6 +6,6 @@
   <%= render :partial => 'form', :locals => { :form => form } %>
   <p>
     <%= submit_tag "Create" %> or 
-		<%= link_to( "cancel", "#", :onclick => update_page { |page| page.visual_effect( :blind_up, "story_new", :duration => 0.3 ); page << "return false;" } ) %>
+		<%= link_to( "cancel", "#", :onclick => update_page { |page| page.visual_effect( :blind_up, "iteration_#{@story.iteration_id.inspect}_story_new", :duration => 0.3 ); page << "return false;" } ) %>
   </p>
 <% end -%>
