@@ -124,8 +124,6 @@ ul#navigation {
 .section_header {
   font-weight: bold;
   font-size: 26px;
-
-  width: 100%;
   padding: 5px;
   border-bottom: 1px dashed black;
  }
@@ -138,7 +136,7 @@ ul#navigation {
   margin-bottom: 3px;
 }
 
-.story_card .priority {
+.story_card .status {
   color: #868686;
   font-style: italic;
 }
@@ -204,8 +202,16 @@ ul#navigation {
 	min-height: 5px;
 }
 
-.story_card .header .take_release {
-  float: right;
-  font-size: 0.8em;
+.story_card .header { 
+  position: relative;
+}
+
+
+.story_card .take_release {
   font-style: italic;
+  text-align: right;
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  font-size: 10px;
 }
