@@ -1,18 +1,10 @@
-<%= link_to_remote image_tag( 'show.gif' ), :url => story_path(@project, story), :method => :get, 
-	:before => "if( !toggle_hide_show_with_smart_loading( 'story_#{story.id}_view', [ 'story_#{story.id}_edit', 'story_#{story.id}_time' ] ) ) { return false; }" %>
-<%= link_to_remote image_tag( 'edit.gif' ), :url => edit_story_path(@project, story), :method => :get, 
-	:before => "if( !toggle_hide_show_with_smart_loading( 'story_#{story.id}_edit', [ 'story_#{story.id}_view', 'story_#{story.id}_time' ] ) ) { return false; }" %>
-<%= link_to_remote image_tag( 'time.png' ), :url => time_story_path(@project, story), :method => :get, 
-	:before => "if( !toggle_hide_show_with_smart_loading( 'story_#{story.id}_time', [ 'story_#{story.id}_view', 'story_#{story.id}_edit' ], true ) ) { return false; }" %>
-<%= image_tag "move.gif", :class => 'draggable' %>
-<%= story.status ? story.status.name : "" %>
-<b>Points:</b>
-<span id="story_<%= story.id %>_points" class="inplaceeditor-field"><%= story.points ? h( story.points ) : "&infin;" %></span>
- -
-<%=h story.summary %>
-<% if story.responsible_party -%>
-  <span class="responsible_party">(<%=h story.responsible_party.name %>)</span>
-<% end-%>
-<%= in_place_editor "story_#{story.id}_points", :url => update_points_story_path( @project, story ), :param_name => 'story[points]',
-                                                :ajax_options => { :method => :put }, :eval_scripts => true,
-                                                :ok_button => false, :size => 3 %>
+<div id="story_<%= story.id %>_header" class="take_release">	
+	<% if story.responsible_party.nil?  %>
+		<%= render :partial=>'stories/take', :locals=>{:story=>story} %>
+	<% else %>
+		<%= render :partial=>'stories/release', :locals=>{:story=>story} %>
+	<% end %>
+</div>
+<div style="display:inline">
+	<%= render :partial => 'stories/mini_story_body', :locals => { :story => story } %>
+</div>

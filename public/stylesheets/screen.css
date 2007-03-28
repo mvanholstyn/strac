@@ -134,13 +134,13 @@ ul#navigation {
   padding: 5px;
 }
 
-.responsible_party {
-  color: #868686;
-  font-style: italic;
-}
-
 .story_card {
   margin-bottom: 3px;
+}
+
+.story_card .priority {
+  color: #868686;
+  font-style: italic;
 }
 
 .story_card .header {
@@ -202,4 +202,10 @@ ul#navigation {
 	border-top: 1px dashed #000;
 	padding-top: 5px;
 	min-height: 5px;
+}
+
+.story_card .header .take_release {
+  float: right;
+  font-size: 0.8em;
+  font-style: italic;
 }

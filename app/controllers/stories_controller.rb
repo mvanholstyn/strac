@@ -117,6 +117,45 @@ class StoriesController < ApplicationController
       end
     end
   end
+  
+  def take
+    @story = @project.stories.find(params[:id])
+    @story.responsible_party = User.current_user
+    
+    respond_to do |format|
+      if @story.save
+        format.js do
+          render_notice  %("#{@story.summary}" was successfully taken.) do |page|
+            page["story_#{@story.id}_header"].replace_html( :partial=>"stories/release", :locals=>{:story=>@story})
+          end
+        end
+      else
+        format.js do
+          render_error %("#{@story.summary}" was not successfully taken.)
+        end        
+      end
+    end
+  end
+
+  def release
+    @story = @project.stories.find(params[:id])
+    @story.responsible_party = nil
+    
+    respond_to do |format|
+      if @story.save
+        format.js do
+          render_notice  %("#{@story.summary}" was successfully released.) do |page|
+            page["story_#{@story.id}_header"].replace_html( :partial=>"stories/take", :locals=>{:story=>@story})
+          end
+        end
+      else
+        format.js do
+          render_error %("#{@story.summary}" was not successfully taken.)
+        end        
+      end
+    end
+  end
+
 
   # PUT /stories/1;update_points.js
   def update_points
