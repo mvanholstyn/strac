@@ -1,7 +1,11 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class StoryTest < Test::Unit::TestCase
-  fixtures :stories
+  fixtures :stories, :users
+
+  def setup
+    User.current_user = users(:zdennis)
+  end
 
   def teardown
     Story.delete_all
