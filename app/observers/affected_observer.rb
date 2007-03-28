@@ -2,7 +2,7 @@ class AffectedObserver < ActiveRecord::Observer
   observe Story
   
   def after_create affected
-    create_activity affected, 'create'
+    create_activity affected, 'created'
   end
   
   def after_update affected
