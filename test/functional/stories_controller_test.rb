@@ -51,6 +51,35 @@ class StoriesControllerTest < Test::Unit::TestCase
     assert_template 'update.rjs'
     assert_response :success
   end
+  
+  def test_take_a_story_with_success    
+    put :take, :id => 1, :story => {}, :project_id => @project.id
+    assert_response :success
+    
+    story = assigns(:story)
+    assert story
+
+    assert @response.body =~ /\\\"#{story.summary}\\\" was successfully taken\./
+    assert @response.body =~ /Release from Mark VanHolstyn/
+  end
+  
+  
+  def test_take_a_story_that_fails
+    Story.expects(:find).returns( Story.new(:summary=>"blah") )
+    
+    put :take, :id => 1, :story => {}, :project_id => @project.id
+    assert_response :success
+    
+    story = assigns(:story)
+    assert story
+
+    assert @response.body =~ /\\\"#{story.summary}\\\" was not successfully taken\./
+  end
+  
+  
+  def test_release_a_story
+    
+  end
 
   #TODO: This could be far more robust
   def test_post_to_reorder_should_attempt_to_reorder

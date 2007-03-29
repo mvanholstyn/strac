@@ -3,8 +3,8 @@ mvanholstyn:
   id: 1
   username: mvanholstyn
   password_hash: <%= User.hash_password 'password' %>
-  first_name: MyString
-  last_name: MyString
+  first_name: Mark
+  last_name: VanHolstyn
   email_address: MyString
   group_id: 1
   
