@@ -150,7 +150,7 @@ class StoriesController < ApplicationController
         end
       else
         format.js do
-          render_error %("#{@story.summary}" was not successfully taken.)
+          render_error %("#{@story.summary}" was not successfully released.)
         end        
       end
     end

@@ -63,7 +63,6 @@ class StoriesControllerTest < Test::Unit::TestCase
     assert @response.body =~ /Release from Mark VanHolstyn/
   end
   
-  
   def test_take_a_story_that_fails
     Story.expects(:find).returns( Story.new(:summary=>"blah") )
     
@@ -76,11 +75,29 @@ class StoriesControllerTest < Test::Unit::TestCase
     assert @response.body =~ /\\\"#{story.summary}\\\" was not successfully taken\./
   end
   
-  
-  def test_release_a_story
+  def test_release_a_story_with_success    
+    put :release, :id => 1, :story => {}, :project_id => @project.id
+    assert_response :success
     
-  end
+    story = assigns(:story)
+    assert story
 
+    assert @response.body =~ /\\\"#{story.summary}\\\" was successfully released\./
+    assert @response.body =~ /Take this story/
+  end
+  
+  def test_take_a_release_that_fails
+    Story.expects(:find).returns( Story.new(:summary=>"blah") )
+    
+    put :release, :id => 1, :story => {}, :project_id => @project.id
+    assert_response :success
+    
+    story = assigns(:story)
+    assert story
+
+    assert @response.body =~ /\\\"#{story.summary}\\\" was not successfully released\./
+  end
+  
   #TODO: This could be far more robust
   def test_post_to_reorder_should_attempt_to_reorder
     Story.expects( :reorder ).with( [ 2, 1 ], :iteration_id => nil ).returns( true )
