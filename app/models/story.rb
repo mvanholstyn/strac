@@ -46,4 +46,10 @@ class Story < ActiveRecord::Base
     logger.error "Rescued Exception in Story.reorder: #{e.to_s}\n\t#{e.backtrace.join("\n\t")}"
     false
   end
+  
+  def self.find_backlog options = {}
+    with_scope :find => options do
+      find :all, :conditions => { :iteration_id => nil }
+    end
+  end
 end

@@ -1,22 +1,21 @@
-<% for iteration in @iterations -%>
-  <b><%=h iteration.name %></b>
-  <div id="iteration_<%= iteration.id %>">
-    <hr />
-    <%= render :partial  => 'stories/list', :locals => { :stories => iteration.stories.ordered } %>
-  </div>
-  <br />
-<% end -%>
-<% unless @project.stories.without_iteration.empty? -%>
-	<b>Whenever...</b>
-	<div id="iteration_nil">
-	  <hr />
-	  <%= render :partial  => 'stories/list', :locals => { :stories => @project.stories.without_iteration } %>
+<% if @iteration.new_record? -%>
+	<%= render "iterations/new" %>
+<% else -%>
+	<b><%= @iteration.display_name %></b>
+	<div id="iteration_<%= @iteration.id %>">
+		<hr />
+		<%= render :partial => "stories/list", :locals => { :stories => @iteration.stories } -%>
 	</div>
+<% end -%>
+<br />
+<b>Backlog</b>
+<div id="iteration_nil">
+	<hr />
+	<%= render :partial  => 'stories/list', :locals => { :stories => @stories } %>
+</div>
 
-	<% iteration_list_ids = [ "iteration_nil" ] + @iterations.map{ |i| "iteration_#{i.id}" } -%>
-	<% for iteration in iteration_list_ids -%>
-	  <%= sortable_element iteration,
-	                       :url => reorder_stories_path(@project), :method => :put,
-	                       :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => iteration_list_ids -%>
-	<% end -%>
+<% iteration_list_ids = [ "iteration_nil", "iteration_#{@iteration.id}" ] -%>
+<% for iteration in iteration_list_ids -%>
+	<%= sortable_element iteration, :url => reorder_stories_path(@project), :method => :put,
+				:tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => iteration_list_ids -%>
 <% end -%>

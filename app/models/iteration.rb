@@ -1,9 +1,5 @@
 class Iteration < ActiveRecord::Base
-  has_many :stories do
-    def ordered
-      find :all, :order => :position
-    end
-  end
+  has_many :stories
   belongs_to :project
 
   validates_presence_of :start_date, :end_date, :project_id
@@ -14,5 +10,9 @@ class Iteration < ActiveRecord::Base
     else
       "#{name} (#{start_date.strftime( "%Y-%m-%d" ) + " through " + end_date.strftime( "%Y-%m-%d" )})"
     end
+  end
+
+  def self.find_current
+    find :first, :conditions => [ "? BETWEEN start_date AND end_date", Date.today ]
   end
 end

@@ -8,7 +8,7 @@ iteration_id = "iteration_#{@story.iteration ? @story.iteration.id : 'nil'}"
 page.insert_html :bottom, iteration_id, :partial => 'list', :locals => { :stories => [ @story ] }
 
 
-iteration_list_ids = [ "iteration_nil" ] + @project.iterations.ordered.map{ |i| "iteration_#{i.id}" }
+iteration_list_ids = [ "iteration_nil" ] + @project.iterations.map{ |i| "iteration_#{i.id}" }
 page.sortable iteration_id, :url => reorder_stories_path(@project), :method => :put,
                             :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => iteration_list_ids
 
