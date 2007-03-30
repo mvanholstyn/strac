@@ -2,7 +2,7 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 18) do
+ActiveRecord::Schema.define(:version => 20) do
 
   create_table "activities", :force => true do |t|
     t.column "actor_id",      :integer
@@ -33,7 +33,9 @@ ActiveRecord::Schema.define(:version => 18) do
   end
 
   create_table "priorities", :force => true do |t|
-    t.column "name", :string
+    t.column "name",     :string
+    t.column "color",    :string
+    t.column "position", :integer
   end
 
   create_table "privileges", :force => true do |t|

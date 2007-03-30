@@ -1,0 +1,23 @@
+<% stories_grouped_by_priority = stories.group_by { |s| s.priority } -%>
+
+<% Priority.find( :all, :order => :position ).each do |priority| -%>
+	<div class="priority_box" id="priority_<%= priority.id %>" style="background-color: <%= priority.color %>;">
+		<h1><%= priority.name %></h1>
+		<% for story in ( stories_grouped_by_priority[priority] || [] ) -%>
+	  	<%= render :partial => 'stories/story', :locals => { :story => story } %>
+		<% end -%>
+	</div>
+<% end -%>
+
+<div class="priority_box" id="priority_nil" style="background-color: #000;">
+	<h1>Unprioritized</h1>
+	<% for story in stories_grouped_by_priority[nil] -%>
+  	<%= render :partial => 'stories/story', :locals => { :story => story } %>
+	<% end -%>
+</div>
+
+<% priority_ids = Priority.find( :all ).map{ |p| "priority_#{p.id}" } + [ "priority_nil" ] -%>
+<% for priority_id in priority_ids -%>
+	<%= sortable_element priority_id, :url => reorder_stories_path(@project), :method => :put,
+				:tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => priority_ids -%>
+<% end -%>

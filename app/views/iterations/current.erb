@@ -7,15 +7,8 @@
 		<%= render :partial => "stories/list", :locals => { :stories => @iteration.stories } -%>
 	</div>
 <% end -%>
-<br />
-<b>Backlog</b>
-<div id="iteration_nil">
-	<hr />
-	<%= render :partial  => 'stories/list', :locals => { :stories => @stories } %>
-</div>
 
-<% iteration_list_ids = [ "iteration_nil", "iteration_#{@iteration.id}" ] -%>
-<% for iteration in iteration_list_ids -%>
-	<%= sortable_element iteration, :url => reorder_stories_path(@project), :method => :put,
-				:tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => iteration_list_ids -%>
-<% end -%>
+<br />
+
+<%= render :partial  => 'stories/priority_list', :locals => { :stories => @stories } %>
+
