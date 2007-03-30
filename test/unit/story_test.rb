@@ -1,17 +1,10 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class StoryTest < Test::Unit::TestCase
-  fixtures :stories, :users
-
-  def setup
-    User.current_user = users(:zdennis)
-  end
-
-  def teardown
-    Story.delete_all
-  end
+  fixtures :stories
 
   def create_story( options={} )
+    AffectedObserver.instance.expects( :create_activity )
     default_options = { :summary=>"Summary",
                           :description=>"Description",
                           :points=>"1",
@@ -23,7 +16,7 @@ class StoryTest < Test::Unit::TestCase
     story
   end
 
-  def test_creating_a_story
+  def test_creating_a_stort
     count = Story.count
     story = create_story
     assert_equal count+1, Story.count
