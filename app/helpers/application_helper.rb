@@ -26,5 +26,15 @@ module ApplicationHelper
 
     javascript_tag(function)
   end
+  
+  def convert_story_ids_to_links( description )
+    description.gsub( /(^|\W)(S(\d+))(\W|$)/ ) do |story_id|
+      story = Story.find_by_id( $3 ) 
+      url = story_path( :project_id=>story.project_id, :id=>story.id )
+      link = $1 + link_to( $2, url, :title=>story.title ) + $4
+      link
+    end
+    
+  end
 
 end
