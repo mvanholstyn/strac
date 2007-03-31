@@ -1,5 +1,13 @@
 class Project < ActiveRecord::Base
   has_many :time_entries
   has_many :stories
-  has_many :iterations
+  has_many :iterations do 
+    def find_current
+      find :first, :conditions => [ "? BETWEEN start_date AND end_date", Date.today ]
+    end
+  
+    def find_or_build_current
+      find_current || build( :name => "Iteration #{size + 1}", :start_date => Date.today, :end_date =>  Date.today + 7 )
+    end
+  end
 end
