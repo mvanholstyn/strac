@@ -80,8 +80,7 @@ class IterationsController < ApplicationController
   end
   
   def current
-    @iteration = @project.iterations.find_current
-    @iteration ||= @project.iterations.build :name => "Iteration #{@project.iterations.size + 1}", :start_date => Date.today, :end_date =>  Date.today + 7
+    @iteration = @project.iterations.find_or_build_current
     @stories = @project.stories.find( :all, :conditions => { :iteration_id => nil }, :order => :position )
   end
 
