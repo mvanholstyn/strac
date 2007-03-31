@@ -85,19 +85,19 @@ class StoriesController < ApplicationController
 
   # DELETE /stories/1
   # DELETE /stories/1.xml
-  # def destroy
-  #   @story = @project.stories.find(params[:id], :include => :tags)
-  #   @story.destroy
-  #
-  #   respond_to do |format|
-  #     format.js # destroy.rjs
-  #     format.html do
-  #       flash[:notice] = %("#{@story.summary}" was successfully destroyed.)
-  #       redirect_to stories_url( @project )
-  #     end
-  #     format.xml  { head :ok }
-  #   end
-  # end
+  def destroy
+    @story = @project.stories.find(params[:id], :include => :tags)
+    @story.destroy
+  
+    respond_to do |format|
+      format.js # destroy.rjs
+      format.html do
+        flash[:notice] = %("#{@story.summary}" was successfully destroyed.)
+        redirect_to stories_url( @project )
+      end
+      format.xml  { head :ok }
+    end
+  end
 
   # PUT /stories/reorder.js
   def reorder

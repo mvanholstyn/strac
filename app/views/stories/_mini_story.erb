@@ -2,10 +2,11 @@
 <%= "S#{story.id}" %>
 </span>
 
-<%= link_to_remote image_tag( 'show.gif' ), :url => story_path(@project, story), :method => :get, 
+<%= link_to_remote image_tag( 'show.png' ), :url => story_path(@project, story), :method => :get, 
 	:before => "if( !toggle_hide_show_with_smart_loading( 'story_#{story.id}_view', [ 'story_#{story.id}_edit', 'story_#{story.id}_time' ] ) ) { return false; }" %>
-<%= link_to_remote image_tag( 'edit.gif' ), :url => edit_story_path(@project, story), :method => :get, 
+<%= link_to_remote image_tag( 'edit.png' ), :url => edit_story_path(@project, story), :method => :get, 
 	:before => "if( !toggle_hide_show_with_smart_loading( 'story_#{story.id}_edit', [ 'story_#{story.id}_view', 'story_#{story.id}_time' ] ) ) { return false; }" %>
+<%= link_to_remote image_tag( 'destroy.png' ), :url => story_path(@project, story), :method => :delete %>
 <%= link_to_remote image_tag( 'time.png' ), :url => time_story_path(@project, story), :method => :get, 
 	:before => "if( !toggle_hide_show_with_smart_loading( 'story_#{story.id}_time', [ 'story_#{story.id}_view', 'story_#{story.id}_edit' ], true ) ) { return false; }" %>
 <%= image_tag "move.gif", :class => 'draggable' %>
