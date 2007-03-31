@@ -132,6 +132,11 @@ ul#navigation {
   padding: 5px;
 }
 
+.story_id {
+  font-size: 0.8em;
+  padding-right: 0.5em;
+}
+
 .story_card {
   margin-bottom: 3px;
 }
