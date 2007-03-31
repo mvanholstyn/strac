@@ -1,1 +1,8 @@
-<b>Iteration:</b> <%=h @iteration.name %>
+<b>Iteration:</b> <%=h @iteration.name %><br /><br />
+
+
+Stories<br/>
+<hr />
+<% @iteration.stories.each do |story| -%>
+	<%= story.summary %><br/>
+<% end -%>
