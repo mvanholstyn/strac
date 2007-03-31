@@ -1,4 +1,6 @@
 class AddColorToPriority < ActiveRecord::Migration
+  class Priority < ActiveRecord::Base; end
+  
   def self.up
     add_column :priorities, :color, :string
   
