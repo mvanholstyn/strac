@@ -13,4 +13,4 @@ page.sortable iteration_id, :url => reorder_stories_path(@project), :method => :
                             :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => iteration_list_ids
 
 @story = Story.new # we want a fresh form
-page["story_new"].replace_html :partial => 'new'
+page["#{iteration_id}_story_new"].replace_html :partial => 'new'
