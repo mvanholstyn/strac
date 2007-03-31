@@ -4,5 +4,8 @@ page[:notice].show
 page.visual_effect :appear, :notice
 page.delay( 10 ) {  page.visual_effect :fade, :notice }
 
+id_to_hide = "story_#{@story.id}_edit"
+page.visual_effect :blind_up, id_to_hide, :duration => 0.3
+
 page["story_#{@story.id}_mini"].replace_html :partial => 'mini_story', :locals => { :story => @story }
 page["story_#{@story.id}_view"].replace_html :partial => 'show'
