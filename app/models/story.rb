@@ -7,7 +7,7 @@ class Story < ActiveRecord::Base
   has_many :time_entries, :as => :timeable
   has_many :activities, :as => :affected
 
-  acts_as_list :scope => :priority_id
+  acts_as_list :scope => :iteration_id
   acts_as_taggable
   acts_as_textiled :description
 

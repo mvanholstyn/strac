@@ -103,9 +103,9 @@ class StoriesController < ApplicationController
   def reorder
     respond_to do |format|
       #TODO: This will fail if complete stories are hidden..."
-      param_to_use = params.select { |k,v| k =~ /^priority_(\d+|nil)$/ }.first
+      param_to_use = params.select { |k,v| k =~ /^iteration_(\d+|nil)$/ }.first
       if Story.reorder( param_to_use.last,
-                        :priority_id => eval( param_to_use.first.scan( /^priority_(\d+|nil)$/ ).flatten.first ) )
+                        :iteration_id => eval( param_to_use.first.scan( /^iteration_(\d+|nil)$/ ).flatten.first ) )
         format.js { render_notice "Priorities have been successfully updated." }
       else
         format.js do
