@@ -3,6 +3,4 @@
 
 Stories<br/>
 <hr />
-<% @iteration.stories.each do |story| -%>
-	<%= story.summary %><br/>
-<% end -%>
+<%= render :partial => 'stories/list', :locals => { :stories => @iteration.stories } %>
