@@ -36,6 +36,7 @@
 		
 		<% if @project and @project.id -%>
 		<ul id="subnav">
+			<li><%= link_to "<em>o</em>verview", project_path( @project ), :accesskey => "o" %></li>
 			<li><%= link_to "c<em>u</em>rrent iteration", current_iterations_url( @project ), :accesskey => "u" %></li>
 			<li><%= link_to "<em>i</em>terations", iterations_path( @project ), :accesskey => "i" %></li>
 			<li><%= link_to "<em>s</em>tories", stories_path( @project ), :accesskey => "s" %></li>
