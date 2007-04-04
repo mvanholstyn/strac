@@ -1,7 +1,8 @@
 <% if @iteration.new_record? -%>
 	<%= render "iterations/new" %>
 <% else -%>
-	<b><%= @iteration.display_name %></b>
+	<%= render :partial => 'iterations/header', :locals => { :iteration => @iteration } %>
+	
 	<div id="iteration_<%= @iteration.id %>">
 		<%= render :partial => "stories/list", :locals => { :stories => @iteration.stories.find( :all, :order => :position ) } -%>
 	</div>
