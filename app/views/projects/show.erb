@@ -5,7 +5,7 @@
 <table>
 <% Activity.find( :all, :order => "created_at DESC" ).each do |activity| -%>
 	<tr>
-		<td><b><%= activity.affected.name %></b></td>
+		<td><b><%= link_to activity.affected.name, story_path( @project, activity.affected ) %></b></td>
 		<td><%= activity.action %> by</td>
 		<td><b><%= activity.actor.full_name %></b></td>
 		<td>on <b><%= activity.created_at.strftime( "%A, %B %d, %Y </b>at<b> %I:%M:%S %p" ) %></b></td>

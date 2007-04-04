@@ -9,3 +9,7 @@ page.visual_effect :blind_up, id_to_hide, :duration => 0.3
 
 page["story_#{@story.id}_mini"].replace_html :partial => 'mini_story', :locals => { :story => @story }
 page["story_#{@story.id}_view"].replace_html :partial => 'show'
+
+iteration_list_ids = [ "iteration_nil" ] + @project.iterations.map{ |i| "iteration_#{i.id}" }
+page.sortable "iteration_#{@story.iteration.id}", :url => reorder_stories_path(@project), :method => :put,
+                            :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => iteration_list_ids
