@@ -29,7 +29,9 @@ class IterationsControllerTest < Test::Unit::TestCase
 
   def test_should_create_iteration
     old_count = Iteration.count
-    post :create, :iteration => { :start_date => Date.today, :end_date => Date.today }, :project_id=>@project.id
+    post :create, :iteration => { 
+      :start_date => Date.today, 
+      :end_date => Date.today+1 }, :project_id=>@project.id
     assert_equal old_count+1, Iteration.count
 
     assert_redirected_to iteration_path( @project, assigns(:iteration))
@@ -46,7 +48,7 @@ class IterationsControllerTest < Test::Unit::TestCase
   end
 
   def test_should_update_iteration
-    put :update, :id => 1, :project_id=>@project.id, :iteration => { }
+    put :update, :id => 1, :project_id=>@project.id, :iteration => { :budget=>'25' }
     assert_redirected_to iteration_path( @project, assigns(:iteration))
   end
 

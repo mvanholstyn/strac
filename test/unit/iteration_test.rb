@@ -52,4 +52,39 @@ class IterationTest < Test::Unit::TestCase
     assert ! iteration.valid?
     assert_equal 1, iteration.errors.size
   end
+  
+  def test_validates_budget
+    iteration = Iteration.new( :project_id => 1, :start_date => Date.today, :end_date => Date.today+1, :budget => 25 )
+    assert iteration.valid?
+    
+    assert_equal 25, iteration.budget, "iteration budget was wrong!"
+  end
+  
+  def test_points_completed
+    iteration = Iteration.create( :project_id => 1, :start_date => Date.today, :end_date => Date.today+1, :budget => 25 )
+
+    expect_points_completed_for( iteration )
+    
+    assert_equal 10, iteration.points_completed, "points completed for iteration was wrong!"
+  end
+  
+  def test_points_remaining
+    iteration = Iteration.create( :project_id => 1, :start_date => Date.today, :end_date => Date.today+1, :budget => 25 )
+    
+    expect_points_completed_for( iteration )
+    
+    assert_equal 15, iteration.points_remaining, "points remaining for iteration was wrong!"
+        
+  end
+  
+  
+  ## EXPECT HELPER METHODS
+  
+  def expect_points_completed_for( iteration )
+    Story.expects( :find ).with( :first, { 
+      :conditions => { :iteration_id => iteration.id, :status_id => Status.complete.id }, 
+      :select => 'IFNULL(SUM(points),0) AS points'}).returns( Story.new( :points=>10 ))    
+  end
+  
+  
 end

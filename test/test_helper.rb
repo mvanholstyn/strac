@@ -30,6 +30,9 @@ class Test::Unit::TestCase
   # fixtures required for login purposes
   fixtures :users, :groups, :privileges, :groups_privileges
   
+  # required for story dependency reasons
+  fixtures :statuses
+  
   def login_as( username )
      @request.session[:current_user_id] = users( username )
   end
