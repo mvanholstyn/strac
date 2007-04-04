@@ -63,27 +63,32 @@ class IterationTest < Test::Unit::TestCase
   def test_points_completed
     iteration = Iteration.create( :project_id => 1, :start_date => Date.today, :end_date => Date.today+1, :budget => 25 )
 
-    expect_points_completed_for( iteration )
+    expect_points_completed_for( iteration, 10 )
     
     assert_equal 10, iteration.points_completed, "points completed for iteration was wrong!"
+  end
+  
+  def test_points_completed_with_no_stories_defined_with_points
+    iteration = Iteration.create( :project_id => 1, :start_date => Date.today, :end_date => Date.today+1, :budget => 25 )
+
+    expect_points_completed_for( iteration, nil )
+    
+    assert_equal 0, iteration.points_completed, "points completed for iteration was wrong!"
   end
   
   def test_points_remaining
     iteration = Iteration.create( :project_id => 1, :start_date => Date.today, :end_date => Date.today+1, :budget => 25 )
     
-    expect_points_completed_for( iteration )
+    expect_points_completed_for( iteration, 10 )
     
     assert_equal 15, iteration.points_remaining, "points remaining for iteration was wrong!"
-        
   end
-  
+    
   
   ## EXPECT HELPER METHODS
   
-  def expect_points_completed_for( iteration )
-    Story.expects( :find ).with( :first, { 
-      :conditions => { :iteration_id => iteration.id, :status_id => Status.complete.id }, 
-      :select => 'IFNULL(SUM(points),0) AS points'}).returns( Story.new( :points=>10 ))    
+  def expect_points_completed_for( iteration, points )
+    Story.expects( :sum ).with( :points, :conditions => { :iteration_id => iteration.id, :status_id => Status.complete.id }).returns(points)
   end
   
   
