@@ -380,3 +380,11 @@ input, textarea, select {
   margin-right: 5px;
   font-size: 0.8em;
 }
+
+option.group {
+	font-weight: bold;
+}
+
+option.option {
+	padding-left: 15px;
+}

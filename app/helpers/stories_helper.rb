@@ -22,11 +22,11 @@ module StoriesHelper
     html << content_tag( "option", "Me (#{current_user.full_name})", attributes )
     html << content_tag( "option", "", :value => "" )
     Company.find( :all ).each do |c|
-    attributes = { :value => "company_#{c.id}", :class => 'company_option' }
+    attributes = { :value => "company_#{c.id}", :class => 'group' }
     attributes[:selected] = "selected" if attributes[:value] == selected
       html << content_tag( "option", c.name, attributes )
       c.users.each do |u|
-        attributes = { :value => "user_#{u.id}", :class => 'user_option' }
+        attributes = { :value => "user_#{u.id}", :class => 'option' }
         attributes[:selected] = "selected" if attributes[:value] == selected and attributes[:value] != "user_#{current_user.id}"
         html << content_tag( "option", u.full_name, attributes )
       end
