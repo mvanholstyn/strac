@@ -15,7 +15,7 @@
         <tr>
           <td>
             <b>Description</b>
-						<%= check_box_tag "", 2, false %> show preview
+						<%= check_box_tag "story_#{@story.id}_description_preview_checkbox", 1, true %> show preview
           </td>
         </tr>
         <tr>
@@ -87,4 +87,4 @@
   </tr>
 </table>
 <%= observe_field "story_#{@story.id}_description", :url => textile_preview_path, :update => "story_#{@story.id}_description_preview", 
- 																										:with => "'textile=' + value", :frequency => 1 %>
+ 																										:with => "'textile=' + encodeURIComponent( value )", :frequency => 5, :condition => "$('story_#{@story.id}_description_preview_checkbox').checked" %>
