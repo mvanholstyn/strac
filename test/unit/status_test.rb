@@ -7,6 +7,14 @@ class StatusTest < Test::Unit::TestCase
   def teardown
     Status.delete_all
   end
+  
+  def test_validates_presence_of_color
+    status = Status.new :color => nil
+    
+    assert !status.valid?
+    assert_equal 1, status.errors.size
+    assert_not_nil status.errors.on( :color )
+  end
 
   def test_defined_exists_as_expected
     assert Status.defined

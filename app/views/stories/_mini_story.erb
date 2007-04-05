@@ -1,3 +1,9 @@
+<ul class="statuses">
+	<% for status in Status.find( :all ) -%>
+		<li id="<%= "story_#{story.id}_status_#{status.id}" %>" title="<%= status.name %>" class="<%= "#{status.color}#{status == story.status ? " selected" : ""}" %>" onclick="<%= remote_function( :url => update_status_story_path( :project_id => @project, :id => story, :story => { :status_id => status.id } ), :method => :put ) %>">&nbsp;&nbsp;&nbsp;</li>
+	<% end -%>
+</ul>
+
 <%= image_tag "move.gif", :class => 'draggable' %>
 <%= link_to_remote image_tag( 'show.png' ), :url => story_path(@project, story), :method => :get, 
 	:before => "if( !toggle_hide_show_with_smart_loading( 'story_#{story.id}_view', [ 'story_#{story.id}_edit', 'story_#{story.id}_time' ] ) ) { return false; }" %>
@@ -9,10 +15,6 @@
 
 <b>Points:</b> <span id="story_<%= story.id %>_points" class="inplaceeditor-field"><%= story.points ? h( story.points ) : "&infin;" %></span>
  - <%= "S#{story.id}" %> - <%=h story.summary %>
-
-<% if story.status -%>
-  <span class="status">(<%=h story.status.name %>)</span>
-<% end-%>
 
 <span id="story_<%= story.id %>_header">	
 	<% if story.responsible_party.nil? -%>

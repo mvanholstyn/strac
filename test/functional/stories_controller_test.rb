@@ -98,6 +98,19 @@ class StoriesControllerTest < Test::Unit::TestCase
     assert @response.body =~ /\\\"#{story.summary}\\\" was not successfully released\./
   end
   
+  def test_should_update_story_status
+    story_mock = Story.new
+    story_mock.expects( :status_id= ).with( 1 )
+    story_mock.expects( :save ).returns( true )
+    Story.expects( :find ).returns( story_mock )
+    
+    put :update_status, :id => 1, :story => { :status_id => 1 }, :project_id => @project.id
+    assert_response :success
+    
+    story = assigns( :story )
+    assert_not_nil story
+  end
+  
   #TODO: This could be far more robust
   def test_post_to_reorder_should_attempt_to_reorder
     Story.expects( :reorder ).with( [ 2, 1 ], :iteration_id => nil ).returns( true )

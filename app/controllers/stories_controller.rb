@@ -156,7 +156,6 @@ class StoriesController < ApplicationController
     end
   end
 
-
   # PUT /stories/1;update_points.js
   def update_points
     @story = @project.stories.find(params[:id])
@@ -174,6 +173,28 @@ class StoriesController < ApplicationController
           render_error %("#{@story.summary}" was not successfully updated.) do |page|
             page["story_#{@story.id}_points"].replace_html( @story.reload.points || "&infin;" )
           end
+        end
+      end
+    end
+  end
+
+  # PUT /stories/1;update_status.js
+  def update_status
+    @story = @project.stories.find(params[:id])
+    old_status_id = @story.status_id
+    @story.status_id = params[:story][:status_id]
+
+    respond_to do |format|
+      if @story.save
+        format.js do
+          render_notice %("#{@story.summary}" was successfully updated.) do |page|
+            page["story_#{@story.id}_status_#{@story.status_id}"].addClassName( "selected" )
+            page["story_#{@story.id}_status_#{old_status_id}"].removeClassName( "selected" )
+          end
+        end
+      else
+        format.js do
+          render_error %("#{@story.summary}" was not successfully updated.)
         end
       end
     end

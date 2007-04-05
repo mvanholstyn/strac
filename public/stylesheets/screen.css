@@ -372,6 +372,10 @@ input, textarea, select {
   padding-left: 3px;
 }
 
+.story_card .header {
+	position: relative;
+}
+
 .iteration .header-stats {
   float: right; 
 }
@@ -387,4 +391,45 @@ option.group {
 
 option.option {
 	padding-left: 15px;
+}
+
+.statuses {
+	
+	
+}
+
+ul.statuses {
+	list-style: none;
+	position: absolute;
+	right: 5px;
+	top: -5px;
+}
+
+ul.statuses li {
+	display: inline;
+	width: 8px;
+	height: 8px;
+	background-image: url(../images/bullet_white.png);
+	background-repeat: no-repeat;	
+	cursor: pointer;
+}
+
+ul.statuses li.red:hover, ul.statuses li.red.selected {
+	background-image: url(../images/bullet_red.png);
+}
+
+ul.statuses li.yellow:hover, ul.statuses li.yellow.selected {
+	background-image: url(../images/bullet_yellow.png);
+}
+
+ul.statuses li.black:hover, ul.statuses li.black.selected {
+	background-image: url(../images/bullet_black.png);
+}
+
+ul.statuses li.green:hover, ul.statuses li.green.selected {
+	background-image: url(../images/bullet_green.png);
+}
+
+ul.statuses li.blue:hover, ul.statuses li.blue.selected {
+	background-image: url(../images/bullet_blue.png);
 }
