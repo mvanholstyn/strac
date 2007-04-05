@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
       page[:notice].hide
       page[:error].show
       page.visual_effect :appear, :error
-      page.delay( 10 ) {  page.visual_effect :fade, :notice }
+      page.delay( 5 ) {  page.visual_effect :fade, :notice }
       yield page if block_given?
     end
   end
@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
       page[:error].hide
       page[:notice].show
       page.visual_effect :appear, :notice
-      page.delay( 10 ) {  page.visual_effect :fade, :notice }
+      page.delay( 5 ) {  page.visual_effect :fade, :notice }
       yield page if block_given?
     end
   end

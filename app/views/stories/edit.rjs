@@ -1,2 +1,2 @@
 page["story_#{@story.id}_edit"].replace_html :partial => 'edit'
-page.call :toggle_hide_show_with_smart_loading, "story_#{@story.id}_edit", [ "story_#{@story.id}_view", "story_#{@story.id}_time" ]
+page.call :toggle_hide_show_with_smart_loading, "story_#{@story.id}_edit", [ "story_#{@story.id}_view", "story_#{@story.id}_time" ], true
