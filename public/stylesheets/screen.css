@@ -304,25 +304,29 @@ input, textarea, select {
 }
 
 #notice {
-  color: #fff;
+  color: green;
 	font-weight: bold;
+	font-size: 2em;
 	position: fixed;
 	right: 0px;
 	top: 0px;
 	z-index: 100;
-	background-color: green;
-	padding: 2px;
+	background-color: #69FF6B;
+	border: 5px solid green;
+	padding: 20px;
 }
 
 #error {
-  color: #fff;
+  color: red;
 	font-weight: bold;
+	font-size: 2em;
 	position: fixed;
 	right: 0px;
 	top: 0px;
 	z-index: 100;
-	background-color: red;
-	padding: 2px;
+	background-color: #FFA88D;
+	border: 5px solid red;
+	padding: 20px;
 }
 
 .inplaceeditor-form {
@@ -407,8 +411,8 @@ ul.statuses {
 
 ul.statuses li {
 	display: inline;
-	width: 8px;
-	height: 8px;
+	width: 6px;
+	height: 6px;
 	background-image: url(../images/bullet_white.png);
 	background-repeat: no-repeat;	
 	cursor: pointer;
