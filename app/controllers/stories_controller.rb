@@ -189,7 +189,7 @@ class StoriesController < ApplicationController
         format.js do
           render_notice %("#{@story.summary}" was successfully updated.) do |page|
             page["story_#{@story.id}_status_#{@story.status_id}"].addClassName( "selected" )
-            page["story_#{@story.id}_status_#{old_status_id}"].removeClassName( "selected" )
+            page["story_#{@story.id}_status_#{old_status_id}"].removeClassName( "selected" ) if old_status_id and old_status_id != @story.status_id
           end
         end
       else
