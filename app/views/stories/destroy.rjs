@@ -2,6 +2,6 @@ page[:notice].replace_html %("#{@story.summary}" was successfully destroyed.)
 page[:error].hide
 page[:notice].show
 page.visual_effect :appear, :notice
-page.delay( 10 ) {  page.visual_effect :fade, :notice }
+page.delay( 5 ) {  page.visual_effect :fade, :notice }
 
 page["story_#{@story.id}"].remove

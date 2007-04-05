@@ -308,12 +308,13 @@ input, textarea, select {
 	font-weight: bold;
 	font-size: 2em;
 	position: fixed;
-	right: 0px;
-	top: 0px;
+	right: 10px;
+	top: 10px;
 	z-index: 100;
 	background-color: #69FF6B;
 	border: 5px solid green;
-	padding: 20px;
+	padding: 10px;
+	-moz-border-radius: 15px;
 }
 
 #error {
@@ -321,12 +322,13 @@ input, textarea, select {
 	font-weight: bold;
 	font-size: 2em;
 	position: fixed;
-	right: 0px;
-	top: 0px;
+	right: 10px;
+	top: 10px;
 	z-index: 100;
 	background-color: #FFA88D;
 	border: 5px solid red;
-	padding: 20px;
+	padding: 10px;
+	-moz-border-radius: 15px;
 }
 
 .inplaceeditor-form {

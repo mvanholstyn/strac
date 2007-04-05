@@ -2,7 +2,7 @@ page[:notice].replace_html %("#{@story.summary}" was successfully created.)
 page[:error].hide
 page[:notice].show
 page.visual_effect :appear, :notice
-page.delay( 10 ) {  page.visual_effect :fade, :notice }
+page.delay( 5 ) {  page.visual_effect :fade, :notice }
 
 iteration_id = "iteration_#{@story.iteration ? @story.iteration.id : 'nil'}"
 page.insert_html :bottom, iteration_id, :partial => 'list', :locals => { :stories => [ @story ] }
