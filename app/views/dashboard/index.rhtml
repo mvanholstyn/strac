@@ -1,0 +1,5 @@
+<% current_user.projects.each do |project| -%>
+	<h2><%=h project.name %></h2>
+	<%= render :partial => "activities/list", :locals => { :project => project, :date => Date.today - 1 } %>
+	<br />
+<% end -%>
