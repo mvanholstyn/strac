@@ -8,7 +8,7 @@
 		<td><b><%= activity.actor.full_name %></b></td>
 		<td><i><%= activity.action %></i></td>
 		<td><b><%= link_to activity.direct_object.name, story_path( @project, activity.direct_object ) %></b></td>
-		<td>on <b><%= activity.created_at.strftime( "%A, %B %d, %Y </b>at<b> %I:%M:%S %p" ) %></b></td>
+		<td>on <b><%= activity.created_at.strftime( "%a, %b %d, %Y </b>at<b> %I:%M %p" ) %></b></td>
 	</tr>
 <% end -%>
 </table>
