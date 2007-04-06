@@ -3,6 +3,7 @@
 <% remote_form_for(:story, :url => story_path(@project, @story), :html => { :method => :put }) do |form| -%>
   <%= render :partial => 'form', :locals => { :form => form } %>
   <p>
-    <%= submit_tag "Update" %>
+    <%= submit_tag "Update" %> or 
+		<%= link_to( "cancel", "#", :onclick => update_page { |page| page.visual_effect( :blind_up, "story_#{@story.id}_edit", :duration => 0.3 ); page << "return false;" } ) %>
   </p>
 <% end -%>
