@@ -51,15 +51,20 @@
 		<h2><%= @project.name %>: iterations</h2>
 		<ul>
 			<% for iteration in @project.iterations.find( :all, :order => "start_date DESC" ) -%>
-			<li><%= link_to "#{iteration.name}#{iteration==@project.iterations.find_current ? " (current)" : ""}", iteration_path( @project, iteration ) %></li>
+			<li>
+				<%= link_to iteration.name, iteration_path( @project, iteration ) %>
+				<% if @project.iterations.find_current == iteration -%>
+					(<%= link_to "current", current_iterations_path( @project ) %>)
+				<% end -%>
+			</li>
 			<% end -%>
 		</ul>
 		<% end -%>
 		
-		<h2>your projects</h2>
+		<h2 style="display: inline;">your projects</h2> (<%= link_to "create", new_project_path %>)
 		<ul>
 			<% for project in current_user.projects -%>
-			<li><%= link_to project.name, project_path( project ) %></li>
+			<li><%= link_to project.name, project_path( project ) %> (<%= link_to "edit", edit_project_path( project ) %>)</li>
 			<% end -%>
 		</ul>
 	</div>

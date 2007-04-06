@@ -2,7 +2,7 @@ class Iteration < ActiveRecord::Base
   has_many :stories
   belongs_to :project
 
-  validates_presence_of :start_date, :end_date, :project_id
+  validates_presence_of :start_date, :end_date, :project_id, :name
   validate :validate_iterations_do_not_overlap
   validate :validate_start_date_is_before_end_date
   

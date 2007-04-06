@@ -7,61 +7,68 @@ class IterationTest < Test::Unit::TestCase
   end
   
   def test_validates_presence_of_start_date
-    iteration = Iteration.new( :project_id => 1, :start_date => nil, :end_date => Date.today )
+    iteration = Iteration.new( :project_id => 1, :start_date => nil, :end_date => Date.today, :name => "Iteration 1" )
     assert ! iteration.valid?
     assert_equal 1, iteration.errors.size
     assert_not_nil iteration.errors.on( :start_date )
   end
   
   def testtvalidates_presence_of_end_date
-    iteration = Iteration.new( :project_id => 1, :start_date => Date.today, :end_date => nil )
+    iteration = Iteration.new( :project_id => 1, :start_date => Date.today, :end_date => nil, :name => "Iteration 1" )
     assert ! iteration.valid?
     assert_equal 1, iteration.errors.size
     assert_not_nil iteration.errors.on( :end_date )
   end
   
   def test_validates_presence_of_project_id
-    iteration = Iteration.new( :project_id => nil, :start_date => Date.today, :end_date => Date.today + 7 )
+    iteration = Iteration.new( :project_id => nil, :start_date => Date.today, :end_date => Date.today + 7, :name => "Iteration 1" )
     assert ! iteration.valid?
     assert_equal 1, iteration.errors.size
     assert_not_nil iteration.errors.on( :project_id )
   end
   
+  def test_validates_presence_of_name
+    iteration = Iteration.new( :project_id => 1, :start_date => Date.today, :end_date => Date.today + 7, :name => nil )
+    assert ! iteration.valid?
+    assert_equal 1, iteration.errors.size
+    assert_not_nil iteration.errors.on( :name )
+  end
+  
   def test_validates_iterations_do_not_overlap
-    first_iteration = Iteration.create!( :project_id => 1, :start_date => Date.today, :end_date => Date.today + 7 )
+    first_iteration = Iteration.create!( :project_id => 1, :start_date => Date.today, :end_date => Date.today + 7, :name => "Iteration 1" )
 
-    second_iteration = Iteration.new( :project_id => 1, :start_date => Date.today + 7, :end_date => Date.today + 14 )
+    second_iteration = Iteration.new( :project_id => 1, :start_date => Date.today + 7, :end_date => Date.today + 14, :name => "Iteration 1" )
     assert ! second_iteration.valid?
     assert_equal 1, second_iteration.errors.size
     
-    second_iteration = Iteration.new( :project_id => 1, :start_date => Date.today - 7, :end_date => Date.today )
+    second_iteration = Iteration.new( :project_id => 1, :start_date => Date.today - 7, :end_date => Date.today, :name => "Iteration 1" )
     assert ! second_iteration.valid?
     assert_equal 1, second_iteration.errors.size
     
-    second_iteration = Iteration.new( :project_id => 1, :start_date => Date.today + 1, :end_date => Date.today + 2 )
+    second_iteration = Iteration.new( :project_id => 1, :start_date => Date.today + 1, :end_date => Date.today + 2, :name => "Iteration 1" )
     assert ! second_iteration.valid?
     assert_equal 1, second_iteration.errors.size
   end
   
   def test_validates_start_date_is_before_end_date
-    iteration = Iteration.new( :project_id => 1, :start_date => Date.today, :end_date => Date.today )
+    iteration = Iteration.new( :project_id => 1, :start_date => Date.today, :end_date => Date.today, :name => "Iteration 1" )
     assert ! iteration.valid?
     assert_equal 1, iteration.errors.size
     
-    iteration = Iteration.new( :project_id => 1, :start_date => Date.today + 7, :end_date => Date.today )
+    iteration = Iteration.new( :project_id => 1, :start_date => Date.today + 7, :end_date => Date.today, :name => "Iteration 1" )
     assert ! iteration.valid?
     assert_equal 1, iteration.errors.size
   end
   
   def test_validates_budget
-    iteration = Iteration.new( :project_id => 1, :start_date => Date.today, :end_date => Date.today+1, :budget => 25 )
+    iteration = Iteration.new( :project_id => 1, :start_date => Date.today, :end_date => Date.today+1, :budget => 25, :name => "Iteration 1" )
     assert iteration.valid?
     
     assert_equal 25, iteration.budget, "iteration budget was wrong!"
   end
   
   def test_points_completed
-    iteration = Iteration.create( :project_id => 1, :start_date => Date.today, :end_date => Date.today+1, :budget => 25 )
+    iteration = Iteration.create( :project_id => 1, :start_date => Date.today, :end_date => Date.today+1, :budget => 25, :name => "Iteration 1" )
 
     expect_points_completed_for( iteration, 10 )
     
@@ -69,7 +76,7 @@ class IterationTest < Test::Unit::TestCase
   end
   
   def test_points_completed_with_no_stories_defined_with_points
-    iteration = Iteration.create( :project_id => 1, :start_date => Date.today, :end_date => Date.today+1, :budget => 25 )
+    iteration = Iteration.create( :project_id => 1, :start_date => Date.today, :end_date => Date.today+1, :budget => 25, :name => "Iteration 1" )
 
     expect_points_completed_for( iteration, nil )
     
@@ -77,7 +84,7 @@ class IterationTest < Test::Unit::TestCase
   end
   
   def test_points_remaining
-    iteration = Iteration.create( :project_id => 1, :start_date => Date.today, :end_date => Date.today+1, :budget => 25 )
+    iteration = Iteration.create( :project_id => 1, :start_date => Date.today, :end_date => Date.today+1, :budget => 25, :name => "Iteration 1" )
     
     expect_points_completed_for( iteration, 10 )
     
