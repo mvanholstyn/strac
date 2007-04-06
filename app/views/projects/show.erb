@@ -3,11 +3,11 @@
 <br /><br />
 
 <table>
-<% Activity.find( :all, :order => "created_at DESC" ).each do |activity| -%>
+<% @project.activities.find( :all, :order => "created_at DESC" ).each do |activity| -%>
 	<tr>
-		<td><b><%= link_to activity.affected.name, story_path( @project, activity.affected ) %></b></td>
-		<td><%= activity.action %> by</td>
 		<td><b><%= activity.actor.full_name %></b></td>
+		<td><i><%= activity.action %></i></td>
+		<td><b><%= link_to activity.direct_object.name, story_path( @project, activity.direct_object ) %></b></td>
 		<td>on <b><%= activity.created_at.strftime( "%A, %B %d, %Y </b>at<b> %I:%M:%S %p" ) %></b></td>
 	</tr>
 <% end -%>

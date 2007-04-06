@@ -5,7 +5,7 @@ class Story < ActiveRecord::Base
   belongs_to :priority
   belongs_to :responsible_party, :polymorphic => true
   has_many :time_entries, :as => :timeable
-  has_many :activities, :as => :affected
+  has_many :activities, :as => :direct_object
 
   acts_as_list :scope => :iteration_id
   acts_as_taggable

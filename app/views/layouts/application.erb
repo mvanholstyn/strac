@@ -58,7 +58,7 @@
 		
 		<h2>your projects</h2>
 		<ul>
-			<% for project in Project.find( :all ) -%>
+			<% for project in current_user.projects -%>
 			<li><%= link_to project.name, project_path( project ) %></li>
 			<% end -%>
 		</ul>

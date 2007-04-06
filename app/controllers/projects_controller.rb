@@ -2,7 +2,7 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.xml
   def index
-    @projects = Project.find(:all)
+    @projects = current_user.projects.find(:all)
 
     respond_to do |format|
       format.html # index.erb
@@ -13,7 +13,7 @@ class ProjectsController < ApplicationController
   # GET /projects/1
   # GET /projects/1.xml
   def show
-    @project = Project.find(params[:id])
+    @project = current_user.projects.find(params[:id])
     respond_to do |format|
       format.html # show.erb
       format.xml  { render :xml => @project.to_xml }
@@ -27,7 +27,7 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1;edit
   def edit
-    @project = Project.find(params[:id])
+    @project = current_user.projects.find(params[:id])
   end
 
   # POST /projects
@@ -36,7 +36,8 @@ class ProjectsController < ApplicationController
     @project = Project.new(params[:project])
 
     respond_to do |format|
-      if @project.save
+      if @project.save 
+        current_user.projects << @project
         flash[:notice] = 'Project was successfully created.'
         format.html { redirect_to project_url(@project) }
         format.xml  { head :created, :location => project_url(@project) }
@@ -50,10 +51,15 @@ class ProjectsController < ApplicationController
   # PUT /projects/1
   # PUT /projects/1.xml
   def update
-    @project = Project.find(params[:id])
+    @project = current_user.projects.find(params[:id])
 
     respond_to do |format|
       if @project.update_attributes(params[:project])
+        @project.users.clear
+        @project.companies.clear
+        User.find( params[:users] ).each { |u| @project.users << u } unless params[:users].blank?
+        Company.find( params[:companies] ).each { |c| @project.companies << c } unless params[:companies].blank?
+        
         flash[:notice] = 'Project was successfully updated.'
         format.html { redirect_to project_url(@project) }
         format.xml  { head :ok }
@@ -67,7 +73,7 @@ class ProjectsController < ApplicationController
   # DELETE /projects/1
   # DELETE /projects/1.xml
   def destroy
-    @project = Project.find(params[:id])
+    @project = current_user.projects.find(params[:id])
     @project.destroy
 
     respond_to do |format|

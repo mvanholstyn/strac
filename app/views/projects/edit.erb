@@ -7,6 +7,20 @@
     <b>Name</b><br />
     <%= f.text_field :name %>
   </p>
+	
+	<p>
+		<b>Project Permissions</b><br />
+		<ul style="list-style: none;">
+		<% for company in Company.find( :all ) -%>
+			<li><%= check_box_tag "companies[]", company.id, @project.accessors.include?( company ) %> <b><%= company.name %></b></li>
+			<ul style="list-style: none;">
+			<% for user in company.users -%>
+				<li><%= check_box_tag "users[]", user.id, @project.accessors.include?( user ) %> <%= user.full_name %></li>
+			<% end -%>
+			</ul>
+		<% end -%>
+		</ul>
+	</p>
 
   <p>
     <%= submit_tag "Update" %>
