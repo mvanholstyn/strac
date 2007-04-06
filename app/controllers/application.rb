@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include ExceptionLoggable
+  
   restrict_to :user, :except => { :users => [ :login, :logout ] }
 
   private
