@@ -132,3 +132,8 @@ task :after_symlink do
   sudo "chown -R mvanholstyn:www-data #{shared_path}/.."
   run "chmod -R 770 #{shared_path}/.."
 end
+
+desc "Restart apache"
+task :restart do
+  sudo "apache2ctl restart"
+end
