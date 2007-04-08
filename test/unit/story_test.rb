@@ -15,6 +15,10 @@ class StoryTest < Test::Unit::TestCase
     assert story.save
     story
   end
+  
+  def test_associations
+    assert_association Story, :has_many, :comments, Comment, :as => :commenter
+  end
 
   def test_creating_a_stort
     count = Story.count

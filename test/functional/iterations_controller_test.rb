@@ -31,7 +31,8 @@ class IterationsControllerTest < Test::Unit::TestCase
     old_count = Iteration.count
     post :create, :iteration => { 
       :start_date => Date.today, 
-      :end_date => Date.today+1 }, :project_id=>@project.id
+      :end_date => Date.today+1,
+      :name => "Iteration 1" }, :project_id=>@project.id
     assert_equal old_count+1, Iteration.count
 
     assert_redirected_to iteration_path( @project, assigns(:iteration))

@@ -1,3 +1,13 @@
+# == Schema Information
+# Schema version: 26
+#
+# Table name: statuses
+#
+#  id    :integer(11)   not null, primary key
+#  name  :string(255)   
+#  color :string(255)   
+#
+
 class Status < ActiveRecord::Base
   
   validates_presence_of :color

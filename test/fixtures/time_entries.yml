@@ -1,3 +1,17 @@
+# == Schema Information
+# Schema version: 26
+#
+# Table name: time_entries
+#
+#  id            :integer(11)   not null, primary key
+#  hours         :decimal(10, 2 
+#  comment       :string(255)   
+#  date          :date          
+#  project_id    :integer(11)   
+#  timeable_id   :integer(11)   
+#  timeable_type :string(255)   
+#
+
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 one:
   id: 1

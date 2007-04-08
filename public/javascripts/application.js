@@ -1,3 +1,27 @@
+function show_with_smart_loading( id_to_show, focus_form ) {
+	id_to_show = $(id_to_show);
+  if( id_to_show.innerHTML != '' ) {
+		effects = [
+			new Effect.BlindDown( id_to_show, { sync: true } ), 
+			new Effect.ScrollPage( id_to_show, { syne: true } ) 
+		];
+
+		new Effect.Parallel( effects, 
+			{ duration: 0.3, 
+				afterFinish: function() {
+					if( focus_form ) {
+						id_to_show.getElementsBySelector( "form" ).first().focusFirstElement();
+					}
+				}
+			} 
+		);
+		
+		return false;
+	}
+	return true;
+}
+
+
 function toggle_hide_show_with_smart_loading( id_to_show, ids_to_hide, focus_form ) {
 	id_to_show = $(id_to_show);
 	if( id_to_show.visible() ) {

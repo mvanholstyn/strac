@@ -1,0 +1,3 @@
+<% @comments.each do |comment| %>
+  <%= render :partial => 'show', :locals=>{:comment=>comment} %>
+<% end %>

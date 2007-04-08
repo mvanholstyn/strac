@@ -1,3 +1,16 @@
+# == Schema Information
+# Schema version: 26
+#
+# Table name: iterations
+#
+#  id         :integer(11)   not null, primary key
+#  start_date :date          
+#  end_date   :date          
+#  project_id :integer(11)   
+#  name       :string(255)   
+#  budget     :integer(11)   default(0)
+#
+
 class Iteration < ActiveRecord::Base
   has_many :stories
   belongs_to :project

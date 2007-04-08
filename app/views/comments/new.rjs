@@ -1,0 +1,4 @@
+page["new_comment"].replace_html :partial => 'new'
+page.call "show_with_smart_loading", "new_comment", [], true
+#page.visual_effect :blind_down, "new_comment", :duration => 0.3
+#page["comment_content"].focus

@@ -11,7 +11,7 @@ body {
 	padding:0;
 }
 
-#wrapper {
+#wrapper, #comments-wrapper {
 	background:#fff;
 	border:3px solid #f1f1f1;
 	max-width:1200px;
@@ -20,9 +20,13 @@ body {
 	margin:0 auto;
 }
 
+#comments-wrapper{
+  min-width: 150px;
+}
+
 * html #wrapper
 {
-	w\idth: expression(document.documentElement.clientWidth > 1200 ? "1200px" : "auto");
+	width: expression(document.documentElement.clientWidth > 1200 ? "1200px" : "auto");
 }
 
 #innerwrapper {
@@ -438,4 +442,23 @@ ul.statuses li.green:hover, ul.statuses li.green.selected {
 
 ul.statuses li.blue:hover, ul.statuses li.blue.selected {
 	background-image: url(../images/bullet_blue.png);
+}
+
+.comment {
+  margin: 2px;
+}
+
+.comment-header {
+  padding-left: 4px;
+  font-size: 1.0em;
+  font-weight: bold;
+  background-color: #79B933;
+/*  background-color: #4F9EC9; */
+  color: #FFF;
+}
+
+.comment-body {
+  background-color: #c3ff82;
+  font-size: 0.9em;
+  margin-bottom: 1em;
 }

@@ -1,1 +1,7 @@
 <%= convert_story_ids_to_links( @story.description ) %>
+
+<%= link_to "Comments (#{@story.comments.size})", 
+	comments_url( :project_id=>@story.project_id, :story_id=>@story.id ), 
+	:popup => ['new_window', 'height=600,width=500,resizable=1,scrollbars=1'] %>
+
+<div id="story_<%= @story.id %>_comments"></div>

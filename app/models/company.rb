@@ -1,3 +1,12 @@
+# == Schema Information
+# Schema version: 26
+#
+# Table name: companies
+#
+#  id   :integer(11)   not null, primary key
+#  name :string(255)   
+#
+
 class Company < ActiveRecord::Base
   has_many :users
   has_many :stories, :as => :responsible_party

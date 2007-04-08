@@ -1,0 +1,3 @@
+page["nocomments"].hide
+page.insert_html :bottom, "comments", :partial=>'show', :locals=>{:comment=>@comment}
+page.visual_effect :blind_up, "new_comment", :duration => 0.3

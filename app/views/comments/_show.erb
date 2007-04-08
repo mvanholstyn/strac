@@ -1,0 +1,8 @@
+<div class="comment">
+	<div class="comment-header">
+	  Posted by <%= comment.user.username %> on <%= comment.created_at.strftime "%b. %d, %Y at %I:%M:%S%p" %>
+	</div>
+	<div class="comment-body">
+	  <%= comment.content %>
+	</div>
+</div>

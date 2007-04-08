@@ -1,0 +1,22 @@
+<div class="section">
+  <h2>Comments for "<%= @story.summary %>"</h2>
+
+  <div id="nocomments">
+    <% if @comments.size == 0 %>
+	  There are currently no comments.</div>
+    <% end %>
+   </div>
+
+  <div id="comments" class="comments_content">	
+    <%= render :partial => 'list' %>
+  </div>
+	
+  <div>
+	<%= link_to_remote "Post a comment", 
+	  :url=>new_comment_url( :project_id=>@story.project_id, :story_id=>@story.id ),
+	  :method=>:get %>
+  </div>
+
+  <div id="new_comment"></div>
+
+</div>

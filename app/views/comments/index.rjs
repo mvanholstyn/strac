@@ -1,0 +1,1 @@
+page["story_#{@story.id}_comments"].replace_html :partial => 'list'

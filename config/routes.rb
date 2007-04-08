@@ -6,7 +6,11 @@ ActionController::Routing::Routes.draw do |map|
     project_map.resources :iterations, :collection => { :current => :get }
     project_map.resources :stories,
                           :collection => { :reorder => :put },
-                          :member => { :update_points => :put, :update_status => :put, :time => :any, :take => :put, :release => :put }
+                          :member => { 
+                            :update_points => :put, :update_status => :put, 
+                            :time => :any, :take => :put, :release => :put } do |story_map|
+        story_map.resources :comments
+    end
   end
   map.textile_preview 'textile/preview', :controller => 'textile', :action => 'preview'
   map.dashboard '', :controller => "dashboard"

@@ -1,3 +1,21 @@
+# == Schema Information
+# Schema version: 26
+#
+# Table name: stories
+#
+#  id                     :integer(11)   not null, primary key
+#  summary                :string(255)   
+#  description            :text          
+#  points                 :integer(11)   
+#  position               :integer(11)   
+#  iteration_id           :integer(11)   
+#  project_id             :integer(11)   
+#  responsible_party_id   :integer(11)   
+#  responsible_party_type :string(255)   
+#  status_id              :integer(11)   
+#  priority_id            :integer(11)   
+#
+
 class Story < ActiveRecord::Base
   belongs_to :iteration
   belongs_to :project
@@ -6,6 +24,7 @@ class Story < ActiveRecord::Base
   belongs_to :responsible_party, :polymorphic => true
   has_many :time_entries, :as => :timeable
   has_many :activities, :as => :direct_object
+  has_many :comments, :as => :commenter
 
   acts_as_list :scope => :iteration_id
   acts_as_taggable

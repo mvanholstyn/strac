@@ -1,5 +1,5 @@
 <table>
-<% project.activities.find( :all, :conditions => [ "created_at >= ?", date ? date : Date.today - 7 ], :order => "created_at DESC" ).each do |activity| -%>
+<% project.activities.find( :all, :conditions => [ "created_at >= ?",  date ||= Date.today - 7 ], :order => "created_at DESC" ).each do |activity| -%>
 	<tr>
 		<td><b><%= activity.actor.full_name %></b></td>
 		<td><i><%= activity.action %></i></td>

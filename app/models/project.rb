@@ -1,3 +1,12 @@
+# == Schema Information
+# Schema version: 26
+#
+# Table name: projects
+#
+#  id   :integer(11)   not null, primary key
+#  name :string(255)   
+#
+
 class Project < ActiveRecord::Base
   has_many :time_entries
   has_many :stories
