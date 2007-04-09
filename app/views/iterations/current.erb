@@ -1,17 +1,32 @@
 <% if @iteration.new_record? -%>
 	<%= render "iterations/new" %>
 <% else -%>
-	<%= render :partial => 'iterations/header', :locals => { :iteration => @iteration } %>
-	
-	<div id="iteration_<%= @iteration.id %>">
-		<%= render :partial => "stories/list", :locals => { :stories => @iteration.stories.find( :all, :order => :position ) } -%>
+	<table width="100%">
+	  <tr>
+	    <td>
+			<%= render :partial => 'iterations/header', :locals => { :iteration => @iteration } %>
+	    </td>
+	    <td align="right"><%= link_to_remote "create story", :url => new_story_path( :project_id => @project, :iteration_id => @iteration ), :method => :get %></td>
+	  </tr>
+	</table>
+	<div id="iteration_<%= @iteration.id %>_story_new"></div>
+	<div id="iteration_<%= @iteration.id %>" class="story_list">
+	  <%= render :partial  => 'stories/list', :locals => { :stories => @iteration.stories.find( :all, :order => :position ) } %>
 	</div>
 <% end -%>
 
 <br />
 
-<b>Backlog</b>
-<div id="iteration_nil">
+<table width="100%">
+  <tr>
+    <td>
+    	<b>Backlog</b>
+    </td>
+    <td align="right"><%= link_to_remote "create story", :url => new_story_path( @project ), :method => :get %></td>
+  </tr>
+</table>
+<div id="iteration_nil_story_new"></div>
+<div id="iteration_nil" class="story_list">
 	<%= render :partial  => 'stories/list', :locals => { :stories => @stories } %>
 </div>
 
@@ -21,3 +36,4 @@
                        :url => reorder_stories_path(@project), :method => :put,
                        :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => iteration_list_ids -%>
 <% end -%>
+
