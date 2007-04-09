@@ -1,9 +1,9 @@
 <table>
 <% project.activities.find( :all, :conditions => [ "created_at >= ?",  date ||= Date.today - 7 ], :order => "created_at DESC" ).each do |activity| -%>
 	<tr>
+		<td><%= activity.created_at.strftime( "%a, %b %d, %Y %I:%M %p" ) %>:&nbsp;</td>
 		<td><b><%= activity.actor.full_name %></b></td>
-		<td><i><%= expand_ids activity.action %></i></td>
-		<td>on <b><%= activity.created_at.strftime( "%a, %b %d, %Y </b>at<b> %I:%M %p" ) %></b></td>
+		<td><%= expand_ids activity.action %></td>
 	</tr>
 <% end -%>
 </table>
