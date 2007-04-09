@@ -7,8 +7,8 @@ class IterationsController < ApplicationController
     @iterations = @project.iterations.find(:all, :order => "start_date DESC")
 
     respond_to do |format|
-      format.html # index.rhtml
-      format.xml  { render :xml => @iterations.to_xml }
+      format.html { render :action => "index.erb" }
+      format.xml { render :xml => @iterations.to_xml }
     end
   end
 
@@ -18,8 +18,8 @@ class IterationsController < ApplicationController
     @iteration = @project.iterations.find(params[:id])
 
     respond_to do |format|
-      format.html # show.rhtml
-      format.xml  { render :xml => @iteration.to_xml }
+      format.html { render :action => "show.erb" }
+      format.xml { render :xml => @iteration.to_xml }
     end
   end
 
@@ -42,10 +42,10 @@ class IterationsController < ApplicationController
       if @iteration.save
         flash[:notice] = 'Iteration was successfully created.'
         format.html { redirect_to iteration_url(@project, @iteration) }
-        format.xml  { head :created, :location => iteration_url(@project, @iteration) }
+        format.xml { head :created, :location => iteration_url(@project, @iteration) }
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @iteration.errors.to_xml }
+        format.html { render :action => "new.erb" }
+        format.xml { render :xml => @iteration.errors.to_xml }
       end
     end
   end
@@ -59,10 +59,10 @@ class IterationsController < ApplicationController
       if @iteration.update_attributes(params[:iteration])
         flash[:notice] = 'Iteration was successfully updated.'
         format.html { redirect_to iteration_url(@project, @iteration) }
-        format.xml  { head :ok }
+        format.xml { head :ok }
       else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @iteration.errors.to_xml }
+        format.html { render :action => "edit.erb" }
+        format.xml { render :xml => @iteration.errors.to_xml }
       end
     end
   end
@@ -75,7 +75,7 @@ class IterationsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to iterations_url( @project ) }
-      format.xml  { head :ok }
+      format.xml { head :ok }
     end
   end
   

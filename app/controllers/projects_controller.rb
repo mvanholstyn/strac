@@ -5,8 +5,8 @@ class ProjectsController < ApplicationController
     @projects = current_user.projects.find(:all)
 
     respond_to do |format|
-      format.html # index.erb
-      format.xml  { render :xml => @projects.to_xml }
+      format.html { render :action => "index.erb" }
+      format.xml { render :xml => @projects.to_xml }
     end
   end
 
@@ -15,8 +15,8 @@ class ProjectsController < ApplicationController
   def show
     @project = current_user.projects.find(params[:id])
     respond_to do |format|
-      format.html # show.erb
-      format.xml  { render :xml => @project.to_xml }
+      format.html { render :action => "show.erb" }
+      format.xml { render :xml => @project.to_xml }
     end
   end
 
@@ -40,10 +40,10 @@ class ProjectsController < ApplicationController
         current_user.projects << @project
         flash[:notice] = 'Project was successfully created.'
         format.html { redirect_to project_url(@project) }
-        format.xml  { head :created, :location => project_url(@project) }
+        format.xml { head :created, :location => project_url(@project) }
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @project.errors.to_xml }
+        format.html { render :action => "new.erb" }
+        format.xml { render :xml => @project.errors.to_xml }
       end
     end
   end
@@ -62,10 +62,10 @@ class ProjectsController < ApplicationController
         
         flash[:notice] = 'Project was successfully updated.'
         format.html { redirect_to project_url(@project) }
-        format.xml  { head :ok }
+        format.xml { head :ok }
       else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @project.errors.to_xml }
+        format.html { render :action => "edit.erb" }
+        format.xml { render :xml => @project.errors.to_xml }
       end
     end
   end
@@ -78,7 +78,7 @@ class ProjectsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to projects_url }
-      format.xml  { head :ok }
+      format.xml { head :ok }
     end
   end
 end

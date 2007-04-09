@@ -5,8 +5,8 @@ class CompaniesController < ApplicationController
     @companies = Company.find(:all)
 
     respond_to do |format|
-      format.html # index.erb
-      format.xml  { render :xml => @companies.to_xml }
+      format.html { render :action => "index.erb" }
+      format.xml { render :xml => @companies.to_xml }
     end
   end
 
@@ -16,8 +16,8 @@ class CompaniesController < ApplicationController
     @company = Company.find(params[:id])
 
     respond_to do |format|
-      format.html # show.erb
-      format.xml  { render :xml => @company.to_xml }
+      format.html { render :action => "show.erb" }
+      format.xml { render :xml => @company.to_xml }
     end
   end
 
@@ -40,10 +40,10 @@ class CompaniesController < ApplicationController
       if @company.save
         flash[:notice] = 'Company was successfully created.'
         format.html { redirect_to company_url(@company) }
-        format.xml  { head :created, :location => company_url(@company) }
+        format.xml { head :created, :location => company_url(@company) }
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @company.errors.to_xml }
+        format.html { render :action => "new.erb" }
+        format.xml { render :xml => @company.errors.to_xml }
       end
     end
   end
@@ -57,10 +57,10 @@ class CompaniesController < ApplicationController
       if @company.update_attributes(params[:company])
         flash[:notice] = 'Company was successfully updated.'
         format.html { redirect_to company_url(@company) }
-        format.xml  { head :ok }
+        format.xml { head :ok }
       else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @company.errors.to_xml }
+        format.html { render :action => "edit.erb" }
+        format.xml { render :xml => @company.errors.to_xml }
       end
     end
   end
@@ -73,7 +73,7 @@ class CompaniesController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to companies_url }
-      format.xml  { head :ok }
+      format.xml { head :ok }
     end
   end
 end

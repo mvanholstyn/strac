@@ -6,8 +6,8 @@ class StoriesController < ApplicationController
   # GET /stories.xml
   def index
     respond_to do |format|
-      format.html # index.rhtml
-      format.xml  { render :xml => @project.stories.to_xml }
+      format.html { render :action => "index.erb" }
+      format.xml { render :xml => @project.stories.to_xml }
     end
   end
 
@@ -17,7 +17,7 @@ class StoriesController < ApplicationController
     @story = @project.stories.find(params[:id], :include => :tags)
 
     respond_to do |format|
-      format.js # show.rjs
+      format.js { render :action => "show.rjs" }
       format.xml { render :xml => @story.to_xml }
     end
   end
@@ -28,7 +28,7 @@ class StoriesController < ApplicationController
     @story.iteration_id = params[:iteration_id]
 
     respond_to do |format|
-      format.js # new.rjs
+      format.js { render :action => "new.rjs" }
     end
   end
 
@@ -37,7 +37,7 @@ class StoriesController < ApplicationController
     @story = @project.stories.find(params[:id], :include => :tags)
 
     respond_to do |format|
-      format.js # edit.rjs
+      format.js { render :action => "edit.rjs" }
     end
   end
 
@@ -56,7 +56,7 @@ class StoriesController < ApplicationController
       else
         format.js do
           find_priorities_and_statuses
-          render :action => "new"
+          render :action => "new.rjs"
         end
         format.xml { render :xml => @story.errors.to_xml }
       end
@@ -71,7 +71,7 @@ class StoriesController < ApplicationController
     respond_to do |format|
       if @story.update_attributes(params[:story])
         #TODO: If this stories iteration is changed, then something should happen
-        format.js # update.rjs
+        format.js { render :action => "update.rjs" }
         format.xml { head :ok }
       else
         format.js do
@@ -90,7 +90,7 @@ class StoriesController < ApplicationController
     @story.destroy
   
     respond_to do |format|
-      format.js # destroy.rjs
+      format.js { render :action => "destroy.rjs" }
       format.html do
         flash[:notice] = %("#{@story.summary}" was successfully destroyed.)
         redirect_to stories_url( @project )
