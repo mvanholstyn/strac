@@ -29,6 +29,7 @@ class Story < ActiveRecord::Base
   acts_as_list :scope => :iteration_id
   acts_as_taggable
   acts_as_textiled :description
+  acts_as_comparable
 
   validates_presence_of :summary, :project_id
   validates_numericality_of :points, :position, :allow_nil => true
