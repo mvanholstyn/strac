@@ -1,17 +1,13 @@
 # == Schema Information
-# Schema version: 26
+# Schema version: 27
 #
 # Table name: activities
 #
-#  id                   :integer(11)   not null, primary key
-#  actor_id             :integer(11)   
-#  action               :string(255)   
-#  direct_object_id     :integer(11)   
-#  direct_object_type   :string(255)   
-#  created_at           :datetime      
-#  indirect_object_id   :integer(11)   
-#  indirect_object_type :string(255)   
-#  project_id           :integer(11)   
+#  id         :integer(11)   not null, primary key
+#  actor_id   :integer(11)   
+#  action     :string(255)   
+#  created_at :datetime      
+#  project_id :integer(11)   
 #
 
 class Activity < ActiveRecord::Base
