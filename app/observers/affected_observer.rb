@@ -20,7 +20,7 @@ class AffectedObserver < ActiveRecord::Observer
     create_activity direct_object.project, "updated points for S#{direct_object.id}" if cache[direct_object][:points]
     create_activity direct_object.project, "assigned S#{direct_object.id} to #{direct_object.responsible_party_type.upcase}#{direct_object.responsible_party_id}" if cache[direct_object][:responsible_party_id] and cache[direct_object][:responsible_party_id].first
     if cache[direct_object][:responsible_party_id] and not cache[direct_object][:responsible_party_id].first
-      type = cache[direct_object][:responsible_party_type]
+      type = cache[direct_object][:responsible_party_type].last
       create_activity direct_object.project, "released S#{direct_object.id} from #{type.upcase}#{cache[direct_object][:responsible_party_id].last}"
     end
     create_activity direct_object.project, "marked S#{direct_object.id} as STATUS#{direct_object.status_id}" if cache[direct_object][:status_id]
