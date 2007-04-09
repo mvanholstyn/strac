@@ -1,5 +1,6 @@
 class TextileController < ApplicationController
   def preview
-    render :text => RedCloth.new( params[:textile] ).to_html
+    @preview = RedCloth.new( params[:textile] ).to_html
+    render :layout => false
   end
 end

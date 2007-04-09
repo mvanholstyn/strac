@@ -1,4 +1,4 @@
-<%= convert_story_ids_to_links( @story.description ) %>
+<%= expand_ids( @story.description ) %>
 
 <%= link_to "Comments (#{@story.comments.size})", 
 	comments_url( :project_id=>@story.project_id, :story_id=>@story.id ), 

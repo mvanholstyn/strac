@@ -27,18 +27,41 @@ module ApplicationHelper
     javascript_tag(function)
   end
   
-  def convert_story_ids_to_links( description )
-    description.gsub( /(^|\W)(S(\d+))(\W|$)/ ) do |story_id|
-      story = Story.find_by_id( $3 )
-      if story
-        url = story_path( :project_id=>story.project_id, :id=>story.id )
-        link = $1 + link_to( $2, url, :title=>story.summary ) + $4
-        link
+  class Conversion
+    CONVERSIONS = {}
+    attr_reader :keyword, :model, :link
+    
+    def initialize( keyword, model, link = nil )
+      @keyword, @model, @link = keyword, model, link
+      CONVERSIONS[keyword] = self
+    end
+  end
+  
+  Conversion.new( :S, Story, [ :story, :project_id, :id ] )
+  Conversion.new( :I, Iteration, [ :iteration, :project_id, :id ] )
+  Conversion.new( :USER, User )
+  Conversion.new( :COMPANY, Company )
+  Conversion.new( :P, Project, [ :project, :id ] )
+  Conversion.new( :STATUS, Status )
+  Conversion.new( :PRIORITY, Priority )
+  
+  def expand_ids( data )
+    data.gsub( /(^|\W)((#{Conversion::CONVERSIONS.map{ |k,c| k.to_s }.join( '|' )})(\d+))(\W|$)/ ) do |match|
+      conversion = Conversion::CONVERSIONS[$3.to_sym]
+      object = conversion.model.find_by_id( $4 )
+      if object
+        if conversion.link
+          method = conversion.link.first
+          options = {}
+          conversion.link[1...conversion.link.size].each { |p| options[p] = object.send( p ) }
+          url = send( "#{method}_path".to_sym, options )
+          $1 + link_to( object.name, url ) + $5
+        else
+          link = $1 + object.name + $5
+        end
       else
-        story_id
+        match
       end
     end
-    
   end
-
 end
