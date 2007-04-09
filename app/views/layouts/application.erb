@@ -63,7 +63,7 @@
 		
 		<h2 style="display: inline;">your projects</h2> (<%= link_to "create", new_project_path %>)
 		<ul>
-			<% for project in current_user.projects -%>
+			<% for project in ProjectPermission.find_all_projects_for_user( current_user ) -%>
 			<li><%= link_to project.name, project_path( project ) %> (<%= link_to "edit", edit_project_path( project ) %>)</li>
 			<% end -%>
 		</ul>

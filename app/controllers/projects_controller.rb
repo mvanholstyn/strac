@@ -2,8 +2,8 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.xml
   def index
-    @projects = current_user.projects.find(:all)
-
+    @projects = ProjectPermission.find_all_projects_for_user( current_user )
+    
     respond_to do |format|
       format.html { render :action => "index.erb" }
       format.xml { render :xml => @projects.to_xml }
@@ -13,7 +13,8 @@ class ProjectsController < ApplicationController
   # GET /projects/1
   # GET /projects/1.xml
   def show
-    @project = current_user.projects.find(params[:id])
+    @project = ProjectPermission.find_project_for_user( params[:id], current_user )
+    
     respond_to do |format|
       format.html { render :action => "show.erb" }
       format.xml { render :xml => @project.to_xml }
@@ -27,7 +28,7 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1;edit
   def edit
-    @project = current_user.projects.find(params[:id])
+    @project = ProjectPermission.find_project_for_user( params[:id], current_user )
   end
 
   # POST /projects
@@ -51,7 +52,7 @@ class ProjectsController < ApplicationController
   # PUT /projects/1
   # PUT /projects/1.xml
   def update
-    @project = current_user.projects.find(params[:id])
+    @project = ProjectPermission.find_project_for_user( params[:id], current_user )
 
     respond_to do |format|
       if @project.update_attributes(params[:project])
@@ -73,7 +74,7 @@ class ProjectsController < ApplicationController
   # DELETE /projects/1
   # DELETE /projects/1.xml
   def destroy
-    @project = current_user.projects.find(params[:id])
+    @project = ProjectPermission.find_project_for_user( params[:id], current_user )
     @project.destroy
 
     respond_to do |format|
