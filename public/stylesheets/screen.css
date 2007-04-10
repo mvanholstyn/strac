@@ -453,7 +453,6 @@ ul.statuses li.blue:hover, ul.statuses li.blue.selected {
   font-size: 1.0em;
   font-weight: bold;
   background-color: #79B933;
-/*  background-color: #4F9EC9; */
   color: #FFF;
 }
 
@@ -461,4 +460,12 @@ ul.statuses li.blue:hover, ul.statuses li.blue.selected {
   background-color: #c3ff82;
   font-size: 0.9em;
   margin-bottom: 1em;
+}
+
+.comments-inline {
+
+}
+
+.comments-link {
+  display: inline; 
 }

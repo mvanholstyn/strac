@@ -1,10 +1,12 @@
 class CommentsController < ApplicationController
+  before_filter :initialize_params
   before_filter :find_story
 
   # GET /comments
   # GET /comments.xml
   def index
     @comments = @story.comments(true)
+    
     respond_to do |format|
       format.html { render :action => "index.erb" }
       format.xml { render :xml => @story.comments(true).to_xml }
@@ -54,5 +56,11 @@ class CommentsController < ApplicationController
  
   def find_story
     @story = Story.find( params[:story_id] )
+  end
+  
+  def initialize_params
+    puts params.inspect
+    @is_rendering_inline = params[:inline] ? true : false
+    true
   end
 end

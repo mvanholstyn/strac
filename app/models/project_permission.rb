@@ -23,5 +23,4 @@ class ProjectPermission < ActiveRecord::Base
                                    project_id, user.id, user.class.name, user.company.id, user.company.class.name ] ).project
   end
   
-  
 end

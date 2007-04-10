@@ -1,3 +1,8 @@
 page["nocomments"].hide
+
+if is_rendering_inline
+  page["story_#{@story.id}_comments_inline_link"].replace_html :inline=>comments_inline_link
+  page["story_#{@story.id}_comments_popup_link"].replace_html :inline=>comments_popup_link
+end
 page.insert_html :bottom, "comments", :partial=>'show', :locals=>{:comment=>@comment}
 page.visual_effect :blind_up, "new_comment", :duration => 0.3

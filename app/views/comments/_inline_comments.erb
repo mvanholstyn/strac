@@ -1,0 +1,9 @@
+<div id="comments_<%= @story.id %>">
+  <h3>Comments</h3>
+  <%= render :partial=>"comments" %>
+  <%= 
+    link_to_function "Close Comments" do |page|
+      page["story_#{@story.id}_comments"].visual_effect( :blind_up )
+    end
+  %>
+</div>

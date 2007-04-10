@@ -2,6 +2,8 @@ class StoriesController < ApplicationController
   before_filter :find_project
   before_filter :find_priorities_and_statuses, :only => [ :new, :edit ]
 
+  helper :comments
+
   # GET /stories
   # GET /stories.xml
   def index

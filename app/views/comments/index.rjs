@@ -1,1 +1,3 @@
-page["story_#{@story.id}_comments"].replace_html :partial => 'list'
+div_id = "story_#{@story.id}_comments"
+page[div_id].replace_html :partial=>"inline_comments" 
+page.call "show_with_smart_loading", div_id, false

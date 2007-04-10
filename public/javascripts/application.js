@@ -1,5 +1,9 @@
 function show_with_smart_loading( id_to_show, focus_form ) {
 	id_to_show = $(id_to_show);
+	if( !focus_form || focus_form.length()==0){
+	  focus_form = false; 
+  }
+    
   if( id_to_show.innerHTML != '' ) {
 		effects = [
 			new Effect.BlindDown( id_to_show, { sync: true } ), 
@@ -24,6 +28,10 @@ function show_with_smart_loading( id_to_show, focus_form ) {
 
 function toggle_hide_show_with_smart_loading( id_to_show, ids_to_hide, focus_form ) {
 	id_to_show = $(id_to_show);
+	if( !focus_form || focus_form.length()==0){
+	  focus_form = false; 
+  }
+	
 	if( id_to_show.visible() ) {
 		new Effect.BlindUp( id_to_show, { duration: 0.3 } );
 		return false;

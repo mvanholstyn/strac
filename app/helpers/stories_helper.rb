@@ -1,4 +1,5 @@
 module StoriesHelper
+  
   # def toggle_hide_show_with_smart_loading id_to_show, *ids_to_hide
   #   update_page do |page| 
   #     page << "if( $('#{id_to_show}').visible() ) {"
