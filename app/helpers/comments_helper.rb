@@ -1,9 +1,9 @@
 module CommentsHelper
   
-  def cancel_comment_link
-    link_to( "cancel", "#", 
+  def close_comments_link
+    link_to( "Close Comments", "#", 
       :onclick => update_page { |page| 
-        page.visual_effect( :blind_up, "new_comment", :duration => 0.3 ); page << "return false;" } )    
+        page.visual_effect( :blind_up, "story_#{@story.id}_comments", :duration => 0.3 ); page << "return false;" } )    
   end
   
   def comments_popup_link
@@ -24,12 +24,6 @@ module CommentsHelper
   
   def is_rendering_popup
     ! @is_rendering_inline
-  end
-  
-  def post_comment_link
-    link_to_remote "Post a comment", 
-    :url=>new_comment_url( :project_id=>@story.project_id, :story_id=>@story.id, :inline=>is_rendering_inline ),
-    :method=>:get    
   end
     
 end

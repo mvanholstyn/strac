@@ -1,11 +1,13 @@
-<h3>Create Comment</h3>
+<h3>Post Comment</h3>
 
 <%= error_messages_for :comment %>
 
 <% remote_form_for :comment, :url => comments_path( :project_id=>@story.project_id, :story_id=>@story.id, :inline=>is_rendering_inline ) do |form| -%>
-  <%= form.text_area "content", :rows=>"5" %>
+  <%= form.text_area "content", :rows=>"5", :value=>"" %>
   <p>
-    <%= submit_tag "Create" %> or 
-		<%= cancel_comment_link %>
+    <%= submit_tag "Post Comment" %> 
+    <% if is_rendering_inline %>
+      or <%= close_comments_link %>
+    <% end %>
   </p>
 <% end -%>

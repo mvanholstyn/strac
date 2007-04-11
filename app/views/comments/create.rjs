@@ -1,8 +1,19 @@
-page["nocomments"].hide
+page["story_#{@story.id}_nocomments"].hide
 
 if is_rendering_inline
   page["story_#{@story.id}_comments_inline_link"].replace_html :inline=>comments_inline_link
   page["story_#{@story.id}_comments_popup_link"].replace_html :inline=>comments_popup_link
+elsif is_rendering_popup
+# TODO fix these, the innerHTML doesn't work, it may be an escaping issue...
+#  inline_id = "story_#{@story.id}_comments_inline_link"
+#  inline_link = escape_javascript( comments_inline_link)
+#  page.call "window.opener.document.getElementById('#{inline_id}').innerHTML='#{inline_link}';"
+
+#  popup_id = "story_#{@story.id}_comments_popup_link"
+#  page.call "window.opener.document.getElementById('#{popup_id}').innerHTML='#{comments_popup_link}';"  
 end
-page.insert_html :bottom, "comments", :partial=>'show', :locals=>{:comment=>@comment}
-page.visual_effect :blind_up, "new_comment", :duration => 0.3
+
+page.insert_html :bottom, "story_#{@story.id}_comments_list", :partial=>'show', :locals=>{:comment=>@comment}
+
+# regenerate a fresh form
+page["story_#{@story.id}_new_comment"].replace_html :partial => 'new'
