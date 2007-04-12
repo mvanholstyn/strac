@@ -33,8 +33,7 @@ class AffectedObserver < ActiveRecord::Observer
   end
   
   def after_destroy direct_object
-    #create_activity direct_object, 'destroyed'
-    direct_object.activities.map{ |a| a.destroy }
+    create_activity direct_object.project, "destroyed S#{direct_object.id}"
   end
   
   private
