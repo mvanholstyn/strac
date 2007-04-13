@@ -39,7 +39,7 @@ class Project < ActiveRecord::Base
     velocity = iterations.inject( 0 ) do |sum,iteration|
       sum + ( iteration.stories.sum( :points, :conditions => [ "status_id IN (?)", Status.find( :all, :conditions => [ "name IN (?)", [ "complete", "rejected" ] ] ).map( &:id) ] ) || 0 )
     end
-    velocity.to_f / iterations.size.to_f
+    iterations.empty? ? 0 : velocity.to_f / iterations.size.to_f
   end
   
   def estimated_remaining_iterations
