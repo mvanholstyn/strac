@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class StoryCommentsTest < Test::Unit::TestCase
-  fixtures :stories
   
   def setup
     @story = stories(:one)

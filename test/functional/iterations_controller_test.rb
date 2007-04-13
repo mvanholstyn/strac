@@ -5,7 +5,6 @@ require 'iterations_controller'
 class IterationsController; def rescue_action(e) raise e end; end
 
 class IterationsControllerTest < Test::Unit::TestCase
-  fixtures :iterations, :projects
 
   def setup
     @controller = IterationsController.new

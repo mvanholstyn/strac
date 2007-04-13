@@ -73,10 +73,12 @@
 		<% end -%>
 		<ul>
 			<% for project in ProjectPermission.find_all_projects_for_user( current_user ) -%>
-			<li><%= link_to project.name, project_path( project ) %>
-			<% restrict_to :crud_project do -%>	
-			(<%= link_to "edit", edit_project_path( project ) %>)</li>
-			<% end -%>
+			<li>
+			  <%= link_to project.name, project_path( project ) %>
+			  <% restrict_to :crud_project do -%>	
+			    (<%= link_to "edit", edit_project_path( project ) %>)
+			  <% end -%>
+			</li>
 			<% end -%>
 		</ul>
 	</div>

@@ -6,7 +6,6 @@ class StoriesController; def rescue_action(e) raise e end; end
 
 #TODO: Do I want to update the generated functionals to be more robust?
 class StoriesControllerTest < Test::Unit::TestCase
-  fixtures :stories, :projects
 
   def setup
     @controller = StoriesController.new

@@ -5,7 +5,6 @@ require 'companies_controller'
 class CompaniesController; def rescue_action(e) raise e end; end
 
 class CompaniesControllerTest < Test::Unit::TestCase
-  fixtures :companies
 
   def setup
     @controller = CompaniesController.new

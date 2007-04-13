@@ -13,7 +13,7 @@ class IterationTest < Test::Unit::TestCase
     assert_not_nil iteration.errors.on( :start_date )
   end
   
-  def testtvalidates_presence_of_end_date
+  def test_validates_presence_of_end_date
     iteration = Iteration.new( :project_id => 1, :start_date => Date.today, :end_date => nil, :name => "Iteration 1" )
     assert ! iteration.valid?
     assert_equal 1, iteration.errors.size

@@ -59,7 +59,6 @@ class CommentsController < ApplicationController
   end
   
   def initialize_params
-    puts params.inspect
     @is_rendering_inline = params[:inline] ? true : false
     true
   end

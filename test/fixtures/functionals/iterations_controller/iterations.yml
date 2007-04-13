@@ -1,0 +1,26 @@
+# == Schema Information
+# Schema version: 27
+#
+# Table name: iterations
+#
+#  id         :integer(11)   not null, primary key
+#  start_date :date          
+#  end_date   :date          
+#  project_id :integer(11)   
+#  name       :string(255)   
+#  budget     :integer(11)   default(0)
+#
+
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+one:
+  id: 1
+  name: Iteration One
+  start_date: 2007-02-15
+  end_date: 2007-02-16
+  project_id: 1
+two:
+  id: 2
+  name: Iteration Two
+  start_date: 2007-02-17
+  end_date: 2007-02-28
+  project_id: 1

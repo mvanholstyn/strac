@@ -1,0 +1,33 @@
+# == Schema Information
+# Schema version: 27
+#
+# Table name: stories
+#
+#  id                     :integer(11)   not null, primary key
+#  summary                :string(255)   
+#  description            :text          
+#  points                 :integer(11)   
+#  position               :integer(11)   
+#  iteration_id           :integer(11)   
+#  project_id             :integer(11)   
+#  responsible_party_id   :integer(11)   
+#  responsible_party_type :string(255)   
+#  status_id              :integer(11)   
+#  priority_id            :integer(11)   
+#
+
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+one:
+  id: 1
+  summary: MyString
+  description: MyText
+  points: 1
+  position: 0
+  project_id: 1
+two:
+  id: 2
+  summary: MyString
+  description: MyText
+  points: 1
+  position: 1
+  project_id: 1

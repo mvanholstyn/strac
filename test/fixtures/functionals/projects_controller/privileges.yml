@@ -1,0 +1,6 @@
+user:
+  id: 1
+  name: user
+crud_projects:
+  id: 2
+  name: crud_projects

@@ -27,11 +27,24 @@ class Test::Unit::TestCase
 
   # Add more helper methods to be used by all tests here...
   
-  # fixtures required for login purposes
-  fixtures :users, :groups, :privileges, :groups_privileges
+  # redefine fixture_path
+  if false
+    dirname, filename = File.dirname($0), File.basename($0).gsub( /_test\.rb/,'')
+    self.fixture_path = File.join( self.fixture_path, "#{File.basename(dirname)}s", filename )
+  end
   
-  # required for story dependency reasons
-  fixtures :statuses
+  def self.fixture_path
+    filename = self.name.gsub(/Test$/,'').underscore
+    if filename =~ /controller$/
+      dirname = "functionals"
+    elsif self.is_a? ActionController::IntegrationTest
+      dirname = "integrations"
+    else 
+      dirname = "units"
+    end
+
+    File.join( RAILS_ROOT, 'test', 'fixtures', dirname, filename )    
+  end
   
   def assert_association( source, macro, name, klass=nil, options = {} )
     options = klass if options.empty? and klass.is_a?( Hash )
@@ -46,9 +59,20 @@ class Test::Unit::TestCase
     assert_equal options, reflection.options, 'incorrect association options'
   end
   
-  def login_as( username )
-     @request.session[:current_user_id] = users( username )
+  # Load login_as helper if we are doing a functional or integration test
+  def initialize_with_fixtures(*args)
+    initialize_without_fixtures(*args)
+    self.class.fixtures :all
   end
+  alias_method_chain :initialize, :fixtures
+
+    
+  def login_as( username )
+    User.current_user = users( username )
+    @request.session[:current_user_id] = User.current_user.id
+  end 
+
+
 end
 
 

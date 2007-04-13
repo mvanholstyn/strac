@@ -1,0 +1,7 @@
+user:
+  id: 1
+  name: user
+crud_users:
+  id: 2
+  name: crud_users
+

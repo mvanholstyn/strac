@@ -22,6 +22,7 @@ mvanholstyn:
   last_name: VanHolstyn
   email_address: MyString
   group_id: 1
+  company_id: 1
   
 zdennis:
   id: 2
@@ -31,3 +32,4 @@ zdennis:
   last_name: MyString
   email_address: MyString
   group_id: 1
+  company_id: 1

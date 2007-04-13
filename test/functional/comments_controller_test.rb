@@ -5,7 +5,6 @@ require 'comments_controller'
 class CommentsController; def rescue_action(e) raise e end; end
 
 class CommentsControllerTest < Test::Unit::TestCase
-  fixtures :stories, :projects
   
   def setup
     @controller = CommentsController.new

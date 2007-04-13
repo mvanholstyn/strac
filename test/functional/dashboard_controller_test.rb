@@ -5,6 +5,7 @@ require 'dashboard_controller'
 class DashboardController; def rescue_action(e) raise e end; end
 
 class DashboardControllerTest < Test::Unit::TestCase
+  
   def setup
     @controller = DashboardController.new
     @request    = ActionController::TestRequest.new
@@ -12,7 +13,17 @@ class DashboardControllerTest < Test::Unit::TestCase
   end
 
   # Replace this with your real tests.
-  def test_truth
-    assert true
+  def test_index_page_should_have_project_links
+    login_as 'zdennis'
+
+    get :index
+    assert_response :success
+        
+    # main project list
+    assert_select "div#content > h2 > a[href='/projects/1']", "MyString"
+    
+    # sidebar project list list
+    assert_select "div#sidebar > ul > li > a[href='/projects/1']", "MyString" 
+
   end
 end
