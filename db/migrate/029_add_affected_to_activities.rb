@@ -1,4 +1,4 @@
-class AddAffectedToActivityies < ActiveRecord::Migration
+class AddAffectedToActivities < ActiveRecord::Migration
   def self.up
     Activity.delete_all
     add_column :activities, :affected_id, :integer
