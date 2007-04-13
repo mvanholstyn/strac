@@ -20,7 +20,7 @@ class Iteration < ActiveRecord::Base
   validate :validate_start_date_is_before_end_date
   
   def points_completed
-    Story.sum( :points, :conditions=>{:iteration_id=>id,:status_id=>Status.complete.id} ) || 0
+    Story.sum( :points, :conditions => { :iteration_id => id,:status_id => Status.complete.id } ) || 0
   end
   
   def points_remaining

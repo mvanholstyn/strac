@@ -14,9 +14,8 @@ body {
 #wrapper, #comments-wrapper {
 	background:#fff;
 	border:3px solid #f1f1f1;
-	max-width:1200px;
 	width:expression(this.width > 320 ? "320px" : this.width);
-	min-width:760px;
+	min-width:840px;
 	margin:0 auto;
 }
 
@@ -26,7 +25,7 @@ body {
 
 * html #wrapper
 {
-	width: expression(document.documentElement.clientWidth > 1200 ? "1200px" : "auto");
+	width: expression(document.documentElement.clientWidth > 1400 ? "1400px" : "auto");
 }
 
 #innerwrapper {
@@ -169,7 +168,7 @@ body {
 }
 
 #sidebar {
-	width:170px;
+	width:250px;
 	float:right;
 	padding:10px 0 0 20px;
 	background:url(../images/sidebar.jpg) top left no-repeat;
@@ -210,7 +209,7 @@ body {
 
 
 #content {
-	margin:0 210px 0 0px;
+	margin:0 290px 0 0px;
 	padding:20px 0 0 20px;
 }
 
@@ -269,9 +268,6 @@ h3 {
 	color:#444;
 }
 
-form {
-}
-
 label {
 	display:block;
 	font-weight:bold;
@@ -303,6 +299,10 @@ input, textarea, select {
 	border: 1px solid #ccc;
 	font: 90% Verdana;
 	color: #777;
+}
+
+th {
+	text-align: left;
 }
 
 #notice {
@@ -466,4 +466,13 @@ ul.statuses li.blue:hover, ul.statuses li.blue.selected {
 
 .comments-link {
   display: inline; 
+}
+
+table.project_summary {
+	border-collapse: collapse;
+  border-top: 1px solid lightgray; 
+}
+
+table.project_summary tr td, table.project_summary tr th {
+  border-bottom: 1px solid lightgray; 
 }

@@ -54,6 +54,38 @@
 	<div id="sidebar">
 		
 		<% if @project and @project.id -%>
+		<h2><%= @project.name %>: summary</h2>
+		<table class="project_summary">
+			<tr>
+				<th>Total Points:</th>
+				<td><%= @project.total_points %></td>
+			</tr>
+			<tr>
+				<th>Completed Points:</th>
+				<td><%= @project.completed_points %></td>
+			</tr>
+			<tr>
+				<th>Remaining Points:</th>
+				<td><%= @project.remaining_points %></td>
+			</tr>
+			<tr>
+				<th>Completed Iterations:</th>
+				<td><%= @project.iterations.size %></td>
+			</tr>
+			<tr>
+				<th>Average Velocity:</th>
+				<td><%= @project.average_velocity.floor %></td>
+			</tr>
+			<tr>
+				<th>Estimated Remaining Iterations:</th>
+				<td><%= @project.estimated_remaining_iterations.ceil %></td>
+			</tr>
+			<tr>
+				<th>Estimated Completion Date:</th>
+				<td><%= @project.estimated_completion_date %></td>
+			</tr>
+		</table>
+
 		<h2><%= @project.name %>: iterations</h2>
 		<ul>
 			<% for iteration in @project.iterations.find( :all, :order => "start_date DESC" ) -%>

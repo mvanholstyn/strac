@@ -22,4 +22,31 @@ class Project < ActiveRecord::Base
       find_current || build( :name => "Iteration #{size + 1}", :start_date => Date.today, :end_date =>  Date.today + 7 )
     end
   end
+  
+  def total_points
+    stories.sum( :points, :conditions => [ "status_id NOT IN (?)", Status.find( :all, :conditions => [ "name IN (?)", [ "rejected" ] ] ).map( &:id) ] )
+  end
+  
+  def completed_points
+    stories.sum( :points, :conditions => [ "status_id IN (?)", Status.find( :all, :conditions => [ "name IN (?)", [ "complete" ] ] ).map( &:id) ] )
+  end
+  
+  def remaining_points
+    stories.sum( :points, :conditions => [ "status_id NOT IN (?)", Status.find( :all, :conditions => [ "name IN (?)", [ "complete", "rejected" ] ] ).map( &:id) ] )
+  end
+  
+  def average_velocity
+    velocity = iterations.inject( 0 ) do |sum,iteration|
+      sum + ( iteration.stories.sum( :points, :conditions => [ "status_id IN (?)", Status.find( :all, :conditions => [ "name IN (?)", [ "complete", "rejected" ] ] ).map( &:id) ] ) || 0 )
+    end
+    velocity.to_f / iterations.size.to_f
+  end
+  
+  def estimated_remaining_iterations
+    remaining_points.to_f / average_velocity.to_f
+  end
+  
+  def estimated_completion_date
+    Date.today + estimated_remaining_iterations * 7
+  end
 end
