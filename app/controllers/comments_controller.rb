@@ -5,7 +5,7 @@ class CommentsController < ApplicationController
   # GET /comments
   # GET /comments.xml
   def index
-    @comments = @story.comments(true)
+    @comments = @story.comments
     
     respond_to do |format|
       format.html { render :action => "index.erb" }
@@ -28,7 +28,6 @@ class CommentsController < ApplicationController
   # GET /comments/new
   def new
     @comment = @story.comments.build
-    @comment.commenter = @story
 
     respond_to do |format|
       format.js { render :action => "new.rjs" }
@@ -39,7 +38,7 @@ class CommentsController < ApplicationController
   # POST /comments.xml
   def create
    @comment = @story.comments.build(params[:comment])
-   @comment.user = User.current_user
+   @comment.commenter = User.current_user
 
    respond_to do |format|
      if @comment.save

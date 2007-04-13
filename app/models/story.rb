@@ -23,7 +23,7 @@ class Story < ActiveRecord::Base
   belongs_to :priority
   belongs_to :responsible_party, :polymorphic => true
   has_many :time_entries, :as => :timeable
-  has_many :comments, :as => :commenter
+  has_many :comments, :as => :commentable
   has_many :activities, :as => :affected 
 
   acts_as_list :scope => :iteration_id

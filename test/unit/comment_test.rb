@@ -5,8 +5,8 @@ class CommentTest < Test::Unit::TestCase
 
   # Replace this with your real tests.
   def test_associations
-    assert_association Comment, :belongs_to, :user, User
-    assert_association Comment, :belongs_to, :commenter, :polymorphic=>true
+    assert_association Comment, :belongs_to, :commenter, User
+    assert_association Comment, :belongs_to, :commentable, :polymorphic=>true
   end
   
   def test_should_have_user_id

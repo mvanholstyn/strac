@@ -17,7 +17,7 @@ class StoryTest < Test::Unit::TestCase
   end
   
   def test_associations
-    assert_association Story, :has_many, :comments, Comment, :as => :commenter
+    assert_association Story, :has_many, :comments, Comment, :as => :commentable
   end
 
   def test_creating_a_stort

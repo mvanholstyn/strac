@@ -12,8 +12,8 @@
 #
 
 class Comment < ActiveRecord::Base
-  belongs_to :user
-  belongs_to :commenter, :polymorphic => true
+  belongs_to :commenter, :class_name => "User", :foreign_key => "commenter_id"
+  belongs_to :commentable, :polymorphic => true
   
-  validates_presence_of :user_id, :content
+  validates_presence_of :commenter_id, :content, :commentable_id, :commentable_type
 end
