@@ -1,44 +1,75 @@
-class AffectedObserver < ActiveRecord::Observer
-  observe Story
-  
+class AffectedObserver < ActiveRecord::Observer  
   attr_accessor :cache
+  
+  def self.message( message, options )
+    self.messages << [ message, options ]
+  end
+  
+  def self.messages ; @messages ||= [] ; end  
+  
+  def after_create( object )
+    messages.each do |(message,options)|      
+      if options[:created] 
+        message = eval message
+        create_activity( object.project, message )
+      end
+    end    
+  end
+  
+  def after_destroy( object )
+    messages.each do |(message,options)|      
+      if options[:destroyed] 
+        message = eval message
+        create_activity( object.project, message )
+      end
+    end    
+  end
+  
+  def after_update( object )
+    messages.each do |(message,options)|    
+      next unless options[:updated]
+      differences = cache[object]
+        
+      options[:updated].each do |field|
+        if cache[object][field]
+          create = if options[:nil] == false
+            true if cache[object][field].first
+          elsif options[:nil] == true 
+            true if cache[object][field].first.nil?
+          else
+            true
+          end
+          
+          if create
+            message = eval message
+            create_activity( object.project, message )
+            break
+          end
+        end
+      end
+    end
+    cache[object] = nil
+  end
+ 
+  def before_update object
+    cache[object] = object.differences
+  end
   
   def initialize *args, &blk
     super *args, &blk
     self.cache = {}
   end
   
-  def after_create direct_object
-    create_activity direct_object.project, "created S#{direct_object.id}"
-  end
-  
-  def before_update direct_object
-    cache[direct_object] = direct_object.differences
-  end
-  
-  def after_update direct_object
-    create_activity direct_object.project, "updated points for S#{direct_object.id}" if cache[direct_object][:points]
-    create_activity direct_object.project, "assigned S#{direct_object.id} to #{direct_object.responsible_party_type.upcase}#{direct_object.responsible_party_id}" if cache[direct_object][:responsible_party_id] and cache[direct_object][:responsible_party_id].first
-    if cache[direct_object][:responsible_party_id] and not cache[direct_object][:responsible_party_id].first
-      type = cache[direct_object][:responsible_party_type].last
-      create_activity direct_object.project, "released S#{direct_object.id} from #{type.upcase}#{cache[direct_object][:responsible_party_id].last}"
-    end
-    create_activity direct_object.project, "marked S#{direct_object.id} as STATUS#{direct_object.status_id}" if cache[direct_object][:status_id]
-    create_activity direct_object.project, "marked S#{direct_object.id} as PRIORITY#{direct_object.priority_id} priority    " if cache[direct_object][:priority_id]
-    create_activity direct_object.project, "moved S#{direct_object.id} to I#{direct_object.iteration_id}" if cache[direct_object][:iteration_id]
-    if cache[direct_object][:sumamry] or cache[direct_object][:description] or cache[direct_object][:tag]
-      create_activity direct_object.project, "updated S#{direct_object.id}"
-    end
-    cache[direct_object] = nil
-  end
-  
-  def after_destroy direct_object
-    create_activity direct_object.project, "destroyed S#{direct_object.id}"
-  end
   
   private
   
   def create_activity project, message
     Activity.create! :actor => User.current_user, :action => message, :project => project
   end
+  
+  def messages 
+    self.class.messages
+  end
+  
+
 end

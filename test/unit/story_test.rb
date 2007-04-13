@@ -4,7 +4,7 @@ class StoryTest < Test::Unit::TestCase
   fixtures :stories
 
   def create_story( options={} )
-    AffectedObserver.instance.expects( :create_activity )
+    StoryObserver.instance.expects( :create_activity )
     default_options = { :summary=>"Summary",
                           :description=>"Description",
                           :points=>"1",
