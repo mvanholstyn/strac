@@ -4,13 +4,17 @@ if is_rendering_inline
   page["story_#{@story.id}_comments_inline_link"].replace_html :inline=>comments_inline_link
   page["story_#{@story.id}_comments_popup_link"].replace_html :inline=>comments_popup_link
 elsif is_rendering_popup
-# TODO fix these, the innerHTML doesn't work, it may be an escaping issue...
-#  inline_id = "story_#{@story.id}_comments_inline_link"
-#  inline_link = escape_javascript( comments_inline_link)
-#  page.call "window.opener.document.getElementById('#{inline_id}').innerHTML='#{inline_link}';"
+  inline_id = "story_#{@story.id}_comments_inline_link"
+  inline_link = escape_javascript( comments_inline_link)
+   page << "window.opener.document.getElementById('#{inline_id}').innerHTML='#{inline_link}';";
 
-#  popup_id = "story_#{@story.id}_comments_popup_link"
-#  page.call "window.opener.document.getElementById('#{popup_id}').innerHTML='#{comments_popup_link}';"  
+  popup_id = "story_#{@story.id}_comments_popup_link"
+  popup_link = escape_javascript( comments_popup_link )
+  page << "window.opener.document.getElementById('#{popup_id}').innerHTML='#{popup_link}';"  
+
+  raw_comment = controller.send(:render_to_string, :partial=>'show', :locals=>{:comment=>@comment} )
+  comment = escape_javascript( raw_comment)
+  page << "new Insertion.Bottom(window.opener.document.getElementById('story_#{@story.id}_comments_list'), '#{comment}');"
 end
 
 page.insert_html :bottom, "story_#{@story.id}_comments_list", :partial=>'show', :locals=>{:comment=>@comment}
