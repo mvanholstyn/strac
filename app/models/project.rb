@@ -24,7 +24,7 @@ class Project < ActiveRecord::Base
   end
   
   def total_points
-    stories.sum( :points, :conditions => [ "status_id NOT IN (?)", Status.find( :all, :conditions => [ "name IN (?)", [ "rejected" ] ] ).map( &:id) ] ) || 0
+    stories.sum( :points, :conditions => [ "status_id NOT IN (?) OR status_id IS NULL", Status.find( :all, :conditions => [ "name IN (?)", [ "rejected" ] ] ).map( &:id) ] ) || 0
   end
   
   def completed_points
@@ -32,12 +32,12 @@ class Project < ActiveRecord::Base
   end
   
   def remaining_points
-    stories.sum( :points, :conditions => [ "status_id NOT IN (?)", Status.find( :all, :conditions => [ "name IN (?)", [ "complete", "rejected" ] ] ).map( &:id) ] ) || 0
+    stories.sum( :points, :conditions => [ "status_id NOT IN (?) OR status_id IS NULL", Status.find( :all, :conditions => [ "name IN (?)", [ "complete", "rejected" ] ] ).map( &:id) ] ) || 0
   end
   
   def average_velocity
     velocity = iterations.inject( 0 ) do |sum,iteration|
-      sum + ( iteration.stories.sum( :points, :conditions => [ "status_id IN (?)", Status.find( :all, :conditions => [ "name IN (?)", [ "complete", "rejected" ] ] ).map( &:id) ] ) || 0 )
+      sum + ( iteration.stories.sum( :points, :conditions => [ "status_id IN (?)", Status.find( :all, :conditions => [ "name IN (?)", [ "complete" ] ] ).map( &:id) ] ) || 0 )
     end
     iterations.empty? ? 0 : velocity.to_f / iterations.size.to_f
   end
