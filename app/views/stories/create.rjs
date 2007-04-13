@@ -12,5 +12,5 @@ iteration_list_ids = [ "iteration_nil" ] + @project.iterations.map{ |i| "iterati
 page.sortable iteration_id, :url => reorder_stories_path(@project), :method => :put,
                             :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => iteration_list_ids
 
-@story = Story.new # we want a fresh form
+@story = Story.new :iteration_id => @story.iteration_id # we want a fresh form
 page["#{iteration_id}_story_new"].replace_html :partial => 'new'
