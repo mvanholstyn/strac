@@ -43,7 +43,7 @@ class Project < ActiveRecord::Base
   end
   
   def estimated_remaining_iterations
-    average_velocity.zero? 0 : remaining_points.to_f / average_velocity.to_f
+    average_velocity.zero? ? 0 : remaining_points.to_f / average_velocity.to_f
   end
   
   def estimated_completion_date
