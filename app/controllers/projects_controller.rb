@@ -1,4 +1,6 @@
 class ProjectsController < ApplicationController
+  restrict_to :crud_projects, :except => :show
+  
   # GET /projects
   # GET /projects.xml
   def index

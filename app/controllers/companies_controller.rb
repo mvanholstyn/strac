@@ -1,4 +1,6 @@
 class CompaniesController < ApplicationController
+  restrict_to :crud_companies
+  
   # GET /companies
   # GET /companies.xml
   def index

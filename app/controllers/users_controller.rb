@@ -1,15 +1,20 @@
 class UsersController < ApplicationController
+  restrict_to :crud_users, :crud_companies_users
+  
   acts_as_login_controller
 
   redirect_after_login do
     { :controller => "dashboard" }
   end
 
-
   # GET /users
   # GET /users.xml
   def index
-    @users = User.find(:all)
+    @users = if current_user.has_privilege? :crud_users
+      User.find( :all )
+    else
+      current_user.company.users.find(:all)
+    end
 
     respond_to do |format|
       format.html { render :action => "index.erb" }
@@ -20,7 +25,11 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.xml
   def show
-    @user = User.find(params[:id])
+    @user = if current_user.has_privilege? :crud_users
+      User.find( params[:id] )
+    else
+      current_user.company.users.find(params[:id])
+    end
 
     respond_to do |format|
       format.html { render :action => "show.erb" }
@@ -30,18 +39,35 @@ class UsersController < ApplicationController
 
   # GET /users/new
   def new
-    @user = User.new
+    @user = if current_user.has_privilege? :crud_users
+      User.new
+    else
+      current_user.company.users.build
+    end
+    find_groups
+    find_companies
   end
 
   # GET /users/1;edit
   def edit
-    @user = User.find(params[:id])
+    @user = 
+    @user = if current_user.has_privilege? :crud_users
+      User.find( params[:id] )
+    else
+      current_user.company.users.find(params[:id])
+    end
+    find_groups
+    find_companies
   end
 
   # POST /users
   # POST /users.xml
   def create
-    @user = User.new(params[:user])
+    @user = if current_user.has_privilege? :crud_users
+      User.new( params[:user] )
+    else
+      current_user.company.users.build( params[:user] )
+    end
 
     respond_to do |format|
       if @user.save
@@ -49,7 +75,11 @@ class UsersController < ApplicationController
         format.html { redirect_to user_url(@user) }
         format.xml { head :created, :location => user_url(@user) }
       else
-        format.html { render :action => "new.erb" }
+        format.html do          
+          find_groups
+          find_companies
+          render :action => "new.erb"
+        end
         format.xml { render :xml => @user.errors.to_xml }
       end
     end
@@ -58,7 +88,11 @@ class UsersController < ApplicationController
   # PUT /users/1
   # PUT /users/1.xml
   def update
-    @user = User.find(params[:id])
+    @user = if current_user.has_privilege? :crud_users
+      User.find( params[:id] )
+    else
+      current_user.company.users.find(params[:id])
+    end
 
     respond_to do |format|
       if @user.update_attributes(params[:user])
@@ -66,7 +100,11 @@ class UsersController < ApplicationController
         format.html { redirect_to user_url(@user) }
         format.xml { head :ok }
       else
-        format.html { render :action => "edit.erb" }
+        format.html do          
+          find_groups
+          find_companies
+          render :action => "edit.erb"
+        end
         format.xml { render :xml => @user.errors.to_xml }
       end
     end
@@ -75,12 +113,34 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.xml
   def destroy
-    @user = User.find(params[:id])
+    @user = if current_user.has_privilege? :crud_users
+      User.find( params[:id] )
+    else
+      current_user.company.users.find(params[:id])
+    end
     @user.destroy
 
     respond_to do |format|
       format.html { redirect_to users_url }
       format.xml { head :ok }
+    end
+  end
+  
+  private
+  
+  def find_groups
+    @groups = Group.find( :all, :conditions => { :name => current_user.group.groups } ).map { |c| [ c.name, c.id ] }
+    if @user and not @user.new_record? and @user != current_user
+      @groups << [ @user.group.name, @user.group.id ]
+    end
+    @groups.uniq!
+  end
+  
+  def find_companies
+    @companies = if current_user.has_privilege? :crud_companies
+      Company.find( :all ).map { |c| [ c.name, c.id ] }
+    else
+      [ [ current_user.company.name, current_user.company.id ] ]
     end
   end
 end
