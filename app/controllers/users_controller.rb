@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  restrict_to :crud_users, :crud_companies_users
+  restrict_to :crud_users, :crud_companies_users, :except => [ :login, :logout ]
   
   acts_as_login_controller
 
