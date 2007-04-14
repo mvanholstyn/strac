@@ -4,6 +4,14 @@
 	<% end -%>
 </ul>
 
+<span id="story_<%= story.id %>_header" style="position:absolute; right: 100px;">	
+	<% if story.responsible_party.nil? -%>
+		<%= render :partial=>'stories/take', :locals=>{:story=>story} %>
+	<% else -%>
+		<%= render :partial=>'stories/release', :locals=>{:story=>story} %>
+	<% end -%>
+</span>
+
 <%= image_tag "move.gif", :class => 'draggable', :title => "drag to move" %>
 <%= link_to_remote image_tag( 'show.png', :title => "click to display description" ), :url => story_path(@project, story), :method => :get, 
 	:before => "if( !toggle_hide_show_with_smart_loading( 'story_#{story.id}_view', [ 'story_#{story.id}_edit', 'story_#{story.id}_time' ] ) ) { return false; }" %>
@@ -15,14 +23,6 @@
 
 <b>Points:</b> <span id="story_<%= story.id %>_points" class="inplaceeditor-field"><%= story.points ? h( story.points ) : "&infin;" %></span>
  - <%= "S#{story.id}" %> - <%=h story.summary %>
-
-<span id="story_<%= story.id %>_header">	
-	<% if story.responsible_party.nil? -%>
-		<%= render :partial=>'stories/take', :locals=>{:story=>story} %>
-	<% else -%>
-		<%= render :partial=>'stories/release', :locals=>{:story=>story} %>
-	<% end -%>
-</span>
 
 <%= in_place_editor "story_#{story.id}_points", :url => update_points_story_path( @project, story ), :param_name => 'story[points]',
                                                 :ajax_options => { :method => :put }, :eval_scripts => true,
