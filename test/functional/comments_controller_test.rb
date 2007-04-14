@@ -27,7 +27,7 @@ class CommentsControllerTest < Test::Unit::TestCase
 
   def test_should_create_comment
     old_count = Comment.count
-    post :create, :comment => { :content=>"test comment", :user_id=>1 }, :story_id=>@story.id, :project_id=>@project.id
+    post :create, :comment => { :content=>"test comment", :commenter_id=>1 }, :story_id=>@story.id, :project_id=>@project.id
     assert_equal old_count+1, Comment.count
 
     assert_template 'create.rjs'
