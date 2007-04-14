@@ -14,7 +14,7 @@ class StoryCommentsTest < Test::Unit::TestCase
   def test_adding_a_valid_comment_to_a_story_should_work
     CommentObserver.instance.expects( :create_activity )
 
-    comment = Comment.new :content=>"story comment", :user_id=>1
+    comment = Comment.new :content=>"story comment", :commenter_id=>1, :commentable_id=>1, :commentable_type=>"Story"
   
     assert comment.valid?, "comment was not valid when it should have been!"
     
