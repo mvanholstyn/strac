@@ -301,6 +301,10 @@ input, textarea, select {
 	color: #777;
 }
 
+select {
+	padding: 0px;
+}
+
 th {
 	text-align: left;
 }
