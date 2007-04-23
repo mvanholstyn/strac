@@ -1,13 +1,15 @@
 # == Schema Information
-# Schema version: 27
+# Schema version: 30
 #
 # Table name: activities
 #
-#  id         :integer(11)   not null, primary key
-#  actor_id   :integer(11)   
-#  action     :string(255)   
-#  created_at :datetime      
-#  project_id :integer(11)   
+#  id            :integer(11)   not null, primary key
+#  actor_id      :integer(11)   
+#  action        :string(255)   
+#  created_at    :datetime      
+#  project_id    :integer(11)   
+#  affected_id   :integer(11)   
+#  affected_type :string(255)   
 #
 
 class Activity < ActiveRecord::Base

@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 27
+# Schema version: 30
 #
 # Table name: companies
 #

@@ -1,3 +1,12 @@
+# == Schema Information
+# Schema version: 30
+#
+# Table name: groups
+#
+#  id   :integer(11)   not null, primary key
+#  name :string(255)   
+#
+
 class Group < ActiveRecord::Base
   def groups
     case name
