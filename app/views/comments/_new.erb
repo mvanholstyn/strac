@@ -2,11 +2,11 @@
 
 <%= error_messages_for :comment %>
 
-<% remote_form_for :comment, :url => comments_path( :project_id=>@story.project_id, :story_id=>@story.id, :inline=>is_rendering_inline ) do |form| -%>
+<% remote_form_for :comment, :url => comments_path( :project_id=>@story.project_id, :story_id=>@story.id, :inline=>is_rendering_inline_comments ) do |form| -%>
   <%= form.text_area "content", :rows=>"5", :value=>"" %>
   <p>
     <%= submit_tag "Post Comment" %> 
-    <% if is_rendering_inline %>
+    <% if is_rendering_inline_comments %>
       or <%= close_comments_link %>
     <% end %>
   </p>

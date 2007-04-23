@@ -16,9 +16,12 @@ class StoriesController < ApplicationController
   # GET /stories/1
   # GET /stories/1.xml
   def show
-    @story = @project.stories.find(params[:id], :include => :tags)
+    @story = @project.stories.find(params[:id], :include => [:tags, :comments] )
+    @comments = @story.comments
+    should_render_comment_links = false
 
     respond_to do |format|
+      format.html { render :action => "show.erb" }
       format.js { render :action => "show.rjs" }
       format.xml { render :xml => @story.to_xml }
     end

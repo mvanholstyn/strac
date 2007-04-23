@@ -6,7 +6,7 @@ class CommentsController < ApplicationController
   # GET /comments.xml
   def index
     @comments = @story.comments
-    
+
     respond_to do |format|
       format.html { render :action => "index.erb" }
       format.xml { render :xml => @story.comments(true).to_xml }
@@ -58,7 +58,7 @@ class CommentsController < ApplicationController
   end
   
   def initialize_params
-    @is_rendering_inline = params[:inline] ? true : false
+    @is_rendering_inline_comments = params['inline'] =~ /true/ ? true : false
     true
   end
 end

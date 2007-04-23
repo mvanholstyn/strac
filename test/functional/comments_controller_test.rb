@@ -15,9 +15,28 @@ class CommentsControllerTest < Test::Unit::TestCase
     login_as 'zdennis'
   end
 
-  def test_should_get_index
+  def test_should_list_comments
     get :index, :story_id=>@story.id, :project_id=>@project.id
     assert_response :success
+    
+    is_rendering_inline_comments = assigns(:is_rendering_inline_comments)
+    assert_equal false, is_rendering_inline_comments, "Inline comments shouldn't be rendered!"
+  end
+  
+  def test_should_should_list_comments_with_is_rendering_popup_comments_as_false
+    get :index, :story_id=>@story.id, :project_id=>@project.id, :inline=>'false'
+    assert_response :success
+
+    is_rendering_inline_comments = assigns(:is_rendering_inline_comments)
+    assert_equal false, is_rendering_inline_comments, "Inline comments shouldn't be rendered!"
+  end
+  
+  def test_should_should_list_comments_with_is_rendering_popup_comments_as_false
+    get :index, :story_id=>@story.id, :project_id=>@project.id, :inline=>'true'
+    assert_response :success
+
+    is_rendering_inline_comments = assigns(:is_rendering_inline_comments)
+    assert is_rendering_inline_comments, "Inline comments should be rendered!"
   end
 
   def test_should_get_new

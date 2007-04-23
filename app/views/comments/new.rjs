@@ -1,2 +1,2 @@
 page["story_#{@story.id}_new_comment"].replace_html :partial => 'new'
-page.call "show_with_smart_loading", "story_#{@story.id}_new_comment", is_rendering_popup
+page.call "show_with_smart_loading", "story_#{@story.id}_new_comment", true

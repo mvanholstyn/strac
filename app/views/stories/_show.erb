@@ -1,11 +1,3 @@
 <%= expand_ids( @story.description ) %>
 
-<div id="story_<%= @story.id %>_comments_inline_link" class="comments-link">
-  <%= comments_inline_link %>
-</div>
-
-<div id="story_<%= @story.id %>_comments_popup_link" class="comments-link">
-  <%= comments_popup_link %>
-</div>
-
-<div id="story_<%= @story.id %>_comments" class="comments-inline"></div>
+<%= render :partial=>"comments/inline_comments" %>

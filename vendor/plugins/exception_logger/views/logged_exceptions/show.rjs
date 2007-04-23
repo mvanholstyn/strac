@@ -1,2 +1,2 @@
-page[:showpage].replace_html :partial => "show"
+page[:showpage].replace_html :partial => "mini_show"
 page[:showpage].visual_effect :blind_down, :duration => 0.25

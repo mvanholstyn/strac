@@ -38,6 +38,8 @@ class StoriesControllerTest < Test::Unit::TestCase
   def test_should_show_story
     get :show, :id => 1, :project_id=>@project.id
     assert_response :success
+    
+    assert_template 'show.erb'
   end
 
   def test_should_get_edit

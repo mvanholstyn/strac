@@ -1,4 +1,6 @@
 module CommentsHelper
+  attr_accessor :is_rendering_inline_comments
+  attr_accessor :should_render_comment_links
   
   def close_comments_link
     link_to( "Close Comments", "#", 
@@ -18,12 +20,16 @@ module CommentsHelper
         :method => :get
   end  
   
-  def is_rendering_inline
-    @is_rendering_inline
+  def is_rendering_inline_comments
+    @is_rendering_inline_comments
   end
   
-  def is_rendering_popup
-    ! @is_rendering_inline
+  def is_rendering_popup_comments
+    ! @is_rendering_inline_comments
+  end
+  
+  def should_render_comment_links
+    @should_render_comment_links ||= true
   end
     
 end
