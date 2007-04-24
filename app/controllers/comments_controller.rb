@@ -14,17 +14,6 @@ class CommentsController < ApplicationController
     end
   end
   
-  # GET /comments/1
-  # GET /comments/1.xml
-  def show
-    @comment = @story.comments.find(params[:id])
-
-    respond_to do |format|
-      format.js { render :action => "show.rjs" }
-      format.xml { render :xml => @comment.to_xml }
-    end
-  end  
-  
   # GET /comments/new
   def new
     @comment = @story.comments.build

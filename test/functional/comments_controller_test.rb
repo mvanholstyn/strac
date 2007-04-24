@@ -38,7 +38,7 @@ class CommentsControllerTest < Test::Unit::TestCase
     is_rendering_inline_comments = assigns(:is_rendering_inline_comments)
     assert is_rendering_inline_comments, "Inline comments should be rendered!"
   end
-
+  
   def test_should_get_new
     get :new, :story_id=>@story.id, :project_id=>@project.id
     assert_response :success
@@ -51,6 +51,19 @@ class CommentsControllerTest < Test::Unit::TestCase
 
     assert_template 'create.rjs'
     assert_response :success
+  end
+  
+  def test_should_fail_creating_a_comment
+    old_count = Comment.count
+    xhr :post, :create, :comment => {}, :story_id=>@story.id, :project_id=>@project.id
+    assert_equal old_count, Comment.count
+    
+    comment = assigns(:comment)
+    assert comment, "should have had a comment!"
+    assert comment.errors.on(:content), "should have had an error on content"
+    assert_equal "can't be blank", comment.errors.on(:content), "should have had an error on content"
+    
+    assert_template 'new.rjs'
   end
 
   def t1est_should_show_comment
