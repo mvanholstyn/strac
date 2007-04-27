@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 30
+# Schema version: 32
 #
 # Table name: projects
 #
@@ -8,6 +8,7 @@
 #
 
 class Project < ActiveRecord::Base
+  has_many :invitations
   has_many :time_entries
   has_many :stories
   has_many :activities

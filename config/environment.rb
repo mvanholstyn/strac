@@ -14,13 +14,13 @@ Rails::Initializer.run do |config|
   # Settings in config/environments/* take precedence over those specified here
   
   # Skip frameworks you're not going to use (only works if using vendor/rails)
-  config.frameworks -= [ :action_web_service, :action_mailer ]
+  config.frameworks -= [ :action_web_service ]
 
   # Only load the plugins named here, by default all plugins in vendor/plugins are loaded
   # config.plugins = %W( exception_notification ssl_requirement )
 
   # Add additional load paths for your own custom dirs
-  config.load_paths += %W( #{RAILS_ROOT}/app/observers )
+  config.load_paths += %W( #{RAILS_ROOT}/app/observers #{RAILS_ROOT}/app/mailers )
 
   # Force all environments to use the same logger level 
   # (by default production uses :info, the others :debug)
@@ -46,6 +46,9 @@ Rails::Initializer.run do |config|
     :session_key => 'strac_session_key',
     :secret      => 'strac_secret'
   }
+  
+  config.action_mailer.delivery_method = :sendmail
+ 
 end
 
 # Add new inflection rules using the following format 

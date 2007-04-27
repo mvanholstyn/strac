@@ -1,0 +1,21 @@
+<div>
+  <h2>Add People To Your Project</h2>
+
+  <div>Enter email addresses separated by newlines.</div>
+
+  <% form_for :invitation, :url=>invitations_path do |f| %>
+
+    <p>  
+      <h3>Developers</h3>
+      <%= text_area_tag "invitation[developers]", '', :cols=>50, :rows=>5 %>
+    
+      <h3>Customers</h3>
+      <%= text_area_tag "invitation[customers]", '', :cols=>50, :rows=>5 %>
+    </p>
+
+    <p>
+    <%= submit_tag "Invite" %>
+    </p>
+  
+  <% end %>
+</div>
