@@ -10,7 +10,8 @@ class AddDefaultAuthenticationData < ActiveRecord::Migration
     customer_group = Group.create! :name => 'Customer'
     customer_group.privileges << user_privilege << customer_privilege
     
-    administrator = User.create! :username =>'admin', :password => 'password', :password_confirmation => 'password', :group => developer_group
+    administrator = User.create! :username =>'admin', :email_address => "admin@example.com",
+                                 :password => 'password', :password_confirmation => 'password', :group => developer_group
   end
 
   def self.down

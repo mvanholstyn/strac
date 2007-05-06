@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   include ExceptionLoggable
   
+  helper :all
+  
   restrict_to :user, :except => { :users => [ :login, :logout ] }
   
   on_permission_denied do

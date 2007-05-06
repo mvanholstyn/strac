@@ -27,6 +27,7 @@ class AddGroupsAndPrivileges < ActiveRecord::Migration
     
     [ 'mvanholstyn', 'zdennis' ].each do |username|
       user = User.find_by_username username
+      next unless user
       user.group = admin_group
       user.save!
     end
