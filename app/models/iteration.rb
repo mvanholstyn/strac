@@ -19,12 +19,21 @@ class Iteration < ActiveRecord::Base
   validate :validate_iterations_do_not_overlap
   validate :validate_start_date_is_before_end_date
   
+  def points_before_iteration
+    Story.sum( :points, 
+      :conditions => ["created_at < :start_date", { :start_date => self.start_date } ] ) || 0
+  end
+  
   def points_completed
     Story.sum( :points, :conditions => { :iteration_id => id,:status_id => Status.complete.id } ) || 0
   end
   
   def points_remaining
-    budget - points_completed
+    total_points - points_completed
+  end
+
+  def total_points
+    Story.sum( :points, :conditions => { :iteration_id => id } ) || 0
   end
   
   def display_name
@@ -53,7 +62,7 @@ class Iteration < ActiveRecord::Base
   def validate_start_date_is_before_end_date
     if start_date and end_date
       if end_date <= start_date
-        errors.add_to_base "start date must be after end date"
+        errors.add_to_base "start date must be before end date"
         return false
       end
     end

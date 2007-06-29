@@ -68,6 +68,8 @@ class AffectedObserver < ActiveRecord::Observer
   end
   
   def create_activity project, object, message
-    Activity.create! :actor => User.current_user, :action => message, :project => project, :affected => object
+    if User.current_user
+      Activity.create! :actor => User.current_user, :action => message, :project => project, :affected => object
+    end
   end
 end

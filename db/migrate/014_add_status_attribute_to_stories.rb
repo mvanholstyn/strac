@@ -1,5 +1,7 @@
 class AddStatusAttributeToStories < ActiveRecord::Migration
-  class Status < ActiveRecord::Base; end
+  
+  class Story < ActiveRecord::Base ; end
+  class Status < ActiveRecord::Base ; end
 
   def self.up
     create_table :statuses do |t|

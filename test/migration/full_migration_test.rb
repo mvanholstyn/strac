@@ -43,6 +43,7 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "actor_id", :integer
         t.column "action", :string
         t.column "created_at", :datetime
+        t.column "updated_at", :datetime
         t.column "project_id", :integer
         t.column "affected_id", :integer
         t.column "affected_type", :string
@@ -52,6 +53,7 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "id", :integer
         t.column "content", :text
         t.column "created_at", :datetime
+        t.column "updated_at", :datetime
         t.column "commenter_id", :integer
         t.column "commentable_id", :integer
         t.column "commentable_type", :string
@@ -60,17 +62,23 @@ class FullMigrationTest < ActionController::IntegrationTest
       s.table "companies" do |t|
         t.column "id", :integer
         t.column "name", :string
+        t.column "created_at", :datetime
+        t.column "updated_at", :datetime
       end
 
       s.table "groups" do |t|
         t.column "id", :integer
         t.column "name", :string
+        t.column "created_at", :datetime
+        t.column "updated_at", :datetime
       end
 
       s.table "groups_privileges" do |t|
         t.column "id", :integer
         t.column "group_id", :integer
         t.column "privilege_id", :integer
+        t.column "created_at", :datetime
+        t.column "updated_at", :datetime
       end
 
       s.table "invitations" do |t|
@@ -79,6 +87,8 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "recipient", :string
         t.column "project_id", :integer
         t.column "kind", :string
+        t.column "created_at", :datetime
+        t.column "updated_at", :datetime
       end
 
       s.table "iterations" do |t|
@@ -88,6 +98,8 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "project_id", :integer
         t.column "name", :string
         t.column "budget", :integer
+        t.column "created_at", :datetime
+        t.column "updated_at", :datetime
       end
 
       s.table "logged_exceptions" do |t|
@@ -107,11 +119,15 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "name", :string
         t.column "color", :string
         t.column "position", :integer
+        t.column "created_at", :datetime
+        t.column "updated_at", :datetime
       end
 
       s.table "privileges" do |t|
         t.column "id", :integer
         t.column "name", :string
+        t.column "created_at", :datetime
+        t.column "updated_at", :datetime
       end
 
       s.table "project_permissions" do |t|
@@ -119,17 +135,23 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "project_id", :integer
         t.column "accessor_id", :integer
         t.column "accessor_type", :string
+        t.column "created_at", :datetime
+        t.column "updated_at", :datetime
       end
 
       s.table "projects" do |t|
         t.column "id", :integer
         t.column "name", :string
+        t.column "created_at", :datetime
+        t.column "updated_at", :datetime
       end
 
       s.table "statuses" do |t|
         t.column "id", :integer
         t.column "name", :string
         t.column "color", :string
+        t.column "created_at", :datetime
+        t.column "updated_at", :datetime
       end
 
       s.table "stories" do |t|
@@ -144,6 +166,9 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "responsible_party_type", :string
         t.column "status_id", :integer
         t.column "priority_id", :integer
+        t.column "created_at", :datetime
+        t.column "completed_at", :datetime
+        t.column "updated_at", :datetime
       end
 
       s.table "taggings" do |t|
@@ -166,6 +191,8 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "project_id", :integer
         t.column "timeable_id", :integer
         t.column "timeable_type", :string
+        t.column "created_at", :datetime
+        t.column "updated_at", :datetime
       end
 
       s.table "users" do |t|
@@ -177,6 +204,8 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "email_address", :string
         t.column "group_id", :integer
         t.column "company_id", :integer
+        t.column "created_at", :datetime
+        t.column "updated_at", :datetime
       end
     end
   end

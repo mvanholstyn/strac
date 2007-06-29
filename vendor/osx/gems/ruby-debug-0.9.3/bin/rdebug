@@ -1,0 +1,138 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'optparse'
+require "ostruct"
+require 'ruby-debug'
+
+options = OpenStruct.new(
+  'server'      => false,
+  'client'      => false,
+  'debug_module'=> 'debug',
+  'host'        => nil,
+  'port'        => Debugger::PORT,
+  'cport'       => Debugger::PORT + 1,
+  'control'     => true,
+  'wait'        => false,
+  'nostop'      => false,
+  'post_mortem' => false,
+  'script'      => nil,
+  'tracing'     => false,
+  'frame_bind'  => false
+)
+
+opts = OptionParser.new do |opts|
+  opts.banner = <<EOB
+ruby-debug #{Debugger::VERSION}
+Usage: rdebug [options] <script.rb> -- <script.rb parameters>
+EOB
+  opts.separator ""
+  opts.separator "Options:"
+  opts.on("-s", "--server", "Listen for remote connections") {options.server = true}
+  opts.on("-w", "--wait", "Wait for a client connection, implies -s option") {options.wait = true}
+  opts.on("-c", "--client", "Connect to remote debugger") {options.client = true}
+  opts.on("-h", "--host HOST", "Host name used for remote debugging") {|options.host|}
+  opts.on("-p", "--port PORT", Integer, "Port used for remote debugging") {|options.port|}
+  opts.on("--cport PORT", Integer, "Port used for contol commands") {|options.cport|}
+  opts.on("--no-control", "Do not automatically start control thread") {options.control = false}
+  opts.on("-x", "--trace", "turn on line tracing") {options.tracing = true}
+  opts.on("-n", "--nostop", "Do not stop when stript is loaded") {options.nostop = true}
+  opts.on("-m", "--post-mortem", "Activate post-mortem mode") {options.post_mortem = true}
+  opts.on("-I", "--include PATH", String, "Add PATH to $LOAD_PATH") do |path|
+    $LOAD_PATH.unshift(path)
+  end
+  opts.on("--script FILE", String, "Name of the script file to run") do |options.script| 
+    unless File.exists?(options.script)
+      puts "Script file '#{options.script}' is not found"
+      exit
+    end
+  end
+  opts.on("-r", "--require debug", String,
+          "Compatibility with Ruby-distributed debug module") do |options.debug_module|
+    if options.debug_module != 'debug'
+      puts "Use '-r' option only with 'debug' (You supplied '#{options.debug_module}'). " + 
+        "This option is ignored."
+    end
+  end
+  opts.on("--keep-frame-binding", "Keep frame bindings") {options.frame_bind = true}
+  opts.on("--emacs", "Activates emacs mode") {ENV['EMACS'] = '1'}
+  opts.separator ""
+  opts.separator "Common options:"
+  opts.on_tail("--help", "Show this message") do
+    puts opts
+    exit
+  end
+  opts.on_tail("-v", "--version", "Show version") do
+    puts "ruby-debug #{Debugger::VERSION}"
+    exit
+  end
+end
+
+begin
+  Debugger::ARGV = ARGV.clone
+  rdebug_path = File.expand_path($0)
+  if RUBY_PLATFORM =~ /mswin/
+    rdebug_path += ".cmd" unless rdebug_path =~ /\.cmd$/i
+  end
+  Debugger::RDEBUG_SCRIPT = rdebug_path
+  opts.parse! ARGV
+rescue StandardError => e
+  puts opts
+  puts
+  puts e.message
+  exit(-1)
+end
+
+if options.client
+  Debugger.start_client(options.host, options.port)
+else
+  if ARGV.empty?
+    puts opts
+    puts
+    puts "Must specify a script to run"
+    exit(-1)
+  end
+
+  # save script name
+  Debugger::PROG_SCRIPT = ARGV.shift
+  
+  # install interruption handler
+  trap('INT') { Debugger.interrupt_last }
+  
+  # set options
+  Debugger.wait_connection = options.wait
+  Debugger.keep_frame_binding = options.frame_bind
+  
+  load_initrc = lambda do
+    script_file = "#{ENV["HOME"] || ENV["HOMEPATH" || "."]}/.rdebugrc"
+    Debugger.run_script script_file, StringIO.new  if File.exists?(script_file)
+  end
+  
+  if options.server
+    # start remote mode
+    Debugger.start_remote(options.host, [options.port, options.cport], options.post_mortem) do
+      # load initrc script
+      load_initrc.call
+    end
+    # load script
+    Debugger.debug_load Debugger::PROG_SCRIPT, !options.nostop
+  else
+    # activate debugger
+    Debugger.start
+    # start control thread
+    Debugger.start_control(options.host, options.cport) if options.control
+
+    # load initrc script
+    load_initrc.call
+    
+    # run startup script if specified
+    if options.script
+      Debugger.run_script(options.script)
+    end
+    # activate post-mortem
+    Debugger.post_mortem if options.post_mortem
+    Debugger.tracing = options.nostop = true if options.tracing
+    # load script
+    Debugger.debug_load Debugger::PROG_SCRIPT, !options.nostop
+  end
+end

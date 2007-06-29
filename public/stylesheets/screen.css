@@ -384,6 +384,10 @@ th {
   padding-left: 3px;
 }
 
+.story_card span {
+  background-color: #FFFFFF; 
+}
+
 .story_card .header {
 	position: relative;
 }

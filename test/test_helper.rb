@@ -45,20 +45,7 @@ class Test::Unit::TestCase
 
     File.join( RAILS_ROOT, 'test', 'fixtures', dirname, filename )    
   end
-  
-  def assert_association( source, macro, name, klass=nil, options = {} )
-    options = klass if options.empty? and klass.is_a?( Hash )
-    if options[:polymorphic]
-      options[:foreign_type] = "#{name}_type"
-    end
     
-    reflection = source.reflect_on_association( name )
-    assert( reflection, 'association not defined' )
-    assert_equal klass, reflection.klass, 'associated to wrong class'  unless options[:polymorphic]
-    assert_equal macro, reflection.macro, 'wrong type of association'
-    assert_equal options, reflection.options, 'incorrect association options'
-  end
-  
   # Load login_as helper if we are doing a functional or integration test
   def initialize_with_fixtures(*args)
     initialize_without_fixtures(*args)
