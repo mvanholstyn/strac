@@ -1,0 +1,14 @@
+2007-07-06  zdennis  <zdennis@elijah.local>
+
+        * updated full migration test to expect the priorities to have nil positions since they are never set in a migration
+
+        * fixed migration issues by updating migrations to declare the model class in the migration 
+
+2007-07-01  zdennis  <zdennis@elijah.local>
+
+        * Added a migration to create a example project and adds that project to the admin users projects
+
+        * Fixed migrations so the default admin user belongs to the admin group
+
+        * Fixed CSS issue where there no dropzone for an iteration with 0 stories in it
+

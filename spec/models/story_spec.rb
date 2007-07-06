@@ -58,18 +58,37 @@ describe Story do
 end
 
 # TODO - move Story.reorder to Iteration#reorder
-describe "Story class methods" do
+describe "Reordering stories" do
   before(:each) do
     @story1 = Story.create!(:summary=>"Story1", :project_id=>2, :iteration_id=>1)
     @story2 = Story.create!(:summary=>"Story2", :project_id=>2, :iteration_id=>1)
+        
+    @story1.position.should == 1 ; @story1.iteration_id.should == 1
+    @story2.position.should == 2 ; @story2.iteration_id.should == 1
   end
   
-  it "should reorder Stories" do
-    @story1.position.should == 1
-    @story2.position.should == 2
-    Story.reorder( [@story2.id, @story1.id] )
+  it "should require an iteration id" do
+    lambda {
+      Story.reorder( [@story2.id], {})
+    }.should raise_error(ArgumentError)
+  end
+  
+  it "should update story positions" do
+    Story.reorder( [@story2.id, @story1.id], :iteration_id=>1 )
     @story1.reload.position.should == 2
     @story2.reload.position.should == 1    
+  end
+
+  it "should set the story's iteration when the updated story iteration is not nil" do
+    Story.reorder( [@story2.id ], :iteration_id => 2 )
+    @story1.reload.iteration_id.should == 1
+    @story2.reload.iteration_id.should == 2
+  end
+  
+  it "should set the Story's iteration to nil when the updated story iteration is nil" do
+    Story.reorder( [@story2.id ], :iteration_id => nil )
+    @story1.reload.iteration_id.should == 1
+    @story2.reload.iteration_id.should == nil
   end
 
 end

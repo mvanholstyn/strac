@@ -1,4 +1,6 @@
 class UpdateActivitiesToBeLessRigid < ActiveRecord::Migration
+  class Activity < ActiveRecord::Base ; end
+  
   def self.up
     Activity.delete_all
     remove_column :activities, :direct_object_id

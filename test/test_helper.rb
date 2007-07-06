@@ -37,7 +37,7 @@ class Test::Unit::TestCase
     filename = self.name.gsub(/Test$/,'').underscore
     if filename =~ /controller$/
       dirname = "functionals"
-    elsif self.is_a? ActionController::IntegrationTest
+    elsif integration_test?
       dirname = "integrations"
     else 
       dirname = "units"
@@ -46,19 +46,21 @@ class Test::Unit::TestCase
     File.join( RAILS_ROOT, 'test', 'fixtures', dirname, filename )    
   end
     
-  # Load login_as helper if we are doing a functional or integration test
   def initialize_with_fixtures(*args)
     initialize_without_fixtures(*args)
-    self.class.fixtures :all
+    self.class.fixtures :all  unless self.class.integration_test?
   end
   alias_method_chain :initialize, :fixtures
 
-    
+  # Load login_as helper if we are doing a functional or integration test    
   def login_as( username )
     User.current_user = users( username )
     @request.session[:current_user_id] = User.current_user.id
   end 
 
+  def self.integration_test?
+    self.allocate.is_a? ActionController::IntegrationTest
+  end
 
 end
 

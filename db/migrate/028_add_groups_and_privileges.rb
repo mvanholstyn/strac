@@ -1,4 +1,22 @@
 class AddGroupsAndPrivileges < ActiveRecord::Migration
+  class Privilege < ActiveRecord::Base ; end
+
+  class GroupPrivilege < ActiveRecord::Base
+    set_table_name "groups_privileges"
+    belongs_to :group
+    belongs_to :privilege
+  end
+  
+  class Group < ActiveRecord::Base 
+    has_many :users
+    has_many :privileges, :through => :group_privileges
+    has_many :group_privileges, :dependent => :destroy  
+  end
+  
+  class User < ActiveRecord::Base
+    has_one :group
+  end
+    
   def self.up
     Privilege.destroy_all
     
@@ -23,7 +41,7 @@ class AddGroupsAndPrivileges < ActiveRecord::Migration
     admin_group = Group.create! :name => 'Admin'
     admin_group.privileges << user_privilege << crud_companies_privilege << crud_projects_privilege << crud_users_privilege
     
-    User.update_all [ "group_id = ?", customer_group ]
+    User.update_all [ "group_id = ?", admin_group ]
     
     [ 'mvanholstyn', 'zdennis' ].each do |username|
       user = User.find_by_username username

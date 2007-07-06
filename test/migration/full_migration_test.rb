@@ -215,6 +215,7 @@ class FullMigrationTest < ActionController::IntegrationTest
   class Group < ActiveRecord::Base ; end
   class User < ActiveRecord::Base ; end
   class Priority < ActiveRecord::Base ; end
+  class Project < ActiveRecord::Base ; end
 
   # Make sure data you expect your migrations to load are in there:
   def see_default_data
@@ -236,18 +237,20 @@ class FullMigrationTest < ActionController::IntegrationTest
     assert Group.find_by_name("Admin" )
     
     assert User.find_by_username("admin")
-    
+
     priority_high = Priority.find_by_name("High")
     assert_equal "red", priority_high.color
-    assert_equal 1, priority_high.position
+    assert_nil priority_high.position
     
     priority_medium = Priority.find_by_name("Medium")
     assert_equal "yellow", priority_medium.color
-    assert_equal 2, priority_medium.position
+    assert_nil priority_medium.position
 
     priority_low = Priority.find_by_name("Low")
     assert_equal "green", priority_low.color
-    assert_equal 3, priority_low.position
+    assert_nil priority_low.position
+    
+    assert_equal 1, Project.count(:conditions=>"name='Example Project'")
   end
 
   #

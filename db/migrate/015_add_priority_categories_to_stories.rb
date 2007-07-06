@@ -1,4 +1,6 @@
 class AddPriorityCategoriesToStories < ActiveRecord::Migration
+  class Priority < ActiveRecord::Base ; end
+  
   def self.up
     add_column :stories, :priority_id, :integer
     create_table :priorities do |t|
@@ -15,5 +17,4 @@ class AddPriorityCategoriesToStories < ActiveRecord::Migration
     remove_column :stories, :priority_id
   end
 
-  class Priority < ActiveRecord::Base ; end
 end

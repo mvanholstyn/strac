@@ -49,17 +49,20 @@ class Story < ActiveRecord::Base
   end
 
   #TODO: Is there a better way to put this into a single SQL statement?
-  def self.reorder ids, attributes = {}
-    values = [] 
+  def self.reorder ids, options={}
+    options = options.symbolize_keys
+    raise ArgumentError.new("iteration_id is required") unless options.has_key?(:iteration_id)
+    
+    iteration_id = options[:iteration_id]
+    values = []
     ids.each_with_index do |id, index|
-      values << [id,index+1]
+      values << [id, index+1, iteration_id]
     end
     
-    Story.import( [:id, :position], values, :on_duplicate_key_update=>[:position], :validate=>false )
+    columns2import = [:id, :position, :iteration_id]
+    columns2update = [:position, :iteration_id]
+    Story.import( columns2import, values, :on_duplicate_key_update=>columns2update, :validate=>false )
     true
-  rescue Exception => e
-    logger.error "Rescued Exception in Story.reorder: #{e.to_s}\n\t#{e.backtrace.join("\n\t")}"
-    false
   end
   
   def self.find_backlog options = {}

@@ -13,14 +13,29 @@ class ProjectPermission < ActiveRecord::Base
   belongs_to :accessor, :polymorphic => true
   belongs_to :project
   
-  def self.find_all_projects_for_user user
-    find( :all, :conditions => [ "(accessor_id = ? AND accessor_type = ?) OR (accessor_id = ? AND accessor_type = ?)", 
-                                 user.id, user.class.name, user.company.id, user.company.class.name ] ).map{ |pp| pp.project }
-  end
+  # Class Methods
+  class << self
+    def find_all_projects_for_user user
+      conditions = build_conditions_for_user user
+      find(:all, :conditions => conditions).map{ |project_permission| project_permission.project }
+    end
   
-  def self.find_project_for_user project_id, user
-    find( :first, :conditions => [ "project_id = ? AND ( (accessor_id = ? AND accessor_type = ?) OR (accessor_id = ? AND accessor_type = ?) )", 
-                                   project_id, user.id, user.class.name, user.company.id, user.company.class.name ] ).project
+    def find_project_for_user project_id, user
+      conditions = build_conditions_for_user user
+      project_permission = find(:first, :conditions => conditions)
+      project_permission ? project_permission.project : nil
+    end
+  
+    private
+
+    def build_conditions_for_user user
+      conditions = ["(accessor_id = ? AND accessor_type = ?)", user.id, user.class.name]
+      if user.company
+        conditions.first << " OR (accessor_id = ? AND accessor_type = ?)"
+        conditions << user.company.id << user.company.class.name
+      end
+      conditions
+    end
   end
   
 end

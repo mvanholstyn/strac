@@ -1,4 +1,6 @@
 class AddColorToStatus < ActiveRecord::Migration
+  class Status < ActiveRecord::Base ; end
+  
   def self.up
     add_column :statuses, :color, :string
     
