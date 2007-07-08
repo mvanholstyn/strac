@@ -1,6 +1,8 @@
 class AddCreationFieldsToStories < ActiveRecord::Migration
   class Story < ActiveRecord::Base ; end
-  class Iteration < ActiveRecord::Base ; end
+  class Iteration < ActiveRecord::Base
+    has_many :stories
+  end
   
   def self.up
     add_column :stories, :created_at, :datetime
