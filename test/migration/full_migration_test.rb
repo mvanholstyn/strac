@@ -194,6 +194,13 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "created_at", :datetime
         t.column "updated_at", :datetime
       end
+      
+      s.table :user_reminders do |t|
+        t.column :id, :integer
+        t.column :user_id, :integer
+        t.column :token, :string
+        t.column :expires_at, :datetime
+      end
 
       s.table "users" do |t|
         t.column "id", :integer

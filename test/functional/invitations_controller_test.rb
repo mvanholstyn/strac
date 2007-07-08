@@ -28,7 +28,7 @@ class InvitationsControllerTest < Test::Unit::TestCase
   
   def test_create_an_invitation_fails_saving
     project = Project.create :id=>1, :name=>"strac"
-    Project.expects(:find).returns(project).times(2)
+    Project.expects(:find).returns(project)
     
     project_invitations = mock
     invitation = Invitation.new( :inviter_id => User.current_user.id, :recipient => "mvette13@gmail.com", :project_id => 1, :kind => "developer") 
@@ -89,7 +89,7 @@ class InvitationsControllerTest < Test::Unit::TestCase
         Invitation.new( :inviter_id => User.current_user.id, :recipient => "bob@gmail.com", :project_id => 1, :kind => "customer" ) ]
     )
  
-    project.expects(:invitations).returns(project_invitations).times(4)
+    project.expects(:invitations).returns(project_invitations).times(2)
     
     post :create, :invitation=>{ :developers=>"mvette13@gmail.com\njack@gmail.com", :customers=>"zach.dennis@gmail.com\nbob@gmail.com" }, :project_id=>1
     assert_redirected_to project_path(project)
