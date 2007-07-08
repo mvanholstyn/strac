@@ -1,0 +1,39 @@
+<h1>My Profile</h1>
+
+<%= error_messages_for :user %>
+
+<% form_for(:user) do |form| %>
+  <p>
+    <b>First name</b><br />
+    <%= form.text_field :first_name %>
+  </p>
+
+  <p>
+    <b>Last name</b><br />
+    <%= form.text_field :last_name %>
+  </p>
+
+  <p>
+    <b>Email address</b><br />
+    <%= form.text_field :email_address %>
+  </p>
+
+	<p>
+	  <b>Username</b><br />
+	  <%= form.text_field :username %>
+	</p>
+
+  <p>
+    <b>Password</b><br />
+    <%= form.password_field :password %>
+  </p>
+
+  <p>
+    <b>Password confirmation</b><br />
+    <%= form.password_field :password_confirmation %>
+  </p>
+
+  <p>
+    <%= submit_tag "Update" %>
+  </p>
+<% end %>

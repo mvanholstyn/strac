@@ -1,7 +1,4 @@
-<div class="notice"><%= flash[:notice] %></div>
-<div class="error"><%= flash[:error] %></div>
-
-<% form_for :user do |form| -%>
+<% form_for :user, :html => { :id => "login_form" } do |form| -%>
 	<p>
   	<b>Username</b><br />
 		<%= form.text_field :username %>
@@ -16,3 +13,7 @@
   	<%= submit_tag 'Login' %>
 	</p>
 <% end -%>
+
+<%= link_to "forgot your password?", reminder_users_path %>
+
+<%= javascript_tag "$('login_form').focusFirstElement();" %>

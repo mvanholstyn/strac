@@ -1,6 +1,3 @@
-<div class="notice"><%= flash[:notice] %></div>
-<div class="error"><%= flash[:error] %></div>
-
 <% form_for :user do |form| -%>
 	<p>
   	<b>Email Address</b><br />
@@ -12,4 +9,4 @@
 	</p>
 <% end -%>
 
-<%= link_to "Login", :action => "login" %>
+<%= link_to "login", login_users_path %>

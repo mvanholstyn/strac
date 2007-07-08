@@ -1,7 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :tags, :collection => { :auto_complete => :any }
   map.resources :companies
-  map.resources :users, :collection => { :login => :any, :logout => :post }
+  map.resources :users, :collection => { :login => :any, :logout => :post, :reminder => :any, :reminder_login => :any, :profile => :any, :signup => :any }
   map.resources :projects do |project_map|
     project_map.resources :invitations, :name_prefix => nil
     project_map.resources :iterations, :name_prefix => nil, 

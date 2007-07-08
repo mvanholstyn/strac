@@ -1,11 +1,13 @@
 class UsersController < ApplicationController
-  restrict_to :crud_users, :crud_companies_users, :except => [ :login, :logout ]
+  restrict_to :crud_users, :crud_companies_users, :except => [ :login, :logout, :reminder, :reminder_login, :signup ]
   
   acts_as_login_controller
 
   redirect_after_login do
     { :controller => "dashboard" }
   end
+
+  before_filter :find_groups, :find_companies, :only => [ :profile ]
 
   # GET /users
   # GET /users.xml
