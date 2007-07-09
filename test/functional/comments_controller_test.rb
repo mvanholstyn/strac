@@ -49,7 +49,7 @@ class CommentsControllerTest < Test::Unit::TestCase
     post :create, :comment => { :content=>"test comment", :commenter_id=>1 }, :story_id=>@story.id, :project_id=>@project.id
     assert_equal old_count+1, Comment.count
 
-    assert_template 'create.rjs'
+    assert_template 'create'
     assert_response :success
   end
   
@@ -63,7 +63,7 @@ class CommentsControllerTest < Test::Unit::TestCase
     assert comment.errors.on(:content), "should have had an error on content"
     assert_equal "can't be blank", comment.errors.on(:content), "should have had an error on content"
     
-    assert_template 'new.rjs'
+    assert_template 'new'
   end
 
   def t1est_should_show_comment

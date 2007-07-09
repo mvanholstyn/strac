@@ -13,7 +13,7 @@ if should_render_comment_links
     popup_link = escape_javascript( comments_popup_link )
     page << "window.opener.document.getElementById('#{popup_id}').innerHTML='#{popup_link}';"  
 
-    raw_comment = controller.send(:render_to_string, :partial=>'show', :locals=>{:comment=>@comment} )
+    raw_comment = controller.send(:render_to_string, :partial=>'show.html.erb', :locals=>{:comment=>@comment} )
     comment = escape_javascript( raw_comment)
     page << "new Insertion.Bottom(window.opener.document.getElementById('story_#{@story.id}_comments_list'), '#{comment}');"
   end

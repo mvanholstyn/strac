@@ -8,9 +8,9 @@ class CommentsController < ApplicationController
     @comments = @story.comments
 
     respond_to do |format|
-      format.html { render :action => "index.erb" }
+      format.html
       format.xml { render :xml => @story.comments(true).to_xml }
-      format.js { render :action => "index.rjs" }
+      format.js
     end
   end
   
@@ -19,7 +19,7 @@ class CommentsController < ApplicationController
     @comment = @story.comments.build
 
     respond_to do |format|
-      format.js { render :action => "new.rjs" }
+      format.js
     end
   end
   
@@ -31,10 +31,10 @@ class CommentsController < ApplicationController
 
    respond_to do |format|
      if @comment.save
-       format.js { render :action => "create.rjs" }
+       format.js
        format.xml { head :created, :location => comment_url(@comment) }
      else
-       format.js { render :action => "new.rjs" }
+       format.js { render :action => "new" }
        format.xml { render :xml => @comment.errors.to_xml }
      end
    end
