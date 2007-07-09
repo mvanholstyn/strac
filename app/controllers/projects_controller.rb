@@ -7,7 +7,7 @@ class ProjectsController < ApplicationController
     @projects = ProjectPermission.find_all_projects_for_user( current_user )
     
     respond_to do |format|
-      format.html { render :action => "index.erb" }
+      format.html
       format.xml { render :xml => @projects.to_xml }
     end
   end
@@ -18,7 +18,7 @@ class ProjectsController < ApplicationController
     @project = ProjectPermission.find_project_for_user( params[:id], current_user )
     
     respond_to do |format|
-      format.html { render :action => "show.erb" }
+      format.html
       format.xml { render :xml => @project.to_xml }
     end
   end
@@ -45,7 +45,7 @@ class ProjectsController < ApplicationController
         format.html { redirect_to project_url(@project) }
         format.xml { head :created, :location => project_url(@project) }
       else
-        format.html { render :action => "new.erb" }
+        format.html { render :action => "new" }
         format.xml { render :xml => @project.errors.to_xml }
       end
     end
@@ -67,7 +67,7 @@ class ProjectsController < ApplicationController
         format.html { redirect_to project_url(@project) }
         format.xml { head :ok }
       else
-        format.html { render :action => "edit.erb" }
+        format.html { render :action => "edit" }
         format.xml { render :xml => @project.errors.to_xml }
       end
     end

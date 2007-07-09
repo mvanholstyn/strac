@@ -7,7 +7,7 @@ class IterationsController < ApplicationController
     @iterations = @project.iterations.find(:all, :order => "start_date DESC")
 
     respond_to do |format|
-      format.html { render :action => "index.erb" }
+      format.html
       format.xml { render :xml => @iterations.to_xml }
     end
   end
@@ -18,7 +18,7 @@ class IterationsController < ApplicationController
     @iteration = @project.iterations.find(params[:id])
 
     respond_to do |format|
-      format.html { render :action => "show.erb" }
+      format.html
       format.xml { render :xml => @iteration.to_xml }
     end
   end
@@ -44,7 +44,7 @@ class IterationsController < ApplicationController
         format.html { redirect_to iteration_url(@project, @iteration) }
         format.xml { head :created, :location => iteration_url(@project, @iteration) }
       else
-        format.html { render :action => "new.erb" }
+        format.html { render :action => "new" }
         format.xml { render :xml => @iteration.errors.to_xml }
       end
     end
@@ -61,7 +61,7 @@ class IterationsController < ApplicationController
         format.html { redirect_to iteration_url(@project, @iteration) }
         format.xml { head :ok }
       else
-        format.html { render :action => "edit.erb" }
+        format.html { render :action => "edit" }
         format.xml { render :xml => @iteration.errors.to_xml }
       end
     end

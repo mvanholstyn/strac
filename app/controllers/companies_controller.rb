@@ -7,7 +7,7 @@ class CompaniesController < ApplicationController
     @companies = Company.find(:all)
 
     respond_to do |format|
-      format.html { render :action => "index.erb" }
+      format.html
       format.xml { render :xml => @companies.to_xml }
     end
   end
@@ -18,7 +18,7 @@ class CompaniesController < ApplicationController
     @company = Company.find(params[:id])
 
     respond_to do |format|
-      format.html { render :action => "show.erb" }
+      format.html
       format.xml { render :xml => @company.to_xml }
     end
   end
@@ -44,7 +44,7 @@ class CompaniesController < ApplicationController
         format.html { redirect_to company_url(@company) }
         format.xml { head :created, :location => company_url(@company) }
       else
-        format.html { render :action => "new.erb" }
+        format.html { render :action => "new" }
         format.xml { render :xml => @company.errors.to_xml }
       end
     end
@@ -61,7 +61,7 @@ class CompaniesController < ApplicationController
         format.html { redirect_to company_url(@company) }
         format.xml { head :ok }
       else
-        format.html { render :action => "edit.erb" }
+        format.html { render :action => "edit" }
         format.xml { render :xml => @company.errors.to_xml }
       end
     end
