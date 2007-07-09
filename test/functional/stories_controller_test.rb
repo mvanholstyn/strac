@@ -31,7 +31,7 @@ class StoriesControllerTest < Test::Unit::TestCase
     post :create, :story => { :summary => "My Summary", :description => "My Description" }, :project_id=>@project.id
     assert_equal old_count+1, Story.count
 
-    assert_template 'create.rjs'
+    assert_template 'create'
     assert_response :success
   end
 
@@ -39,7 +39,7 @@ class StoriesControllerTest < Test::Unit::TestCase
     get :show, :id => 1, :project_id=>@project.id
     assert_response :success
     
-    assert_template 'show.erb'
+    assert_template 'show'
   end
 
   def test_should_get_edit
@@ -49,7 +49,7 @@ class StoriesControllerTest < Test::Unit::TestCase
 
   def test_should_update_story
     put :update, :id => 1, :story => { }, :project_id=>@project.id    
-    assert_template 'update.rjs'
+    assert_template 'update'
     assert_response :success
   end
   

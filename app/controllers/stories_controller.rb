@@ -8,7 +8,7 @@ class StoriesController < ApplicationController
   # GET /stories.xml
   def index
     respond_to do |format|
-      format.html { render :action => "index.erb" }
+      format.html
       format.xml { render :xml => @project.stories.to_xml }
     end
   end
@@ -21,8 +21,8 @@ class StoriesController < ApplicationController
     should_render_comment_links = false
 
     respond_to do |format|
-      format.html { render :action => "show.erb" }
-      format.js { render :action => "show.rjs" }
+      format.html
+      format.js
       format.xml { render :xml => @story.to_xml }
     end
   end
@@ -33,7 +33,7 @@ class StoriesController < ApplicationController
     @story.iteration_id = params[:iteration_id]
 
     respond_to do |format|
-      format.js { render :action => "new.rjs" }
+      format.js
     end
   end
 
@@ -42,7 +42,7 @@ class StoriesController < ApplicationController
     @story = @project.stories.find(params[:id], :include => :tags)
 
     respond_to do |format|
-      format.js { render :action => "edit.rjs" }
+      format.js
     end
   end
 
@@ -55,13 +55,12 @@ class StoriesController < ApplicationController
       if @story.save
         format.js do
           find_priorities_and_statuses
-          render :action => "create.rjs"
         end
         format.xml { head :created, :location => story_url(@project, @story) }
       else
         format.js do
           find_priorities_and_statuses
-          render :action => "new.rjs"
+          render :action => "new"
         end
         format.xml { render :xml => @story.errors.to_xml }
       end
@@ -76,12 +75,12 @@ class StoriesController < ApplicationController
     respond_to do |format|
       if @story.update_attributes(params[:story])
         #TODO: If this stories iteration is changed, then something should happen
-        format.js { render :action => "update.rjs" }
+        format.js
         format.xml { head :ok }
       else
         format.js do
           find_priorities_and_statuses
-          render :action => "edit.rjs"
+          render :action => "edit"
         end
         format.xml { render :xml => @story.errors.to_xml }
       end
@@ -95,7 +94,7 @@ class StoriesController < ApplicationController
     @story.destroy
   
     respond_to do |format|
-      format.js { render :action => "destroy.rjs" }
+      format.js
       format.html do
         flash[:notice] = %("#{@story.summary}" was successfully destroyed.)
         redirect_to stories_url( @project )

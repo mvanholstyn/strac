@@ -19,7 +19,7 @@ class UsersController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { render :action => "index.erb" }
+      format.html
       format.xml { render :xml => @users.to_xml }
     end
   end
@@ -34,7 +34,7 @@ class UsersController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { render :action => "show.erb" }
+      format.html
       format.xml { render :xml => @user.to_xml }
     end
   end
@@ -80,7 +80,7 @@ class UsersController < ApplicationController
         format.html do          
           find_groups
           find_companies
-          render :action => "new.erb"
+          render :action => "new"
         end
         format.xml { render :xml => @user.errors.to_xml }
       end
@@ -105,7 +105,7 @@ class UsersController < ApplicationController
         format.html do          
           find_groups
           find_companies
-          render :action => "edit.erb"
+          render :action => "edit"
         end
         format.xml { render :xml => @user.errors.to_xml }
       end
