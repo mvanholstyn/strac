@@ -1,4 +1,4 @@
-user:
+admin_group_admin_privilege:
   id: 1
   group_id: 1
   privilege_id: 1

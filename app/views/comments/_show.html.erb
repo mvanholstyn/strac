@@ -1,6 +1,6 @@
 <div class="comment">
 	<div class="comment-header">
-	  Posted by <%= comment.commenter.username %> on <%= comment.created_at.strftime "%b. %d, %Y at %I:%M:%S%p" %>
+	  Posted by <%= comment.commenter.username %> on <%= comment_datetime_for comment.created_at %>
 	</div>
 	<div class="comment-body">
 	  <%= comment.content %>

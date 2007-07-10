@@ -54,8 +54,9 @@ class Test::Unit::TestCase
 
   # Load login_as helper if we are doing a functional or integration test    
   def login_as( username )
-    User.current_user = users( username )
+    user = User.current_user = users( username )
     @request.session[:current_user_id] = User.current_user.id
+    user
   end 
 
   def self.integration_test?

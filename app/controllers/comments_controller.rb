@@ -1,19 +1,19 @@
 class CommentsController < ApplicationController
   before_filter :initialize_params
   before_filter :find_story
-
+  
+      
   # GET /comments
   # GET /comments.xml
   def index
     @comments = @story.comments
-
     respond_to do |format|
       format.html
       format.xml { render :xml => @story.comments(true).to_xml }
       format.js
     end
   end
-  
+    
   # GET /comments/new
   def new
     @comment = @story.comments.build

@@ -32,4 +32,14 @@ carl:
   password_hash: 5f4dcc3b5aa765d61d8327deb882cf99
   updated_at: 
   username: carl
-  
+user_without_privileges:
+  company_id: 2
+  created_at: 
+  email_address: carl@example.com
+  first_name: Sanford
+  group_id: "4"
+  id: "4"
+  last_name: Son
+  password_hash: 5f4dcc3b5aa765d61d8327deb882cf99
+  updated_at: 
+  username: sanford

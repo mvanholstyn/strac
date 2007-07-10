@@ -14,3 +14,9 @@ admin:
   updated_at: 
   id: "3"
   created_at: 
+no_privileges:
+  name: No Privleges
+  updated_at:
+  id: "4"
+  created_at:
+  

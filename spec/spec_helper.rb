@@ -24,6 +24,12 @@ Spec::Runner.configure do |config|
   #
   # If you declare global fixtures, be aware that they will be declared
   # for all of your examples, even those that don't use them.
+  def login_as( username )
+    user = User.current_user = users( username )
+    @request.session[:current_user_id] = User.current_user.id
+    user
+  end 
+
 end
 
 module Spec::DSL::BehaviourEval::ModuleMethods
