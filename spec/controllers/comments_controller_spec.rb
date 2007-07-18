@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe "User without the privilege user" do
+describe "User without privileges" do
   controller_name "comments"
   fixtures :users, :groups
 
@@ -12,22 +12,22 @@ describe "User without the privilege user" do
     login_as 'user_without_privileges'
   end
 
-  they "should be redirected to the dashboard when requesting index" do
+  is "redirected to the dashboard when requesting index" do
     get :index, :story_id=>@story_id, :project_id=>@project_id
     response.should redirect_to(dashboard_path)
   end
 
-  they "should be redirected to the dashboard when requesting new" do
+  is "redirected to the dashboard when requesting new" do
     get :new, :story_id=>@story_id, :project_id=>@project_id
     response.should redirect_to(dashboard_path)
   end
 
-  they "should be redirected to the dashboard controller when trying to post a comment" do
+  is "redirected to the dashboard controller when trying to post a comment" do
     post :create, :story_id=>@story_id, :project_id=>@project_id
     response.should redirect_to(dashboard_path)
   end
 
-  they "should be redirected to the dashboard controller when trying to post a comment with xhr" do
+  is "redirected to the dashboard controller when trying to post a comment with xhr" do
     xhr :post, :create, :story_id=>@story_id, :project_id=>@project_id
     response.should redirect_to(dashboard_path)
   end

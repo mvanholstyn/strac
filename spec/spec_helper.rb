@@ -34,4 +34,5 @@ end
 
 module Spec::DSL::BehaviourEval::ModuleMethods
   alias_method :they, :it
+  alias_method :is, :it
 end
