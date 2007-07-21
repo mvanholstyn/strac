@@ -1,4 +1,12 @@
-admin_group_admin_privilege:
+user_user:
   id: 1
   group_id: 1
+  privilege_id: 1
+crud_companies_crud_companies:
+  id: 2
+  group_id: 5
+  privilege_id: 2
+crud_companies_user:
+  id: 3
+  group_id: 5
   privilege_id: 1

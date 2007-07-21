@@ -4,3 +4,9 @@ admin:
   password_hash: <%= User.hash_password 'password' %>
   group_id: 1
   email_address: admin@example.com
+crud_companies:
+  id: 2
+  username: crud_companies
+  password_hash: <%= User.hash_password 'password' %>
+  group_id: 5
+  email_address: crud_companies@example.com

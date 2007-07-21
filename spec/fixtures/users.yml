@@ -43,3 +43,14 @@ user_without_privileges:
   password_hash: 5f4dcc3b5aa765d61d8327deb882cf99
   updated_at: 
   username: sanford
+crud_companies:
+  company_id: 2
+  created_at: 
+  email_address: crud_companies@example.com
+  first_name: crud_companies
+  group_id: "5"
+  id: "5"
+  last_name: Son
+  password_hash: 5f4dcc3b5aa765d61d8327deb882cf99
+  updated_at: 
+  username: crud_companies
