@@ -1,8 +1,0 @@
-admin_user:
-  id: 1
-  group_id: 1
-  privilege_id: 1
-admin_companies:
-  id: 2
-  group_id: 1
-  privilege_id: 2
