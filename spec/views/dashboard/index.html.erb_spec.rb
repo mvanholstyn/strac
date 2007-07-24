@@ -15,11 +15,10 @@ describe "/dashboard/index.html.erb with projects" do
     @activity1 = mock_model(Activity)
     @activity2 = mock_model(Activity)    
     
-        
     assigns[:projects] = [@project1, @project2]
     @project1_activities = [@activity1, @activity2]
-    @project1.should_receive(:activities).and_return @project1_activities
-    @project2.should_receive(:activities).and_return []
+    @project1.should_receive(:recent_activities).with(1.day).and_return @project1_activities
+    @project2.should_receive(:recent_activities).with(1.day).and_return []
 
     template.expect_render :partial => "activities/list", :locals => { :project=>@project1, :activities=>@project1_activities }
     template.expect_render :partial => "activities/list", :locals => { :project=>@project2, :activities=>[] }

@@ -34,10 +34,6 @@ describe DashboardController, "user with 'user' privileges viewing the project p
     assigns[:projects].should == @user.projects
   end
   
-  it "assigns the activities_date to yesterday" do
-    assigns[:activities_date].should == Date.today - 1
-  end
-
 end
 
 

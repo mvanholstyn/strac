@@ -50,4 +50,12 @@ class Project < ActiveRecord::Base
   def estimated_completion_date
     Date.today + estimated_remaining_iterations * 7
   end
+  
+  def recent_activities(days=1)
+    self.activities.find( 
+      :all, 
+      :conditions => ["created_at >= ?",  Date.today - days ],
+      :order => "created_at DESC"
+    )
+  end
 end
