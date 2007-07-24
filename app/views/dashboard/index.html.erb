@@ -1,5 +1,5 @@
 <% @projects.each do |project| -%>
-	<h2><%= link_to project.name, project_path(project) %></h2>
-	<%= render :partial => "activities/list", :locals => { :project => project, :date => Date.today - 1 } %>
+	<h2 class="project-title"><%= link_to project.name, project_path(project.id) %></h2>
+	<%= render :partial => "activities/list", :locals => { :project => project, :activities => project.activities }	%>
 	<br />
 <% end -%>

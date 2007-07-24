@@ -1,9 +1,9 @@
 <table>
-<% activities = project.activities.find( :all, :conditions => [ "created_at >= ?",  date ||= Date.today - 7 ], :order => "created_at DESC" ).each do |activity| -%>
-	<tr>
-		<td><%= activity.created_at.strftime( "%a, %b %d, %Y %I:%M %p" ) %>:&nbsp;</td>
-		<td><b><%= activity.actor.full_name %></b></td>
-		<td><%= expand_ids activity.action %></td>
+<% activities.each do |activity| -%>
+	<tr class="activity">
+		<td class="created-at"><%= activity.created_at.strftime( "%a, %b %d, %Y %I:%M %p" ) %>:&nbsp;</td>
+		<td class="activator"><b><%= activity.actor.full_name %></b></td>
+		<td class="action"><%= expand_ids activity.action %></td>
 	</tr>
 <% end -%>
 <%= "<td><i>No recent activity</i></td>" if activities.empty? %>

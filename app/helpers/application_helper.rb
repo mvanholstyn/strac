@@ -45,6 +45,7 @@ module ApplicationHelper
   Conversion.new( :STATUS, Status )
   Conversion.new( :PRIORITY, Priority )
   
+  # TODO - come up with a great way to test this or extract it out in a couple objects or methods and test those
   def expand_ids( data )
     data.gsub( /(^|\W)((#{Conversion::CONVERSIONS.map{ |k,c| k.to_s }.join( '|' )})(\d+))(\W|$)/ ) do |match|
       conversion = Conversion::CONVERSIONS[$3.to_sym]
