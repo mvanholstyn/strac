@@ -1,18 +1,29 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe Project do
+describe Project, "#new with no attributes" do
   before do
     @project = Project.new
   end
 
-  it "should be valid" do
-    @project.should be_valid
+  it "should not be valid" do
+    @project.should_not be_valid
   end
 
-  it "should have many invitations" do
+  it "can have many invitations" do
     assert_association Project, :has_many, :invitations, Invitation
   end
+end
+
+describe Project, "#new with name attribute" do
+  it "should be valid" do
+    @project = Project.new :name => "foo"
+    @project.should be_valid
+  end
   
+  it "should not be valid with an empty string for name" do
+    @project = Project.new :name => ""
+    @project.should_not be_valid    
+  end
 end
 
 describe Project, "recent_activities" do

@@ -13,3 +13,11 @@ project1_carl:
   project_id: "1"
   id: "2"
   created_at: 2007-06-30 23:44:24
+project1_crud_projects:
+  accessor_type: User
+  updated_at: 2007-06-30 23:44:24
+  accessor_id: "6"
+  project_id: "1"
+  id: "3"
+  created_at: 2007-06-30 23:44:24
+  

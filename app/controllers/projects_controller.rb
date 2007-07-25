@@ -42,8 +42,8 @@ class ProjectsController < ApplicationController
       if @project.save 
         current_user.projects << @project
         flash[:notice] = 'Project was successfully created.'
-        format.html { redirect_to project_url(@project) }
-        format.xml { head :created, :location => project_url(@project) }
+        format.html { redirect_to project_path(@project) }
+        format.xml { head :created, :location => project_path(@project) }
       else
         format.html { render :action => "new" }
         format.xml { render :xml => @project.errors.to_xml }
@@ -64,7 +64,7 @@ class ProjectsController < ApplicationController
         Company.find( params[:companies] ).each { |c| @project.companies << c } unless params[:companies].blank?
         
         flash[:notice] = 'Project was successfully updated.'
-        format.html { redirect_to project_url(@project) }
+        format.html { redirect_to project_path(@project) }
         format.xml { head :ok }
       else
         format.html { render :action => "edit" }
@@ -80,7 +80,7 @@ class ProjectsController < ApplicationController
     @project.destroy
 
     respond_to do |format|
-      format.html { redirect_to projects_url }
+      format.html { redirect_to projects_path }
       format.xml { head :ok }
     end
   end

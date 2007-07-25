@@ -10,3 +10,11 @@ crud_companies_user:
   id: 3
   group_id: 5
   privilege_id: 1
+crud_projects_user:
+  id: 4
+  group_id: 6
+  privilege_id: 1
+crud_projects_crud_projects:
+  id: 5
+  group_id: 6
+  privilege_id: 3
