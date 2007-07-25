@@ -1,12 +1,14 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe IterationsController, "user without 'user' privileges" do
-  fixtures :users, :groups_privileges, :privileges, :groups, :projects
+  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :iterations
 
   before do
     @user = login_as :user_without_privileges
     @user.has_privilege?(:user).should_not be_true
     @project = projects(:project1)
+    @project.iterations.should_not be_empty
+    @iteration = @project.iterations.first
   end
   
   # TODO - shouldn't this redirect to the login path?
@@ -21,7 +23,7 @@ describe IterationsController, "user without 'user' privileges" do
   end
 
   it "redirects to the dashboard path on show" do
-    get :new, :project_id => @project.id, :id => @project.iterations.first.id
+    get :show, :project_id => @project.id, :id => @iteration.id
     response.should redirect_to(dashboard_path)
   end
   
@@ -29,7 +31,7 @@ end
 
 
 describe IterationsController, "user with 'user' privileges requesting index" do
-  fixtures :users, :groups_privileges, :privileges, :groups, :projects
+  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :iterations
 
   before do
     @user = login_as :joe
@@ -53,7 +55,7 @@ describe IterationsController, "user with 'user' privileges requesting index" do
 end
 
 describe IterationsController, "user with 'user' privileges requesting new" do
-  fixtures :users, :groups_privileges, :privileges, :groups, :projects
+  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :iterations
 
   before do
     @user = login_as :joe
@@ -76,7 +78,7 @@ describe IterationsController, "user with 'user' privileges requesting new" do
 end
 
 describe IterationsController, "user with 'user' privileges requesting show" do
-  fixtures :users, :groups_privileges, :privileges, :groups, :projects
+  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :iterations
 
   before do
     @user = login_as :joe
@@ -99,7 +101,7 @@ describe IterationsController, "user with 'user' privileges requesting show" do
 end
 
 describe IterationsController, "user with 'user' privileges requesting create successfully" do
-  fixtures :users, :groups_privileges, :privileges, :groups, :projects
+  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :iterations
 
   before do
     @user = login_as :joe
@@ -142,7 +144,7 @@ describe IterationsController, "user with 'user' privileges requesting create su
 end
 
 describe IterationsController, "user with 'user' privileges requesting create unsuccessfully" do
-  fixtures :users, :groups_privileges, :privileges, :groups, :projects
+  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :iterations
 
   before do
     @user = login_as :joe
@@ -170,7 +172,7 @@ describe IterationsController, "user with 'user' privileges requesting create un
 end
 
 describe IterationsController, "user with 'user' privileges requesting update successfully" do
-  fixtures :users, :groups_privileges, :privileges, :groups, :projects
+  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :iterations
 
   before do
     @user = login_as :joe
@@ -195,7 +197,7 @@ describe IterationsController, "user with 'user' privileges requesting update su
 end
 
 describe IterationsController, "user with 'user' privileges requesting update unsuccessfully" do
-  fixtures :users, :groups_privileges, :privileges, :groups, :projects
+  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :iterations
 
   before do
     @user = login_as :joe
@@ -228,7 +230,7 @@ end
 
 
 describe IterationsController, "user with 'user' privileges requesting edit" do
-  fixtures :users, :groups_privileges, :privileges, :groups, :projects
+  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :iterations
 
   before do
     @user = login_as :joe
@@ -251,7 +253,7 @@ describe IterationsController, "user with 'user' privileges requesting edit" do
 end
 
 describe IterationsController, "user with 'user' privileges requesting destroy" do
-  fixtures :users, :groups_privileges, :privileges, :groups, :projects
+  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :iterations
   
   before do
     @user = login_as :joe
