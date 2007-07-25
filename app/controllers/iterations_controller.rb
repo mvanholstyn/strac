@@ -42,7 +42,7 @@ class IterationsController < ApplicationController
       if @iteration.save
         flash[:notice] = 'Iteration was successfully created.'
         format.html { redirect_to iteration_url(@project, @iteration) }
-        format.xml { head :created, :location => iteration_url(@project, @iteration) }
+        format.xml { head :created, :location => iteration_path(@project, @iteration) }
       else
         format.html { render :action => "new" }
         format.xml { render :xml => @iteration.errors.to_xml }
@@ -58,7 +58,7 @@ class IterationsController < ApplicationController
     respond_to do |format|
       if @iteration.update_attributes(params[:iteration])
         flash[:notice] = 'Iteration was successfully updated.'
-        format.html { redirect_to iteration_url(@project, @iteration) }
+        format.html { redirect_to iteration_path(@project, @iteration) }
         format.xml { head :ok }
       else
         format.html { render :action => "edit" }

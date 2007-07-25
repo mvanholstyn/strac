@@ -1,9 +1,17 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-one:
+project1_iteration1:
   id: 1
-  created_at: 2007-06-28 20:41:00
-  updated_at: 2007-06-28 20:41:00
-two:
+  project_id: 1
+  name: Iteration 1
+  start_date: 2007-05-18 20:41:00
+  end_date: 2007-05-28 20:41:00
+  created_at: 
+  updated_at: 
+project1_iteration2:
   id: 2
-  created_at: 2007-06-28 20:41:00
-  updated_at: 2007-06-28 20:41:00
+  project_id: 1
+  name: Iteration 1
+  start_date: 2007-05-29 20:41:00
+  end_date: 2007-06-09 20:41:00
+  created_at: 
+  updated_at: 

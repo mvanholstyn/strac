@@ -76,7 +76,7 @@ describe CompaniesController, "putting to the 'update' action with user and crud
   end
 end
 
-describe CompaniesController, "delete to the 'desroy' action with user and crud_privileges" do
+describe CompaniesController, "delete to the 'destroy' action with user and crud_privileges" do
   fixtures :companies, :users, :privileges, :groups_privileges, :groups
   
   before do
@@ -92,7 +92,6 @@ describe CompaniesController, "delete to the 'desroy' action with user and crud_
     assert_equal old_count-1, Company.count
     assert_redirected_to companies_path
   end
-  
 end
 
 
