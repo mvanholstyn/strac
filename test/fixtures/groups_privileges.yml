@@ -1,8 +1,8 @@
 admin_user:
   id: 1
-  privilege_id: 1
   group_id: 1
-user_crud_companies:
+  privilege_id: 1
+admin_crud_users:
   id: 2
+  group_id: 1
   privilege_id: 2
-  group_id: 5

@@ -61,7 +61,7 @@ class StoriesControllerTest < Test::Unit::TestCase
     assert story
 
     assert @response.body =~ /\\\"#{story.summary}\\\" was successfully taken\./
-    assert @response.body =~ /Release from Mark VanHolstyn/
+    assert @response.body =~ /Release from Mark Van Holstyn/
   end
   
   def test_take_a_story_that_fails

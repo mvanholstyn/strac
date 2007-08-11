@@ -1,12 +1,37 @@
-admin:
+# == Schema Information
+# Schema version: 27
+#
+# Table name: users
+#
+#  id            :integer(11)   not null, primary key
+#  username      :string(255)   
+#  password_hash :string(255)   
+#  first_name    :string(255)   
+#  last_name     :string(255)   
+#  email_address :string(255)   
+#  group_id      :integer(11)   
+#  company_id    :integer(11)   
+#
+
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+mvanholstyn:
   id: 1
-  username: admin
+  username: mvanholstyn
   password_hash: <%= User.hash_password 'password' %>
+  first_name: Mark
+  last_name: Van Holstyn
+  email_address: mvanholstyn@example.com
   group_id: 1
-  email_address: admin@example.com
-crud_companies:
+  company_id: 1
+  active: true
+  
+zdennis:
   id: 2
-  username: crud_companies
+  username: zdennis
   password_hash: <%= User.hash_password 'password' %>
-  group_id: 5
-  email_address: crud_companies@example.com
+  first_name: MyString
+  last_name: MyString
+  email_address: zdennis@example.com
+  group_id: 1
+  company_id: 1
+  active: true

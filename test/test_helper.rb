@@ -27,42 +27,14 @@ class Test::Unit::TestCase
 
   # Add more helper methods to be used by all tests here...
   
-  # redefine fixture_path
-  if false
-    dirname, filename = File.dirname($0), File.basename($0).gsub( /_test\.rb/,'')
-    self.fixture_path = File.join( self.fixture_path, "#{File.basename(dirname)}s", filename )
-  end
+  fixtures :all
   
-  def self.fixture_path
-    filename = self.name.gsub(/Test$/,'').underscore
-    if filename =~ /controller$/
-      dirname = "functionals"
-    elsif integration_test?
-      dirname = "integrations"
-    else 
-      dirname = "units"
-    end
-
-    File.join( RAILS_ROOT, 'test', 'fixtures', dirname, filename )    
-  end
-    
-  def initialize_with_fixtures(*args)
-    initialize_without_fixtures(*args)
-    self.class.fixtures :all  unless self.class.integration_test?
-  end
-  alias_method_chain :initialize, :fixtures
-
   # Load login_as helper if we are doing a functional or integration test    
   def login_as( username )
     user = User.current_user = users( username )
     @request.session[:current_user_id] = User.current_user.id
     user
-  end 
-
-  def self.integration_test?
-    self.allocate.is_a? ActionController::IntegrationTest
   end
-
 end
 
 
