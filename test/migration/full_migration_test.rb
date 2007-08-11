@@ -211,6 +211,7 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "email_address", :string
         t.column "group_id", :integer
         t.column "company_id", :integer
+        t.column "active", :boolean
         t.column "created_at", :datetime
         t.column "updated_at", :datetime
       end

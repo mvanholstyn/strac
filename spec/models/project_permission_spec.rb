@@ -20,12 +20,18 @@ describe ProjectPermission do
     it "should find the project that a user has permissions on given the project" do
       project = ProjectPermission.find_project_for_user projects(:project1), @user
       project.should == projects(:project1)
-    end    
+    end
+      
+    it "should find the project that a user has permissions on given the project" do
+      project = ProjectPermission.find_project_for_user projects(:project2), @user
+      project.should == projects(:project2)
+    end
         
     it "should find all projects that the user has permissions on" do
       projects = ProjectPermission.find_all_projects_for_user @user
-      projects.size.should == 1
-      projects.first.should == projects(:project1)
+      projects.size.should == 2
+      projects.should include(projects(:project1))
+      projects.should include(projects(:project1))
     end
   end
   

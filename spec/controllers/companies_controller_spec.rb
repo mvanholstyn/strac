@@ -54,7 +54,7 @@ describe CompaniesController, "posting to the 'create' action with user and crud
     old_count = Company.count
     post :create, { :company => { :name=>"JoeCompany" }}
     Company.count.should == old_count+1
-    response.should redirect_to(company_path(assigns:company))
+    response.should redirect_to(company_path(assigns(:company)))
   end
 end
 
@@ -93,10 +93,3 @@ describe CompaniesController, "delete to the 'destroy' action with user and crud
     assert_redirected_to companies_path
   end
 end
-
-
-
-
-
-
-

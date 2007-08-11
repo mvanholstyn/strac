@@ -20,4 +20,11 @@ project1_crud_projects:
   project_id: "1"
   id: "3"
   created_at: 2007-06-30 23:44:24
+project2_joe:
+  accessor_type: User
+  updated_at: 2007-06-30 23:44:24
+  accessor_id: "1"
+  project_id: 2
+  id: 4
+  created_at: 2007-06-30 23:44:24
   

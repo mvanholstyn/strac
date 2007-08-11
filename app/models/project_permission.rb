@@ -22,6 +22,8 @@ class ProjectPermission < ActiveRecord::Base
   
     def find_project_for_user project_id, user
       conditions = build_conditions_for_user user
+      conditions.first << " AND project_id = ?"
+      conditions << project_id
       project_permission = find(:first, :conditions => conditions)
       project_permission ? project_permission.project : nil
     end
@@ -33,6 +35,7 @@ class ProjectPermission < ActiveRecord::Base
       if user.company
         conditions.first << " OR (accessor_id = ? AND accessor_type = ?)"
         conditions << user.company.id << user.company.class.name
+        conditions[0] = "(#{conditions[0]})"
       end
       conditions
     end

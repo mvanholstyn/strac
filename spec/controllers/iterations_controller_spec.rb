@@ -44,7 +44,7 @@ describe IterationsController, "user with 'user' privileges requesting index" do
   
   it "renders index template" do
     response.should be_success
-    response.should render_template 'index'
+    response.should render_template('index')
   end
 
   it "assigns a list of iterations for the current project" do
@@ -68,7 +68,7 @@ describe IterationsController, "user with 'user' privileges requesting new" do
   
   it "renders new template" do
     response.should be_success
-    response.should render_template 'new'
+    response.should render_template('new')
   end
 
   it "assigns an iteration for the current project" do
@@ -92,7 +92,7 @@ describe IterationsController, "user with 'user' privileges requesting show" do
   
   it "renders show template" do
     response.should be_success
-    response.should render_template 'show'
+    response.should render_template('show')
   end
 
   it "assigns the requested iteration" do
@@ -244,7 +244,7 @@ describe IterationsController, "user with 'user' privileges requesting edit" do
   
   it "renders edit template" do
     response.should be_success
-    response.should render_template 'edit'
+    response.should render_template('edit')
   end
 
   it "assigns the requested iteration" do
@@ -275,5 +275,3 @@ describe IterationsController, "user with 'user' privileges requesting destroy" 
   end
   
 end
-
-

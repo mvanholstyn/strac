@@ -44,7 +44,7 @@ describe ProjectsController, "user with 'crud_projects' privileges requesting in
   
   it "renders index template" do
     response.should be_success
-    response.should render_template 'index'
+    response.should render_template('index')
   end
 
   it "assigns a list of projects for the current project that the user has permissions on" do
@@ -66,7 +66,7 @@ describe ProjectsController, "user with 'crud_projects' privileges requesting ne
   
   it "renders new template" do
     response.should be_success
-    response.should render_template 'new'
+    response.should render_template('new')
   end
 
   it "assigns an blank project" do
@@ -88,7 +88,7 @@ describe ProjectsController, "user with 'crud_projects' privileges requesting sh
   
   it "renders show template" do
     response.should be_success
-    response.should render_template 'show'
+    response.should render_template('show')
   end
 
   it "assigns the requested project" do
@@ -109,7 +109,7 @@ describe ProjectsController, "user with 'users' privileges requesting show" do
   
   it "renders show template" do
     response.should be_success
-    response.should render_template 'show'
+    response.should render_template('show')
   end
 
   it "assigns the requested project" do
@@ -214,7 +214,7 @@ describe ProjectsController, "user with 'crud_projects' privileges requesting ed
   
   it "renders edit template" do
     response.should be_success
-    response.should render_template 'edit'
+    response.should render_template('edit')
   end
 
   it "assigns the requested iteration" do
@@ -243,5 +243,3 @@ describe ProjectsController, "user with 'crud_projects' privileges requesting de
   end
   
 end
-
-
