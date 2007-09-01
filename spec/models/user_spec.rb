@@ -6,14 +6,9 @@ describe User do
   end
 
   it "should be valid" do
-    @user.username = "joe"
     @user.group_id = 1
     @user.email_address = "me@me.com"
     @user.should be_valid
-  end
-  
-  it "should always have a username" do
-    assert_validates_presence_of @user, :username
   end
   
   it "should always have a group id" do
@@ -39,6 +34,7 @@ describe User do
   it "should have many Projects" do
     assert_association User, :has_many, :projects, Project, 
        :source=>:project,
+       :conditions => nil,
        :extend=>[],
        :class_name=>"Project",
        :limit=>nil,

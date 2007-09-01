@@ -16,7 +16,6 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 mvanholstyn:
   id: 1
-  username: mvanholstyn
   password_hash: <%= User.hash_password 'password' %>
   first_name: Mark
   last_name: Van Holstyn
@@ -27,7 +26,6 @@ mvanholstyn:
   
 zdennis:
   id: 2
-  username: zdennis
   password_hash: <%= User.hash_password 'password' %>
   first_name: MyString
   last_name: MyString

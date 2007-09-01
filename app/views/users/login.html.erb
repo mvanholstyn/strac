@@ -1,7 +1,7 @@
 <% form_for :user, :html => { :id => "login_form" } do |form| -%>
 	<p>
-  	<b>Username</b><br />
-		<%= form.text_field :username %>
+  	<b>Email Address</b><br />
+		<%= form.text_field :email_address %>
   </p>
 
 	<p>
@@ -10,10 +10,15 @@
   </p>
 
 	<p>
-  	<%= submit_tag 'Login' %>
+		<%= check_box_tag :remember_me %>
+		<b>Remember Me</b>
+	</p>
+
+	<p>
+  	<%= form.submit 'Login' %>
 	</p>
 <% end -%>
 
-<%= link_to "forgot your password?", reminder_users_path %>
+<%= link_to "forgot your password?", reminder_path %> | <%= link_to "need an account?", signup_path %>
 
 <%= javascript_tag "$('login_form').focusFirstElement();" %>

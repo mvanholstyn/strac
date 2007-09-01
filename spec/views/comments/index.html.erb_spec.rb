@@ -9,14 +9,14 @@ describe "/comments/index.html.erb with comments" do
     @story.stub!(:project_id).and_return(1)
 
     @comment1_commenter = mock_model(User)
-    @comment1_commenter.stub!(:username).and_return("zdennis")
+    @comment1_commenter.stub!(:full_name).and_return("zdennis")
     @comment1= mock_model(Comment)
     @comment1.stub!(:commenter).and_return(@comment1_commenter)
     @comment1.stub!(:created_at).and_return(Time.now)
     @comment1.stub!(:content).and_return("boo!")
 
     @comment2_commenter = mock_model(User)
-    @comment2_commenter.stub!(:username).and_return("mcdougal")
+    @comment2_commenter.stub!(:full_name).and_return("mcdougal")
     @comment2= mock_model(Comment)
     @comment2.stub!(:commenter).and_return(@comment2_commenter)
     @comment2.stub!(:created_at).and_return(Time.now)
@@ -52,7 +52,7 @@ describe "/comments/index.html.erb with comments" do
 
   def see_comment comment
     with_tag ".comment" do
-      with_tag ".comment-header", "Posted by #{comment.commenter.username} on #{comment_datetime_for(comment.created_at)}"
+      with_tag ".comment-header", "Posted by #{comment.commenter.full_name} on #{comment_datetime_for(comment.created_at)}"
       with_tag ".comment-body", "#{comment.content}"
     end
   end

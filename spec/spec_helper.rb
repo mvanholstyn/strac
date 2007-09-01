@@ -32,8 +32,8 @@ Spec::Runner.configure do |config|
   #
   # If you declare global fixtures, be aware that they will be declared
   # for all of your examples, even those that don't use them.
-  def login_as( username )
-    user = User.current_user = users( username )
+  def login_as( user )
+    user = User.current_user = users(user)
     @request.session[:current_user_id] = User.current_user.id
     user
   end 

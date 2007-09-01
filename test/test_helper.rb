@@ -30,8 +30,8 @@ class Test::Unit::TestCase
   fixtures :all
   
   # Load login_as helper if we are doing a functional or integration test    
-  def login_as( username )
-    user = User.current_user = users( username )
+  def login_as(user)
+    user = User.current_user = users(user)
     @request.session[:current_user_id] = User.current_user.id
     user
   end

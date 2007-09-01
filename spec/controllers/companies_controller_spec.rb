@@ -5,38 +5,38 @@ describe CompaniesController, "requesting actions without crud_companies privile
 
   it "redirects to the login page when index is requested" do
     get :index
-    response.should redirect_to(login_users_path)
+    response.should redirect_to(login_path)
   end
 
   it "redirects to the login page when show is requested" do
     get :show, :id => 1
-    response.should redirect_to(login_users_path)
+    response.should redirect_to(login_path)
   end
 
   it "redirects to the login page when new is requested" do
     get :new
-    response.should redirect_to(login_users_path)
+    response.should redirect_to(login_path)
   end
 
   it "redirects to the login page when edit is requested" do
     get :edit, :id=>1
-    response.should redirect_to(login_users_path)
+    response.should redirect_to(login_path)
   end
   
   it "redirects to the login page when create is requested" do
     post :create
-    response.should redirect_to(login_users_path)
+    response.should redirect_to(login_path)
   end
 
   
   it "redirects to the login page when update is requested" do
     put :update, :id=>1
-    response.should redirect_to(login_users_path)
+    response.should redirect_to(login_path)
   end
   
   it "redirects to the login page when destroy is requested" do
     delete :destroy, :id=>1
-    response.should redirect_to(login_users_path)
+    response.should redirect_to(login_path)
   end
   
 end

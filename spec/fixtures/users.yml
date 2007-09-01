@@ -9,7 +9,7 @@ joe:
   last_name: Smith
   password_hash: 5f4dcc3b5aa765d61d8327deb882cf99
   updated_at: 
-  username: joe
+  active: true
 stan:
   company_id: 1
   created_at: 
@@ -20,7 +20,7 @@ stan:
   last_name: Lee
   password_hash: 5f4dcc3b5aa765d61d8327deb882cf99
   updated_at: 
-  username: stan
+  active: true
 carl:
   company_id: 2
   created_at: 
@@ -31,7 +31,7 @@ carl:
   last_name: Youngblood
   password_hash: 5f4dcc3b5aa765d61d8327deb882cf99
   updated_at: 
-  username: carl
+  active: true
 user_without_privileges:
   company_id: 2
   created_at: 
@@ -42,7 +42,7 @@ user_without_privileges:
   last_name: Son
   password_hash: 5f4dcc3b5aa765d61d8327deb882cf99
   updated_at: 
-  username: sanford
+  active: true
 crud_companies:
   company_id: 2
   created_at: 
@@ -53,7 +53,7 @@ crud_companies:
   last_name: Son
   password_hash: 5f4dcc3b5aa765d61d8327deb882cf99
   updated_at: 
-  username: crud_companies
+  active: true
 crud_projects:
   company_id: 2
   created_at: 
@@ -64,4 +64,4 @@ crud_projects:
   last_name: Pa
   password_hash: 5f4dcc3b5aa765d61d8327deb882cf99
   updated_at: 
-  username: crud_projects
+  active: true

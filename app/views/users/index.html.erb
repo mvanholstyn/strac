@@ -1,8 +1,7 @@
-<h1>Listing users</h1>
+<h1>Users</h1>
 
 <table>
   <tr>
-    <th>Username</th>
     <th>First name</th>
     <th>Last name</th>
     <th>Email address</th>
@@ -12,7 +11,6 @@
 
 <% for user in @users %>
   <tr>
-    <td><%=h user.username %></td>
     <td><%=h user.first_name %></td>
     <td><%=h user.last_name %></td>
     <td><%=h user.email_address %></td>

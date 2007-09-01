@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   restrict_to :crud_users, :crud_companies_users, :except => [ :login, :logout, :reminder, :reminder_login, :signup ]
   
-  acts_as_login_controller
+  acts_as_login_controller :allow_signup => true
 
   redirect_after_login do
     { :controller => "dashboard" }

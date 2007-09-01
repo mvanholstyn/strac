@@ -16,6 +16,8 @@ class AddDefaultAuthenticationData < ActiveRecord::Migration
   class User < ActiveRecord::Base
     acts_as_login_model
     has_one :group
+    
+    attr_accessor :salt
   end
   
   def self.up

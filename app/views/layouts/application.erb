@@ -37,8 +37,8 @@
 			<% restrict_to :crud_companies do -%>
 			<li><%= link_to "<em>c</em>ompanies", companies_path, :accesskey => "c" %></li>
 			<% end -%>
-			<li><%= link_to "profile", profile_users_path %></li>
-			<li><%= link_to "logout", logout_users_path, :method => :post %></li>
+			<li><%= link_to "profile", profile_path %></li>
+			<li><%= link_to "logout", logout_path, :method => :post %></li>
 			<% end -%>
 		</ul>
 		

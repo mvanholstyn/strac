@@ -204,7 +204,6 @@ class FullMigrationTest < ActionController::IntegrationTest
 
       s.table "users" do |t|
         t.column "id", :integer
-        t.column "username", :string
         t.column "password_hash", :string
         t.column "first_name", :string
         t.column "last_name", :string
@@ -214,6 +213,9 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "active", :boolean
         t.column "created_at", :datetime
         t.column "updated_at", :datetime
+        t.column "salt", :string
+        t.column "remember_me_token", :string
+        t.column "remember_me_token_expires_at", :datetime
       end
     end
   end
@@ -227,11 +229,11 @@ class FullMigrationTest < ActionController::IntegrationTest
 
   # Make sure data you expect your migrations to load are in there:
   def see_default_data
-    assert Status.find_by_name("defined"    )
+    assert Status.find_by_name("defined")
     assert Status.find_by_name("in progress")
-    assert Status.find_by_name("complete"   )
-    assert Status.find_by_name("rejected"   )
-    assert Status.find_by_name("blocked"    )
+    assert Status.find_by_name("complete")
+    assert Status.find_by_name("rejected")
+    assert Status.find_by_name("blocked")
     
     assert Privilege.find_by_name("crud_companies")
     assert Privilege.find_by_name("crud_projects")       
@@ -240,11 +242,11 @@ class FullMigrationTest < ActionController::IntegrationTest
     assert Privilege.find_by_name("user")  
     
     assert Group.find_by_name("Developer")
-    assert Group.find_by_name("Customer" )
-    assert Group.find_by_name("Customer Admin" )
-    assert Group.find_by_name("Admin" )
+    assert Group.find_by_name("Customer")
+    assert Group.find_by_name("Customer Admin")
+    assert Group.find_by_name("Admin")
     
-    assert User.find_by_username("admin")
+    assert User.find_by_email_address("admin@example.com")
 
     priority_high = Priority.find_by_name("High")
     assert_equal "red", priority_high.color
