@@ -18,3 +18,11 @@ crud_projects_crud_projects:
   id: 5
   group_id: 6
   privilege_id: 3
+crud_user_user:
+  id: 6
+  group_id: 7
+  privilege_id: 1
+crud_user_crud_user:
+  id: 7
+  group_id: 7
+  privilege_id: 4

@@ -24,8 +24,13 @@ crud_companies:
   updated_at:
   id: "5"
   created_at:
-crud_users:
-  name: User with crud_projects
+crud_projects:
+  name: CRUD Projects
   updated_at:
   id: "6"
+  created_at:
+crud_users:
+  name: CRUD Psers
+  updated_at:
+  id: "7"
   created_at:

@@ -78,7 +78,6 @@ class ProjectsController < ApplicationController
   def destroy
     @project = ProjectPermission.find_project_for_user( params[:id], current_user )
     @project.destroy
-
     respond_to do |format|
       format.html { redirect_to projects_path }
       format.xml { head :ok }

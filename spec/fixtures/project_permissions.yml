@@ -9,7 +9,7 @@ project1_joe:
 project1_carl:
   accessor_type: Company
   updated_at: 2007-06-30 23:44:24
-  accessor_id: "1"
+  accessor_id: "2"
   project_id: "1"
   id: "2"
   created_at: 2007-06-30 23:44:24

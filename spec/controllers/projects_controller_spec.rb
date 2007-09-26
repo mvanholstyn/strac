@@ -48,7 +48,7 @@ describe ProjectsController, "user with 'crud_projects' privileges requesting in
   end
 
   it "assigns a list of projects for the current project that the user has permissions on" do
-    assigns[:projects].size.should == 1
+    assigns[:projects].size.should == @user.projects.size
     assigns[:projects].should include(@project)
   end
 end
@@ -172,7 +172,7 @@ describe ProjectsController, "user with 'crud_projects' privileges requesting up
     put(:update, :id => @project.id, :project => { :name => "Project HRM" })
   end
   
-  it "redirects to the created iteration's index page" do
+  it "redirects to the updated project's path" do
     response.should be_redirect
     path = project_path(:id=>@project.id)
     response.should redirect_to(path)
@@ -185,8 +185,8 @@ describe ProjectsController, "user with 'crud_projects' privileges requesting up
   before do
     @user = login_as :crud_projects
     @user.has_privilege?(:crud_projects).should be_true
-    @project = projects(:project1)
-
+    @project = projects(:project1).reload
+  
     put( :update, :id => @project.id, :project => { :name=>"" })
   end
   
@@ -194,10 +194,6 @@ describe ProjectsController, "user with 'crud_projects' privileges requesting up
     response.should render_template("edit")
   end
   
-  it "should not update the iteration for the project" do
-    @project.reload
-    @project.name.should_not == ''
-  end
 end
 
 
@@ -225,20 +221,20 @@ end
 describe ProjectsController, "user with 'crud_projects' privileges requesting destroy" do
   fixtures :users, :groups_privileges, :privileges, :groups, :projects, :project_permissions
   
-  before do
+  before(:each) do
     @user = login_as :crud_projects
     @user.has_privilege?(:user).should be_true
     @project = projects(:project1)
-
-    @old_count = Project.count
-    delete :destroy, :id=>@project.id 
   end
 
   it "destroys an existing iteration" do
+    @old_count = Project.count
+    delete :destroy, :id=>@project.id 
     assert_equal @old_count-1, Project.count
   end
 
   it "redirects the user to the iterations index page" do
+    delete :destroy, :id=>@project.id 
     assert_redirected_to projects_path    
   end
   
