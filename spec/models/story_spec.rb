@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Story do
-  before(:each) do
+  before do
     @story = Story.new
   end
 
@@ -27,7 +27,14 @@ describe Story do
     assert_association Story, :belongs_to, :priority, Priority
   end
   
-  it "should belong to a ResponsibleParty (polymorphic)"
+  describe "#responsible_party - polymorphic association" do
+    it "associates with another model" do
+      @user = Generate.user("some user")
+      @project = Generate.project("Some Project")
+      @story = Generate.story("story summary", :responsible_party => @user)
+      @story.responsible_party.should be(@user)
+    end
+  end
   
   it "should have many Time Entries" do
     assert_association Story, :has_many, :time_entries, TimeEntry, :as => :timeable

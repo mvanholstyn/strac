@@ -1,11 +1,11 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Activity do
-  before(:each) do
+  before do
     @activity = Activity.new
   end
 
-  it "should be valid" do
+  it "is valid" do
     @activity.actor_id = 1
     @activity.action = "action"
     @activity.affected_id = 2
@@ -13,30 +13,35 @@ describe Activity do
     @activity.should be_valid
   end
 
-  it "should require an actor id" do
+  it "requires an actor id" do
     assert_validates_presence_of @activity, :actor_id
   end
 
-  it "should require an action" do
+  it "requires an action" do
     assert_validates_presence_of @activity, :action
   end
 
-  it "should require an affected id" do
+  it "requires an affected id" do
     assert_validates_presence_of @activity, :affected_id
   end
   
-  it "should require an affected type" do
+  it "requires an affected type" do
     assert_validates_presence_of @activity, :affected_type
   end
 
-  it "should belong to a Project" do
+  it "belongs to a Project" do
     assert_association Activity, :belongs_to, :project, Project
   end
 
-  it "should belong to an Actor (User)" do
+  it "belongs to an Actor (User)" do
     assert_association Activity, :belongs_to, :actor, User, :class_name=>"User", :foreign_key => "actor_id"
   end
   
-  it "should belong to an affected (polymorphic)"
-  
+  describe "#affected - polymorphic association" do
+    it "associates with another model" do
+      @user = Generate.user("Sally Jane")
+      @activity = Generate.activity("some action", :actor=>"some user", :affected=>@user)
+      @activity.affected.should be(@user)
+    end
+  end
 end
