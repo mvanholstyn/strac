@@ -14,6 +14,10 @@ class Generate
     Group.create!(attributes.merge(:name=>name))
   end
   
+  def self.privilege(name, attributes={})
+    Privilege.create!(attributes.merge(:name=>name))
+  end
+  
   def self.project(name, attributes={})
     Project.create!(attributes.merge(:name=>name))
   end
