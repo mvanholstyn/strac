@@ -5,6 +5,7 @@ RAILS_ROOT = "#{File.dirname(__FILE__)}/.." unless defined?(RAILS_ROOT)
 unless defined?(Rails::Initializer)
   if File.directory?("#{RAILS_ROOT}/vendor/rails")
     require "#{RAILS_ROOT}/vendor/rails/railties/lib/initializer"
+    require 'rubygems'
   else
     require 'rubygems'
 
