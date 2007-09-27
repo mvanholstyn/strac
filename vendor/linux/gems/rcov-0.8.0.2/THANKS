@@ -1,0 +1,68 @@
+
+Tom Dolbilin:
+ * identified and fixed backslash problem on win32 for generated filenames
+
+Andrew Kreiling:
+* made the index XHTML compliant
+* consolidate multiple references to the same underlying .rb file
+
+Robert Feldt:
+* pointed me to dynamic uses of the tracing hooks, provided the inspiration
+  for RCOV__.run_hooked
+* helped to refine the color scheme
+
+Andre Nathan:
+* identified a bug in the heuristics: missing propagation for lines
+  with only }, ), ]
+
+David Roberts: 
+* reported confusing behavior when all files are ignored because they match
+  a regexp in the reject list
+* tested the RubyGems package for win32
+
+John-Mason Shackelford:
+* reported an important bug in the pure-Ruby tracer module, which broke it
+  altogether in 0.4.0
+* suggested a change in the CSS to make XHTML reports more readable under IE
+
+Dave Burt:
+* reported an issue with text reports under cmd.exe (should use < 80 cols)
+
+Alex Wayne:
+* reported problem with heredocs: they were not being marked as a whole if
+  the "header" wasn't reported by Ruby.
+* reported problem with the last line of literal data structs not being
+  covered if there was stuff after the end delimiter
+
+Coda Hale:
+* reported problem with blocks were the first line is not being marked
+  and ditto for the last line when end/} is followed by more stuff
+
+Tim Shadel:
+* reported that the last comment block was not being marked even when
+  it was the last thing in the file
+
+Thomas Leitner:
+* reported that the SCRIPT_LINES__ workaround did not always work
+* fixed the bug which broke differential reports for filenames with
+  special characters
+
+Assaph Mehr:
+* beta-tested 0.7.0 and found a bug in --aggregate (missing files)
+
+Ryan Kinderman:
+* suggested that -Ipath be passed to ruby instead of rcov in RcovTasks
+
+Jan Svitok:
+* reported typo in rcovtask.rb's RDoc
+
+rubikitch:
+* implemented --annotate mode
+* implemented --gcc option
+* superior emacs support
+* testing, refactoring...
+* many other things, see darcs changes
+
+
+Zed A. Shaw:
+* reported and fixed segfault triggered by rspec

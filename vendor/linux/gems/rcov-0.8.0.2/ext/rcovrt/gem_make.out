@@ -1,0 +1,12 @@
+ruby extconf.rb install rcov
+creating Makefile
+
+make
+gcc -I. -I/usr/lib/ruby/1.8/i486-linux -I/usr/lib/ruby/1.8/i486-linux -I.  -fPIC -Wall -g -fno-strict-aliasing -O2  -fPIC  -c rcovrt.c
+gcc -I. -I/usr/lib/ruby/1.8/i486-linux -I/usr/lib/ruby/1.8/i486-linux -I.  -fPIC -Wall -g -fno-strict-aliasing -O2  -fPIC  -c callsite.c
+gcc -shared -rdynamic -Wl,-export-dynamic   -L"/usr/lib" -o rcovrt.so rcovrt.o callsite.o  -lruby1.8  -lpthread -ldl -lcrypt -lm   -lc
+
+make install
+/usr/bin/install -c -m 0755 rcovrt.so /var/lib/gems/1.8/gems/rcov-0.8.0.2/lib
+
+make clean
