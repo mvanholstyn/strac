@@ -261,23 +261,23 @@ def generate_user_without_any_privileges
   @user = Generate.user("Some User without privileges")
 end
 
-def generate_user_with_proper_privileges_to_view_a_project(username="some user")
+def generate_user_with_proper_privileges_to_view_a_project(email_address="some email")
   @user_privilege = Generate.privilege("user")
   @group = Generate.group("Some Group")
   @group.privileges << @user_privilege
-  @user = Generate.user(username, :group => @group)
+  @user = Generate.user(email_address, :group => @group)
   @project = Generate.project("Some Project")
   @project.users << @user
   @user
 end
   
-def generate_user_with_proper_privileges_to_crud_a_project(username="some user")
+def generate_user_with_proper_privileges_to_crud_a_project(email_address="some user")
   @crud_projects_privilege = Generate.privilege("crud_projects")
   @user_privilege = Generate.privilege("user")
   @group = Generate.group("Some Group")
   @group.privileges << @crud_projects_privilege
   @group.privileges << @user_privilege
-  @user = Generate.user(username, :group => @group)
+  @user = Generate.user(email_address, :group => @group)
   @project = Generate.project("Some Project")
   @project.users << @user
   @user

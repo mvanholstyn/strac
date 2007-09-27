@@ -33,7 +33,7 @@ class Generate
     TimeEntry.create!(attributes.merge(:hours => hours, :date => date))
   end
   
-  def self.user(username, attributes={})
+  def self.user(email_address, attributes={})
     if attributes[:group].nil?
       attributes[:group] = Generate.group("some group")
     elsif ! attributes[:group].is_a?(Group)
@@ -42,8 +42,7 @@ class Generate
     
     User.create!(
       attributes.merge(
-        :username => username,
-        :email_address => "#{username}@#{username}.com"
+        :email_address => email_address
       )
     )
   end
