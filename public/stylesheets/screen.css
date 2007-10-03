@@ -237,6 +237,7 @@ h2 a {
 h2 a:hover {
 	color:#5F9128;
 }
+
 a {
 	color:#222;
 }
@@ -390,6 +391,18 @@ th {
 
 .story_card .header {
 	position: relative;
+}
+
+.story_card .content {
+	position: relative;
+}
+
+.story_card .destroy {
+	float: right;
+	background: url(../images/destroy.png) no-repeat;
+	padding-left: 20px;
+	color: red;
+	font-weight: bold;
 }
 
 .story_card span {

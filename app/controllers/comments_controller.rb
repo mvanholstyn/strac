@@ -1,7 +1,6 @@
 class CommentsController < ApplicationController
   before_filter :initialize_params
   before_filter :find_story
-  
       
   # GET /comments
   # GET /comments.xml

@@ -1,3 +1,5 @@
+<%= link_to_remote "destroy", {:url => story_path(@project, @story), :method => :delete, :confirm => 'Are you sure?'}, :class => "destroy" %>
+
 <%= error_messages_for :story %>
 
 <% remote_form_for(:story, :url => story_path(@project, @story), :html => { :method => :put }) do |form| -%>
