@@ -1,10 +1,10 @@
-<ul class="statuses">
+<ul class="statuses clearfix">
 	<% for status in Status.find( :all ) -%>
-		<li id="<%= "story_#{story.id}_status_#{status.id}" %>" title="<%= status.name %>" class="<%= "#{status.color}#{status == story.status ? " selected" : ""}" %>" onclick="Event.stop(event); <%= remote_function( :url => update_status_story_path( :project_id => @project, :id => story, :story => { :status_id => status.id } ), :method => :put, :condition => "! $(this).hasClassName('selected')" ) %>">&nbsp;&nbsp;&nbsp;</li>
+		<li id="<%= "story_#{story.id}_status_#{status.id}" %>" title="<%= status.name %>" class="<%= "#{status.color}#{status == story.status ? " selected" : ""}" %>" onclick="Event.stop(event); <%= remote_function( :url => update_status_story_path( :project_id => @project, :id => story, :story => { :status_id => status.id } ), :method => :put, :condition => "! $(this).hasClassName('selected')" ) %>"></li>
 	<% end -%>
 </ul>
 
-<span id="story_<%= story.id %>_header" style="position:absolute; right: 100px;">	
+<span id="story_<%= story.id %>_header" class="responsible_party">
 	<% if story.responsible_party.nil? -%>
 		<%= render :partial=>'stories/take', :locals=>{:story=>story} %>
 	<% else -%>

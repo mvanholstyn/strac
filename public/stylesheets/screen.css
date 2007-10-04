@@ -483,21 +483,17 @@ option.option {
 	padding-left: 15px;
 }
 
-.statuses {
-	
-}
-
 ul.statuses {
+	float: right;
 	list-style: none;
-	position: absolute;
-	right: 5px;
-	top: -5px;
+	margin: 0;
+	padding: 0;
 }
 
 ul.statuses li {
-	display: inline;
-	width: 6px;
-	height: 6px;
+	margin: 2px 5px 0 0;
+	padding: 3px;
+	float: left;
 	background-image: url(../images/bullet_white.png);
 	background-repeat: no-repeat;	
 	cursor: pointer;
@@ -521,6 +517,10 @@ ul.statuses li.green:hover, ul.statuses li.green.selected {
 
 ul.statuses li.blue:hover, ul.statuses li.blue.selected {
 	background-image: url(../images/bullet_blue.png);
+}
+
+.responsible_party {
+	float: right;
 }
 
 .comment {
