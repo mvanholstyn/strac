@@ -386,25 +386,36 @@ th {
 }
 
 .story_card {
-  margin-top: 3px;
-  padding-top: 3px;
-  padding-left: 3px;
+	margin-top: 3px;
 }
 
 .story_card.even {
-	background-color: #D3D3D3;
+	background-color: #f5f5f5;
+	border: 1px solid #d3d3d3;
 }
 
 .story_card.odd {
 	background-color: #fff;
+	border: 1px solid #f5f5f5;
 }
 
 .story_card .header {
 	position: relative;
+	cursor: pointer;
+  padding: 3px;
+}
+
+.story_card .header:hover {
+	background-color: #E6F5FF;
 }
 
 .story_card .content {
 	position: relative;
+  padding: 3px;
+}
+
+.story_card .content .toolbar {
+	float: right;
 }
 
 .story_card .content .destroy {

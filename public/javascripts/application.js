@@ -22,8 +22,7 @@ function show_with_smart_loading( id_to_show, focus_form ) {
 	return true;
 }
 
-
-function toggle_hide_show_with_smart_loading( id_to_show, ids_to_hide, focus_form ) {
+function toggle_hide_show_with_smart_loading(id_to_show, ids_to_hide, focus_form) {
 	id_to_show = $(id_to_show);
 
 	if( id_to_show.visible() ) {
