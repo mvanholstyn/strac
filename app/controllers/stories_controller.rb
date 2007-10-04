@@ -36,7 +36,7 @@ class StoriesController < ApplicationController
       format.js
     end
   end
-
+  
   # GET /stories/1;edit
   def edit
     @story = @project.stories.find(params[:id], :include => :tags)
@@ -74,7 +74,7 @@ class StoriesController < ApplicationController
 
     respond_to do |format|
       if @story.update_attributes(params[:story])
-        #TODO: If this stories iteration is changed, then something should happen
+        #TODO: If this stories iteration is changed, then it should move
         format.js
         format.xml { head :ok }
       else
@@ -106,6 +106,7 @@ class StoriesController < ApplicationController
   # PUT /stories/reorder.js
   def reorder
     respond_to do |format|
+      #TODO: Update zebra striping...
       #TODO: This will fail if complete stories are hidden..."
       param_to_use = params.select { |k,v| k =~ /^iteration_(\d+|nil)$/ }.first
       if Story.reorder( param_to_use.last,
@@ -159,12 +160,12 @@ class StoriesController < ApplicationController
       end
     end
   end
-
+  
   # PUT /stories/1;update_points.js
   def update_points
     @story = @project.stories.find(params[:id])
     @story.points = params[:story][:points]
-
+  
     respond_to do |format|
       if @story.save
         format.js do
@@ -181,7 +182,7 @@ class StoriesController < ApplicationController
       end
     end
   end
-
+  
   # PUT /stories/1;update_status.js
   def update_status
     @story = @project.stories.find(params[:id])
@@ -208,16 +209,20 @@ class StoriesController < ApplicationController
     @story = @project.stories.find(params[:id])
     @time_entry = @project.time_entries.build( params[:time_entry] )
     
-    if request.post?
-      @time_entry.timeable = @story
-      if @time_entry.save
-        format.js do
-          #render_notice %(Time entry was successfully created.) do |page|
-          #  page["story_#{@story.id}_time_list"].replace_html( @story.points || "&infin;" )
-          #end
+    respond_to do |format|
+      if request.post?
+        @time_entry.timeable = @story
+        if @time_entry.save
+          format.js do
+            #render_notice %(Time entry was successfully created.) do |page|
+            #  page["story_#{@story.id}_time_list"].replace_html( @story.points || "&infin;" )
+            #end
+          end
         end
+      else
+        format.js
       end
-    end    
+    end
   end
 
   private
