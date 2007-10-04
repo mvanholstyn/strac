@@ -3,10 +3,14 @@ require File.dirname(__FILE__) + '/../../spec_helper.rb'
 module Spec
   module Runner
     describe Options do
-      before do
+      before(:each) do
         @err = StringIO.new('')
         @out = StringIO.new('')
         @options = Options.new(@err, @out)
+      end
+      
+      after(:each) do
+        Spec::Expectations.differ = nil
       end
 
       it "instantiates empty arrays" do
@@ -45,9 +49,12 @@ module Spec
       end
 
       it "should use custom diff format option when format is a custom format" do
-        @options.parse_diff "Custom::Formatter"
+        Spec::Expectations.differ.should_not be_instance_of(Custom::Differ)
+        
+        @options.parse_diff "Custom::Differ"
         @options.diff_format.should == :custom
-        @options.differ_class.should == Custom::Formatter
+        @options.differ_class.should == Custom::Differ
+        Spec::Expectations.differ.should be_instance_of(Custom::Differ)
       end
 
       it "should print instructions about how to fix missing differ" do
@@ -82,6 +89,24 @@ module Spec
       end
     end
 
+    describe Options, "#custom_runner?" do
+      before do
+        @err = StringIO.new('')
+        @out = StringIO.new('')
+        @options = Options.new(@err, @out)
+      end
+      
+      it "returns true when there is a runner_arg" do
+        @options.runner_arg = "Custom::BehaviourRunner"
+        @options.custom_runner?.should be_true
+      end
+
+      it "returns false when there is no runner_arg" do
+        @options.runner_arg = nil
+        @options.custom_runner?.should be_false
+      end
+    end
+
     describe Options, "splitting class names and args" do
       before do
         @err = StringIO.new('')
@@ -109,67 +134,107 @@ module Spec
       end
     end
 
-    describe Options, "receiving create_behaviour_runner" do
+    describe Options, "#differ_class and #differ_class=" do
       before do
         @err = StringIO.new
         @out = StringIO.new
         @options = Options.new(@err, @out)
       end
 
-      it "should fail when custom runner not found" do
-        @options.runner_arg = "Whatever"
-        lambda { @options.create_behaviour_runner }.should raise_error(NameError)
-        @err.string.should match(/Couldn't find behaviour runner class/)
-      end
-
-      it "should fail when custom runner not valid class name" do
-        @options.runner_arg = "whatever"
-        lambda { @options.create_behaviour_runner }.should raise_error('"whatever" is not a valid class name')
-        @err.string.should match(/"whatever" is not a valid class name/)
-      end
-
-      it "returns nil when generate is true" do
-        @options.generate = true
-        @options.create_behaviour_runner.should == nil
-      end
-
-      it "returns a BehaviourRunner by default" do
-        runner = @options.create_behaviour_runner
-        runner.class.should == BehaviourRunner
-      end
-
       it "does not set Expectations differ when differ_class is not set" do
-        @options.differ_class = nil
         Spec::Expectations.should_not_receive(:differ=)
-        @options.create_behaviour_runner
+        @options.differ_class = nil
       end
 
       it "sets Expectations differ when differ_class is set" do
-        @options.differ_class = Spec::Expectations::Differs::Default
         Spec::Expectations.should_receive(:differ=).with(anything()).and_return do |arg|
           arg.class.should == Spec::Expectations::Differs::Default
         end
-        @options.configure
-      end
-
-      it "creates a Reporter" do
-        formatter = ::Spec::Runner::Formatter::BaseFormatter.new(:somewhere)
-        @options.formatters << formatter
-        reporter = Reporter.new(@formatters, @backtrace_tweaker)
-        Reporter.should_receive(:new).with(@options.formatters, @options.backtrace_tweaker).and_return(reporter)
-        @options.configure
-        @options.reporter.should === reporter
-      end
-
-      it "sets colour and dry_run on the formatters" do
-        @options.colour = true
-        @options.dry_run = true
-        formatter = ::Spec::Runner::Formatter::BaseTextFormatter.new(:somewhere)
-        formatter.should_receive(:colour=).with(true)
-        formatter.should_receive(:dry_run=).with(true)
-        @options.formatters << formatter
-        @options.configure
+        @options.differ_class = Spec::Expectations::Differs::Default
       end
     end
+
+    describe Options, "#reporter" do
+      before do
+        @err = StringIO.new
+        @out = StringIO.new
+        @options = Options.new(@err, @out)
+      end
+
+      it "returns a Reporter" do
+        @options.reporter.should be_instance_of(Reporter)
+        @options.reporter.options.should === @options
+      end
+    end
+
+    describe Options, "#add_behaviour affecting passed in behaviour" do
+      it_should_behave_like "Test::Unit io sink"
+      before do
+        @err = StringIO.new('')
+        @out = StringIO.new('')
+        @options = Options.new(@err, @out)
+      end
+
+      it "runs all examples when options.examples is nil" do
+        example_1_has_run = false
+        example_2_has_run = false
+        @behaviour = Class.new(::Spec::DSL::Example).describe("A Behaviour") do
+          it "runs 1" do
+            example_1_has_run = true
+          end
+          it "runs 2" do
+            example_2_has_run = true
+          end
+        end
+
+        @options.examples = nil
+
+        @options.add_behaviour @behaviour
+        @options.run_examples
+        example_1_has_run.should be_true
+        example_2_has_run.should be_true
+      end
+
+      it "keeps all example_definitions when options.examples is empty" do
+        example_1_has_run = false
+        example_2_has_run = false
+        @behaviour = Class.new(::Spec::DSL::Example).describe("A Behaviour") do
+          it "runs 1" do
+            example_1_has_run = true
+          end
+          it "runs 2" do
+            example_2_has_run = true
+          end
+        end
+
+        @options.examples = []
+
+        @options.add_behaviour @behaviour
+        @options.run_examples
+        example_1_has_run.should be_true
+        example_2_has_run.should be_true
+      end
+    end
+
+    describe Options, "#add_behaviour affecting behaviours" do
+      it_should_behave_like "Test::Unit io sink"
+      before do
+        @err = StringIO.new('')
+        @out = StringIO.new('')
+        @options = Options.new(@err,@out)
+      end
+
+      it "adds behaviour when behaviour has example_definitions and is not shared" do
+        @behaviour = Class.new(::Spec::DSL::Example).describe("A Behaviour") do
+          it "uses this behaviour" do
+          end
+        end
+
+        @options.number_of_examples.should == 0
+        @options.add_behaviour @behaviour
+        @options.number_of_examples.should == 1
+        @options.behaviours.length.should == 1
+      end
+    end    
   end
 end

@@ -97,9 +97,10 @@ end
 
 module Custom
   class Formatter < Spec::Runner::Formatter::BaseTextFormatter
-    attr_reader :where
+    attr_reader :options, :where
     
-    def initialize(where)
+    def initialize(options, where)
+      @options = options
       @where = where
     end
   end
@@ -107,13 +108,16 @@ module Custom
   class BadFormatter < Spec::Runner::Formatter::BaseTextFormatter
     attr_reader :where
     
-    def initialize(where)
+    def initialize(options, where)
       bad_method
     end
   end
 
-  class BehaviourRunner
-    def initialize(options, arg=nil); end
+  class Differ
+    attr_reader :options
+    def initialize(options)
+      @options = options
+    end
   end
 end
 

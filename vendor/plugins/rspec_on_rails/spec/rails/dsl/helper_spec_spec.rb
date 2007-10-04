@@ -1,16 +1,25 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 Spec::Runner.configuration.global_fixtures = :people
 
-describe "HelperBehaviour", :behaviour_type => :helper do
+describe "HelperExample", :behaviour_type => :helper do
   helper_name :explicit
   
   it "should have direct access to methods defined in helpers" do
     method_in_explicit_helper.should =~ /text from a method/
   end
+  
+  it "should have access to named routes" do
+    rspec_on_rails_specs_url.should == "http://test.host/rspec_on_rails_specs"
+    rspec_on_rails_specs_path.should == "/rspec_on_rails_specs"
+  end
+
+  it "should fail if the helper method deson't exist" do
+    lambda { non_existant_helper_method }.should raise_error(NameError)
+  end
 end
 
 
-describe "HelperBehaviour#eval_erb", :behaviour_type => :helper do
+describe "HelperExample#eval_erb", :behaviour_type => :helper do
   helper_name :explicit
   
   it "should support methods that accept blocks" do
@@ -18,7 +27,7 @@ describe "HelperBehaviour#eval_erb", :behaviour_type => :helper do
   end
 end
 
-describe "HelperBehaviour.fixtures", :behaviour_type => :helper do
+describe "HelperExample.fixtures", :behaviour_type => :helper do
   helper_name :explicit
   fixtures :animals
 
@@ -33,7 +42,7 @@ describe "HelperBehaviour.fixtures", :behaviour_type => :helper do
   end  
 end
 
-describe "HelperBehaviour included modules", :behaviour_type => :helper do
+describe "HelperExample included modules", :behaviour_type => :helper do
   helpers = [
     ActionView::Helpers::ActiveRecordHelper,
     ActionView::Helpers::AssetTagHelper,
@@ -46,16 +55,19 @@ describe "HelperBehaviour included modules", :behaviour_type => :helper do
     ActionView::Helpers::FormOptionsHelper,
     ActionView::Helpers::FormTagHelper,
     ActionView::Helpers::JavaScriptHelper,
-    ActionView::Helpers::JavaScriptMacrosHelper,
     ActionView::Helpers::NumberHelper,
     ActionView::Helpers::PrototypeHelper,
-    ActionView::Helpers::PrototypeHelper::JavaScriptGenerator::GeneratorMethods,
     ActionView::Helpers::ScriptaculousHelper,
     ActionView::Helpers::TagHelper,
     ActionView::Helpers::TextHelper,
     ActionView::Helpers::UrlHelper
   ]
-  helpers << ActionView::Helpers::PaginationHelper unless ENV['RSPEC_RAILS_VERSION'] == 'edge'
+  unless ['edge','2.0.0'].include?(ENV['RSPEC_RAILS_VERSION'])
+    helpers += [
+      ActionView::Helpers::PaginationHelper,
+      ActionView::Helpers::JavaScriptMacrosHelper
+    ]
+  end
   helpers.each do |helper_module|
     it "should include #{helper_module}" do
       self.class.ancestors.should include(helper_module)
@@ -67,14 +79,16 @@ describe ExplicitHelper, :behaviour_type => :helper do
   it "should not require naming the helper if describe is passed a type" do
     method_in_explicit_helper.should match(/text from a method/)
   end
+  
+  
 end
 
 module Spec
   module Rails
     module DSL
-      describe HelperBehaviour do
+      describe HelperExample do
         it "should tell you its behaviour_type is :helper" do
-          behaviour = HelperBehaviour.new("") {}
+          behaviour = Class.new(HelperExample).describe("")
           behaviour.behaviour_type.should == :helper
         end
       end

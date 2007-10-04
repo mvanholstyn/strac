@@ -8,22 +8,21 @@ require 'active_record/base'
 require 'active_record/fixtures'
 require 'spec'
 
-require File.expand_path("#{dir}/rails/dsl")
-
 require File.expand_path("#{dir}/dsl")
 require File.expand_path("#{dir}/matchers")
+require File.expand_path("#{dir}/rails/dsl")
 
 require File.expand_path("#{dir}/rails/version")
 require File.expand_path("#{dir}/rails/extensions")
 require File.expand_path("#{dir}/rails/matchers")
 
-Test::Unit.run = true
+#Test::Unit.run = true
 
 module Spec
   # = Spec::Rails
   #
   # Spec::Rails (a.k.a. RSpec on Rails) is a Ruby on Rails plugin that allows you to drive the development
-  # of your RoR application using RSpec, a framework that aims to enable Behaviour Driven Development
+  # of your RoR application using RSpec, a framework that aims to enable Example Driven Development
   # in Ruby.
   # 
   # == Features

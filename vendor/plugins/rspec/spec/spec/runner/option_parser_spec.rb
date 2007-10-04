@@ -4,15 +4,12 @@ describe "OptionParser" do
   before(:each) do
     @out = StringIO.new
     @err = StringIO.new
-    @parser = Spec::Runner::OptionParser.new
+    @parser = Spec::Runner::OptionParser.new(@err, @out)
   end
 
   def parse(args)
-    @parser.parse(args, @err, @out, true)
-  end
-
-  def behaviour_runner(args)
-    @parser.create_behaviour_runner(args, @err, @out, true)
+    @parser.parse(args)
+    @parser.options
   end
 
   it "should accept dry run option" do
@@ -57,11 +54,6 @@ describe "OptionParser" do
   it "should print instructions about how to require missing formatter" do
     lambda { options = parse(["--format", "Custom::MissingFormatter"]) }.should raise_error(NameError)
     @err.string.should match(/Couldn't find formatter class Custom::MissingFormatter/n)
-  end
-
-  it "should print usage to err if no dir specified" do
-    options = parse([])
-    @err.string.should match(/Usage: spec/)
   end
 
   it "should print version to stdout" do
@@ -195,9 +187,13 @@ describe "OptionParser" do
   end
 
   it "should use custom diff format option when format is a custom format" do
-    options = parse(["--diff", "Custom::Formatter"])
+    Spec::Expectations.differ.should_not be_instance_of(Custom::Differ)
+
+    options = parse(["--diff", "Custom::Differ"])
+    options.parse_diff "Custom::Differ"
     options.diff_format.should == :custom
-    options.differ_class.should == Custom::Formatter
+    options.differ_class.should == Custom::Differ
+    Spec::Expectations.differ.should be_instance_of(Custom::Differ)
   end
 
   it "should print instructions about how to fix missing differ" do
@@ -277,18 +273,21 @@ describe "OptionParser" do
   end
 
   it "should read options from file when --options is specified" do
-    Spec::Runner::CommandLine.should_receive(:run).with(["--diff", "--colour"], @err, @out, true, true)
     options = parse(["--options", File.dirname(__FILE__) + "/spec.opts"])
+    options.diff_format.should_not be_nil
+    options.colour.should be_true
   end
 
-  it "should append options from file when --options is specified" do
-    Spec::Runner::CommandLine.should_receive(:run).with(["some/spec.rb", "--diff", "--colour"], @err, @out, true, true)
-    options = parse(["some/spec.rb", "--options", File.dirname(__FILE__) + "/spec.opts"])
+  it "should default the formatter to ProgressBarFormatter when using options file" do
+    options = parse(["--options", File.dirname(__FILE__) + "/spec.opts"])
+    options.formatters.first.should be_instance_of(::Spec::Runner::Formatter::ProgressBarFormatter)
   end
-  
+
   it "should read spaced and multi-line options from file when --options is specified" do
-    Spec::Runner::CommandLine.should_receive(:run).with(["--diff", "--colour", "--format", "s"], @err, @out, true, true)
     options = parse(["--options", File.dirname(__FILE__) + "/spec_spaced.opts"])
+    options.diff_format.should_not be_nil
+    options.colour.should be_true
+    options.formatters.first.should be_instance_of(::Spec::Runner::Formatter::SpecdocFormatter)
   end
    
   it "should save config to file when --generate-options is specified" do
@@ -298,52 +297,55 @@ describe "OptionParser" do
     FileUtils.rm 'test.spec.opts'
   end
 
+  it "should save config to file when -G is specified" do
+    FileUtils.rm 'test.spec.opts' if File.exist?('test.spec.opts')
+    options = parse(["--colour", "-G", "test.spec.opts", "--diff"])
+    IO.read('test.spec.opts').should == "--colour\n--diff\n"
+    FileUtils.rm 'test.spec.opts'
+  end
+
   it "should call DrbCommandLine when --drb is specified" do
-    Spec::Runner::DrbCommandLine.should_receive(:run).with(["some/spec.rb", "--diff", "--colour"], @err, @out, true, true)
+    Spec::Runner::DrbCommandLine.should_receive(:run).with(["some/spec.rb", "--diff", "--colour"], @err, @out)
     options = parse(["some/spec.rb", "--diff", "--drb", "--colour"])
   end
   
-  it "should not return an Options object when --drb is specified" do
-    Spec::Runner::DrbCommandLine.stub!(:run)
-    parse(["some/spec.rb", "--drb"]).should be_nil
-  end
-
   it "should reverse spec order when --reverse is specified" do
     options = parse(["some/spec.rb", "--reverse"])
   end
 
   it "should set an mtime comparator when --loadby mtime" do
-    behaviour_runner = behaviour_runner(["--loadby", 'mtime'])
+    options = parse(["--loadby", 'mtime'])
     Dir.chdir(File.dirname(__FILE__)) do
+      options.files << 'command_line_spec.rb'
+      options.files << 'most_recent_spec.rb'
       FileUtils.touch "most_recent_spec.rb"
-      all_files = ['command_line_spec.rb', 'most_recent_spec.rb']
-      sorted_files = behaviour_runner.sort_paths(all_files)
-      sorted_files.should == ["most_recent_spec.rb", "command_line_spec.rb"]
+      options.paths.should == ["most_recent_spec.rb", "command_line_spec.rb"]
       FileUtils.rm "most_recent_spec.rb"
     end
   end
 
   it "should use the standard runner by default" do
     options = parse([])
-    options.create_behaviour_runner.class.should equal(Spec::Runner::BehaviourRunner)
+    options.custom_runner.should be_nil
   end
 
   it "should use a custom runner when given" do
     options = parse(["--runner", "Custom::BehaviourRunner"])
-    options.create_behaviour_runner.class.should equal(Custom::BehaviourRunner)
+    options.custom_runner.class.should equal(Custom::BehaviourRunner)
   end
 
   it "should use a custom runner with extra options" do
     options = parse(["--runner", "Custom::BehaviourRunner:something"])
-    options.create_behaviour_runner.class.should equal(Custom::BehaviourRunner)
+    options.custom_runner.class.should equal(Custom::BehaviourRunner)
+  end
+
+  it "should not have a custom runner by default" do
+    options = Spec::Runner::OptionParser.parse([], @err, @out)
+    options.custom_runner.should be_nil
   end
 
   it "should return the correct default behaviour runner" do
-    @parser.create_behaviour_runner([], @err, @out, true).should be_instance_of(Spec::Runner::BehaviourRunner)
-  end
-
-  it "should return the correct default behaviour runner" do
-    @parser.create_behaviour_runner(["--runner", "Custom::BehaviourRunner"], @err, @out, true).should be_instance_of(Custom::BehaviourRunner)
-  end
-
+   options = Spec::Runner::OptionParser.parse(["--runner", "Custom::BehaviourRunner"], @err, @out)
+    options.custom_runner.class.should equal(Custom::BehaviourRunner)
+  end  
 end

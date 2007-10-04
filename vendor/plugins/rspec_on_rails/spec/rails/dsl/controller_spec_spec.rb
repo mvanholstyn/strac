@@ -80,6 +80,14 @@ require 'controller_spec_controller'
       route_for(:controller => "controller_spec", :action => "some_action").should == "/controller_spec/some_action"
     end
 
+    it "should generate params for custom routes" do
+      params_from(:get, '/custom_route').should == {:controller => "custom_route_spec", :action => "custom_route"}
+    end
+    
+    it "should generate params for existing routes" do
+      params_from(:get, '/controller_spec/some_action').should == {:controller => "controller_spec", :action => "some_action"}
+    end
+    
     it "should expose the assigns hash directly" do
       get 'action_setting_the_assigns_hash'
       assigns[:direct_assigns_key].should == :direct_assigns_key_value
@@ -147,9 +155,9 @@ end
 module Spec
   module Rails
     module DSL
-      describe ControllerBehaviour do
+      describe ControllerExample do
         it "should tell you its behaviour_type is :controller" do
-          behaviour = ControllerBehaviour.new("") {}
+          behaviour = Class.new(ControllerExample).describe("")
           behaviour.behaviour_type.should == :controller
         end
       end

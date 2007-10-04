@@ -1,41 +1,54 @@
 module Spec
   module DSL
     class BehaviourFactory
-
+      BEHAVIOURS = {
+        :default => Spec::DSL::Example,
+        :shared => Spec::DSL::SharedBehaviour
+      }      
       class << self
-
-        BEHAVIOUR_CLASSES = {:default => Spec::DSL::Behaviour}
-        
         # Registers a behaviour class +klass+ with the symbol
-        # +behaviour_type+. For example:
+        # +type+. For example:
         #
-        #   Spec::DSL::BehaviourFactory.add_behaviour_class(:farm, Spec::Farm::DSL::FarmBehaviour)
+        #   Spec::DSL::BehaviourFactory.add_example_class(:farm, Spec::Farm::DSL::FarmBehaviour)
         #
         # This will cause Kernel#describe from a file living in 
         # <tt>spec/farm</tt> to create behaviour instances of type
         # Spec::Farm::DSL::FarmBehaviour.
-        def add_behaviour_class(behaviour_type, klass)
-          BEHAVIOUR_CLASSES[behaviour_type] = klass
+        def add_example_class(type, klass)
+          BEHAVIOURS[type] = klass
         end
-
-        def remove_behaviour_class(behaviour_type)
-          BEHAVIOUR_CLASSES.delete(behaviour_type)
+        
+        def remove_example_class(type)
+          BEHAVIOURS.delete(type)
         end
 
         def create(*args, &block)
           opts = Hash === args.last ? args.last : {}
           if opts[:shared]
-            behaviour_type = :default
+            type = :shared
+            return create_shared_module(*args, &block)
+            
+          # new: replaces behaviour_type  
+          elsif opts[:type]
+            type = opts[:type]
+            
+          #backwards compatibility
           elsif opts[:behaviour_type]
-            behaviour_type = opts[:behaviour_type]
-          elsif opts[:spec_path] =~ /spec(\\|\/)(#{BEHAVIOUR_CLASSES.keys.join('|')})/
-            behaviour_type = $2.to_sym
+            type = opts[:behaviour_type]
+            
+          elsif opts[:spec_path] =~ /spec(\\|\/)(#{BEHAVIOURS.keys.join('|')})/
+            type = $2.to_sym
           else
-            behaviour_type = :default
+            type = :default
           end
-          return BEHAVIOUR_CLASSES[behaviour_type].new(*args, &block)
+          example_class = Class.new(BEHAVIOURS[type])
+          example_class.describe(*args, &block)
         end
 
+        protected
+        def create_shared_module(*args, &block)
+          BEHAVIOURS[:shared].new(*args, &block)
+        end
       end
     end
   end

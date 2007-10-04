@@ -6,9 +6,12 @@ module Spec
     module ReporterSpecHelper
       def setup
         @io = StringIO.new
+        @options = Options.new(StringIO.new, @io)
         @backtrace_tweaker = stub("backtrace tweaker", :tweak_backtrace => nil)
+        @options.backtrace_tweaker = @backtrace_tweaker
         @formatter = mock("formatter")
-        @reporter = Reporter.new([@formatter], @backtrace_tweaker)
+        @options.formatters << @formatter
+        @reporter = Reporter.new(@options)
       end
 
       def failure
@@ -16,7 +19,7 @@ module Spec
       end
       
       def description(s)
-        Spec::DSL::Description.new(s)
+        Spec::DSL::BehaviourDescription.new(s)
       end
     end
     
@@ -34,6 +37,7 @@ module Spec
         @formatter.should_receive(:example_started).exactly(3).times
         @formatter.should_receive(:example_passed).exactly(3).times
         @formatter.should_receive(:start_dump)
+        @formatter.should_receive(:dump_pending)
         @formatter.should_receive(:close).with(no_args)
         @formatter.should_receive(:dump_summary).with(anything(), 3, 0, 0)
         @reporter.add_behaviour(description("behaviour"))
@@ -56,6 +60,7 @@ module Spec
         @formatter.should_receive(:example_failed).with("example", 2, failure)
         @formatter.should_receive(:dump_failure).exactly(2).times
         @formatter.should_receive(:start_dump)
+        @formatter.should_receive(:dump_pending)
         @formatter.should_receive(:close).with(no_args)
         @formatter.should_receive(:dump_summary).with(anything(), 4, 2, 0)
         @backtrace_tweaker.should_receive(:tweak_backtrace).twice
@@ -70,6 +75,7 @@ module Spec
 
       it "should push stats to formatter even with no data" do
         @formatter.should_receive(:start_dump)
+        @formatter.should_receive(:dump_pending)
         @formatter.should_receive(:dump_summary).with(anything(), 0, 0, 0)
         @formatter.should_receive(:close).with(no_args)
         @reporter.dump
@@ -78,6 +84,7 @@ module Spec
       it "should push time to formatter" do
         @formatter.should_receive(:start).with(5)
         @formatter.should_receive(:start_dump)
+        @formatter.should_receive(:dump_pending)
         @formatter.should_receive(:close).with(no_args)
         @formatter.should_receive(:dump_summary) do |time, a, b|
           time.to_s.should match(/[0-9].[0-9|e|-]+/)
@@ -106,6 +113,7 @@ module Spec
       it "should account for passing example in stats" do
         @formatter.should_receive(:example_passed)
         @formatter.should_receive(:start_dump)
+        @formatter.should_receive(:dump_pending)
         @formatter.should_receive(:dump_summary).with(anything(), 1, 0, 0)
         @formatter.should_receive(:close).with(no_args)
         @reporter.example_finished("example")
@@ -132,6 +140,7 @@ module Spec
         @formatter.should_receive(:add_behaviour)
         @formatter.should_receive(:example_failed).with("example", 1, failure)
         @formatter.should_receive(:start_dump)
+        @formatter.should_receive(:dump_pending)
         @formatter.should_receive(:dump_failure).with(1, anything())
         @formatter.should_receive(:dump_summary).with(anything(), 1, 1, 0)
         @formatter.should_receive(:close).with(no_args)
@@ -156,6 +165,7 @@ module Spec
       it "should account for pending example in stats" do
         @formatter.should_receive(:example_pending).with(description("behaviour"), "example", "Not Yet Implemented")
         @formatter.should_receive(:start_dump)
+        @formatter.should_receive(:dump_pending)
         @formatter.should_receive(:dump_summary).with(anything(), 1, 0, 1)
         @formatter.should_receive(:add_behaviour).with(description("behaviour"))
         @formatter.should_receive(:close).with(no_args)
@@ -179,6 +189,7 @@ module Spec
       it "should account for pending example in stats" do
         @formatter.should_receive(:example_pending).with(description("behaviour"), "example", "reason")
         @formatter.should_receive(:start_dump)
+        @formatter.should_receive(:dump_pending)
         @formatter.should_receive(:dump_summary).with(anything(), 1, 0, 1)
         @formatter.should_receive(:close).with(no_args)
         @formatter.should_receive(:add_behaviour).with(description("behaviour"))

@@ -6,8 +6,9 @@ module Spec
       describe ProgressBarFormatter, "dry run" do
         before(:each) do
           @io = StringIO.new
-          @formatter = ProgressBarFormatter.new(@io)
-          @formatter.dry_run = true
+          @options = Options.new(StringIO.new, @io)
+          @formatter = @options.create_formatter(ProgressBarFormatter)
+          @options.dry_run = true
         end
       
         it "should not produce summary on dry run" do

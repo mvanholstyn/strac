@@ -1,11 +1,9 @@
-require 'action_controller/url_rewriter'
-
 module Spec
   module Rails
     module Matchers
-    
+
       class RedirectTo  #:nodoc:
-    
+
         def initialize(request, expected)
           @expected = expected
           @request = request
@@ -48,11 +46,7 @@ module Spec
 
         def query_hash(url)
           query = url.split("?", 2)[1] || ""
-          if defined?(CGIMethods)
-            CGIMethods.parse_query_parameters(query)
-          else
-            ActionController::AbstractRequest.parse_query_parameters(query)
-          end
+          QueryParameterParser.parse_query_parameters(query, @request)
         end
 
        def expected_url
@@ -75,13 +69,23 @@ module Spec
             return %Q{expected redirect to #{@expected.inspect}, got no redirect}
           end
         end
-        
+
         def negative_failure_message
             return %Q{expected not to be redirected to #{@expected.inspect}, but was} if @redirected
         end
-        
+
         def description
           "redirect to #{@actual.inspect}"
+        end
+
+        class QueryParameterParser
+          def self.parse_query_parameters(query, request)
+            if defined?(CGIMethods)
+              CGIMethods.parse_query_parameters(query)
+            else
+              request.class.parse_query_parameters(query)
+            end
+          end
         end
       end
 

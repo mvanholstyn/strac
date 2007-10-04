@@ -6,7 +6,9 @@ module Spec
       describe "SpecdocFormatter" do
         before(:each) do
           @io = StringIO.new
-          @formatter = SpecdocFormatter.new(@io)
+          @options = Options.new(StringIO.new, @io)
+          @formatter = @options.create_formatter(SpecdocFormatter)
+          @behaviour = Class.new(::Spec::DSL::Example).describe("My Behaviour")
         end
 
         it "should produce standard summary without pending when pending has a 0 count" do
@@ -20,12 +22,12 @@ module Spec
         end
 
         it "should push context name" do
-          @formatter.add_behaviour(Spec::DSL::Description.new("context"))
+          @formatter.add_behaviour(Spec::DSL::BehaviourDescription.new("context"))
           @io.string.should eql("\ncontext\n")
         end
 
         it "should push failing spec name and failure number" do
-          @formatter.example_failed(DSL::Example.new("spec"), 98, Reporter::Failure.new("c s", RuntimeError.new))
+          @formatter.example_failed(@behaviour.create_example_definition("spec"), 98, Reporter::Failure.new("c s", RuntimeError.new))
           @io.string.should eql("- spec (ERROR - 98)\n")
         end
 
@@ -40,7 +42,7 @@ module Spec
         end
 
         it "should push passing spec name" do
-          @formatter.example_passed(DSL::Example.new("spec"))
+          @formatter.example_passed(@behaviour.create_example_definition("spec"))
           @io.string.should eql("- spec\n")
         end
 

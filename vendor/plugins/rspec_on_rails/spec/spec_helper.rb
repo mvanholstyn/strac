@@ -39,3 +39,10 @@ class Proc
     lambda { self.call }.should_not raise_error
   end
 end
+
+ActionController::Routing::Routes.draw do |map|
+  map.resources :rspec_on_rails_specs
+  map.connect 'custom_route', :controller => 'custom_route_spec', :action => 'custom_route'
+  map.connect ":controller/:action/:id"
+end
+

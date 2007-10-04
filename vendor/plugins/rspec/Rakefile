@@ -11,7 +11,7 @@ require "pre_commit"
 
 # Some of the tasks are in separate files since they are also part of the website documentation
 load File.dirname(__FILE__) + '/rake_tasks/examples.rake'
-load File.dirname(__FILE__) + '/rake_tasks/examples_specdoc.rake'
+load File.dirname(__FILE__) + '/rake_tasks/examples_rdoc.rake'
 load File.dirname(__FILE__) + '/rake_tasks/examples_with_rcov.rake'
 load File.dirname(__FILE__) + '/rake_tasks/failing_examples_with_html.rake'
 load File.dirname(__FILE__) + '/rake_tasks/verify_rcov.rake'
@@ -32,16 +32,11 @@ task :default => [:verify_rcov]
 
 desc "Run all specs"
 Spec::Rake::SpecTask.new do |t|
-  t.spec_files = FileList[
-    'spec/**/*_spec.rb',
-    '../RSpec.tmbundle/Support/spec/*_spec.rb'
-    # TODO: get these in too - need to fix coverage
-    # '../spec_ui/spec/**/*_spec.rb'
-  ]
+  t.spec_files = FileList['spec/**/*_spec.rb']
   t.spec_opts = ['--options', 'spec.opts']
   t.rcov = true
   t.rcov_dir = '../doc/output/coverage'
-  t.rcov_opts = ['--exclude', 'spec\/spec,bin\/spec,examples']
+  t.rcov_opts = ['--exclude', 'spec\/spec,bin\/spec,examples,\/var\/lib\/gems']
 end
 
 desc "Run all translated specs"
@@ -81,9 +76,7 @@ rd = Rake::RDocTask.new do |rdoc|
 end
 
 desc "Generate EXAMPLES.rb"
-task :rdoc do
-  core.rdoc
-end
+task(:rdoc) {core.rdoc}
 
 spec = Gem::Specification.new do |s|
   s.name = PKG_NAME
@@ -177,9 +170,7 @@ task(:pre_commit) {core.pre_commit}
 desc "Build the website, but do not publish it"
 task(:website) {core.website}
 
-task :rdoc_rails do
-  core.rdoc_rails
-end
+task(:rdoc_rails) {core.rdoc_rails}
 
 task :verify_user do
   raise "RUBYFORGE_USER environment variable not set!" unless ENV['RUBYFORGE_USER']
@@ -230,14 +221,6 @@ task :package_tmbundle do
   end
 end
 task :pkg => :package_tmbundle
-
-desc "Package the Spec::Ui gem"
-task :package_spec_ui do
-  Dir.chdir '../spec_ui' do
-    `rake clobber gem`
-  end
-end
-task :pkg => :package_spec_ui
 
 desc "Publish gem+tgz+zip on RubyForge. You must make sure lib/version.rb is aligned with the CHANGELOG file"
 task :publish_packages => [:verify_user, :package] do

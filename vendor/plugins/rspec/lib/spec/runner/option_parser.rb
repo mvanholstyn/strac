@@ -3,7 +3,17 @@ require 'stringio'
 
 module Spec
   module Runner
-    class OptionParser
+    class OptionParser < ::OptionParser
+      class << self
+        def parse(args, err, out)
+          parser = new(err, out)
+          parser.parse(args)
+          parser.options
+        end
+      end
+
+      attr_reader :options
+
       BUILT_IN_FORMATTERS = {
         'specdoc'  => Formatter::SpecdocFormatter,
         's'        => Formatter::SpecdocFormatter,
@@ -19,7 +29,7 @@ module Spec
         'b'        => Formatter::FailingBehavioursFormatter
       }
 
-      COMMAND_LINE = {
+      OPTIONS = {
         :diff =>    ["-D", "--diff [FORMAT]", "Show diff of objects that are expected to be equal when they are not",
                                              "Builtin formats: unified|u|context|c",
                                              "You can also specify a custom differ class",
@@ -45,8 +55,8 @@ module Spec
                                                     " ",
                                                     "Builtin formats: ",
                                                     "progress|p           : Text progress",
-                                                    "specdoc|s            : Behaviour doc as text",
-                                                    "rdoc|r               : Behaviour doc as RDoc",
+                                                    "specdoc|s            : Example doc as text",
+                                                    "rdoc|r               : Example doc as RDoc",
                                                     "html|h               : A nice HTML report",
                                                     "failing_examples|e   : Write all failing examples - input for --example",
                                                     "failing_behaviours|b : Write all failing behaviours - input for --example",
@@ -79,148 +89,142 @@ module Spec
         :help => ["-h", "--help", "You're looking at it"]
       }
 
-      def initialize
+      def initialize(err, out)
+        super()
+        @error_stream = err
+        @out_stream = out
+        @options = Options.new(@error_stream, @out_stream)
+
         @spec_parser = SpecParser.new
         @file_factory = File
+
+        self.banner = "Usage: spec (FILE|DIRECTORY|GLOB)+ [options]"
+        self.separator ""
+        on(*OPTIONS[:diff]) {|diff| @options.parse_diff(diff)}
+        on(*OPTIONS[:colour]) {@options.colour = true}
+        on(*OPTIONS[:example]) {|example| @options.parse_example(example)}
+        on(*OPTIONS[:specification]) {|example| @options.parse_example(example)}
+        on(*OPTIONS[:line]) {|line_number| @options.line_number = line_number.to_i}
+        on(*OPTIONS[:format]) {|format| @options.parse_format(format)}
+        on(*OPTIONS[:require]) {|req| @options.parse_require(req)}
+        on(*OPTIONS[:backtrace]) {@options.backtrace_tweaker = NoisyBacktraceTweaker.new}
+        on(*OPTIONS[:loadby]) {|loadby| @options.loadby = loadby}
+        on(*OPTIONS[:reverse]) {@options.reverse = true}
+        on(*OPTIONS[:timeout]) {|timeout| @options.timeout = timeout.to_f}
+        on(*OPTIONS[:heckle]) {|heckle| @options.parse_heckle(heckle)}
+        on(*OPTIONS[:dry_run]) {@options.dry_run = true}
+        on(*OPTIONS[:options_file]) {|options_file| parse_options_file(options_file)}
+        on(*OPTIONS[:generate_options]) do |options_file|
+        end
+        on(*OPTIONS[:runner]) do |runner|
+          @options.runner_arg = runner
+        end
+        on(*OPTIONS[:drb]) {}
+        on(*OPTIONS[:version]) {parse_version}
+        self.on_tail(*OPTIONS[:help]) {parse_help}
       end
 
-      def create_behaviour_runner(args, err, out, warn_if_no_files)
-        options = parse(args, err, out, warn_if_no_files)
-        # Some exit points in parse (--generate-options, --drb) don't return the options, 
-        # but hand over control. In that case we don't want to continue.
-        return nil unless options.is_a?(Options)
-        options.configure
-        options.behaviour_runner
+      def order!(argv=default_argv, &blk)
+        @argv = argv
+        return if parse_generate_options
+        return if parse_drb
+        
+        super(@argv) do |file|
+          @options.files << file
+          blk.call(file) if blk
+        end
+
+        if @options.line_number
+          set_spec_from_line_number
+        end
+
+        if @options.formatters.empty?
+          @options.create_formatter(Formatter::ProgressBarFormatter)
+        end
+
+        @options
       end
 
-      def parse(args, err, out, warn_if_no_files)
+      protected
+      def parse_options_file(options_file)
+        option_file_args = IO.readlines(options_file).map {|l| l.chomp.split " "}.flatten
+        @argv.push(*option_file_args)
+      end
+
+      def parse_generate_options
+        # Remove the --generate-options option and the argument before writing to file
         options_file = nil
-        args_copy = args.dup
-        options = Options.new(err, out)
-
-        opts = ::OptionParser.new do |opts|
-          opts.banner = "Usage: spec (FILE|DIRECTORY|GLOB)+ [options]"
-          opts.separator ""
-
-          def opts.rspec_on(name, &block)
-            on(*COMMAND_LINE[name], &block)
+        ['-G', '--generate-options'].each do |option|
+          if index = @argv.index(option)
+            @argv.delete_at(index)
+            options_file = @argv.delete_at(index)
           end
-
-          opts.rspec_on(:diff) {|diff| options.parse_diff(diff)}
-
-          opts.rspec_on(:colour) {options.colour = true}
-
-          opts.rspec_on(:example) {|example| options.parse_example(example)}
-
-          opts.rspec_on(:specification) {|example| options.parse_example(example)}
-
-          opts.rspec_on(:line) {|line_number| options.line_number = line_number.to_i}
-
-          opts.rspec_on(:format) {|format| options.parse_format(format)}
-
-          opts.rspec_on(:require) {|req| options.parse_require(req)}
-
-          opts.rspec_on(:backtrace) {options.backtrace_tweaker = NoisyBacktraceTweaker.new}
-
-          opts.rspec_on(:loadby) {|loadby| options.loadby = loadby}
-
-          opts.rspec_on(:reverse) {options.reverse = true}
-
-          opts.rspec_on(:timeout) {|timeout| options.timeout = timeout.to_f}
-
-          opts.rspec_on(:heckle) {|heckle| options.parse_heckle(heckle)}
-          
-          opts.rspec_on(:dry_run) {options.dry_run = true}
-
-          opts.rspec_on(:options_file) do |options_file|
-            return parse_options_file(options_file, out, err, args_copy, warn_if_no_files)
-          end
-
-          opts.rspec_on(:generate_options) do |options_file|
-            options.parse_generate_options(options_file, args_copy, out)
-          end
-
-          opts.rspec_on(:runner) do |runner|
-            options.runner_arg = runner
-          end
-
-          opts.rspec_on(:drb) do
-            return parse_drb(args_copy, out, err, warn_if_no_files)
-          end
-
-          opts.rspec_on(:version) {parse_version(out)}
-
-          opts.on_tail(*COMMAND_LINE[:help]) {parse_help(opts, out)}
         end
-        opts.parse!(args)
-
-        if args.empty? && warn_if_no_files
-          err.puts "No files specified."
-          err.puts opts
-          exit(6) if err == $stderr
+        
+        if options_file
+          write_generated_options(options_file)
+          return true
+        else
+          return false
         end
-
-        if options.line_number
-          set_spec_from_line_number(options, args, err)
+      end
+      
+      def write_generated_options(options_file)
+        File.open(options_file, 'w') do |io|
+          io.puts @argv.join("\n")
         end
-
-        if options.formatters.empty?
-          options.formatters << Formatter::ProgressBarFormatter.new(out)
-        end
-
-        options
+        @out_stream.puts "\nOptions written to #{options_file}. You can now use these options with:"
+        @out_stream.puts "spec --options #{options_file}"
+        @options.generate = true
       end
 
-      def parse_options_file(options_file, out_stream, error_stream, args_copy, warn_if_no_files)
-        # Remove the --options option and the argument before writing to file
-        index = args_copy.index("-O") || args_copy.index("--options")
-        args_copy.delete_at(index)
-        args_copy.delete_at(index)
-
-        new_args = args_copy + IO.readlines(options_file).map {|l| l.chomp.split " "}.flatten
-        return CommandLine.run(new_args, error_stream, out_stream, true, warn_if_no_files)
+      def parse_drb
+        is_drb = false
+        is_drb ||= @argv.delete(OPTIONS[:drb][0])
+        is_drb ||= @argv.delete(OPTIONS[:drb][1])
+        return is_drb ? DrbCommandLine.run(@argv, @error_stream, @out_stream) : nil
       end
 
-      def parse_drb(args_copy, out_stream, error_stream, warn_if_no_files)
-        # Remove the --drb option
-        index = args_copy.index("-X") || args_copy.index("--drb")
-        args_copy.delete_at(index)
-
-        return DrbCommandLine.run(args_copy, error_stream, out_stream, true, warn_if_no_files)
+      def parse_version
+        @out_stream.puts ::Spec::VERSION::DESCRIPTION
+        exit if stdout?
       end
 
-      def parse_version(out_stream)
-        out_stream.puts ::Spec::VERSION::DESCRIPTION
-        exit if out_stream == $stdout
-      end
-
-      def parse_help(opts, out_stream)
-        out_stream.puts opts
-        exit if out_stream == $stdout
+      def parse_help
+        @out_stream.puts self
+        exit if stdout?
       end      
 
-      def set_spec_from_line_number(options, args, err)
-        if options.examples.empty?
-          if args.length == 1
-            if @file_factory.file?(args[0])
-              source = @file_factory.open(args[0])
-              example = @spec_parser.spec_name_for(source, options.line_number)
-              options.parse_example(example)
-            elsif @file_factory.directory?(args[0])
-              err.puts "You must specify one file, not a directory when using the --line option"
-              exit(1) if err == $stderr
+      def set_spec_from_line_number
+        if @options.examples.empty?
+          if @options.files.length == 1
+            if @file_factory.file?(@options.files[0])
+              source = @file_factory.open(@options.files[0])
+              example = @spec_parser.spec_name_for(source, @options.line_number)
+              @options.parse_example(example)
+            elsif @file_factory.directory?(@options.files[0])
+              @error_stream.puts "You must specify one file, not a directory when using the --line option"
+              exit(1) if stderr?
             else
-              err.puts "#{args[0]} does not exist"
-              exit(2) if err == $stderr
+              @error_stream.puts "#{@options.files[0]} does not exist"
+              exit(2) if stderr?
             end
           else
-            err.puts "Only one file can be specified when using the --line option: #{args.inspect}"
-            exit(3) if err == $stderr
+            @error_stream.puts "Only one file can be specified when using the --line option: #{@options.files.inspect}"
+            exit(3) if stderr?
           end
         else
-          err.puts "You cannot use both --line and --example"
-          exit(4) if err == $stderr
+          @error_stream.puts "You cannot use both --line and --example"
+          exit(4) if stderr?
         end
+      end
+
+      def stdout?
+        @out_stream == $stdout
+      end
+
+      def stderr?
+        @error_stream == $stderr
       end
     end
   end

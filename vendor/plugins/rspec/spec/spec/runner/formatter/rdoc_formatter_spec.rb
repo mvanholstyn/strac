@@ -6,8 +6,10 @@ module Spec
       describe "RdocFormatter" do
         before(:each) do
           @io = StringIO.new
-          @formatter = RdocFormatter.new(@io)
-          @formatter.dry_run = true
+          @options = Options.new(StringIO.new, @io)
+          @formatter = @options.create_formatter(RdocFormatter)
+          @options.dry_run = true
+          @behaviour = Class.new(::Spec::DSL::Example).describe("My Behaviour")
         end
 
         it "should produce no summary" do
@@ -21,17 +23,17 @@ module Spec
         end
 
         it "should push out context" do
-          @formatter.add_behaviour(Spec::DSL::Description.new("context"))
+          @formatter.add_behaviour(Spec::DSL::BehaviourDescription.new("context"))
           @io.string.should eql("# context\n")
         end
 
         it "should push out failed spec" do
-          @formatter.example_failed(DSL::Example.new("spec"), 98, nil)
+          @formatter.example_failed(@behaviour.create_example_definition("spec"), 98, nil)
           @io.string.should eql("# * spec [98 - FAILED]\n")
         end
 
         it "should push out spec" do
-          @formatter.example_passed(DSL::Example.new("spec"))
+          @formatter.example_passed(@behaviour.create_example_definition("spec"))
           @io.string.should eql("# * spec\n")
         end
 

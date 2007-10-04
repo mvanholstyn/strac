@@ -1,9 +1,7 @@
-dir = File.dirname(__FILE__)
-
-require File.expand_path("#{dir}/behaviour/render_observer")
-require File.expand_path("#{dir}/behaviour/base")
-require File.expand_path("#{dir}/behaviour/functional")
-require File.expand_path("#{dir}/behaviour/model")
-require File.expand_path("#{dir}/behaviour/controller")
-require File.expand_path("#{dir}/behaviour/helper")
-require File.expand_path("#{dir}/behaviour/view")
+require "spec/rails/dsl/behaviour/render_observer"
+require "spec/rails/dsl/behaviour/rails_example"
+require "spec/rails/dsl/behaviour/model_example"
+require "spec/rails/dsl/behaviour/functional_example"
+require "spec/rails/dsl/behaviour/controller_example"
+require "spec/rails/dsl/behaviour/helper_example"
+require "spec/rails/dsl/behaviour/view_example"

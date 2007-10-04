@@ -1,73 +1,83 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe "the BehaviourFactory" do
-  it "should return a ModelBehaviour when given :behaviour_type => :model" do
-    Spec::DSL::BehaviourFactory.create("name", :behaviour_type => :model) {
-    }.should be_an_instance_of(Spec::Rails::DSL::ModelBehaviour)
+  it "should return a ModelExample when given :behaviour_type => :model" do
+    behaviour = Spec::DSL::BehaviourFactory.create("name", :behaviour_type => :model)
+    behaviour.superclass.should == Spec::Rails::DSL::ModelExample
   end
-  
-  it "should return a ModelBehaviour when given :spec_path => '/blah/spec/models/'" do
-    Spec::DSL::BehaviourFactory.create("name", :spec_path => '/blah/spec/models/blah.rb') {
-    }.should be_an_instance_of(Spec::Rails::DSL::ModelBehaviour)
+
+  it "should return a ModelExample when given :spec_path => '/blah/spec/models/'" do
+    behaviour = Spec::DSL::BehaviourFactory.create("name", :spec_path => '/blah/spec/models/blah.rb')
+    behaviour.superclass.should == Spec::Rails::DSL::ModelExample
   end
-  
-  it "should return a ModelBehaviour when given :spec_path => '\\blah\\spec\\models\\' (windows format)" do
-    Spec::DSL::BehaviourFactory.create("name", :spec_path => '\\blah\\spec\\models\\blah.rb') {
-    }.should be_an_instance_of(Spec::Rails::DSL::ModelBehaviour)
+
+  it "should return a ModelExample when given :spec_path => '\\blah\\spec\\models\\' (windows format)" do
+    behaviour = Spec::DSL::BehaviourFactory.create("name", :spec_path => '\\blah\\spec\\models\\blah.rb')
+    behaviour.superclass.should == Spec::Rails::DSL::ModelExample
   end
-  
-  it "should return a ViewBehaviour when given :behaviour_type => :model" do
-    Spec::DSL::BehaviourFactory.create("name", :behaviour_type => :view) {
-    }.should be_an_instance_of(Spec::Rails::DSL::ViewBehaviour)
+
+  it "should return a RailsExample when given :spec_path => '/blah/spec/foo/' (anything other than controllers, views and helpers)" do
+    behaviour = Spec::DSL::BehaviourFactory.create("name", :spec_path => '/blah/spec/foo/blah.rb')
+    behaviour.superclass.should == Spec::Rails::DSL::RailsExample
   end
-  
-  it "should return a ViewBehaviour when given :spec_path => '/blah/spec/views/'" do
-    Spec::DSL::BehaviourFactory.create("name", :spec_path => '/blah/spec/views/blah.rb') {
-    }.should be_an_instance_of(Spec::Rails::DSL::ViewBehaviour)
+
+  it "should return a RailsExample when given :spec_path => '\\blah\\spec\\foo\\' (windows format)  (anything other than controllers, views and helpers)" do
+    behaviour = Spec::DSL::BehaviourFactory.create("name", :spec_path => '\\blah\\spec\\foo\\blah.rb')
+    behaviour.superclass.should == Spec::Rails::DSL::RailsExample
   end
-  
-  it "should return a ModelBehaviour when given :spec_path => '\\blah\\spec\\views\\' (windows format)" do
-    Spec::DSL::BehaviourFactory.create("name", :spec_path => '\\blah\\spec\\views\\blah.rb') {
-    }.should be_an_instance_of(Spec::Rails::DSL::ViewBehaviour)
+
+  it "should return a ViewExample when given :behaviour_type => :model" do
+    behaviour = Spec::DSL::BehaviourFactory.create("name", :behaviour_type => :view)
+    behaviour.superclass.should == Spec::Rails::DSL::ViewExample
   end
-  
-  it "should return a HelperBehaviour when given :behaviour_type => :helper" do
-    Spec::DSL::BehaviourFactory.create("name", :behaviour_type => :helper) {
-    }.should be_an_instance_of(Spec::Rails::DSL::HelperBehaviour)
+
+  it "should return a ViewExample when given :spec_path => '/blah/spec/views/'" do
+    behaviour = Spec::DSL::BehaviourFactory.create("name", :spec_path => '/blah/spec/views/blah.rb')
+    behaviour.superclass.should == Spec::Rails::DSL::ViewExample
   end
-  
-  it "should return a HelperBehaviour when given :spec_path => '/blah/spec/helpers/'" do
-    Spec::DSL::BehaviourFactory.create("name", :spec_path => '/blah/spec/helpers/blah.rb') {
-    }.should be_an_instance_of(Spec::Rails::DSL::HelperBehaviour)
+
+  it "should return a ModelExample when given :spec_path => '\\blah\\spec\\views\\' (windows format)" do
+    behaviour = Spec::DSL::BehaviourFactory.create("name", :spec_path => '\\blah\\spec\\views\\blah.rb')
+    behaviour.superclass.should == Spec::Rails::DSL::ViewExample
   end
-  
-  it "should return a ModelBehaviour when given :spec_path => '\\blah\\spec\\helpers\\' (windows format)" do
-    Spec::DSL::BehaviourFactory.create("name", :spec_path => '\\blah\\spec\\helpers\\blah.rb') {
-    }.should be_an_instance_of(Spec::Rails::DSL::HelperBehaviour)
+
+  it "should return a HelperExample when given :behaviour_type => :helper" do
+    behaviour = Spec::DSL::BehaviourFactory.create("name", :behaviour_type => :helper)
+    behaviour.superclass.should == Spec::Rails::DSL::HelperExample
   end
-  
-  it "should return a ControllerBehaviour when given :behaviour_type => :controller" do
-    Spec::DSL::BehaviourFactory.create("name", :behaviour_type => :controller) {
-    }.should be_an_instance_of(Spec::Rails::DSL::ControllerBehaviour)
+
+  it "should return a HelperExample when given :spec_path => '/blah/spec/helpers/'" do
+    behaviour = Spec::DSL::BehaviourFactory.create("name", :spec_path => '/blah/spec/helpers/blah.rb')
+    behaviour.superclass.should == Spec::Rails::DSL::HelperExample
   end
-  
-  it "should return a ControllerBehaviour when given :spec_path => '/blah/spec/controllers/'" do
-    Spec::DSL::BehaviourFactory.create("name", :spec_path => '/blah/spec/controllers/blah.rb') {
-    }.should be_an_instance_of(Spec::Rails::DSL::ControllerBehaviour)
+
+  it "should return a ModelExample when given :spec_path => '\\blah\\spec\\helpers\\' (windows format)" do
+    behaviour = Spec::DSL::BehaviourFactory.create("name", :spec_path => '\\blah\\spec\\helpers\\blah.rb')
+    behaviour.superclass.should == Spec::Rails::DSL::HelperExample
   end
-  
-  it "should return a ModelBehaviour when given :spec_path => '\\blah\\spec\\controllers\\' (windows format)" do
-    Spec::DSL::BehaviourFactory.create("name", :spec_path => '\\blah\\spec\\controllers\\blah.rb') {
-    }.should be_an_instance_of(Spec::Rails::DSL::ControllerBehaviour)
+
+  it "should return a ControllerExample when given :behaviour_type => :controller" do
+    behaviour = Spec::DSL::BehaviourFactory.create("name", :behaviour_type => :controller)
+    behaviour.superclass.should == Spec::Rails::DSL::ControllerExample
   end
-  
+
+  it "should return a ControllerExample when given :spec_path => '/blah/spec/controllers/'" do
+    behaviour = Spec::DSL::BehaviourFactory.create("name", :spec_path => '/blah/spec/controllers/blah.rb')
+    behaviour.superclass.should == Spec::Rails::DSL::ControllerExample
+  end
+
+  it "should return a ModelExample when given :spec_path => '\\blah\\spec\\controllers\\' (windows format)" do
+    behaviour = Spec::DSL::BehaviourFactory.create("name", :spec_path => '\\blah\\spec\\controllers\\blah.rb')
+    behaviour.superclass.should == Spec::Rails::DSL::ControllerExample
+  end
+
   it "should favor the :behaviour_type over the :spec_path" do
-    Spec::DSL::BehaviourFactory.create("name", :spec_path => '/blah/spec/models/blah.rb', :behaviour_type => :controller) {
-    }.should be_an_instance_of(Spec::Rails::DSL::ControllerBehaviour)
+    behaviour = Spec::DSL::BehaviourFactory.create("name", :spec_path => '/blah/spec/models/blah.rb', :behaviour_type => :controller)
+    behaviour.superclass.should == Spec::Rails::DSL::ControllerExample
   end
-  
-  it "should create a Spec::DSL::Behaviour if :shared => true" do
+
+  it "should create a Spec::DSL::Example if :shared => true" do
     Spec::DSL::BehaviourFactory.create("name", :spec_path => '/blah/spec/models/blah.rb', :behaviour_type => :controller, :shared => true) {
-    }.should be_an_instance_of(Spec::DSL::Behaviour)
+    }.should be_an_instance_of(Spec::DSL::SharedBehaviour)
   end
 end

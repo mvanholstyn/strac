@@ -6,7 +6,7 @@ module Spec
       class HtmlFormatter < BaseTextFormatter
         include ERB::Util # for the #h method
         
-        def initialize(output)
+        def initialize(options, output)
           super
           @current_behaviour_number = 0
           @current_example_number = 0
@@ -104,7 +104,7 @@ module Spec
         end
 
         def dump_summary(duration, example_count, failure_count, pending_count)
-          if @dry_run
+          if dry_run?
             totals = "This was a dry-run"
           else
             totals = "#{example_count} example#{'s' unless example_count == 1}, #{failure_count} failure#{'s' unless failure_count == 1}"
@@ -121,15 +121,14 @@ module Spec
 
         def html_header 
           <<-EOF
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!DOCTYPE html
-     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
   <title>RSpec results</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Expires" content="-1" />
   <meta http-equiv="Pragma" content="no-cache" />
   <style type="text/css">

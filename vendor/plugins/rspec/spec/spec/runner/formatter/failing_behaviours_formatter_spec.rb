@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../../../spec_helper.rb'
+require File.dirname(__FILE__) + '/../../../spec_helper'
 
 module Spec
   module Runner
@@ -6,11 +6,12 @@ module Spec
       describe "FailingBehavioursFormatter" do
         before(:each) do
           @io = StringIO.new
-          @formatter = FailingBehavioursFormatter.new(@io)
+          @options = Options.new(StringIO.new, @io)
+          @formatter = @options.create_formatter(FailingBehavioursFormatter)
         end
         
         def description(s)
-          Spec::DSL::Description.new(s)
+          Spec::DSL::BehaviourDescription.new(s)
         end
 
         it "should add example name for each failure" do

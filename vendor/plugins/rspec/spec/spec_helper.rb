@@ -1,5 +1,6 @@
 require 'stringio'
 require 'rbconfig'
+require 'tmpdir'
 
 dir = File.dirname(__FILE__)
 lib_path = File.expand_path("#{dir}/../lib")
@@ -8,9 +9,9 @@ $_spec_spec = true # Prevents Kernel.exit in various places
 
 require 'spec'
 require 'spec/mocks'
-require 'hpricot' # Needed to compare generated with wanted HTML
 spec_classes_path = File.expand_path("#{dir}/../spec/spec/spec_classes")
 require spec_classes_path unless $LOAD_PATH.include?(spec_classes_path)
+require File.dirname(__FILE__) + '/../lib/spec/expectations/differs/default'
 
 module Spec
   module Matchers
@@ -44,3 +45,21 @@ module Spec
 end
 
 class NonStandardError < Exception; end
+
+describe "Test::Unit io sink", :shared => true do
+  before do
+    @test_runner_io = StringIO.new
+  end
+
+  after do
+  end
+end
+
+module Custom
+  class BehaviourRunner
+    attr_reader :options, :arg
+    def initialize(options, arg)
+      @options, @arg = options, arg
+    end
+  end  
+end
