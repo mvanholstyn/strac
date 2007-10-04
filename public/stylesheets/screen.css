@@ -447,6 +447,11 @@ th {
 	padding: 1px 0 1px 20px;
 }
 
+.story_card .content .toolbar .comments {
+	background: url(../images/comments.png) no-repeat;
+	padding: 1px 0 1px 20px;
+}
+
 .story_card .content .toolbar .edit {
 	background: url(../images/edit.png) no-repeat;
 	padding: 1px 0 1px 20px;
@@ -539,6 +544,7 @@ ul.statuses li.blue:hover, ul.statuses li.blue.selected {
 
 .comment {
   margin: 2px;
+	width: 80%;
 }
 
 .comment-header {

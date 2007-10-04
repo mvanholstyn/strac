@@ -6,8 +6,5 @@
   <%= form.text_area "content", :rows=>"5", :value=>"" %>
   <p>
     <%= submit_tag "Post Comment" %> 
-    <% if is_rendering_inline_comments %>
-      or <%= close_comments_link %>
-    <% end %>
   </p>
 <% end -%>

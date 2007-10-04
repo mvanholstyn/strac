@@ -2,8 +2,9 @@ page["story_#{@story.id}_nocomments"].hide
 
 if should_render_comment_links
   if is_rendering_inline_comments
-    page["story_#{@story.id}_comments_inline_link"].replace_html :inline=>comments_inline_link
-    page["story_#{@story.id}_comments_popup_link"].replace_html :inline=>comments_popup_link
+    page.select(".story_#{@story.id}_comments_count").each do |element|
+      element.update @story.comments.size
+    end
   elsif is_rendering_popup_comments
     inline_id = "story_#{@story.id}_comments_inline_link"
     inline_link = escape_javascript( comments_inline_link)

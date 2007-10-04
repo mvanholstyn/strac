@@ -1,21 +1,26 @@
 <ul class="toolbar">
   <li>
-    <%= link_to_remote "show", { :url => story_path(@project, @story), :method => :get, 
-	        :before => "if( !toggle_hide_show_with_smart_loading( 'story_#{@story.id}_view', [ 'story_#{@story.id}_edit', 'story_#{@story.id}_time' ] ) ) { return false; }" },
+    <%= link_to_remote "show", { :url => story_path(@story.project, @story), :method => :get, 
+	        :before => "if( !toggle_hide_show_with_smart_loading( 'story_#{@story.id}_view', [ 'story_#{@story.id}_comments', 'story_#{@story.id}_edit', 'story_#{@story.id}_time' ] ) ) { return false; }" },
 	        :class => "show" %>
 	</li>
+	<li>
+    <%= link_to_remote %Q{comments (<span class="story_#{@story.id}_comments_count">#{@story.comments.size}</span>)}, { :url => comments_url(@story.project, @story, :inline => true), :method => :get, 
+	        :before => "if( !toggle_hide_show_with_smart_loading( 'story_#{@story.id}_comments', [ 'story_#{@story.id}_view', 'story_#{@story.id}_edit', 'story_#{@story.id}_time' ] ) ) { return false; }" },
+	        :class => "comments" %>
+  </li>
   <li>
-    <%= link_to_remote "edit", { :url => edit_story_path(@project, @story), :method => :get, 
-	        :before => "if( !toggle_hide_show_with_smart_loading( 'story_#{@story.id}_edit', [ 'story_#{@story.id}_view', 'story_#{@story.id}_time' ], true ) ) { return false; }" },
+    <%= link_to_remote "edit", { :url => edit_story_path(@story.project, @story), :method => :get, 
+	        :before => "if( !toggle_hide_show_with_smart_loading( 'story_#{@story.id}_edit', [ 'story_#{@story.id}_view', 'story_#{@story.id}_comments', 'story_#{@story.id}_time' ], true ) ) { return false; }" },
 	        :class => "edit" %>
 	</li>
 	<li>
-    <%= link_to_remote "time", { :url => time_story_path(@project, @story), :method => :get, 
-    	    :before => "if( !toggle_hide_show_with_smart_loading( 'story_#{@story.id}_time', [ 'story_#{@story.id}_view', 'story_#{@story.id}_edit' ], true ) ) { return false; }"},
+    <%= link_to_remote "time", { :url => time_story_path(@story.project, @story), :method => :get, 
+    	    :before => "if( !toggle_hide_show_with_smart_loading( 'story_#{@story.id}_time', [ 'story_#{@story.id}_view', 'story_#{@story.id}_comments', 'story_#{@story.id}_edit' ], true ) ) { return false; }"},
 	        :class => "time" %>
   </li>
   <li>
-    <%= link_to_remote "destroy", {:url => story_path(@project, @story), :method => :delete, :confirm => 'Are you sure?'}, :class => "destroy" %>
+    <%= link_to_remote "destroy", {:url => story_path(@story.project, @story), :method => :delete, :confirm => 'Are you sure?'}, :class => "destroy" %>
   </li>
 </ul>
 
