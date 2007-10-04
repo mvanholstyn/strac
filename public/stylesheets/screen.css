@@ -11,6 +11,22 @@ body {
 	padding:0;
 }
 
+.clearfix:after {
+	content:".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+.clearfix {display: inline-block;}
+/* Hide from IE Mac \*/
+.clearfix {height: 1%; display:block;}
+/* End hide from IE Mac */
+
+.clear {
+	clear: both;
+}
+
 #wrapper, #comments-wrapper {
 	background:#fff;
 	border:3px solid #f1f1f1;
@@ -277,11 +293,11 @@ label {
 
 }
 
-p img {
+/*p img {
 	float:left;
 	margin:0 10px 0 0;
 }
-
+*/
 blockquote p {
 	font:160% Georgia;
 	color:#aaa;
@@ -414,16 +430,36 @@ th {
   padding: 3px;
 }
 
-.story_card .content .toolbar {
+.story_card .content ul.toolbar {
 	float: right;
+	list-style: none;
+	margin: 0;
+	padding: 0;
 }
 
-.story_card .content .destroy {
-	float: right;
+.story_card .content ul.toolbar li {
+	margin: 0;
+	padding: 0;
+}
+
+.story_card .content .toolbar .show {
+	background: url(../images/show.png) no-repeat;
+	padding: 1px 0 1px 20px;
+}
+
+.story_card .content .toolbar .edit {
+	background: url(../images/edit.png) no-repeat;
+	padding: 1px 0 1px 20px;
+}
+
+.story_card .content .toolbar .time {
+	background: url(../images/time.png) no-repeat;
+	padding: 1px 0 1px 20px;
+}
+
+.story_card .content .toolbar .destroy {
 	background: url(../images/destroy.png) no-repeat;
-	padding-left: 20px;
-	color: red;
-	font-weight: bold;
+	padding: 1px 0 1px 20px;
 }
 
 .story_card .content dl {

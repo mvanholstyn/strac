@@ -13,10 +13,6 @@
 </span>
 
 <%= image_tag "move.gif", :class => 'draggable', :title => "drag to move", :onclick => "Event.stop(event);" %>
-<%= link_to_remote image_tag( 'edit.png', :title => "click to edit" ), :url => edit_story_path(@project, story), :method => :get, 
-	:before => "Event.stop(event); if( !toggle_hide_show_with_smart_loading( 'story_#{story.id}_edit', [ 'story_#{story.id}_view', 'story_#{story.id}_time' ], true ) ) { return false; }" %>
-<%= link_to_remote image_tag( 'time.png', :title => "click to add time entries" ), :url => time_story_path(@project, story), :method => :get, 
-	:before => "Event.stop(event); if( !toggle_hide_show_with_smart_loading( 'story_#{story.id}_time', [ 'story_#{story.id}_view', 'story_#{story.id}_edit' ], true ) ) { return false; }" %>
 
 <b>Points:</b> <span id="story_<%= story.id %>_points" class="inplaceeditor-field"><%= story.points ? h( story.points ) : "&infin;" %></span>
  - <%= "S#{story.id}" %> - <%=h story.summary %>
