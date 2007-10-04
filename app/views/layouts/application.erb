@@ -51,77 +51,79 @@
 		</ul>
 		<% end -%>
 	</div>
+	
+	<div id="innerinnerwrapper">
+  	<% if current_user -%>
+  	<div id="sidebar">
+		
+  		<% if @project and @project.id -%>
+  		<h2><%= @project.name %>: summary</h2>
+  		<table class="project_summary">
+  			<tr>
+  				<th>Total Points:</th>
+  				<td><%= @project.total_points %></td>
+  			</tr>
+  			<tr>
+  				<th>Completed Points:</th>
+  				<td><%= @project.completed_points %></td>
+  			</tr>
+  			<tr>
+  				<th>Remaining Points:</th>
+  				<td><%= @project.remaining_points %></td>
+  			</tr>
+  			<tr>
+  				<th>Completed Iterations:</th>
+  				<td><%= @project.iterations.size %></td>
+  			</tr>
+  			<tr>
+  				<th>Average Velocity:</th>
+  				<td><%= @project.average_velocity.floor %></td>
+  			</tr>
+  			<tr>
+  				<th>Estimated Remaining Iterations:</th>
+  				<td><%= @project.estimated_remaining_iterations.ceil %></td>
+  			</tr>
+  			<tr>
+  				<th>Estimated Completion Date:</th>
+  				<td><%= @project.estimated_completion_date %></td>
+  			</tr>
+  		</table>
 
-	<% if current_user -%>
-	<div id="sidebar">
+  		<h2><%= @project.name %>: iterations</h2>
+  		<ul>
+  			<% for iteration in @project.iterations.find( :all, :order => "start_date DESC" ) -%>
+  			<li>
+  				<%= link_to iteration.name, iteration_path( @project, iteration ) %>
+  				<% if @project.iterations.find_current == iteration -%>
+  					(<%= link_to "current", current_iterations_path( @project ) %>)
+  				<% end -%>
+  			</li>
+  			<% end -%>
+  		</ul>
+  		<% end -%>
 		
-		<% if @project and @project.id -%>
-		<h2><%= @project.name %>: summary</h2>
-		<table class="project_summary">
-			<tr>
-				<th>Total Points:</th>
-				<td><%= @project.total_points %></td>
-			</tr>
-			<tr>
-				<th>Completed Points:</th>
-				<td><%= @project.completed_points %></td>
-			</tr>
-			<tr>
-				<th>Remaining Points:</th>
-				<td><%= @project.remaining_points %></td>
-			</tr>
-			<tr>
-				<th>Completed Iterations:</th>
-				<td><%= @project.iterations.size %></td>
-			</tr>
-			<tr>
-				<th>Average Velocity:</th>
-				<td><%= @project.average_velocity.floor %></td>
-			</tr>
-			<tr>
-				<th>Estimated Remaining Iterations:</th>
-				<td><%= @project.estimated_remaining_iterations.ceil %></td>
-			</tr>
-			<tr>
-				<th>Estimated Completion Date:</th>
-				<td><%= @project.estimated_completion_date %></td>
-			</tr>
-		</table>
-
-		<h2><%= @project.name %>: iterations</h2>
-		<ul>
-			<% for iteration in @project.iterations.find( :all, :order => "start_date DESC" ) -%>
-			<li>
-				<%= link_to iteration.name, iteration_path( @project, iteration ) %>
-				<% if @project.iterations.find_current == iteration -%>
-					(<%= link_to "current", current_iterations_path( @project ) %>)
-				<% end -%>
-			</li>
-			<% end -%>
-		</ul>
-		<% end -%>
+  		<h2 style="display: inline;">your projects</h2>
+  		<% restrict_to :crud_projects do -%>
+  		(<%= link_to "create", new_project_path %>)
+  		<% end -%>
+  		<ul>
+  			<% for project in ProjectPermission.find_all_projects_for_user( current_user ) -%>
+  			<li>
+  			  <%= link_to project.name, project_path( project ) %>
+  			  <% restrict_to :crud_projects do -%>	
+  			    (<%= link_to "edit", edit_project_path( project ) %>)
+  			  <% end -%>
+  			</li>
+  			<% end -%>
+  		</ul>
+  	</div>
+  	<% end -%>
 		
-		<h2 style="display: inline;">your projects</h2>
-		<% restrict_to :crud_projects do -%>
-		(<%= link_to "create", new_project_path %>)
-		<% end -%>
-		<ul>
-			<% for project in ProjectPermission.find_all_projects_for_user( current_user ) -%>
-			<li>
-			  <%= link_to project.name, project_path( project ) %>
-			  <% restrict_to :crud_projects do -%>	
-			    (<%= link_to "edit", edit_project_path( project ) %>)
-			  <% end -%>
-			</li>
-			<% end -%>
-		</ul>
+  	<div id="content">
+  		<%= yield %>
+  	</div>
 	</div>
-	<% end -%>
-		
-	<div id="content">
-		<%= yield %>
-	</div>
-		
+	
 	<div id="footer">
 		&copy;2007 strac
 	</div>

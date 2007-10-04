@@ -2,8 +2,8 @@
   <div id="story_<%= story.id %>_mini" class="header" width="100%" onclick="if( toggle_hide_show_with_smart_loading( 'story_<%= story.id %>_view', [ 'story_<%= story.id %>_comments', 'story_<%= story.id %>_edit', 'story_<%= story.id %>_time' ], false, event ) ) { <%= remote_function :url => story_path(@project, story), :method => :get %>; }">
 	  <%= render :partial => 'stories/mini_story', :locals => { :story => story } %>
   </div>
-  <div id="story_<%= story.id %>_view" class="content" style="display:none;"></div>
+  <div id="story_<%= story.id %>_view" class="content clearfix" style="display:none;"></div>
   <div id="story_<%= story.id %>_edit" class="content" style="display:none;"></div>
-  <div id="story_<%= story.id %>_time" class="content" style="display:none;"></div>
+  <div id="story_<%= story.id %>_time" class="content clearfix" style="display:none;"></div>
   <div id="story_<%= story.id %>_comments" class="content" style="display:none;"></div>
 </div>

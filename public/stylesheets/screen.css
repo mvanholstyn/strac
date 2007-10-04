@@ -50,6 +50,10 @@ body {
 	padding:20px;
 }
 
+#innerinnerwrapper {
+	position:relative;
+}
+
 #header input {
 	width:150px;
 	padding:5px;
@@ -184,8 +188,10 @@ body {
 }
 
 #sidebar {
+	position: absolute;
+	right: 0;
+	top: 0;
 	width:250px;
-	float:right;
 	padding:10px 0 0 20px;
 	background:url(../images/sidebar.jpg) top left no-repeat;
 }
@@ -223,14 +229,8 @@ body {
 	border-bottom:1px solid #ccc;
 }
 
-
 #content {
 	margin:0 290px 0 0px;
-	padding:20px 0 0 20px;
-}
-
-#contentnorightbar {
-	margin:0 0 0 240px;
 	padding:20px 0 0 20px;
 }
 
@@ -272,16 +272,8 @@ h3 {
 	line-height:25px;
 	padding-left: 15px;
 }
+
 #content ul span {
-	color:#444;
-}
-#contentnorightbar ul {
-	margin:15px 0 15px 20px;
-	line-height:25px;
-	padding:15px 0;
-	color:#79B933;
-}
-#contentnorightbar ul span {
 	color:#444;
 }
 
@@ -379,6 +371,7 @@ th {
 #footer {
 	clear: both;
 	border-top: 1px solid #eee;
+	margin-top: 10px;
 	padding-top: 10px;
 	text-align: center;
 	font-size: 0.8em;
