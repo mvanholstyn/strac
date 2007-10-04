@@ -348,6 +348,7 @@ th {
 
 .draggable {
   cursor: move;
+	vertical-align: middle;
 }
 
 .auto_complete_results ul {
@@ -409,6 +410,14 @@ th {
 .story_card .content {
 	position: relative;
   padding: 3px;
+}
+
+.story_card.even .content {
+	border-top: 1px solid #d3d3d3;
+}
+
+.story_card.odd .content {
+	border-top: 1px solid #f5f5f5;
 }
 
 .story_card .content ul.toolbar {
