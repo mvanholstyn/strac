@@ -18,6 +18,8 @@ set :deploy_to, "/home/mvanholstyn/websites/strac.lotswholetime.com"
 # This application does not have staging
 set(:rails_env, :production)
 
+set(:user, Etc.getlogin)
+
 namespace :deploy do
   # This application is not on mongrel...
   desc "Start apache"
