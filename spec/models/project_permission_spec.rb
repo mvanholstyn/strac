@@ -4,7 +4,7 @@ describe ProjectPermission, "with no specified attributes" do
   before do
     @project_permission = ProjectPermission.new
   end
-
+  
   it "should be valid" do
     @project_permission.should be_valid
   end

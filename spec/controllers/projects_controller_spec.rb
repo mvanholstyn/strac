@@ -1,12 +1,12 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe ProjectsController, "user without 'crud_projects' privileges" do
-  before do
-    # @user = generate_user_without_any_privileges
-    # login_as @user
-    # @user.has_privilege?(:user).should_not be_true
-    # @project = projects(:project1)
-  end
+  # before do
+  #   # @user = generate_user_without_any_privileges
+  #   # login_as @user
+  #   # @user.has_privilege?(:user).should_not be_true
+  #   # @project = projects(:project1)
+  # end
   
   # TODO - there is an issue with calling these w/o permissions. Perhaps in LWT auth?
   it "redirects to the dashboard path on index" 
@@ -14,14 +14,14 @@ describe ProjectsController, "user without 'crud_projects' privileges" do
   #   get :index
   #   response.should redirect_to(dashboard_path)
   # end
-
+  
   # TODO - there is an issue with calling these w/o permissions. Perhaps in LWT auth?
   it "redirects to the dashboard path on new" 
   # do
   #   get :new
   #   response.should redirect_to(dashboard_path)
   # end
-
+  
   it "redirects to the dashboard path on show" 
   # do
   #   get :show, :id => @project.id
@@ -136,12 +136,12 @@ describe ProjectsController, "#create - user with proper privileges to create a 
 end
 
 describe ProjectsController, "#create - user without the proper privileges to create a project" do
-  before do
-    @user = generate_user_without_the_proper_privileges_to_create_a_project
-    login_as @user
-    @old_count = Project.count
-    post( :create, :project => { :name => '' } )
-  end
+  # before do
+  #   @user = generate_user_without_the_proper_privileges_to_create_a_project
+  #   login_as @user
+  #   @old_count = Project.count
+  #   post( :create, :project => { :name => '' } )
+  # end
 
   # TODO - i believe this to be a failure with LWT auth and how it handles redirects
   it "redirect to the dashboard_path" #do

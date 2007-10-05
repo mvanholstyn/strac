@@ -1,10 +1,9 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe "User without privileges" do
-  controller_name "comments"
+describe CommentsController, "User without privileges" do
   fixtures :users, :groups
 
-  before(:each) do    
+  before do    
     @project_id = '1' 
     @story_id = '2'
 
@@ -34,11 +33,10 @@ describe "User without privileges" do
 end
 
 
-describe "CommentsController listing comments as a User with privilege user" do
-  controller_name "comments"
+describe CommentsController, "listing comments as a User with privilege user" do
   fixtures :users, :groups, :groups_privileges, :privileges
   
-  before(:each) do    
+  before do    
     @project_id = '1' 
     @story_id = '2'
     
@@ -77,11 +75,10 @@ describe "CommentsController listing comments as a User with privilege user" do
 end
 
 
-describe "CommentsController creating comments as a User with privilege user" do
-  controller_name "comments"
+describe CommentsController, "creating comments as a User with privilege user" do
   fixtures :users, :groups, :groups_privileges, :privileges
   
-  before(:each) do    
+  before do    
     @project_id = '1' 
     @story_id = '2'
     
@@ -113,6 +110,4 @@ describe "CommentsController creating comments as a User with privilege user" do
     response.should render_template("create")
   end
   
-  it "should fail to create a comment"
- 
 end
