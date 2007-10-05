@@ -1,4 +1,8 @@
 class Generate
+
+  def self.active_user(email, attributes={})
+    user email, attributes.merge(:active=>true)
+  end
   
   def self.activity(action, attributes={})
     raise ArgumentError, "requires actor and affected" unless attributes[:actor] && attributes[:affected]
