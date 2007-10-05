@@ -1,17 +1,20 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-
 describe Iteration do
-  before(:each) do
+  before do
     @iteration = Iteration.new
   end
 
-  it "should be valid" do
+  it "is valid with a name, project_id, start_date and end_date" do
     @iteration.name = "Iteration 1"
     @iteration.project_id = 1
     @iteration.start_date = Date.today
     @iteration.end_date = Date.today + 1
     @iteration.should be_valid
+  end
+
+  it "has many stories ordered by position" do
+    assert_association Iteration, :has_many, :stories, Story, :order => :position
   end
 
   it "should always have a start date" do
@@ -41,12 +44,10 @@ describe Iteration do
     @iteration.budget = 25
     @iteration.budget.should == 25
   end
-
 end
 
-
-describe "Iterations" do
-  before(:each) do
+describe Iteration do
+  before do
     Iteration.destroy_all
     Story.destroy_all
     @first_iteration = Iteration.create!( :project_id => 1, :start_date => Date.today, :end_date => Date.today + 7, :name => "Iteration 1" )
@@ -69,10 +70,10 @@ describe "Iterations" do
   end
 end
 
-describe "Iteration with no stories" do
+describe Iteration, "with no stories" do
   fixtures :statuses
 
-  before(:each) do
+  before do
     Iteration.destroy_all
     Story.destroy_all
     @iteration = Iteration.create!(:project_id => 1, :start_date => Date.today, :end_date => Date.today+1, :budget => 25, :name => "Iteration 1")
@@ -86,7 +87,7 @@ end
 describe "Iteration with stories" do
   fixtures :statuses
 
-  before(:each) do
+  before do
     Iteration.destroy_all
     Story.destroy_all
     @iteration = Iteration.create!(:project_id => 1, :start_date => Date.today, :end_date => Date.today+1, :budget => 25, :name => "Iteration 1")

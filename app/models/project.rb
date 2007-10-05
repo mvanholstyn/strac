@@ -26,6 +26,10 @@ class Project < ActiveRecord::Base
     end
   end
   
+  def iterations_ordered_by_start_date
+    iterations.find(:all, :order => :start_date)
+  end
+  
   def total_points
     stories.sum( :points, :conditions => [ "status_id NOT IN (?) OR status_id IS NULL", Status.find( :all, :conditions => [ "name IN (?)", [ "rejected" ] ] ).map( &:id) ] ) || 0
   end
@@ -59,5 +63,13 @@ class Project < ActiveRecord::Base
       :conditions => ["created_at >= ?",  Date.today - days ],
       :order => "created_at DESC"
     )
+  end
+
+  def backlog_iteration
+    iterations.build(:name => "Backlog")
+  end
+  
+  def backlog_stories
+    stories.find_backlog(:order => :position)
   end
 end

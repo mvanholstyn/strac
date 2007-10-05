@@ -27,8 +27,6 @@ describe Project, "#new with name attribute" do
 end
 
 describe Project, "recent_activities" do
-  fixtures :users
-  
   before do
     @project = Project.create :name=>"Project w/Activities"
     
@@ -63,6 +61,50 @@ describe Project, "recent_activities" do
     @activities = @project.recent_activities(1.week)
     @activities.should == [@activity1, @activity2, @activity3, @activity4]
   end
+end
 
+describe Project, "iterations_ordered_by_start_date" do
+  before do
+    @project = Generate.project "ProjectA"
+    @iteration1 = (Generate.iteration "Iteration5", :project => @project, :start_date => Date.today - 3.weeks)
+    @iteration3 = (Generate.iteration "Iteration5", :project => @project, :start_date => Date.today - 1.week)
+    @iteration2 = (Generate.iteration "Iteration5", :project => @project, :start_date => Date.today - 2.weeks)
+    @project.iterations = [ @iteration1, @iteration3, @iteration2 ]
+    @project.save!
+  end
   
+  it "finds all iterations ordered by their start date" do
+    @project.iterations_ordered_by_start_date.should == [ @iteration1, @iteration2, @iteration3 ]
+  end
+end
+
+describe Project, "#backlog_stories" do
+  before do
+    @project = Generate.project "ProjectA"
+    @iteration = Generate.iteration "Iteration1", :project => @project
+    
+    @story1 = Generate.story "story1", :project => @project
+    @story2 = Generate.story "story2", :project => @project
+    @story3 = Generate.story "story3", :project => @project ; @story3.move_higher #acts_as_list
+    @story4 = Generate.story "story4", :project => @project, :iteration => @iteration
+  end
+  
+  it "finds all of the project not assigned to an iteration ordered by position" do
+    @project.backlog_stories.should == [ @story1, @story3, @story2 ]
+  end
+end
+
+describe Project, "#backlog_iteration" do
+  setup do
+    @project = Generate.project "ProjectA"
+    @backlog = @project.backlog_iteration
+  end
+  
+  it "returns a new Iteration" do
+    @backlog.new_record?.should be_true
+  end
+  
+  it "returns an Iteration named 'Backlog'" do
+    @backlog.name.should == "Backlog"
+  end
 end
