@@ -188,7 +188,8 @@ body {
 }
 
 #sidebar {
-	float: right;
+	position: absolute;
+/*	float: right;*/
 	right: 0;
 	top: 0;
 	width:250px;
