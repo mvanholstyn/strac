@@ -70,4 +70,12 @@ class Story < ActiveRecord::Base
       find :all, :conditions => { :iteration_id => nil }
     end
   end
+  
+  def complete?
+    status && (status.name =~ /complete/ || status.name =~ /rejected/)
+  end
+  
+  def incomplete?
+    !complete?
+  end
 end

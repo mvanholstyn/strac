@@ -99,3 +99,37 @@ describe "Reordering stories" do
   end
 
 end
+
+describe Story, "complete" do
+  fixtures :statuses
+  
+  it "is incomplete if it doesnot have a status" do
+    story = Story.new
+    story.should be_incomplete
+  end
+  
+  it "is incomplete if its status is defined" do
+    story = Story.new :status => statuses(:defined)
+    story.should be_incomplete
+  end
+  
+  it "is incomplete if its status is in progress" do
+    story = Story.new :status => statuses(:inprogress)
+    story.should be_incomplete
+  end
+  
+  it "is complete if its status is complete" do
+    story = Story.new :status => statuses(:complete)
+    story.should be_complete
+  end
+  
+  it "is complete if its status is rejected" do
+    story = Story.new :status => statuses(:rejected)
+    story.should be_complete
+  end
+  
+  it "is incomplete if its status is in blocked" do
+    story = Story.new :status => statuses(:blocked)
+    story.should be_incomplete
+  end
+end
