@@ -25,30 +25,48 @@ end
 describe IterationPresenter, "#show?" do
   it "returns true when the iteration's end date is greater then or equal to today's dates" do
     build_iteration_presenter
+    
     @iteration.should_receive(:end_date).and_return(Date.today)
-    @iteration_presenter.show?.should == true
+    @iteration_presenter.should be_show
 
     build_iteration_presenter
     @iteration.should_receive(:end_date).and_return(Date.today+1.week)
-    @iteration_presenter.show?.should == true
+    @iteration_presenter.should be_show
 
     build_iteration_presenter
     @iteration.should_receive(:end_date).and_return(Date.today+1.year)
-    @iteration_presenter.show?.should == true
+    @iteration_presenter.should be_show
   end
   
   it "returns false when the iteratin's end date is less then today's date" do
     build_iteration_presenter
+    @iteration.stub!(:stories).and_return([])
     @iteration.should_receive(:end_date).and_return(Date.today-1)
-    @iteration_presenter.show?.should == false
+    @iteration_presenter.should_not be_show
 
     build_iteration_presenter
+    @iteration.stub!(:stories).and_return([])
     @iteration.should_receive(:end_date).and_return(Date.today-1.week)
-    @iteration_presenter.show?.should == false
+    @iteration_presenter.should_not be_show
 
     build_iteration_presenter
+    @iteration.stub!(:stories).and_return([])
     @iteration.should_receive(:end_date).and_return(Date.today-1.year)
-    @iteration_presenter.show?.should == false
+    @iteration_presenter.should_not be_show
+  end
+  
+  it "returns false when the iteratin's end date is less then today's date and all stories are complete?" do
+    build_iteration_presenter
+    @iteration.stub!(:stories).and_return([stub("story", :incomplete? => false)])
+    @iteration.should_receive(:end_date).and_return(Date.today-1)
+    @iteration_presenter.should_not be_show
+  end
+  
+  it "returns true when the iteratin's end date is less then today's date and a story is incomplete?" do
+    build_iteration_presenter
+    @iteration.stub!(:stories).and_return([stub("story", :incomplete? => true)])
+    @iteration.should_receive(:end_date).and_return(Date.today-1)
+    @iteration_presenter.should be_show
   end
 end
 
