@@ -1,35 +1,19 @@
-<% iterations.each do |iteration| -%>
-  <table width="100%">
-    <tr>
-      <td>
-				<%= render :partial => 'iterations/header', :locals => { :iteration => iteration } %>
-      </td>
-      <td align="right"><%= link_to_remote "create story", :url => new_story_path( :project_id => @project, :iteration_id => iteration.id ), :method => :get %></td>
-    </tr>
-  </table>
-	<div id="<%= iteration.unique_id %>_story_new"></div>
-  <div id="<%= iteration.unique_id %>" class="story_list">
-    <%= render :partial  => 'stories/list', :locals => { :stories => iteration.stories } %>
-  </div>
-  <br />
-<% end -%>
+<%= render :partial => "iterations/list", :locals => {:iterations=>iterations} %>
 
 <table width="100%">
 	<tr>
 		<td>
      	<b>Backlog</b>
     </td>
-   	<td align="right"><%= link_to_remote "create story", :url => new_story_path( @project ), :method => :get %></td>
+   	<td align="right"><%= link_to_remote "create story", :url => new_story_path( iterations.backlog.project.id ), :method => :get, :html=>{:class=>"create-story"} %></td>
   </tr>
 </table>
-<div id="<%= iterations.backlog.unique_id %>_story_new"></div>
-<div id="<%= iterations.backlog.unique_id %>" class="story_list">
-  <%= render :partial  => 'stories/list', :locals => { :stories => iterations.backlog.stories } %>
-</div>
+
+<%= render :partial => "iterations/stories", :locals=>{:iteration=>iterations.backlog, :stories => iterations.backlog.stories} %>
 
 <% iterations.each_with_backlog do |iteration| -%>
   <%= sortable_element iteration.unique_id,
                        :url => reorder_stories_path(iteration.project), :method => :put,
-                       :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => [iterations.backlog.unique_id] + iterations.map(&:unique_id) -%>
+                       :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => iterations.containment_ids -%>
 <% end -%>
 

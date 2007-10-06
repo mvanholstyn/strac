@@ -1,0 +1,14 @@
+<table width="100%">
+  <tr>
+    <td>
+			<%= render :partial => 'iterations/header', :locals => { :iteration => iteration } %>
+    </td>
+    <td align="right">
+      <%= link_to_remote "create story", 
+        :url => new_story_path(:project_id => iteration.project.id, :iteration_id => iteration.id ), 
+        :method => :get,
+        :html => { :class => "create-story" } %></td>
+  </tr>
+</table>
+<%= render :partial => "iterations/stories", :locals => {:iteration=>iteration, :stories=>iteration.stories} %>
+<br />

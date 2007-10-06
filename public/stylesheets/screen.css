@@ -476,7 +476,8 @@ th {
 }
 
 .iteration .header-stats {
-  float: right; 
+  float: right;
+  white-space: nowrap;
 }
 
 .iteration .header-stats .stat {

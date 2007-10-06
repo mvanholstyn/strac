@@ -35,7 +35,10 @@ describe StoriesController, "user with privileges requesting #index " do
     @backlog_iteration = mock "backlog iteration"
     @project.should_receive(:iterations_ordered_by_start_date).and_return(@iterations)
     @project.should_receive(:backlog_iteration).and_return(@backlog_iteration)
-    IterationsPresenter.should_receive(:new).with(@iterations, @backlog_iteration).and_return(@iterations_presenter)
+    IterationsPresenter.should_receive(:new).with(
+      :iterations => @iterations, 
+      :backlog => @backlog_iteration,
+      :project => @project).and_return(@iterations_presenter)
     get_index
 
     assigns[:iterations].should == @iterations_presenter

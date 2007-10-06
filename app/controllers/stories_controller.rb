@@ -8,8 +8,9 @@ class StoriesController < ApplicationController
   # GET /stories.xml
   def index
     @iterations = IterationsPresenter.new(
-      @project.iterations_ordered_by_start_date,
-      @project.backlog_iteration)
+      :iterations => @project.iterations_ordered_by_start_date,
+      :backlog => @project.backlog_iteration,
+      :project => @project)
     respond_to do |format|
       format.html
       format.xml { render :xml => @project.stories.to_xml }

@@ -1,9 +1,13 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+def build_iteration_presenter
+  @iteration = mock("iteration1")
+  @iteration_presenter = IterationPresenter.new @iteration  
+end
+
 describe IterationPresenter, "#unique_id" do
   before do
-    @iteration = mock("iteration1")
-    @iteration_presenter = IterationPresenter.new @iteration
+    build_iteration_presenter
   end
 
   it "returns a unique string identifer for the passed in iteration using it's numeric id when it is not a new record" do
@@ -18,10 +22,39 @@ describe IterationPresenter, "#unique_id" do
   end
 end
 
+describe IterationPresenter, "#show?" do
+  it "returns true when the iteration's end date is greater then or equal to today's dates" do
+    build_iteration_presenter
+    @iteration.should_receive(:end_date).and_return(Date.today)
+    @iteration_presenter.show?.should == true
+
+    build_iteration_presenter
+    @iteration.should_receive(:end_date).and_return(Date.today+1.week)
+    @iteration_presenter.show?.should == true
+
+    build_iteration_presenter
+    @iteration.should_receive(:end_date).and_return(Date.today+1.year)
+    @iteration_presenter.show?.should == true
+  end
+  
+  it "returns false when the iteratin's end date is less then today's date" do
+    build_iteration_presenter
+    @iteration.should_receive(:end_date).and_return(Date.today-1)
+    @iteration_presenter.show?.should == false
+
+    build_iteration_presenter
+    @iteration.should_receive(:end_date).and_return(Date.today-1.week)
+    @iteration_presenter.show?.should == false
+
+    build_iteration_presenter
+    @iteration.should_receive(:end_date).and_return(Date.today-1.year)
+    @iteration_presenter.show?.should == false
+  end
+end
+
 describe IterationPresenter, "defaults" do
   before do
-    @iteration = mock("iteration1")
-    @iteration_presenter = IterationPresenter.new @iteration
+    build_iteration_presenter
   end
 
   it "delegates #id to the passed in iteration" do
@@ -29,7 +62,6 @@ describe IterationPresenter, "defaults" do
     @iteration.should_receive(:id).and_return(@id)
     @iteration_presenter.id.should == @id
   end
-
 
   it "delegates #start_date to the passed in iteration" do
     @start_date = mock "start date"
