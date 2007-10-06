@@ -32,6 +32,7 @@ class StoriesController < ApplicationController
 
   # GET /stories/new
   def new
+    p params
     @story = @project.stories.build
     @story.iteration_id = params[:iteration_id]
 
