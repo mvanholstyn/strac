@@ -6,7 +6,7 @@ module IterationsHelper
       link_to_remote "show iteration", 
         :url => stories_iteration_path(iteration.project.id, iteration.id), 
         :method => :get, 
-        :loading => "Element.update('notice', 'Loading iteration #{iteration.id}...') ; Element.show('notice')", 
+        :loading => "Element.update('notice', 'Loading #{iteration.name}...') ; Element.show('notice')", 
         :success => "Element.hide('notice')"
     end
   end

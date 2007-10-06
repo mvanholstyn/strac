@@ -11,9 +11,15 @@ describe BacklogIterationPresenter, "defaults" do
   end
 
   it "delegates #project to the passed in iteration" do
-    @project = mock "start date"
+    @project = mock "project"
     @iteration.should_receive(:project).and_return(@project)
     @backlog.project.should == @project
+  end
+
+  it "delegates #name to the passed in iteration" do
+    @name = mock "name"
+    @iteration.should_receive(:name).and_return(@name)
+    @backlog.name.should == @name
   end
   
   it "returns 'backlog' for #id" do
@@ -45,12 +51,12 @@ describe BacklogIterationPresenter, "#unique_id" do
   end
 end
 
-describe BacklogIterationPresenter, "#show?" do
+describe BacklogIterationPresenter, "display" do
   before do
     build_backlog_iteration
   end
 
-  it "returns 'false'" do
-    @backlog.show?.should == false
+  it "is shown" do
+    @backlog.should be_show
   end
 end

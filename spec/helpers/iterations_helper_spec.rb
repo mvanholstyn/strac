@@ -9,11 +9,12 @@ describe IterationsHelper, "#display_stories_list_for_iteration given an iterati
     @iteration.should_receive(:project).and_return(@project)
     @project.stub!(:id).and_return(1)
     @iteration.stub!(:id).and_return(2)
+    @iteration.stub!(:name).and_return("Iteration 1")
     self.should_receive(:link_to_remote).with(
       "show iteration", 
       :url => stories_iteration_path(@project.id, @iteration.id),
       :method => :get, 
-      :loading => "Element.update('notice', 'Loading iteration #{@iteration.id}...') ; Element.show('notice')", 
+      :loading => "Element.update('notice', 'Loading #{@iteration.name}...') ; Element.show('notice')", 
       :success => "Element.hide('notice')"
     ).and_return("REMOTE LINK")
 

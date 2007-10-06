@@ -1,6 +1,6 @@
 class BacklogIterationPresenter < PresentationObject
   def initialize(iteration)
-    delegate :project, :to => iteration
+    delegate :name, :project, :to => iteration
     
     declare :id do
       "backlog"
@@ -11,7 +11,7 @@ class BacklogIterationPresenter < PresentationObject
     end
     
     declare :show? do
-      false
+      true
     end
     
     declare :stories do
