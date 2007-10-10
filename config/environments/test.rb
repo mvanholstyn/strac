@@ -18,4 +18,7 @@ config.action_controller.perform_caching             = false
 # ActionMailer::Base.deliveries array.
 config.action_mailer.delivery_method = :test
 
+# Disable raising errors when mass-assigning to a protected attribute
+config.active_record.whiny_protected_attributes = false 
+
 require 'ruby-debug'
