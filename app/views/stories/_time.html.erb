@@ -1,4 +1,4 @@
-<%= render :partial => "toolbar" %>
+<%= render :partial => "toolbar", :locals => { :story => story } %>
 
 <div id="<%= "story_#{@story.id}_time_new" %>">
 	<%= render :partial => "time_form" %>

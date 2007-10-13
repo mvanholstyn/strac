@@ -53,7 +53,6 @@ describe CommentsController, "listing comments as a User with privilege user" do
     response.should be_success
     
     assigns[:comments].should == "comments"
-    assigns[:is_rendering_inline_comments].should == false
   end
   
   it "should should list comments with is rendering popup comments as false" do
@@ -61,7 +60,6 @@ describe CommentsController, "listing comments as a User with privilege user" do
     response.should be_success
     
     assigns[:comments].should == "comments"
-    assigns[:is_rendering_inline_comments].should == false
   end
   
   it "should should list comments inline" do

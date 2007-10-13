@@ -1,26 +1,12 @@
 page["story_#{@story.id}_nocomments"].hide
 
 if should_render_comment_links
-  if is_rendering_inline_comments
-    page.select(".story_#{@story.id}_comments_count").each do |element|
-      element.update @story.comments.size
-    end
-  elsif is_rendering_popup_comments
-    inline_id = "story_#{@story.id}_comments_inline_link"
-    inline_link = escape_javascript( comments_inline_link)
-    page << "window.opener.document.getElementById('#{inline_id}').innerHTML='#{inline_link}';";
-
-    popup_id = "story_#{@story.id}_comments_popup_link"
-    popup_link = escape_javascript( comments_popup_link )
-    page << "window.opener.document.getElementById('#{popup_id}').innerHTML='#{popup_link}';"  
-
-    raw_comment = controller.send(:render_to_string, :partial=>'show.html.erb', :locals=>{:comment=>@comment} )
-    comment = escape_javascript( raw_comment)
-    page << "new Insertion.Bottom(window.opener.document.getElementById('story_#{@story.id}_comments_list'), '#{comment}');"
+  page.select(".story_#{@story.id}_comments_count").each do |element|
+    element.update @story.comments.size
   end
 end
 
 page.insert_html :bottom, "story_#{@story.id}_comments_list", :partial=>'show', :locals=>{:comment=>@comment}
 
 # regenerate a fresh form
-page["story_#{@story.id}_new_comment"].replace_html :partial => 'new'
+page["story_#{@story.id}_new_comment"].replace_html :partial => 'new', :locals => { :comment => @comment, :story => @story }

@@ -55,7 +55,7 @@ module Spec
           register_verify_after_each
           expect_render_mock_proxy.stub!(:render, :expected_from => caller(1)[0]).with(opts)
         end
-  
+
         def verify_rendered # :nodoc:
           expect_render_mock_proxy.rspec_verify
         end

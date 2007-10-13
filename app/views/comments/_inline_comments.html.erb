@@ -1,6 +1,4 @@
-<%= render :partial => "stories/toolbar" %>
-
-<div id="story_<%= @story.id %>_inline_comments">
+<div id="story_<%= story.id %>_inline_comments">
   <h3>Comments</h3>
-  <%= render :partial=>"comments/comments" %>
+  <%= render :partial=>"comments/comments", :locals => { :story => story } %>
 </div>

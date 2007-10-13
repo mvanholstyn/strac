@@ -46,7 +46,7 @@ class CommentsController < ApplicationController
   end
   
   def initialize_params
-    @is_rendering_inline_comments = params['inline'] =~ /true/ ? true : false
+    @is_rendering_inline_comments = true
     true
   end
 end

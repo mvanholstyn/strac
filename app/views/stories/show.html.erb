@@ -1,5 +1,5 @@
 <div class="story">
   <h2><%= @story.summary %></h2>
 
-  <%= render :partial=>"show" %>
+  <%= render :partial=>"show", :locals => { :story => @story } %>
 </div>

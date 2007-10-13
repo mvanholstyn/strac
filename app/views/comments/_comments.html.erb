@@ -1,13 +1,13 @@
-<div id="story_<%= @story.id %>_nocomments">
- <% if @comments.size == 0 %>
+<div id="story_<%= story.id %>_nocomments">
+ <% if story.comments.size == 0 %>
   There are currently no comments.
   <% end %>
  </div>
 
-<div id="story_<%= @story.id %>_comments_list" class="comments_content">	
-  <%= render :partial => 'comments/list' %>
+<div id="story_<%= story.id %>_comments_list" class="comments_content">	
+  <%= render :partial => 'comments/list', :locals => { :comments => story.comments } %>
 </div>
 
-<div id="story_<%= @story.id %>_new_comment">
-  <%= render :partial=>"comments/new" %>
+<div id="story_<%= story.id %>_new_comment">
+  <%= render :partial=>"comments/new", :locals => { :story => story } %>
 </div>

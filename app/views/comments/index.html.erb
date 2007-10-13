@@ -1,5 +1,5 @@
 <div class="section">
   <h2>Comments for "<%= @story.summary %>"</h2>
 
-  <%= render :partial => 'comments' %>
+  <%= render :partial => 'comments/comments', :locals => { :story => @story } %>
 </div>

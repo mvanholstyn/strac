@@ -11,12 +11,7 @@ Story "User Login", %|
        @user = Generate.user("bob@jones.com")
     end
     When "they try to login" do
-      get "/users/login"
-      submit_form "login_form" do |form|
-        form.user.email_address = @user.email_address
-        form.user.password = "Invalid password!"
-      end
-      response.should be_success
+      try_to_login
     end
     Then "they see an error" do
       response.should have_tag("#error")

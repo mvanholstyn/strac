@@ -4,7 +4,10 @@ ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'spec/rails'
 require File.expand_path(File.dirname(__FILE__) + "/../test/helpers/assertions")
-require File.expand_path(File.dirname(__FILE__) + "/../spec/spec_helpers/model_generation")
+
+Dir[File.expand_path(File.dirname(__FILE__) + "/../spec/spec_helpers/*.rb")].each do |file|
+  require file
+end
 
 Spec::Runner.configure do |config|
   config.use_transactional_fixtures = true
@@ -46,4 +49,13 @@ end
 module Spec::DSL::Behaviour
   alias_method :they, :it
   alias_method :is, :it
+end
+
+def stub(name, attrs={})
+  mock = mock(name)
+  returning mock do |mock|
+    attrs.each_pair do |key, val|
+      mock.stub!(key).and_return(val)
+    end
+  end
 end

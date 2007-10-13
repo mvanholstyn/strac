@@ -412,15 +412,15 @@ th {
   padding: 3px;
 }
 
-.story_card.even .content {
-	border-top: 1px solid #d3d3d3;
+.story_card.even .content ul.toolbar {
+  border-top: 1px solid #d3d3d3;
 }
 
-.story_card.odd .content {
-	border-top: 1px solid #f5f5f5;
+.story_card.odd .content ul.toolbar {
+  border-top: 1px solid #f5f5f5;
 }
 
-#content .story_card .content ul.toolbar {
+#content .story_card ul.toolbar {
 	float: both;
 	list-style: none;
 	margin: 0;
@@ -429,7 +429,7 @@ th {
 	line-height: 18px;
 }
 
-.story_card .content ul.toolbar li {
+.story_card ul.toolbar li {
 	margin: 0;
 	padding: 0;
 	display :inline;
@@ -440,24 +440,29 @@ th {
 	padding: 1px 0 1px 20px;
 }
 
-.story_card .content .toolbar .comments {
+.story_card .toolbar .comments {
 	background: url(../images/comments.png) no-repeat;
 	padding: 1px 0 1px 20px;
 }
 
-.story_card .content .toolbar .edit {
+.story_card .toolbar .edit {
 	background: url(../images/edit.png) no-repeat;
 	padding: 1px 0 1px 20px;
 }
 
-.story_card .content .toolbar .time {
+.story_card .toolbar .time {
 	background: url(../images/time.png) no-repeat;
 	padding: 1px 0 1px 20px;
 }
 
-.story_card .content .toolbar .destroy {
+.story_card .toolbar .destroy {
 	background: url(../images/destroy.png) no-repeat;
 	padding: 1px 0 1px 20px;
+}
+
+.story_card .toolbar .permalink {
+  background: url(../images/anchor.png) no-repeat;
+  padding: 1px 0 1px 20px; 
 }
 
 .story_card .content dl {
