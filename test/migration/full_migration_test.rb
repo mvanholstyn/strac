@@ -86,7 +86,7 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "inviter_id", :integer
         t.column "recipient", :string
         t.column "project_id", :integer
-        t.column "kind", :string
+        t.column "code", :string
         t.column "created_at", :datetime
         t.column "updated_at", :datetime
       end

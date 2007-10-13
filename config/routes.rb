@@ -12,7 +12,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :companies
   map.resources :users
   map.resources :projects do |project_map|
-    project_map.resources :invitations, :name_prefix => nil
+    project_map.resources :invitations
     project_map.resources :iterations, :name_prefix => nil, 
                           :collection => { :current => :get },
                           :member => { :stories => :get }
@@ -24,6 +24,8 @@ ActionController::Routing::Routes.draw do |map|
     end
   end
   map.textile_preview 'textile/preview', :controller => 'textile', :action => 'preview'
-  map.dashboard '', :controller => "dashboard"
   map.connect "logged_exceptions/:action/:id", :controller => "logged_exceptions"
+
+  map.root :controller => "dashboard"
+  map.dashboard "", :controller => "dashboard"
 end

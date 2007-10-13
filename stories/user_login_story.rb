@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + "/all")
+require File.expand_path(File.dirname(__FILE__) + "/helper")
 
 Story "User Login", %|
   As a User

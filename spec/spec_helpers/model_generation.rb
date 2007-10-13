@@ -15,7 +15,12 @@ class Generate
   end
     
   def self.group(name, attributes={})
-    Group.create!(attributes.merge(:name=>name))
+    privilege = Generate.privilege("user")
+    group = Group.create!(attributes.merge(:name=>name))
+    
+    group.privileges << privilege
+    
+    group
   end
 
   def self.iteration(name, attributes={})
@@ -53,7 +58,10 @@ class Generate
     
     User.create!(
       attributes.merge(
-        :email_address => email_address
+        :email_address => email_address,
+        :password => "password",
+        :password_confirmation => "password",
+        :active => true
       )
     )
   end

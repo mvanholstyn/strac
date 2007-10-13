@@ -44,6 +44,13 @@ Spec::Runner.configure do |config|
     User.current_user = user
   end 
 
+  def mock_new_model(clazz)
+    model = mock_model(clazz)
+    model.stub!(:id)
+    model.stub!(:to_param)
+    model.stub!(:new_record?).and_return(true)
+    model
+  end
 end
 
 module Spec::DSL::Behaviour

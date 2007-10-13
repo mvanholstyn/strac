@@ -1,0 +1,7 @@
+<ul id="subnav">
+  <li><%= link_to "<em>o</em>verview", project, :accesskey => "o" %></li>
+  <li><%= link_to "c<em>u</em>rrent iteration", current_iterations_path(project), :accesskey => "u" %></li>
+  <li><%= link_to "<em>i</em>terations", iterations_path(project), :accesskey => "i" %></li>
+  <li><%= link_to "<em>s</em>tories", stories_path(project), :accesskey => "s" %></li>
+  <li><%= link_to "Invite People", new_project_invitation_path(project) %></li>
+</ul>
