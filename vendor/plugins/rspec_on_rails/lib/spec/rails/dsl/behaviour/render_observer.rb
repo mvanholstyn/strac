@@ -51,13 +51,9 @@ module Spec
         # This is exactly like expect_render, with the exception that the call to render will not
         # be verified. Use this if you are trying to isolate your example from a complicated render
         # operation but don't care whether it is called or not.
-        def stub_render(opts=nil)
+        def stub_render(opts={})
           register_verify_after_each
-          if opts
-            expect_render_mock_proxy.stub!(:render, :expected_from => caller(1)[0]).with(opts)
-          else
-            expect_render_mock_proxy.stub!(:render, :expected_from => caller(1)[0])
-          end
+          expect_render_mock_proxy.stub!(:render, :expected_from => caller(1)[0]).with(opts)
         end
 
         def verify_rendered # :nodoc:
