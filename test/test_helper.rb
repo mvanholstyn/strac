@@ -36,5 +36,3 @@ class Test::Unit::TestCase
     user
   end
 end
-
-
