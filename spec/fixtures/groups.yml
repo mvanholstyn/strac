@@ -30,7 +30,7 @@ crud_projects:
   id: "6"
   created_at:
 crud_users:
-  name: CRUD Psers
+  name: CRUD Users
   updated_at:
   id: "7"
   created_at:
