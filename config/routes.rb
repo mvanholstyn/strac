@@ -9,8 +9,6 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.resources :tags, :collection => { :auto_complete => :any }
-  map.resources :companies
-  map.resources :users
   map.resources :projects do |project_map|
     project_map.resources :invitations
     project_map.resources :iterations, :name_prefix => nil, 

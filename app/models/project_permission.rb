@@ -31,13 +31,7 @@ class ProjectPermission < ActiveRecord::Base
     private
 
     def build_conditions_for_user user
-      conditions = ["(accessor_id = ? AND accessor_type = ?)", user.id, user.class.name]
-      if user.company
-        conditions.first << " OR (accessor_id = ? AND accessor_type = ?)"
-        conditions << user.company.id << user.company.class.name
-        conditions[0] = "(#{conditions[0]})"
-      end
-      conditions
+      ["(accessor_id = ? AND accessor_type = ?)", user.id, user.class.name]
     end
   end
   

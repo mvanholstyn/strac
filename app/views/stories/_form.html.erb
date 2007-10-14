@@ -63,7 +63,7 @@
             <b>Responsible Party</b>
           </td>
           <td>
-            <%= select_tag "story[responsible_party_type_id]", options_for_responsible_parties( @story.responsible_party_type_id ) %>
+            <%= select_tag "story[responsible_party_type_id]", options_for_responsible_parties(@project, @story.responsible_party_type_id) %>
           </td>
         </tr>
         <tr>

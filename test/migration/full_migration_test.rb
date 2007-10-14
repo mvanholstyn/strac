@@ -59,13 +59,6 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "commentable_type", :string
       end
 
-      s.table "companies" do |t|
-        t.column "id", :integer
-        t.column "name", :string
-        t.column "created_at", :datetime
-        t.column "updated_at", :datetime
-      end
-
       s.table "groups" do |t|
         t.column "id", :integer
         t.column "name", :string
@@ -209,7 +202,6 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "last_name", :string
         t.column "email_address", :string
         t.column "group_id", :integer
-        t.column "company_id", :integer
         t.column "active", :boolean
         t.column "created_at", :datetime
         t.column "updated_at", :datetime
@@ -235,16 +227,9 @@ class FullMigrationTest < ActionController::IntegrationTest
     assert Status.find_by_name("rejected")
     assert Status.find_by_name("blocked")
     
-    assert Privilege.find_by_name("crud_companies")
-    assert Privilege.find_by_name("crud_projects")       
-    assert Privilege.find_by_name("crud_users")           
-    assert Privilege.find_by_name("crud_companies_users") 
     assert Privilege.find_by_name("user")  
     
-    assert Group.find_by_name("Developer")
-    assert Group.find_by_name("Customer")
-    assert Group.find_by_name("Customer Admin")
-    assert Group.find_by_name("Admin")
+    assert Group.find_by_name("User")
     
     assert User.find_by_email_address("admin@example.com")
 

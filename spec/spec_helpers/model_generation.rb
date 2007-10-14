@@ -9,11 +9,7 @@ class Generate
     attributes[:actor] = Generate.user(attributes[:actor]) unless attributes[:actor].is_a?(ActiveRecord::Base)
     Activity.create!(attributes.merge(:action=>action))
   end
-  
-  def self.company(name, attributes={})
-    Company.create!(attributes.merge(:name=>name))
-  end
-    
+      
   def self.group(name, attributes={})
     privilege = Generate.privilege("user")
     group = Group.create!(attributes.merge(:name=>name))

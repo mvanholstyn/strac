@@ -1,12 +1,3 @@
 user:
   id: 1
   name: user
-crud_companies:
-  id: 2
-  name: crud_companies
-crud_projects:
-  id: 3
-  name: crud_projects
-crud_users:
-  id: 4
-  name: crud_users

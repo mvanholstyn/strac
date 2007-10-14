@@ -10,10 +10,8 @@
 #  last_name     :string(255)   
 #  email_address :string(255)   
 #  group_id      :integer(11)   
-#  company_id    :integer(11)   
 #
 
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 mvanholstyn:
   id: 1
   password_hash: <%= User.hash_password 'password' %>
@@ -21,7 +19,6 @@ mvanholstyn:
   last_name: Van Holstyn
   email_address: mvanholstyn@example.com
   group_id: 1
-  company_id: 1
   active: true
   
 zdennis:
@@ -31,5 +28,4 @@ zdennis:
   last_name: MyString
   email_address: zdennis@example.com
   group_id: 1
-  company_id: 1
   active: true

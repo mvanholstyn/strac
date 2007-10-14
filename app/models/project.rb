@@ -15,7 +15,7 @@ class Project < ActiveRecord::Base
   has_many :stories
   has_many :activities
   has_many :project_permissions, :dependent => :destroy
-  has_many_polymorphs :accessors, :through => :project_permissions, :from => [ :companies, :users ]
+  has_many_polymorphs :accessors, :through => :project_permissions, :from => [:users]
   has_many :iterations do 
     def find_current
       find :first, :conditions => [ "? BETWEEN start_date AND end_date", Date.today ]

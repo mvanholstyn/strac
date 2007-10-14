@@ -1,36 +1,5 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-developer:
-  name: Developer
+user:
+  name: User
   updated_at: 
   id: "1"
   created_at: 
-customer:
-  name: Customer
-  updated_at: 
-  id: "2"
-  created_at: 
-admin:
-  name: Admin
-  updated_at: 
-  id: "3"
-  created_at: 
-no_privileges:
-  name: No Privleges
-  updated_at:
-  id: "4"
-  created_at:
-crud_companies:
-  name: CRUD Companies
-  updated_at:
-  id: "5"
-  created_at:
-crud_projects:
-  name: CRUD Projects
-  updated_at:
-  id: "6"
-  created_at:
-crud_users:
-  name: CRUD Users
-  updated_at:
-  id: "7"
-  created_at:

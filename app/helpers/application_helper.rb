@@ -40,7 +40,6 @@ module ApplicationHelper
   Conversion.new( :S, Story, [ :story, :project_id, :id ] )
   Conversion.new( :I, Iteration, [ :iteration, :project_id, :id ] )
   Conversion.new( :USER, User )
-  Conversion.new( :COMPANY, Company )
   Conversion.new( :P, Project, [ :project, :id ] )
   Conversion.new( :STATUS, Status )
   Conversion.new( :PRIORITY, Priority )

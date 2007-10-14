@@ -1,6 +1,4 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 joe:
-  company_id: 
   created_at: 
   email_address: joe@example.com
   first_name: Joe
@@ -11,7 +9,6 @@ joe:
   updated_at: 
 
 stan:
-  company_id: 1
   created_at: 
   email_address: joe@example.com
   first_name: Stan
@@ -22,7 +19,6 @@ stan:
   updated_at: 
 
 carl:
-  company_id: 2
   created_at: 
   email_address: carl@example.com
   first_name: Carl
@@ -33,7 +29,6 @@ carl:
   updated_at: 
 
 user_without_privileges:
-  company_id: 2
   created_at: 
   email_address: carl@example.com
   first_name: Sanford
@@ -42,37 +37,3 @@ user_without_privileges:
   last_name: Son
   password_hash: 5f4dcc3b5aa765d61d8327deb882cf99
   updated_at: 
-
-crud_companies:
-  company_id: 2
-  created_at: 
-  email_address: crud_companies@example.com
-  first_name: crud_companies
-  group_id: "5"
-  id: "5"
-  last_name: Son
-  password_hash: 5f4dcc3b5aa765d61d8327deb882cf99
-  updated_at: 
-
-crud_projects:
-  company_id: 2
-  created_at: 
-  email_address: crud_projects@example.com
-  first_name: crud_projects
-  group_id: "6"
-  id: "6"
-  last_name: Pa
-  password_hash: 5f4dcc3b5aa765d61d8327deb882cf99
-  updated_at: 
-
-crud_users:
-  company_id: 2
-  created_at: 
-  email_address: crud_users@example.com
-  first_name: crud_users
-  group_id: "7"
-  id: "7"
-  last_name: Usah
-  password_hash: 5f4dcc3b5aa765d61d8327deb882cf99
-  updated_at: 
-

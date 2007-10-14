@@ -10,13 +10,11 @@
 #  last_name     :string(255)   
 #  email_address :string(255)   
 #  group_id      :integer(11)   
-#  company_id    :integer(11)   
 #
 
 class User < ActiveRecord::Base
   acts_as_login_model
   
-  belongs_to :company
   has_many :stories, :as => :responsible_party
   has_many :projects, :through => :project_permissions
   has_many :project_permissions, :foreign_key => "accessor_id", :as => :accessor

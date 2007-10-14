@@ -1,5 +1,5 @@
 class ProjectsController < ApplicationController
-  restrict_to :crud_projects, :except => :show
+  restrict_to :user
   
   # GET /projects
   # GET /projects.xml
@@ -54,14 +54,15 @@ class ProjectsController < ApplicationController
   # PUT /projects/1
   # PUT /projects/1.xml
   def update
-    @project = ProjectPermission.find_project_for_user( params[:id], current_user )
+    unless @project = ProjectPermission.find_project_for_user( params[:id], current_user )
+      redirect_to dashboard_path
+      return
+    end
 
     respond_to do |format|
       if @project.update_attributes(params[:project])
         @project.users.clear
-        @project.companies.clear
         User.find( params[:users] ).each { |u| @project.users << u } unless params[:users].blank?
-        Company.find( params[:companies] ).each { |c| @project.companies << c } unless params[:companies].blank?
         
         flash[:notice] = 'Project was successfully updated.'
         format.html { redirect_to project_path(@project) }

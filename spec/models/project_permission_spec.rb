@@ -10,7 +10,7 @@ describe ProjectPermission, "with no specified attributes" do
   end
 end
 
-describe ProjectPermission, "User without a company that has permissions on two projects" do
+describe ProjectPermission, "User that has permissions on two projects" do
   before do
     @group = Generate.group("GroupA")
     @user = Generate.user("jabba the hut", :group => @group)
@@ -19,11 +19,7 @@ describe ProjectPermission, "User without a company that has permissions on two 
       project.users << @user
     end
   end
-  
-  it "has a user that doesn't belong to a Company" do
-    @user.company.should be_nil    
-  end
-    
+      
   it "finds the first project that a user has permissions on given the project" do
     project = ProjectPermission.find_project_for_user @projects.first, @user
     project.should == @projects.first
@@ -39,50 +35,12 @@ describe ProjectPermission, "User without a company that has permissions on two 
     projects.should == @projects
   end
 end
-  
-describe ProjectPermission, "User with permissions on two projects through company" do
-  before do
-    @group = Generate.group("GroupA")
-    @user = Generate.user("jabba the hut", :group => @group)
-    @company = Generate.company("Company XYZ")
-    @user.company = @company
-    @projects = [ Generate.project("ProjectA"), Generate.project("ProjectB") ]
-    @projects.each do |project|
-      project.companies << @company
-    end
-  end
-  
-  it "has a user that belongs to a company" do
-    @user.company.should be(@company)
-  end
-  
-  it "finds the first project that a user has permissions on" do
-    project = ProjectPermission.find_project_for_user @projects.first, @user
-    project.should == @projects.first
-  end
-
-  it "finds the second project that a user has permissions on" do
-    project = ProjectPermission.find_project_for_user @projects.last, @user
-    project.should == @projects.last
-  end
-
-  it "finds all projects that the user has permissions on" do
-    projects = ProjectPermission.find_all_projects_for_user @user
-    projects.should == @projects
-  end
-end
 
 describe ProjectPermission, "User without project permissions" do
   before do
     @group = Generate.group("GroupA")
     @user = Generate.user("jabba the hut", :group => @group)
-    @company = Generate.company("Company XYZ")
-    @user.company = @company
     @projects = [ Generate.project("ProjectA"), Generate.project("ProjectB") ]
-  end
-  
-  it "has a user that belongs to a company" do
-    @user.company.should be(@company)
   end
   
   it "should return nil when no project permission is found for a given project" do

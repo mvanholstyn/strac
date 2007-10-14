@@ -22,10 +22,6 @@ describe User do
   it "should belong a Group" do
     assert_association User, :belongs_to, :group, Group
   end
-      
-  it "should belong to a Company" do
-    assert_association User, :belongs_to, :company, Company
-  end
   
   it "should have many Stories" do
     assert_association User, :has_many, :stories, Story, :as => :responsible_party

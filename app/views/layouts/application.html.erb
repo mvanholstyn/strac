@@ -32,19 +32,7 @@
         <ul id="nav">
           <% if current_user -%>
             <li><%= link_to "dashboard", dashboard_path %></li>
-            
-            <% restrict_to :crud_projects do -%>
-              <li><%= link_to "<em>p</em>rojects", projects_path, :accesskey => "p" %></li>
-            <% end -%>
-            
-            <% restrict_to :crud_users, :crud_companies_users do -%>
-              <li><%= link_to "<em>u</em>sers", users_path, :accesskey => "u" %></li>
-            <% end -%>
-            
-            <% restrict_to :crud_companies do -%>
-              <li><%= link_to "<em>c</em>ompanies", companies_path, :accesskey => "c" %></li>
-            <% end -%>
-            
+            <li><%= link_to "<em>p</em>rojects", projects_path, :accesskey => "p" %></li>                        
             <li><%= link_to "profile", profile_path %></li>
             <li><%= link_to "logout", logout_path, :method => :post %></li>
           <% end -%>
@@ -104,18 +92,12 @@
               </ul>
             <% end -%>
 
-            <h2 style="display: inline;">your projects</h2>
-            <% restrict_to :crud_projects do -%>
-              (<%= link_to "create", new_project_path %>)
-            <% end -%>
+            <h2 style="display: inline;">your projects</h2> (<%= link_to "create", new_project_path %>)
 
             <ul>
               <% for project in ProjectPermission.find_all_projects_for_user( current_user ) -%>
                 <li>
-                  <%= link_to project.name, project_path( project ) %>
-                  <% restrict_to :crud_projects do -%>
-                    (<%= link_to "edit", edit_project_path( project ) %>)
-                  <% end -%>
+                  <%= link_to project.name, project_path( project ) %> (<%= link_to "edit", edit_project_path( project ) %>)
                 </li>
               <% end -%>
             </ul>
