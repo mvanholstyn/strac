@@ -90,6 +90,15 @@
                   </li>
                 <% end -%>
               </ul>
+
+              <h2><%= @project.name %>: people</h2>
+              <ul>
+                <% for user in @project.users.find(:all, :conditions => ["users.id != ?", current_user.id]) -%>
+                  <li>
+                    <%= user.full_name %>
+                  </li>
+                <% end -%>
+              </ul>
             <% end -%>
 
             <h2 style="display: inline;">your projects</h2> (<%= link_to "create", new_project_path %>)
