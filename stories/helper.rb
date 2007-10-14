@@ -3,10 +3,6 @@ require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'spec/rails/story_adapter'
 require File.expand_path(File.dirname(__FILE__) + "/../spec/spec_helpers/model_generation")
 
-def puts_body
-  puts response.body
-end
-
 def click_link(path)
   select_link(path).follow
 end
