@@ -1,3 +1,14 @@
+# == Schema Information
+# Schema version: 41
+#
+# Table name: groups
+#
+#  id         :integer(11)   not null, primary key
+#  name       :string(255)   
+#  created_at :datetime      
+#  updated_at :datetime      
+#
+
 user:
   id: 1
   name: user
