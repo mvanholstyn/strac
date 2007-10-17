@@ -1,5 +1,3 @@
-load File.join(File.dirname(__FILE__), '..', 'vendor', 'plugins', 'lwt_deployment', 'recipes')
-
 set :application, "strac"
 # My repository does not follow my own standard convention...
 # set :repository_host, "svn.example.com"
