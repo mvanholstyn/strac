@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Invitation do
-  before(:each) do
+  before do
     @invitation = Invitation.new
   end
   
@@ -30,7 +30,7 @@ end
 
 describe Invitation, "#create_for - creating a single invitation" do
   def create_invitations
-    @invitations = Invitation.create_for(@project, @user, @email_address)    
+    @invitations = Invitation.create_for(@project, @user, @email_address, @email_body)    
   end
 
   before do
@@ -40,6 +40,7 @@ describe Invitation, "#create_for - creating a single invitation" do
     UniqueCodeGenerator.stub!(:generate)
     
     @email_address = "user@example.com"
+    @email_body = "user defined invitation message"
   end
 
   it "creates a single invitation when given a single email address" do
@@ -58,6 +59,11 @@ describe Invitation, "#create_for - creating a single invitation" do
     @invitations.first.inviter_id.should == @user.id
   end
   
+  it "sets the passed in #message" do
+    create_invitations
+    @invitations.first.message.should == @email_body
+  end
+  
   it "assigns a unique code to the invitation" do
     unique_code = "blahblah"
     UniqueCodeGenerator.should_receive(:generate).with(@email_address).and_return(unique_code)
@@ -69,7 +75,7 @@ end
 
 describe Invitation, "#create_for - creating multiple invitations at a time" do
   def create_invitations
-    @invitations = Invitation.create_for(@project, @user, @email_addresses.join(" , "))
+    @invitations = Invitation.create_for(@project, @user, @email_addresses.join(" , "), @email_body)
   end
   
   before do
@@ -78,6 +84,7 @@ describe Invitation, "#create_for - creating multiple invitations at a time" do
 
     UniqueCodeGenerator.stub!(:generate)
         
+    @email_body = "user defined invitation message"
     @email_addresses = ["user@example.com", "foo@blah.com"]
   end
 
@@ -100,6 +107,12 @@ describe Invitation, "#create_for - creating multiple invitations at a time" do
     @invitations.last.inviter_id.should == @user.id
   end
   
+  it "assigns the passed in message as the message on each invitation" do
+    create_invitations
+    @invitations.first.message.should == @email_body
+    @invitations.last.message.should ==  @email_body   
+  end
+  
   it "assigns a unique code to the invitations" do
     unique_code = "blahblah"
     another_unique_code = "blahblahblah"
@@ -108,5 +121,22 @@ describe Invitation, "#create_for - creating multiple invitations at a time" do
     create_invitations
     @invitations.first.code.should == unique_code
     @invitations.last.code.should == another_unique_code
+  end
+end
+
+describe Invitation, "#accept_invitation_url" do
+  it "is a readable/writable accessor" do
+    url = stub("URL")
+    invitation = Invitation.new
+    invitation.accept_invitation_url = url
+    invitation.accept_invitation_url.should == url
+  end
+  
+  it "is not saved to the database" do
+    invitation = Generate.invitation "foo@blah.com"
+    invitation.accept_invitation_url = "http://some url here"
+    invitation.save!
+    invitation2 = Invitation.find(invitation.id)
+    invitation2.accept_invitation_url.should be_nil
   end
 end

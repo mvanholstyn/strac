@@ -13,15 +13,18 @@
 #
 
 class Invitation < ActiveRecord::Base
+  attr_accessor :accept_invitation_url
+
   belongs_to :inviter, :class_name => "User", :foreign_key => "inviter_id"
   belongs_to :project
   
   validates_presence_of :inviter_id, :project_id
 
-  def self.create_for(project, inviter, recipients)
+  def self.create_for(project, inviter, recipients, message)
     recipients.split(/\s*,\s*/).map do |recipient|
       Invitation.create!(:project => project, :inviter => inviter, :recipient => recipient, 
-                         :code => UniqueCodeGenerator.generate(recipient))
+                         :code => UniqueCodeGenerator.generate(recipient),
+                         :message => message)
     end
   end
 

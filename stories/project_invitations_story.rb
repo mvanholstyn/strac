@@ -21,9 +21,16 @@ Story "Project Invitations", %|
     When "they fill out the form and submit it" do
       submit_the_project_invitation_form
     end
-    Then "an email with an invitation link is sent to the specified email addresses" do
+    Then "an email is sent to each email address specified" do
       see_the_emails_were_sent
     end
+    And "each email has a accept link" do
+      see_the_emails_each_have_a_unique_accept_link
+    end
+    And "each email contains the body that the user input" do
+      see_each_email_contains_the_from_the_submitted_form
+    end
+    
   end
 
   def a_user_viewing_a_project
@@ -49,10 +56,11 @@ Story "Project Invitations", %|
     ActionMailer::Base.deliveries.clear
     Invitation.delete_all
     @emails = ["user@example.com", "bob@example.com"]
+    @email_body = "Come join my project!"
     
     submit_form "new_invitation" do |form|
       form.email_addresses = @emails.join(",")
-      form.email_body = "Come join my project!"
+      form.email_body = @email_body
     end
   end
   
@@ -60,13 +68,8 @@ Story "Project Invitations", %|
     emails = ActionMailer::Base.deliveries
 
     emails.size.should == @emails.size
-    emails.first.recipients.should == [@emails.first]
-    emails.last.recipients.should == [@emails.last]
-    
-    invitations = Invitation.find(:all)
-    
-    emails.first.body.should have_text(accept_project_invitation_url(invitations.first, :code => invitations.first.code))
-    emails.last.body.should have_text(accept_project_invitation_url(invitations.last, :code => invitations.last.code))
+    emails.first.to.should == [@emails.first]
+    emails.last.to.should == [@emails.last]
   end
   
   def login_as(user, password)
@@ -76,6 +79,20 @@ Story "Project Invitations", %|
     end
     follow_redirect!
   end
+  
+  def see_the_emails_each_have_a_unique_accept_link
+    emails = ActionMailer::Base.deliveries
+    invitations = Invitation.find(:all)
+    emails.first.body.should =~ login_url(:code => invitations.first.code).to_regexp
+    emails.last.body.should =~ login_url(:code => invitations.last.code).to_regexp    
+  end
+  
+  def see_each_email_contains_the_from_the_submitted_form
+    emails = ActionMailer::Base.deliveries
+    emails.first.body.should =~ @email_body.to_regexp
+    emails.first.body.should =~ @email_body.to_regexp
+  end
+  
   
   def click_project_link_for(project)
     click_link project_path(project)

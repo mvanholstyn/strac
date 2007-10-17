@@ -1,16 +1,9 @@
 class InvitationMailer < ActionMailer::Base
-  
-  def invite_developer( invitation )
+
+  def invitation(invitation)
     recipients invitation.recipient
-    from "#{invitation.inviter.email_address} <#{invitation.inviter.full_name}>"
-    subject "You've been invited as a developer to '#{invitation.project.name}'!"
-    body :invitation => invitation
-  end
-  
-  def invite_customer( invitation )
-    recipients invitation.recipient
-    from "#{invitation.inviter.email_address} <#{invitation.inviter.full_name}>"
-    subject "You've been invited as a customer to '#{invitation.project.name}'!"
+    from invitation.inviter.email_address
+    subject "You've been invited to '#{invitation.project.name}'!"
     body :invitation => invitation
   end
   

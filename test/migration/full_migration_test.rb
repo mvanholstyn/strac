@@ -80,6 +80,7 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "recipient", :string
         t.column "project_id", :integer
         t.column "code", :string
+        t.column "message", :string
         t.column "created_at", :datetime
         t.column "updated_at", :datetime
       end

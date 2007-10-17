@@ -19,6 +19,21 @@ class Generate
     group
   end
 
+  def self.invitation(recipient, attributes={})
+    if attributes[:project].nil?
+      attributes[:project] = Generate.project("Invitation Project")
+    end
+    if attributes[:inviter].nil?
+      @inviter_count ||= 0
+      attributes[:inviter] = Generate.user(
+        "inviter#{@inviter_count+=1}@foo.com", 
+        :first_name => "Henry", 
+        :last_name => "James")
+    end
+    
+    Invitation.create!(attributes.reverse_merge(:recipient => recipient, :message => "Come and join!"))
+  end
+
   def self.iteration(name, attributes={})
     raise ArgumentError, "requires project" unless attributes[:project]
     attributes[:start_date] = Date.today unless attributes[:start_date]

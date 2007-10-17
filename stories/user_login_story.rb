@@ -26,11 +26,7 @@ Story "User Login", %|
        @user = Generate.user("bob@jones.com", :password=>"password", :password_confirmation=>"password")
     end
     When "they try to login" do
-      get "/users/login"
-      submit_form "login_form" do |form|
-        form.user.email_address = @user.email_address
-        form.user.password = "password"
-      end
+      try_to_login
     end
     Then "they see an error" do
       response.should have_tag("#error")
@@ -49,11 +45,20 @@ Story "User Login", %|
       submit_form "login_form" do |form|
         form.user.email_address = @user.email_address
         form.user.password = "password"
-      end
+      end      
     end
     Then "they are redirected to to the dashboard page" do
       response.should redirect_to("/")
     end
   end
 
+end
+
+
+def try_to_login
+  get "/users/login"
+  submit_form "login_form" do |form|
+    form.user.email_address = @user.email_address
+    form.user.password = "password"
+  end
 end
