@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 32
+# Schema version: 41
 #
 # Table name: stories
 #
@@ -14,6 +14,9 @@
 #  responsible_party_type :string(255)   
 #  status_id              :integer(11)   
 #  priority_id            :integer(11)   
+#  created_at             :datetime      
+#  completed_at           :datetime      
+#  updated_at             :datetime      
 #
 
 class Story < ActiveRecord::Base

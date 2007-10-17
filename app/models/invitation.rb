@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 32
+# Schema version: 41
 #
 # Table name: invitations
 #
@@ -7,6 +7,9 @@
 #  inviter_id :integer(11)   
 #  recipient  :string(255)   
 #  project_id :integer(11)   
+#  created_at :datetime      
+#  updated_at :datetime      
+#  code       :string(255)   
 #
 
 class Invitation < ActiveRecord::Base

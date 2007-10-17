@@ -1,10 +1,12 @@
 # == Schema Information
-# Schema version: 32
+# Schema version: 41
 #
 # Table name: projects
 #
-#  id   :integer(11)   not null, primary key
-#  name :string(255)   
+#  id         :integer(11)   not null, primary key
+#  name       :string(255)   
+#  created_at :datetime      
+#  updated_at :datetime      
 #
 
 class Project < ActiveRecord::Base

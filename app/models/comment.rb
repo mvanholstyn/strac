@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 32
+# Schema version: 41
 #
 # Table name: comments
 #
@@ -9,6 +9,7 @@
 #  commenter_id     :integer(11)   
 #  commentable_id   :integer(11)   
 #  commentable_type :string(255)   
+#  updated_at       :datetime      
 #
 
 class Comment < ActiveRecord::Base

@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 32
+# Schema version: 41
 #
 # Table name: iterations
 #
@@ -9,6 +9,8 @@
 #  project_id :integer(11)   
 #  name       :string(255)   
 #  budget     :integer(11)   default(0)
+#  created_at :datetime      
+#  updated_at :datetime      
 #
 
 class Iteration < ActiveRecord::Base

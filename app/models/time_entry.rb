@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 32
+# Schema version: 41
 #
 # Table name: time_entries
 #
@@ -10,6 +10,8 @@
 #  project_id    :integer(11)   
 #  timeable_id   :integer(11)   
 #  timeable_type :string(255)   
+#  created_at    :datetime      
+#  updated_at    :datetime      
 #
 
 class TimeEntry < ActiveRecord::Base

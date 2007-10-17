@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 32
+# Schema version: 41
 #
 # Table name: project_permissions
 #
@@ -7,6 +7,8 @@
 #  project_id    :integer(11)   
 #  accessor_id   :integer(11)   
 #  accessor_type :string(255)   
+#  created_at    :datetime      
+#  updated_at    :datetime      
 #
 
 class ProjectPermission < ActiveRecord::Base

@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 32
+# Schema version: 41
 #
 # Table name: activities
 #
@@ -10,6 +10,7 @@
 #  project_id    :integer(11)   
 #  affected_id   :integer(11)   
 #  affected_type :string(255)   
+#  updated_at    :datetime      
 #
 
 class Activity < ActiveRecord::Base
