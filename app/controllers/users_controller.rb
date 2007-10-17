@@ -13,6 +13,7 @@ private
   def assign_group
     if params[:user]
       params[:user][:group_id] = Group.find_by_name("User").id
+      params[:user][:active] = true
     end
   end
   
