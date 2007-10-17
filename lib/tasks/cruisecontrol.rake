@@ -1,7 +1,8 @@
 require File.join(RAILS_ROOT, '/vendor/plugins/rspec/lib/spec/rake/spectask')
 
 task :cruise do
-   Rake::Task["cruise_spec"].invoke
+  Rake::Task["db:migrate"].invoke
+  Rake::Task["cruise_spec"].invoke
 end
 
 Spec::Rake::SpecTask.new(:cruise_spec) do |t|
