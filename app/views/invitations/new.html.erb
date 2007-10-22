@@ -1,11 +1,11 @@
 <div>
   <h2>Add People To Your Project</h2>
-
-  <div>Enter email addresses separated by newlines.</div>
   
   <% form_for [@project, @invitation] do |form| -%>
-    <%= text_area_tag :email_addresses %>
-    <%= text_area_tag :email_body %>
+    <label for="email_addresses">Enter email addresses separated by newlines:</label>
+    <p><%= text_area_tag :email_addresses, "", :cols=>50, :rows => 5 %></p>
+    <label for="email_body">Enter invitation message:</label>
+    <p><%= text_area_tag :email_body, "", :cols=>50, :rows => 5 %></p>
     <%= form.submit "Send Invites!" %>
   <% end -%>
  
