@@ -7,7 +7,6 @@ describe CommentsController, "User without privileges" do
     @project_id = '1' 
     @story_id = '2'
 
-    Story.should_receive(:find).with(@story_id)
     login_as 'user_without_privileges'
   end
 
