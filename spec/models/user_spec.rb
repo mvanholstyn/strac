@@ -4,6 +4,8 @@ describe User do
   before(:each) do
     @user = User.new
   end
+  
+  it "requires a unique email address"
 
   it "should be valid" do
     @user.group_id = 1
@@ -26,7 +28,7 @@ describe User do
   it "should have many Stories" do
     assert_association User, :has_many, :stories, Story, :as => :responsible_party
   end
-  
+    
   it "should have many Projects" do
     assert_association User, :has_many, :projects, Project, 
        :source=>:project,

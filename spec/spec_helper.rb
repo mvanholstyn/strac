@@ -26,7 +26,7 @@ Spec::Runner.configure do |config|
   # If you declare global fixtures, be aware that they will be declared
   # for all of your examples, even those that don't use them.
   
-  def login_as( user )
+  def login_as(user)
     if user.is_a?(String) || user.is_a?(Symbol)
       user = users(user)
     end

@@ -20,7 +20,8 @@
 
 class User < ActiveRecord::Base
   acts_as_login_model
-  
+
+  validates_uniqueness_of :email_address
   has_many :stories, :as => :responsible_party
   has_many :projects, :through => :project_permissions
   has_many :project_permissions, :foreign_key => "accessor_id", :as => :accessor

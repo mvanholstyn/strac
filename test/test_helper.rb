@@ -41,4 +41,6 @@ class Test::Unit::TestCase
     @request.session[:current_user_id] = User.current_user.id
     user
   end
+  
 end
+

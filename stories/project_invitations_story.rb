@@ -30,9 +30,36 @@ Story "Project Invitations", %|
     And "each email contains the body that the user input" do
       see_each_email_contains_the_from_the_submitted_form
     end
-    
-  end
 
+    Given "a user received an email invitation" do
+      reset!
+    end
+    When "they click on the invitation acceptance link" do
+      click_invitation_acceptance_link_in_email
+    end
+    Then "they should be taken to a signup or login page" do
+      see_signup_or_login_page
+    end
+    
+    Given "a user viewing the signup or login page" do
+      # we are on this page already
+    end
+    When "they login" do
+      login_as @user_accepting_the_project_invitation, "password"
+    end
+    And "they go to the dashboard page" do
+      go_to_the_dashboard
+    end
+    Then "they see a link which takes them to the project they accepted" do
+      see_and_click_on_the_newly_accepted_project_link
+    end
+
+  end
+  
+  def see_and_click_on_the_newly_accepted_project_link
+    click_project_link_for @project
+  end
+  
   def a_user_viewing_a_project
     @project = Generate.project("ProjectA")
     user = Generate.user("joe@blow.com")
@@ -42,6 +69,16 @@ Story "Project Invitations", %|
     login_as user, "password"
     
     click_project_link_for @project
+  end
+  
+  def click_invitation_acceptance_link_in_email
+    @user_accepting_the_project_invitation = Generate.user("bob@example.com")
+    invitations = Invitation.find(:all)
+    get login_url(:code => invitations.first.code)
+  end
+  
+  def see_signup_or_login_page
+    response.should have_tag("form#login_form")
   end
   
   def click_on_invite_people_link
@@ -93,9 +130,4 @@ Story "Project Invitations", %|
     emails.first.body.should =~ @email_body.to_regexp
   end
   
-  
-  def click_project_link_for(project)
-    click_link project_path(project)
-  end
-
 end

@@ -1,6 +1,18 @@
 class UsersController < ApplicationController
   acts_as_login_controller :allow_signup => true, :email_from => "admin@lotswholetime.com"
 
+  def login
+    super
+    if request.get?
+      InvitationManager.store_pending_invitation_acceptance(session, params[:code])
+    elsif request.post? && current_user
+      accepted_project_name = InvitationManager.accept_pending_invitations(session, current_user)
+      if accepted_project_name
+        flash[:notice] = "You have been added to project: #{accepted_project_name}"
+      end
+    end
+  end
+
   redirect_after_login do
     dashboard_path
   end
