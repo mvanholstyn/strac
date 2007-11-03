@@ -1,6 +1,6 @@
 <%= error_messages_for :user %>
 
-<% form_for :user do |form| -%>
+<% form_for :user, :url => signup_path, :html =>{:id => "signup"} do |form| -%>
 	<p>
   	<b>Email Address</b><br />
 		<%= form.text_field :email_address %>

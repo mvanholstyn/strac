@@ -101,7 +101,7 @@
               </ul>
             <% end -%>
 
-            <h2 style="display: inline;">your projects</h2> (<%= link_to "create", new_project_path %>)
+            <h2 style="display: inline;" class="your_projects">your projects</h2> (<%= link_to "create", new_project_path %>)
 
             <ul>
               <% for project in ProjectPermission.find_all_projects_for_user( current_user ) -%>

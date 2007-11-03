@@ -17,6 +17,10 @@ class UsersController < ApplicationController
     dashboard_path
   end
   
+  redirect_after_signup do
+    dashboard_path
+  end
+  
   before_filter :assign_group, :only => [:signup]
   before_filter :find_groups, :only => [:profile]
   

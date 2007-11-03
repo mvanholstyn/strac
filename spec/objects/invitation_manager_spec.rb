@@ -20,6 +20,7 @@ describe InvitationManager, "#store_pending_invitation_acceptance with non-nil i
     session.should_receive(:[]=).with(:pending_invite_code, code)        
     @target.store_pending_invitation_acceptance(session, code)
   end
+  
 end
 
 describe InvitationManager, ".accept_pending_invitations" do
