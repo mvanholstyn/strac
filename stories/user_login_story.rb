@@ -7,26 +7,11 @@ Story "User Login", %|
 |, :type => RailsStory do
   
   Scenario "User with invalid credentials" do
-    Given "a user" do
-       @user = Generate.user("bob@jones.com")
+    Given "a user at the login page" do
+      get login_path
     end
-    When "they try to login" do
-      try_to_login
-    end
-    Then "they see an error" do
-      response.should have_tag("#error")
-    end
-    And "remain on the login page" do
-      response.should render_template("users/login")
-    end
-  end
-  
-  Scenario "User with good credentials who has not been activated" do
-    Given "a user" do
-       @user = Generate.user("bob@jones.com", :password=>"password", :password_confirmation=>"password")
-    end
-    When "they try to login" do
-      try_to_login
+    When "they login unsuccessfully" do
+      login_unsuccessfully
     end
     Then "they see an error" do
       response.should have_tag("#error")
@@ -35,13 +20,13 @@ Story "User Login", %|
       response.should render_template("users/login")
     end
   end
-
+    
   Scenario "User with good credentials who has been activated" do
-    Given "a user" do
-       @user = Generate.active_user("bob@jones.com", :password=>"password", :password_confirmation=>"password")
+    Given "a user at the login page" do
+      get login_path
+      @user = Generate.active_user("newuser3@jones.com", :password=>"password", :password_confirmation=>"password")
     end
-    When "they try to login" do
-      get "/users/login"
+    When "they login successfully" do
       submit_form "login_form" do |form|
         form.user.email_address = @user.email_address
         form.user.password = "password"
@@ -54,11 +39,13 @@ Story "User Login", %|
 
 end
 
+def login_unsuccessfully
+  try_to_login("bad email", "bad password")
+end
 
-def try_to_login
-  get "/users/login"
+def try_to_login(email, password="password")
   submit_form "login_form" do |form|
-    form.user.email_address = @user.email_address
-    form.user.password = "password"
+    form.user.email_address = email
+    form.user.password = password
   end
 end

@@ -3,17 +3,17 @@
 ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'spec/rails'
-require File.expand_path(File.dirname(__FILE__) + "/../test/helpers/assertions")
 
-Dir[File.expand_path(File.dirname(__FILE__) + "/../spec/spec_helpers/*.rb")].each do |file|
-  require file
-end
+require File.expand_path(File.dirname(__FILE__) + "/../spec/helpers/assertions")
+require File.expand_path(File.dirname(__FILE__) + "/../spec/helpers/association_matcher")
+require File.expand_path(File.dirname(__FILE__) + "/../spec/spec_helpers/model_generation")
+require File.expand_path(File.dirname(__FILE__) + "/../spec/spec_helpers/string_extensions")
 
 Spec::Runner.configure do |config|
   config.use_transactional_fixtures = true
   config.use_instantiated_fixtures  = false
   config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
-
+  config.include HaveAssociationMatcher 
   # You can declare fixtures for each behaviour like this:
   #   describe "...." do
   #     fixtures :table_a, :table_b
@@ -25,7 +25,7 @@ Spec::Runner.configure do |config|
   #
   # If you declare global fixtures, be aware that they will be declared
   # for all of your examples, even those that don't use them.
-  
+
   def login_as(user)
     if user.is_a?(String) || user.is_a?(Symbol)
       user = users(user)
@@ -41,6 +41,7 @@ Spec::Runner.configure do |config|
     model.stub!(:new_record?).and_return(true)
     model
   end
+
 end
 
 module Spec::DSL::Behaviour

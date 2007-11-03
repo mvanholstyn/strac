@@ -7,11 +7,11 @@ describe Comment do
   end
 
   it "should belong to a commenter" do
-    assert_association Comment, :belongs_to, :commenter, User, :class_name=>"User", :foreign_key=>"commenter_id"    
+    Comment.should have_association(:belongs_to, :commenter, User)
   end
   
   it "should belong to a comment" do
-    assert_association Comment, :belongs_to, :commentable, :polymorphic=>true    
+    Comment.should have_association(:belongs_to, :commentable, :polymorphic=>true)
   end
 
   it "should always have a commenter" do
