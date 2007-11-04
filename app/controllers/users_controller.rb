@@ -18,6 +18,7 @@ class UsersController < ApplicationController
   end
   
   redirect_after_signup do
+    set_current_user @user
     dashboard_path
   end
   

@@ -64,3 +64,28 @@ describe UsersController, "#login - post request with a successful user login" d
     response.should redirect_to(dashboard_path)
   end
 end
+
+describe UsersController, "#signup" do
+  before(:each) do
+    @user = mock_model(User, :save => true, :active= => false)
+    User.stub!(:new).and_return(@user)
+    
+    @reminder = mock_model(UserReminder, :token => nil)
+    UserReminder.stub!(:create_for_user).and_return(@reminder)
+    
+    UserReminderMailer.stub!(:deliver_signup)
+  end
+  
+  def do_post
+    post :signup
+  end
+  
+  it "redirects to the dashboard path" do
+    do_post
+    response.should redirect_to(dashboard_path)
+  end
+  
+  it "sets the current user" do
+    controller.current_user.should_not be_nil
+  end
+end
