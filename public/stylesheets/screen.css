@@ -188,10 +188,7 @@ body {
 }
 
 #sidebar {
-	position: absolute;
-/*	float: right;*/
-	right: 0;
-	top: 0;
+	float: right;
 	width:250px;
 	padding:10px 0 0 20px;
 	background:url(../images/sidebar.jpg) top left no-repeat;
@@ -421,7 +418,6 @@ th {
 }
 
 #content .story_card ul.toolbar {
-	float: both;
 	list-style: none;
 	margin: 0;
 	padding: 0 10px 0 0;
