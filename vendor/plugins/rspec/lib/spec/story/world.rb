@@ -35,15 +35,19 @@ module Spec
         def step_mother
           @step_mother ||= StepMother.new
         end
-        
+                
+        def use(steps)
+          step_mother.use(steps)
+        end
+
         # TODO: investigate duplication between #run_with_suspended_listeners and #store_and_call
         
         def run_with_suspended_listeners(instance, type, name, step)
-          current_listeners = Array.new(@listeners)
+          current_listeners = Array.new(listeners)
           begin
             listeners.each { |l| l.found_step(type, name) }
             @listeners.clear
-            step.perform(instance) unless ::Spec::Story::Runner.dry_run
+            step.perform(instance, name) unless ::Spec::Story::Runner.dry_run
           ensure
             @listeners.replace(current_listeners)
           end
@@ -51,12 +55,34 @@ module Spec
         
         def store_and_call(instance, type, name, *args, &block)
           if block_given?
-            step_mother.store(type, name, SimpleStep.new(name, &block))
+            step_mother.store(type, Step.new(name, &block))
           end
           step = step_mother.find(type, name)
           listeners.each { |l| l.found_step(type, name, *args) }
-          step.perform(instance, *args) unless ::Spec::Story::Runner.dry_run
+          begin
+            step.perform(instance, name, *args) unless ::Spec::Story::Runner.dry_run
+          rescue Exception => e
+            case e
+            when Spec::DSL::ExamplePendingError
+              @listeners.each { |l| l.step_pending }
+            else
+              @listeners.each { |l| l.step_failed }
+            end
+            errors << e
+          end
         end
+        
+        def errors
+          @errors ||= []
+        end
+      end
+      
+      def start_collecting_errors
+        errors.clear
+      end
+      
+      def errors
+        World.errors
       end
       
       def GivenScenario(name)

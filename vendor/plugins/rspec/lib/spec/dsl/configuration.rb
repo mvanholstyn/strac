@@ -1,7 +1,6 @@
 module Spec
   module DSL
     class Configuration
-      
       # Chooses what mock framework to use. Example:
       #
       #   Spec::Runner.configure do |config|
@@ -60,27 +59,11 @@ module Spec
         modules, options = args_and_options(*args)
         required_behaviour_type = options[:behaviour_type]
         required_behaviour_type = required_behaviour_type.to_sym if required_behaviour_type
-        @modules ||= {}
-        @modules[required_behaviour_type] ||= []
-        @modules[required_behaviour_type] += modules
+        modules.each do |mod|
+          BehaviourFactory.get!(required_behaviour_type).send(:include, mod)
+        end
       end
 
-      def modules_for(required_behaviour_type) #:nodoc:
-        @modules ||= {}
-        modules = @modules[nil] || [] # general ones
-        if required_behaviour_type
-          modules.push(*@modules[required_behaviour_type.to_sym])
-        end
-        modules.uniq.compact
-      end
-      
-      # This is just for cleanup in RSpec's own examples
-      def exclude(*modules) #:nodoc:
-        @modules.each do |behaviour_type, mods|
-          modules.each{|m| mods.delete(m)}
-        end
-      end
-      
       # Defines global predicate matchers. Example:
       #
       #   config.predicate_matchers[:swim] = :can_swim?
@@ -96,7 +79,9 @@ module Spec
       # Prepends a global <tt>before</tt> block to all behaviours.
       # See #append_before for filtering semantics.
       def prepend_before(*args, &proc)
-        Example.prepend_before(*args, &proc)
+        scope, options = scope_and_options(*args)
+        behaviour_type = BehaviourFactory.get!(options[:behaviour_type])
+        behaviour_type.prepend_before(scope, &proc)
       end
       # Appends a global <tt>before</tt> block to all behaviours.
       #
@@ -110,28 +95,38 @@ module Spec
       #   config.prepend_before(:behaviour_type => :farm)
       #
       def append_before(*args, &proc)
-        Example.append_before(*args, &proc)
+        scope, options = scope_and_options(*args)
+        behaviour_type = BehaviourFactory.get!(options[:behaviour_type])
+        behaviour_type.append_before(scope, &proc)
       end
       alias_method :before, :append_before
 
       # Prepends a global <tt>after</tt> block to all behaviours.
       # See #append_before for filtering semantics.
       def prepend_after(*args, &proc)
-        Example.prepend_after(*args, &proc)
+        scope, options = scope_and_options(*args)
+        behaviour_type = BehaviourFactory.get!(options[:behaviour_type])
+        behaviour_type.prepend_after(scope, &proc)
       end
       alias_method :after, :prepend_after
       # Appends a global <tt>after</tt> block to all behaviours.
       # See #append_before for filtering semantics.
       def append_after(*args, &proc)
-        Example.append_after(*args, &proc)
+        scope, options = scope_and_options(*args)
+        behaviour_type = BehaviourFactory.get!(options[:behaviour_type])
+        behaviour_type.append_after(scope, &proc)
       end
 
     private
+
+      def scope_and_options(*args)
+        args, options = args_and_options(*args)
+        scope = (args[0] || :each), options
+      end
     
       def mock_framework_path(framework_name)
         File.expand_path(File.join(File.dirname(__FILE__), "..", "..", "..", "plugins", "mock_frameworks", framework_name))
       end
-      
     end
   end
 end

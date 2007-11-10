@@ -33,7 +33,7 @@ module Spec
 
       after :each do
         $rspec_options = @original_rspec_options
-        Example.clear_before_and_after!
+        Example.reset!
       end
     end
 
@@ -85,6 +85,17 @@ module Spec
 
     describe ExampleSuite, "#run with success" do
       it_should_behave_like "Spec::DSL::ExampleSuite#run without failure in example"
+
+      before do
+        @special_behaviour = Class.new(Example)
+        BehaviourFactory.register(:special, @special_behaviour)
+        @not_special_behaviour = Class.new(Example)
+        BehaviourFactory.register(:not_special, @not_special_behaviour)
+      end
+
+      after do
+        BehaviourFactory.reset!
+      end
 
       it "should send reporter add_behaviour" do
         suite = @behaviour.suite
@@ -147,10 +158,10 @@ module Spec
 
         Example.before(:all) { fiddle << "Example.before(:all)" }
         Example.prepend_before(:all) { fiddle << "Example.prepend_before(:all)" }
-        Example.before(:each, :behaviour_type => :special) { fiddle << "Example.before(:each, :behaviour_type => :special)" }
-        Example.prepend_before(:each, :behaviour_type => :special) { fiddle << "Example.prepend_before(:each, :behaviour_type => :special)" }
-        Example.before(:all, :behaviour_type => :special) { fiddle << "Example.before(:all, :behaviour_type => :special)" }
-        Example.prepend_before(:all, :behaviour_type => :special) { fiddle << "Example.prepend_before(:all, :behaviour_type => :special)" }
+        @special_behaviour.before(:each) { fiddle << "Example.before(:each, :behaviour_type => :special)" }
+        @special_behaviour.prepend_before(:each) { fiddle << "Example.prepend_before(:each, :behaviour_type => :special)" }
+        @special_behaviour.before(:all) { fiddle << "Example.before(:all, :behaviour_type => :special)" }
+        @special_behaviour.prepend_before(:all) { fiddle << "Example.prepend_before(:all, :behaviour_type => :special)" }
 
         behaviour = Class.new(Example).describe("I'm not special", :behaviour_type => :not_special) do
           it "does nothing"
@@ -168,24 +179,24 @@ module Spec
 
         Example.before(:all) { fiddle << "Example.before(:all)" }
         Example.prepend_before(:all) { fiddle << "Example.prepend_before(:all)" }
-        Example.before(:each, :behaviour_type => :special) { fiddle << "Example.before(:each, :behaviour_type => :special)" }
-        Example.prepend_before(:each, :behaviour_type => :special) { fiddle << "Example.prepend_before(:each, :behaviour_type => :special)" }
-        Example.before(:all, :behaviour_type => :special) { fiddle << "Example.before(:all, :behaviour_type => :special)" }
-        Example.prepend_before(:all, :behaviour_type => :special) { fiddle << "Example.prepend_before(:all, :behaviour_type => :special)" }
-
-        Example.append_before(:behaviour_type => :special) { fiddle << "Example.append_before(:each, :behaviour_type => :special)" }
-        behaviour = Class.new(Example).describe("I'm not special", :behaviour_type => :special) {}
+        @special_behaviour.before(:each) { fiddle << "special.before(:each, :behaviour_type => :special)" }
+        @special_behaviour.prepend_before(:each) { fiddle << "special.prepend_before(:each, :behaviour_type => :special)" }
+        @special_behaviour.before(:all) { fiddle << "special.before(:all, :behaviour_type => :special)" }
+        @special_behaviour.prepend_before(:all) { fiddle << "special.prepend_before(:all, :behaviour_type => :special)" }
+        @special_behaviour.append_before(:each) { fiddle << "special.append_before(:each, :behaviour_type => :special)" }
+        
+        behaviour = Class.new(@special_behaviour).describe("I'm a special behaviour") {}
         behaviour.it("test") {true}
         suite = behaviour.suite
         suite.run
         fiddle.should == [
           'Example.prepend_before(:all)',
           'Example.before(:all)',
-          'Example.prepend_before(:all, :behaviour_type => :special)',
-          'Example.before(:all, :behaviour_type => :special)',
-          'Example.prepend_before(:each, :behaviour_type => :special)',
-          'Example.before(:each, :behaviour_type => :special)',
-          'Example.append_before(:each, :behaviour_type => :special)',
+          'special.prepend_before(:all, :behaviour_type => :special)',
+          'special.before(:all, :behaviour_type => :special)',
+          'special.prepend_before(:each, :behaviour_type => :special)',
+          'special.before(:each, :behaviour_type => :special)',
+          'special.append_before(:each, :behaviour_type => :special)',
         ]
       end
 
@@ -263,48 +274,21 @@ module Spec
       end
 
       it "should include targetted modules included using configuration" do
-        $included_modules = []
+        mod1 = Module.new
+        mod2 = Module.new
+        mod3 = Module.new
+        Spec::Runner.configuration.include(mod1, mod2)
+        Spec::Runner.configuration.include(mod3, :behaviour_type => :not_special)
 
-        mod1 = Module.new do
-          class << self
-            def included(mod)
-              $included_modules << self
-            end
-          end
+        behaviour = Class.new(@special_behaviour).describe("I'm special", :behaviour_type => :special) do
+          it "does nothing"
         end
+        suite = behaviour.suite
+        suite.run
 
-        mod2 = Module.new do
-          class << self
-            def included(mod)
-              $included_modules << self
-            end
-          end
-        end
-
-        mod3 = Module.new do
-          class << self
-            def included(mod)
-              $included_modules << self
-            end
-          end
-        end
-
-        begin
-          Spec::Runner.configuration.include(mod1, mod2)
-          Spec::Runner.configuration.include(mod3, :behaviour_type => :cat)
-
-          behaviour = Class.new(Example).describe("I'm special", :behaviour_type => :dog) do
-            it "does nothing"
-          end
-          suite = behaviour.suite
-          suite.run
-
-          $included_modules.should include(mod1)
-          $included_modules.should include(mod2)
-          $included_modules.should_not include(mod3)
-        ensure
-          Spec::Runner.configuration.exclude(mod1, mod2, mod3)
-        end
+        behaviour.included_modules.should include(mod1)
+        behaviour.included_modules.should include(mod2)
+        behaviour.included_modules.should_not include(mod3)
       end
 
       it "should include any predicate_matchers included using configuration" do

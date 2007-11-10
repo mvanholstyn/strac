@@ -6,7 +6,7 @@ Story "Project Invitations", %|
   So that they may share in fun and challenging experiences of the project itself.
 |, :type => RailsStory do
   
-  Scenario "Sending invitations" do
+  Scenario "Sending invitations to an existing user of the system" do
     Given "a user is viewing a project" do
       a_user_viewing_a_project
     end
@@ -17,7 +17,61 @@ Story "Project Invitations", %|
       see_the_project_invitation_form
     end
     
-    Given "a user is viewing an invitation form" do; end
+    Given "the user is viewing an invitation form" do
+      # already here
+    end
+    When "they fill out the form and submit it" do
+      submit_the_project_invitation_form
+    end
+    Then "an email is sent to each email address specified" do
+      see_the_emails_were_sent
+    end
+    And "each email has a accept link" do
+      see_the_emails_each_have_a_unique_accept_link
+    end
+    And "each email contains the body that the user input" do
+      see_each_email_contains_the_from_the_submitted_form
+    end
+
+    Given "an existing user received an email invitation" do
+      reset!
+    end
+    When "they click on the invitation acceptance link" do
+      click_invitation_acceptance_link_in_email
+    end
+    Then "they should be taken to a signup or login page" do
+      see_signup_or_login_page
+    end
+    
+    Given "the existing user is viewing the signup or login page" do
+      # we are on this page already
+    end
+    When "they login" do
+      login_as @user_accepting_the_project_invitation, "password"
+    end
+    And "they go to the dashboard page" do
+      go_to_the_dashboard
+    end
+    Then "they see a link which takes them to the project they accepted" do
+      see_and_click_on_the_newly_accepted_project_link
+    end
+  end
+
+
+  Scenario "Sending invitations to a user not in the system" do
+    Given "a user is viewing a project" do
+      a_user_viewing_a_project
+    end
+    When "they click on the 'Invite People' link" do
+      click_on_invite_people_link
+    end
+    Then "they see an invitation form with text fields for email addresses and message body" do
+      see_the_project_invitation_form
+    end
+    
+    Given "the user is viewing an invitation form" do
+      # already here
+    end
     When "they fill out the form and submit it" do
       submit_the_project_invitation_form
     end
@@ -41,11 +95,11 @@ Story "Project Invitations", %|
       see_signup_or_login_page
     end
     
-    Given "a user viewing the signup or login page" do
+    Given "the user is viewing the signup or login page" do
       # we are on this page already
     end
-    When "they login" do
-      login_as @user_accepting_the_project_invitation, "password"
+    When "they submit the create an account form" do
+      submit_signup_form
     end
     And "they go to the dashboard page" do
       go_to_the_dashboard
@@ -53,7 +107,6 @@ Story "Project Invitations", %|
     Then "they see a link which takes them to the project they accepted" do
       see_and_click_on_the_newly_accepted_project_link
     end
-
   end
   
   def see_and_click_on_the_newly_accepted_project_link

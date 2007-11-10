@@ -5,11 +5,21 @@ module Spec
         @options = options
       end
 
+      def load_files(files)
+        # It's important that loading files (or choosing not to) stays the
+        # responsibility of the BehaviourRunner. Some implementations (like)
+        # the one using DRb may choose *not* to load files, but instead tell
+        # someone else to do it over the wire.
+        files.each do |file|
+          load file
+        end
+      end
+
       def run
         prepare
         success = true
-        behaviours.each do |behaviour|
-          success = success & behaviour.suite.run
+        behaviour_classes.each do |behaviour_class|
+          success = success & behaviour_class.suite.run
         end
         return success
       ensure
@@ -19,7 +29,7 @@ module Spec
       protected
       def prepare
         reporter.start(number_of_examples)
-        behaviours.reverse! if reverse
+        behaviour_classes.reverse! if reverse
         set_sequence_numbers
       end
 
@@ -39,12 +49,12 @@ module Spec
       # Sets the #number on each ExampleDefinition
       def set_sequence_numbers
         number = 0
-        behaviours.each do |behaviour|
-          number = behaviour.set_sequence_numbers(number)
+        behaviour_classes.each do |behaviour_class|
+          number = behaviour_class.set_sequence_numbers(number)
         end
       end      
 
-      def behaviours
+      def behaviour_classes
         @options.behaviours
       end
 

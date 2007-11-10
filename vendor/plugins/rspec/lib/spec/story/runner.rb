@@ -1,6 +1,9 @@
 require 'spec/story/runner/scenario_collector.rb'
 require 'spec/story/runner/scenario_runner.rb'
 require 'spec/story/runner/story_runner.rb'
+require 'spec/story/runner/story_parser.rb'
+require 'spec/story/runner/story_mediator.rb'
+require 'spec/story/runner/plain_text_story_runner.rb'
 
 module Spec
   module Story
@@ -21,7 +24,7 @@ module Spec
               scenario_runner.add_listener(reporter)
               @story_runner.add_listener(reporter)
             end
-            if not run_options.formatters.empty?
+            unless run_options.formatters.empty?
               documenter = ::Spec::Story::Documenter::PlainTextDocumenter.new($stdout)
               scenario_runner.add_listener(documenter)
               @story_runner.add_listener(documenter)

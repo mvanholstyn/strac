@@ -9,6 +9,10 @@ class UsersController < ApplicationController
   
   redirect_after_signup do
     set_current_user @user
+    accepted_project_name = InvitationManager.accept_pending_invitations(session, current_user)
+    if accepted_project_name
+      flash[:notice] = "You have been added to project: #{accepted_project_name}"
+    end
     dashboard_path
   end
   
@@ -30,7 +34,7 @@ private
 
   def assign_group
     if params[:user]
-      params[:user][:group_id] = Group.find_by_name("User").id
+      params[:user][:group_id] = Group.find_by_name("Developer").id
       params[:user][:active] = true
     end
   end

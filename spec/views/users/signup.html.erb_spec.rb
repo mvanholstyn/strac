@@ -1,16 +1,23 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe "/users/signup.html.erb" do
-  include StoriesHelper
+
+  def render_it
+    render "/users/signup.html.erb"
+  end
   
   before do
-    @story = mock_model(User)
-
+    @user = stub("user")
     assigns[:user] = @user
+    
+    template.expect_render(
+      :partial => "users/signup", :locals => { :user => @user }
+    ).and_return(%|<p id="signup_partial" />|)
   end
-
-  it "should render a signup form" do
-     render "/users/signup.html.erb"
-     response.should have_tag("form#signup")
+  
+  it "renders the /users/_signup.html.erb partial" do
+    render_it
+    response.should have_tag("#signup_partial")
   end
+  
 end

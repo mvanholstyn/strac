@@ -1,6 +1,5 @@
 module Spec
   module DSL
-    # TODO: We need RDoc here anyway (Aslak) 
     class ExampleRunner
       attr_reader :options, :example, :example_definition, :errors
 
@@ -9,14 +8,13 @@ module Spec
         @example = example
         @example_definition = example.rspec_definition
         @errors = []
-        @behaviour = example.rspec_behaviour
-        @behaviour_type = @behaviour.behaviour_type
+        @behaviour = example.class
       end
 
       def run
         reporter.example_started(example_definition)
         if dry_run
-          example_definition.description = "NO NAME (Because of --dry-run)"
+          example_definition.description = "NO NAME (Because of --dry-run)" if example_definition.description == :__generate_description
           return reporter.example_finished(example_definition, nil, example_definition.description)
         end
 
@@ -53,7 +51,7 @@ module Spec
       protected
       def before_example
         setup_mocks
-        example.before_each
+        example.run_before_each
         return ok?
       rescue Exception => e
         errors << e
@@ -72,8 +70,8 @@ module Spec
         return false
       end
 
-      def after_example(&behaviour_after_each)
-        example.after_each
+      def after_example
+        example.run_after_each
 
         begin
           verify_mocks

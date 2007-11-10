@@ -4,6 +4,20 @@ module Spec
     module Behaviour
       attr_accessor :description
 
+      # Makes the describe/it syntax available from a class. For example:
+      #
+      #   class StackSpec < Example
+      #     describe Stack, "with no elements"
+      #
+      #     before
+      #       @stack = Stack.new
+      #     end
+      #
+      #     it "should raise on pop" do
+      #       lambda{ @stack.pop }.should raise_error
+      #     end
+      #   end
+      #
       def describe(*args, &behaviour_block)
         set_description(*args)
         before_eval
@@ -11,14 +25,19 @@ module Spec
         self
       end
 
-      # Use this to pull in example_definitions from shared behaviours.
+      # Use this to pull in examples from shared behaviours.
       # See Spec::Runner for information about shared behaviours.
-      def it_should_behave_like(behaviour_description)
-        behaviour = SharedBehaviour.find_shared_behaviour(behaviour_description)
-        unless behaviour
-          raise RuntimeError.new("Shared Example '#{behaviour_description}' can not be found")
+      def it_should_behave_like(shared_behaviour)
+        case shared_behaviour
+        when SharedBehaviour
+          include shared_behaviour
+        else
+          behaviour = SharedBehaviour.find_shared_behaviour(shared_behaviour)
+          unless behaviour
+            raise RuntimeError.new("Shared Example '#{shared_behaviour}' can not be found")
+          end
+          include(behaviour)
         end
-        include(behaviour)
       end
 
       # :call-seq:
@@ -66,59 +85,54 @@ module Spec
         Kernel.warn("Example disabled: #{description}")
       end
 
-      def behaviour_type #:nodoc:
-        description[:behaviour_type]
-      end
-
-      def described_type
+      def described_type #:nodoc:
         description.described_type
       end
 
-      def example_definitions
+      def example_definitions #:nodoc:
         @example_definitions ||= []
       end
 
-      def number_of_examples
+      def number_of_examples #:nodoc:
         example_definitions.length
       end
 
-      def create_example_definition(description, options={}, &block)
+      def create_example_definition(description, options={}, &block) #:nodoc:
         ExampleDefinition.new(description, options, &block)
       end
 
+      # Registers a block to be executed before each example.
+      # This method prepends +block+ to existing before blocks.
       def prepend_before(*args, &block)
         scope, options = scope_and_options(*args)
-        add(scope, options, :before, :unshift, &block)
+        parts = before_parts_from_scope(scope)
+        parts.unshift(block)
       end
+
+      # Registers a block to be executed before each example.
+      # This method appends +block+ to existing before blocks.
       def append_before(*args, &block)
         scope, options = scope_and_options(*args)
-        add(scope, options, :before, :<<, &block)
+        parts = before_parts_from_scope(scope)
+        parts << block
       end
       alias_method :before, :append_before
 
+      # Registers a block to be executed after each example.
+      # This method prepends +block+ to existing after blocks.
       def prepend_after(*args, &block)
         scope, options = scope_and_options(*args)
-        add(scope, options, :after, :unshift, &block)
+        parts = after_parts_from_scope(scope)
+        parts.unshift(block)
       end
       alias_method :after, :prepend_after
+
+      # Registers a block to be executed after each example.
+      # This method appends +block+ to existing after blocks.
       def append_after(*args, &block)
         scope, options = scope_and_options(*args)
-        add(scope, options, :after, :<<, &block)
-      end
-
-      def scope_and_options(*args)
-        args, options = args_and_options(*args)
-        scope = (args[0] || :each), options
-      end
-
-      def add(scope, options, where, how, &block)
-        scope ||= :each
-        options ||= {}
-        behaviour_type = options[:behaviour_type]
-        case scope
-          when :each; self.__send__("#{where}_each_parts", behaviour_type).__send__(how, block)
-          when :all;  self.__send__("#{where}_all_parts", behaviour_type).__send__(how, block)
-        end
+        parts = after_parts_from_scope(scope)
+        parts << block
       end
 
       def remove_after(scope, &block)
@@ -135,27 +149,24 @@ module Spec
         after(:each, &block)
       end
 
-      def before_all_parts(behaviour_type=nil) # :nodoc:
-        @before_all_parts ||= {}
-        @before_all_parts[behaviour_type] ||= []
+      def before_all_parts # :nodoc:
+        @before_all_parts ||= []
       end
 
-      def after_all_parts(behaviour_type=nil) # :nodoc:
-        @after_all_parts ||= {}
-        @after_all_parts[behaviour_type] ||= []
+      def after_all_parts # :nodoc:
+        @after_all_parts ||= []
       end
 
-      def before_each_parts(behaviour_type=nil) # :nodoc:
-        @before_each_parts ||= {}
-        @before_each_parts[behaviour_type] ||= []
+      def before_each_parts # :nodoc:
+        @before_each_parts ||= []
       end
 
-      def after_each_parts(behaviour_type=nil) # :nodoc:
-        @after_each_parts ||= {}
-        @after_each_parts[behaviour_type] ||= []
+      def after_each_parts # :nodoc:
+        @after_each_parts ||= []
       end
 
-      def clear_before_and_after! # :nodoc:
+      # Only used from RSpec's own examples
+      def reset! # :nodoc:
         @before_all_parts = nil
         @after_all_parts = nil
         @before_each_parts = nil
@@ -163,6 +174,25 @@ module Spec
       end
       
       protected
+
+      def scope_and_options(*args)
+        args, options = args_and_options(*args)
+        scope = (args[0] || :each), options
+      end
+
+      def before_parts_from_scope(scope)
+        case scope
+        when :each; before_each_parts
+        when :all; before_all_parts
+        end
+      end
+
+      def after_parts_from_scope(scope)
+        case scope
+        when :each; after_each_parts
+        when :all; after_all_parts
+        end
+      end      
 
       def before_eval
       end

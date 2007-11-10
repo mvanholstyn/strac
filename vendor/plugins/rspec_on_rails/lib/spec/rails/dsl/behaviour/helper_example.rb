@@ -27,12 +27,6 @@ module Spec
       #   end
       class HelperExample < FunctionalExample
         class << self
-          def before_eval #:nodoc:
-            prepend_before {helper_setup}
-            append_after {teardown}
-            configure
-          end
-
           # The helper name....
           def helper_name(name=nil)
             send :include, "#{name}_helper".camelize.constantize
@@ -44,18 +38,16 @@ module Spec
         end
         ActionController::Routing::Routes.named_routes.install(self)
 
-        def helper_setup #:nodoc:
+        before(:all) do
           @controller_class_name = 'Spec::Rails::DSL::HelperBehaviourController'
-          functional_setup
+        end
+
+        before(:each) do
           @controller.request = @request
           @controller.url = ActionController::UrlRewriter.new @request, {} # url_for
 
           @flash = ActionController::Flash::FlashHash.new
           session['flash'] = @flash
-
-          # This is to fix the JavaScriptGenerator::GeneratorMethods issue
-          # TODO: Refactor me
-          @lines = []
 
           ActionView::Helpers::AssetTagHelper::reset_javascript_include_default
         end
@@ -68,7 +60,14 @@ module Spec
           ERB.new(text).result(binding)
         end
 
-        Spec::DSL::BehaviourFactory.add_example_class(:helper, self)
+
+        # TODO: BT - Helper Examples should proxy method_missing to a Rails View instance.
+        # When that is done, remove this method
+        def protect_against_forgery?
+          false
+        end
+
+        Spec::DSL::BehaviourFactory.register(:helper, self)
       end
 
       class HelperBehaviourController < ApplicationController #:nodoc:
