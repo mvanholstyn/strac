@@ -12,3 +12,4 @@ Dir[dir + "/helpers/*.rb"].each do |f|
   require f
 end
 
+Generate.group("Developer")

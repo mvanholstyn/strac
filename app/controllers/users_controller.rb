@@ -6,13 +6,16 @@ class UsersController < ApplicationController
   redirect_after_login do
     dashboard_path
   end
-  
-  redirect_after_signup do
+
+  after_successful_signup do
     set_current_user @user
     accepted_project_name = InvitationManager.accept_pending_invitations(session, current_user)
     if accepted_project_name
       flash[:notice] = "You have been added to project: #{accepted_project_name}"
     end
+  end
+  
+  redirect_after_signup do
     dashboard_path
   end
   

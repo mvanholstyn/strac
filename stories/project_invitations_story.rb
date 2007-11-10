@@ -5,7 +5,7 @@ Story "Project Invitations", %|
   I want to be able to invite other users to a project
   So that they may share in fun and challenging experiences of the project itself.
 |, :type => RailsStory do
-  
+    
   Scenario "Sending invitations to an existing user of the system" do
     Given "a user is viewing a project" do
       a_user_viewing_a_project
@@ -32,7 +32,7 @@ Story "Project Invitations", %|
     And "each email contains the body that the user input" do
       see_each_email_contains_the_from_the_submitted_form
     end
-
+  
     Given "an existing user received an email invitation" do
       reset!
     end
