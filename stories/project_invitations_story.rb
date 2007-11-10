@@ -98,6 +98,16 @@ Story "Project Invitations", %|
     Given "the user is viewing the signup or login page" do
       # we are on this page already
     end
+    When "they submit the create an account form with mismatched passwords" do
+      submit_signup_form :password => "blah", :password_confirmation => "foo"
+    end
+    Then "they see the errors regarding the mismatched passwords" do
+      see_errors "Password must match".to_regexp
+    end
+
+    Given "the user is viewing the signup or login page" do
+      # we are on this page already
+    end
     When "they submit the create an account form" do
       submit_signup_form
     end
