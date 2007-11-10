@@ -10,7 +10,7 @@ Story "Project Invitations", %|
     Given "a user is viewing a project" do
       a_user_viewing_a_project
     end
-    When "they click on the 'Invite People' link" do
+    When "they click on the 'invite people' link" do
       click_on_invite_people_link
     end
     Then "they see an invitation form with text fields for email addresses and message body" do
@@ -62,7 +62,7 @@ Story "Project Invitations", %|
     Given "a user is viewing a project" do
       a_user_viewing_a_project
     end
-    When "they click on the 'Invite People' link" do
+    When "they click on the 'invite people' link" do
       click_on_invite_people_link
     end
     Then "they see an invitation form with text fields for email addresses and message body" do
