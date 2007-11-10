@@ -1,1 +1,9 @@
+<div id="login_form_container" style="display: none;">
+<h1>Login</h1> or <%= link_to_function "Sign up", "Strac.toggleLoginAndSignupVisibility()" %>
+<%= render :partial => "users/login", :locals => { :user => @user } %>
+</div>
+
+<div id="signup_form_container">
+<h1>Sign up</h1> or <%= link_to_function "Login", "Strac.toggleLoginAndSignupVisibility()" %>
 <%= render :partial => "users/signup", :locals => { :user => @user } %>
+</div>

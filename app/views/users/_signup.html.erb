@@ -1,5 +1,3 @@
-<h1>Sign up</h1>
-
 <%= error_messages_for :user %>
 
 <% form_for :user, :url => signup_path, :html =>{:id => "signup"} do |form| -%>
@@ -19,8 +17,6 @@
   </p>
 
 	<p>
-  	<%= form.submit 'Signup' %>
+  	<%= form.submit 'Sign Up' %>
 	</p>
 <% end -%>
-
-<%= link_to "login", login_path %>

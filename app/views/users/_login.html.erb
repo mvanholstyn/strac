@@ -1,6 +1,4 @@
-<h1>Login</h1>
-
-<% form_for user, :url => login_path, :html => { :id => "login_form" } do |form| -%>
+<% form_for :user, user, :url => login_path, :html => { :id => "login_form" } do |form| -%>
 	<p>
   	<b>Email Address</b><br />
 		<%= form.text_field :email_address %>

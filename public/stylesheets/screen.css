@@ -576,3 +576,13 @@ table.project_summary {
 table.project_summary tr td, table.project_summary tr th {
   border-bottom: 1px solid lightgray; 
 }
+
+#login_form_container h1, #signup_form_container h1 {
+  display: inline
+}
+
+#login_form_container, #signup_form_container {
+  white-space: nowrap;
+  position: relative;
+  top: 0pt;
+}

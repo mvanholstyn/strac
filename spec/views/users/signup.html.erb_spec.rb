@@ -7,7 +7,7 @@ describe "/users/signup.html.erb" do
   end
   
   before do
-    @user = stub("user")
+    @user = stub("user", :email_address => "", :password => "", :id => 99)
     assigns[:user] = @user
     
     template.expect_render(
