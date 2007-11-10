@@ -22,21 +22,25 @@ Story "User Login", %|
   end
     
   Scenario "User with good credentials who has been activated" do
-    Given "a user at the login page" do
+    Given "a user with an account at the login page" do
       get login_path
-      @user = Generate.active_user("newuser3@jones.com", :password=>"password", :password_confirmation=>"password")
     end
     When "they login successfully" do
-      submit_form "login_form" do |form|
-        form.user.email_address = @user.email_address
-        form.user.password = "password"
-      end      
+      login_successfully
     end
     Then "they are redirected to to the dashboard page" do
       response.should redirect_to("/")
     end
   end
+end
 
+
+def login_successfully
+  @user = Generate.active_user("newuser3@jones.com", :password=>"password", :password_confirmation=>"password")
+  submit_form "login_form" do |form|
+    form.user.email_address = @user.email_address
+    form.user.password = "password"
+  end        
 end
 
 def login_unsuccessfully
