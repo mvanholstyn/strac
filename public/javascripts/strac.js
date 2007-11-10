@@ -9,6 +9,6 @@ Object.extend(Strac, {
     if(signup_form_container.visible()){
       form = signup_form_container;
     }
-    form.getElementsBySelector('form input[type=text]')[0].focus();  
+    form.down('form').focusFirstElement();  
   }
 });
