@@ -1,13 +1,13 @@
 # This file is copied to ~/spec when you run 'ruby script/generate rspec'
 # from the project root directory.
 ENV["RAILS_ENV"] = "test"
-require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
+dir = File.expand_path(File.dirname(__FILE__))
+require dir + "/../config/environment"
 require 'spec/rails'
 
-require File.expand_path(File.dirname(__FILE__) + "/../spec/helpers/assertions")
-require File.expand_path(File.dirname(__FILE__) + "/../spec/helpers/association_matcher")
-require File.expand_path(File.dirname(__FILE__) + "/../spec/spec_helpers/model_generation")
-require File.expand_path(File.dirname(__FILE__) + "/../spec/spec_helpers/string_extensions")
+Dir[dir + "/spec_helpers/*.rb"].each do |f|
+  require f
+end
 
 Spec::Runner.configure do |config|
   config.use_transactional_fixtures = true
