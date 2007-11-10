@@ -14,17 +14,17 @@ Story "User Signup", %|
       click_on_the_signup_link
     end
     Then "they will see the signup form" do
-      see_the_signup_form
+      see_the_signup_form 
     end
     
     Given "a user viewing the signup form" do
       # already here
     end
     When "they submit the form with acceptable data" do
-      submit_signup_form
+      submit_signup_form :email_address => "zach.dennis@gmail.com"
     end
     Then "they will be logged in" do
-      verify_the_user_has_logged_in
+      see_the_user_has_logged_in "zach.dennis@gmail.com"
     end
     And "they will see the dashboard page" do
       #we've already satisfied this
@@ -41,10 +41,6 @@ Story "User Signup", %|
   
   def see_the_signup_form
     assert_select "form[action=?]", signup_path, true
-  end
-  
-  def verify_the_user_has_logged_in
-    assert_select ".your_projects", /your projects/i, true
   end
   
 end

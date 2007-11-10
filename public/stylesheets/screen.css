@@ -108,6 +108,7 @@ body {
 	color:#555;
 	padding:14px 0 0 0;
 	border:none;
+	float: left;
 }
 
 #header h2 a {
@@ -316,6 +317,7 @@ th {
 	border: 5px solid green;
 	padding: 10px;
 	-moz-border-radius: 15px;
+	white-space: nowrap;
 }
 
 #error {
@@ -330,6 +332,7 @@ th {
 	border: 5px solid red;
 	padding: 10px;
 	-moz-border-radius: 15px;
+	white-space: nowrap;
 }
 
 .inplaceeditor-form {
@@ -582,3 +585,35 @@ table.project_summary tr td, table.project_summary tr th {
   position: relative;
   top: 0pt;
 }
+
+span.logged_in{
+  float: right; 
+  padding: 2px;
+  top: -24px;
+  color: white; 
+  position: relative;
+  font-style: italic;
+}
+
+span.logged_in a{
+ color: white; 
+}
+
+#notice .close, #error .close{
+  display: block;
+  position: absolute;
+  right: -8px;
+  top: -8px;
+  padding-right: 2px;
+}
+
+#notice .close span, #error .close span{
+  display: block;
+  width: 16px;
+  height: 16px;
+	background:url(../images/cancel.png);
+  visibility: hidden;
+}
+
+
+

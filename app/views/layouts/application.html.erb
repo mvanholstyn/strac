@@ -19,6 +19,10 @@
     <%= flash[:error] %>
   </div>
 
+  <% if current_user %>
+    <span class="logged_in">Logged in as <%= link_to current_user.email_address, profile_path %></span>
+  <% end %>
+
   <div id="wrapper">
     <div id="innerwrapper">
       <div id="header">
