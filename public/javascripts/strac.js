@@ -23,10 +23,10 @@ Object.extend(Strac, {
     close.observe('click', function(){
       element.hide();
     });
-    close.observe("mouseover", function(){
+    element.observe("mouseover", function(){
       close.down("span").setStyle({visibility: 'visible'});
     });  
-    close.observe("mouseout", function(){
+    element.observe("mouseout", function(){
       close.down("span").setStyle({visibility: 'hidden'});
     });  
   }

@@ -605,6 +605,7 @@ span.logged_in a{
   right: -8px;
   top: -8px;
   padding-right: 2px;
+	cursor: pointer;
 }
 
 #notice .close span, #error .close span{
@@ -614,6 +615,3 @@ span.logged_in a{
 	background:url(../images/cancel.png);
   visibility: hidden;
 }
-
-
-
