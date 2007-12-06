@@ -9,6 +9,7 @@ $_spec_spec = true # Prevents Kernel.exit in various places
 
 require 'spec'
 require 'spec/mocks'
+require 'spec/story'
 spec_classes_path = File.expand_path("#{dir}/../spec/spec/spec_classes")
 require spec_classes_path unless $LOAD_PATH.include?(spec_classes_path)
 require File.dirname(__FILE__) + '/../lib/spec/expectations/differs/default'
@@ -62,10 +63,26 @@ end
 class NonStandardError < Exception; end
 
 module Custom
-  class BehaviourRunner
+  class ExampleGroupRunner
     attr_reader :options, :arg
     def initialize(options, arg)
       @options, @arg = options, arg
     end
+
+    def load_files(files)
+    end
+
+    def run
+    end
   end  
+end
+
+def exception_from(&block)
+  exception = nil
+  begin
+    yield
+  rescue StandardError => e
+    exception = e
+  end
+  exception
 end

@@ -1,15 +1,14 @@
-require 'test/unit'
+require 'spec/version'
+require 'spec/matchers'
+require 'spec/expectations'
+require 'spec/example'
+require 'spec/extensions'
+require 'spec/runner'
 
-dir = File.dirname(__FILE__)
-require File.expand_path("#{dir}/spec/version")
-require File.expand_path("#{dir}/spec/matchers")
-require File.expand_path("#{dir}/spec/expectations")
-require File.expand_path("#{dir}/spec/translator")
-require File.expand_path("#{dir}/spec/dsl")
-require File.expand_path("#{dir}/spec/extensions")
-require File.expand_path("#{dir}/spec/runner")
-require File.expand_path("#{dir}/spec/story")
-require File.expand_path("#{dir}/spec/test")
+if Object.const_defined?(:Test); \
+  require 'spec/interop/test'; \
+end
+
 module Spec
   class << self
     def run?
@@ -23,5 +22,16 @@ module Spec
       result; \
     end
     attr_writer :run
+
+    def exit?; \
+      !Object.const_defined?(:Test) || Test::Unit.run?; \
+    end
   end
+end
+
+at_exit do \
+  unless $! || Spec.run?; \
+    success = Spec.run; \
+    exit success if Spec.exit?; \
+  end \
 end

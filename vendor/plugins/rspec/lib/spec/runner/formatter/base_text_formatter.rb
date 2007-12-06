@@ -1,3 +1,5 @@
+require 'spec/runner/formatter/base_formatter'
+
 module Spec
   module Runner
     module Formatter
@@ -20,12 +22,11 @@ module Spec
           else
             @output = where
           end
-          @snippet_extractor = SnippetExtractor.new
           @pending_examples = []
         end
         
-        def example_pending(behaviour_name, example_name, message)
-          @pending_examples << ["#{behaviour_name} #{example_name}", message]
+        def example_pending(example_group_description, example_name, message)
+          @pending_examples << ["#{example_group_description} #{example_name}", message]
         end
         
         def dump_failure(counter, failure)

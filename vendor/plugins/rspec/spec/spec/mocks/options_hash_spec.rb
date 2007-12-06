@@ -6,36 +6,37 @@ module Spec
       before do
         @options = ::Spec::Runner::Options.new(StringIO.new, StringIO.new)
         @reporter = ::Spec::Runner::Reporter.new(@options)
-        @behaviour = Class.new(::Spec::DSL::ExampleGroup).describe("My Behaviour")
+        @example_group = Class.new(::Spec::Example::ExampleGroup) do
+          plugin_mock_framework
+          describe("Some Examples")
+        end
       end
 
       it "should report the file and line submitted with :expected_from" do
-        example_definition = @behaviour.create_example_definition "spec" do
+        example_definition = @example_group.it "spec" do
           mock = Spec::Mocks::Mock.new("a mock")
           mock.should_receive(:message, :expected_from => "/path/to/blah.ext:37")
           mock.rspec_verify
         end
-        example = @behaviour.new(example_definition)
-        proxy = ::Spec::DSL::ExampleRunner.new(@options, example)
+        example = @example_group.new(example_definition)
         
         @reporter.should_receive(:example_finished) do |spec, error|
           error.backtrace.detect {|line| line =~ /\/path\/to\/blah.ext:37/}.should_not be_nil
         end
-        proxy.run
+        example.execute(@options)
       end
 
       it "should use the message supplied with :message" do
-        example_definition = @behaviour.create_example_definition "spec" do
+        example_definition = @example_group.it "spec" do
           mock = Spec::Mocks::Mock.new("a mock")
           mock.should_receive(:message, :message => "recebi nada")
           mock.rspec_verify
         end
-        example = @behaviour.new(example_definition)
-        proxy = ::Spec::DSL::ExampleRunner.new(@options, example)
+        example = @example_group.new(example_definition)
         @reporter.should_receive(:example_finished) do |spec, error|
           error.message.should == "recebi nada"
         end
-        proxy.run
+        example.execute(@options)
       end
     end
   end

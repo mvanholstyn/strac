@@ -1,2 +1,3 @@
-require File.expand_path(File.dirname(__FILE__) + '/extensions/object')
-require File.expand_path(File.dirname(__FILE__) + '/extensions/main')
+require 'spec/extensions/object'
+require 'spec/extensions/class'
+require 'spec/extensions/main'

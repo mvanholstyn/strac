@@ -9,6 +9,11 @@ require File.expand_path(File.dirname(__FILE__) + "/../spec/helpers/association_
 require File.expand_path(File.dirname(__FILE__) + "/../spec/spec_helpers/model_generation")
 require File.expand_path(File.dirname(__FILE__) + "/../spec/spec_helpers/string_extensions")
 
+dir = File.expand_path(File.dirname(__FILE__))
+Dir[ dir + "/spec_helpers/*.rb"].each do |f|
+  require f
+end
+
 Spec::Runner.configure do |config|
   config.use_transactional_fixtures = true
   config.use_instantiated_fixtures  = false
@@ -26,34 +31,6 @@ Spec::Runner.configure do |config|
   # If you declare global fixtures, be aware that they will be declared
   # for all of your examples, even those that don't use them.
 
-  def login_as(user)
-    if user.is_a?(String) || user.is_a?(Symbol)
-      user = users(user)
-    end
-    @request.session[:current_user_id] = user.id
-    User.current_user = user
-  end 
-
-  def mock_new_model(clazz)
-    model = mock_model(clazz)
-    model.stub!(:id)
-    model.stub!(:to_param)
-    model.stub!(:new_record?).and_return(true)
-    model
-  end
 
 end
 
-module Spec::DSL::Behaviour
-  alias_method :they, :it
-  alias_method :is, :it
-end
-
-def stub(name, attrs={})
-  mock = mock(name)
-  returning mock do |mock|
-    attrs.each_pair do |key, val|
-      mock.stub!(key).and_return(val)
-    end
-  end
-end

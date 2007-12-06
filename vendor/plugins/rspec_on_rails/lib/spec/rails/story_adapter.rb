@@ -9,9 +9,11 @@ require 'spec/rails'
 
 Test::Unit.run = true
 
+ActionController::Integration::Session.send(:include, Spec::Matchers)
+ActionController::Integration::Session.send(:include, Spec::Rails::Matchers)
+
 class RailsStory < ActionController::IntegrationTest
   self.use_transactional_fixtures = true
-  include Spec::Rails::Matchers
 
   def initialize #:nodoc:
     @_result = Test::Unit::TestResult.new
@@ -39,7 +41,7 @@ class Spec::Story::Runner::ScenarioRunner
 end
 
 class Spec::Story::GivenScenario
-  def perform(instance)
+  def perform(instance, name = nil)
     scenario = Spec::Story::Runner::StoryRunner.scenario_from_current_story @name
     runner = Spec::Story::Runner::ScenarioRunner.new
     runner.instance_variable_set(:@listeners,[])

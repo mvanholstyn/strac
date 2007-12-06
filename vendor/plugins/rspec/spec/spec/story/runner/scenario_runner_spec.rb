@@ -20,7 +20,7 @@ module Spec
           scenario_runner.run(scenario, world)
           
           # then
-          ensure_that $answer, is(42)
+          $answer.should == 42
         end
         
         it 'should allow scenarios to share methods' do
@@ -69,7 +69,6 @@ module Spec
           scenario_runner.run(scenario, world)
           
           # then
-          # TODO verify_all
         end
         
         it 'should notify listeners when a scenario succeeds' do
@@ -93,7 +92,6 @@ module Spec
           scenario_runner.run(scenario, world)
           
           # then
-          # TODO verify_all
         end
         
         it 'should notify listeners when a scenario raises an error' do
@@ -115,12 +113,11 @@ module Spec
           scenario_runner.run scenario, world
           
           # then
-          # TODO verify_all
         end
         
         it 'should notify listeners when a scenario is pending' do
           # given
-          pending_error = Spec::DSL::ExamplePendingError.new('todo')
+          pending_error = Spec::Example::ExamplePendingError.new('todo')
           story = Story.new 'title', 'narrative' do end
           scenario = Scenario.new story, 'scenario1' do
           end
@@ -138,7 +135,6 @@ module Spec
           scenario_runner.run scenario, world
           
           # then
-          # TODO verify_all
         end
       end
     end
