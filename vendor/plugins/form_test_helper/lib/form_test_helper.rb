@@ -14,10 +14,15 @@ module FormTestHelper
     class MissingSubmitError < RuntimeError; end
     include TagProxy
     attr_reader :tag
-    attr_accessor :xhr
     
-    def initialize(tag, testcase)
-      @tag, @testcase = tag, testcase
+    def initialize(tag, testcase, options={})
+      @tag, @testcase = tag, testcase, 
+      @submit_value = options.delete(:submit_value)
+      @xhr = options.delete(:xhr)
+    end
+
+    def xhr?
+      @xhr
     end
     
     # If you submit the form with JavaScript
@@ -28,13 +33,18 @@ module FormTestHelper
       
       # Convert arrays and hashes in param keys, since test processing doesn't do this automatically
       params = ActionController::UrlEncodedPairParser.new(params).result
-      @testcase.make_request(request_method, path, params, self.uri, xhr)
+      @testcase.make_request(request_method, path, params, self.uri, @xhr)
     end
     
     # Submits the form.  Raises an exception if no submit button is present.
     def submit(opts={})
-      raise MissingSubmitError, "Submit button not found in form" unless tag.select('input[type="submit"], input[type="image"], button[type="submit"]').any?
-      @xhr = opts.delete(:xhr)
+      msg = "Submit button not found in form"
+      selector = 'input[type="submit"], input[type="image"], button[type="submit"]'
+      if @submit_value
+        msg << " with a value of '#{@submit_value}'"
+        selector.gsub!(/\]/, "][value=#{@submit_value}]")
+      end
+      raise MissingSubmitError, msg unless tag.select(selector).any?
       fields_hash.update(opts)
       submit_without_clicking_button
     end
@@ -48,10 +58,13 @@ module FormTestHelper
     end
     
     def fields
+      return @fields if @fields
       # Input, textarea, select, and button are valid field tags.  Name is a required attribute.
-      @fields ||= tag.select('input, textarea, select, button').reject {|field_tag| field_tag['name'].nil? }.group_by {|field_tag| field_tag['name'] }.collect do |name, field_tags|
+      fields = tag.select('input, textarea, select, button').reject{ |tag| tag['name'].nil? }
+      @fields = fields.group_by {|field_tag| field_tag['name'] }.collect do |name, field_tags|
         case field_tags.first['type']
         when 'submit'
+          field_tags.reject!{ |tag,*| tag['value'] != @submit_value } if @submit_value
           FormTestHelper::Submit.new(field_tags)
         when 'checkbox'
           FormTestHelper::CheckBox.new(field_tags)
@@ -169,7 +182,9 @@ module FormTestHelper
     end
     
     def [](key)
-      raise(FieldNotFoundError, "Field named '#{key.to_s}' not found in FieldsHash.") unless self.has_key?(key)
+      unless self.has_key?(key)
+        raise(FieldNotFoundError, "Field named '#{key.to_s}' not found in FieldsHash.") 
+      end
       super
     end
     
@@ -188,6 +203,7 @@ module FormTestHelper
 
     
     protected
+    
     def convert_value(value)
       value.is_a?(Hash) ? FieldsHash.new(value) : value
     end
@@ -418,58 +434,6 @@ module FormTestHelper
     end
   end
   
-  def select_link(text=nil)
-    @html_document = nil # So it always grabs the latest response
-    if css_select(%Q{a[href="#{text}"]}).any?
-      links = assert_select("a[href=?]", text)
-    elsif text.nil?
-      links = assert_select('a', 1)
-    else
-      links = assert_select('a', text)
-    end
-    decorate_link(links.first)
-  end
-  
-  def decorate_link(link)
-    link.extend FormTestHelper::Link
-    link.testcase = self
-    link
-  end
-  
-  def select_form(text=nil, use_xhr=false)
-    @html_document = nil # So it always grabs the latest response
-    forms = case
-    when text.nil?
-      assert_select("form", 1)
-    when css_select(%Q{form[action="#{text}"]}).any?
-      assert_select("form[action=?]", text)
-    else
-      assert_select('form#?', text)
-    end
-    
-    returning Form.new(forms.first, self) do |form|
-      if block_given?
-        yield form
-        form.submit :xhr => use_xhr
-      end
-    end
-  end
-  
-  # Alias for select_form when called with a block. 
-  # Shortcut for select_form(name).submit(args) without block.
-  def submit_form(*args, &block)
-    if block_given?
-      if args[0].is_a?(Hash)
-        select_form(nil, args[0].delete(:xhr), &block)
-      else
-        select_form(*args, &block)
-      end
-    else
-      selector = args[0].is_a?(Hash) ? nil : args.shift
-      select_form(selector).submit(*args)
-    end
-  end
-  
   module Link
     def follow
       path = self.href
@@ -494,26 +458,5 @@ module FormTestHelper
       self
     end
   end
-  
-  def make_request(method, path, params={}, referring_uri=nil, use_xhr=false)
-    if self.kind_of?(ActionController::IntegrationTest) || self.kind_of?(ActionController::Integration::Session)
-      if use_xhr
-        params = {'_method' => method }.merge(params)
-        xml_http_request :post, path, params
-      else
-        self.send(method, path, params.stringify_keys, {:referer => referring_uri})
-      end
-    else
-      params.merge!(ActionController::Routing::Routes.recognize_path(path, :method => method))
-#      if params[:controller] && params[:controller] != current_controller = self.instance_eval("@controller").controller_path
-#        raise "Can't follow links outside of current controller (from #{current_controller} to #{params[:controller]})"
-#      end
-      self.instance_eval("@request").env["HTTP_REFERER"] ||= referring_uri # facilitate testing of redirect_to :back
-      if use_xhr
-        self.xhr(method, params.delete(:action), params.stringify_keys)
-      else
-        self.send(method, params.delete(:action), params.stringify_keys)
-      end
-    end
-  end
+
 end

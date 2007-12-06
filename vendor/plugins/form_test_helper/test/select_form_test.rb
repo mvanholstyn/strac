@@ -22,6 +22,32 @@ class SelectFormTest < Test::Unit::TestCase
     end
   end
   
+  def test_select_form_with_multiple_submits_where_the_submit_value_exists
+    render_html %|
+      <form id="test">
+        <input type="submit" value="yes" />
+        <input type="submit" value="no" />
+      </form>|
+    assert_select "form#?", "test"
+    form = select_form "test", :submit_value => "yes"
+    assert_equal FormTestHelper::Form, form.class
+  end
+  
+  def test_select_form_with_multiple_submits_where_the_submit_value_does_not_exist
+    render_html %|
+      <form id="test">
+        <input type="submit" value="Yes" name="yes"/>
+        <input type="submit" value="No" name="no" /><
+      /form>|
+    assert_select "form#test"
+    form = select_form "test", :submit_value => "Cancel"
+    assert_equal FormTestHelper::Form, form.class
+    
+    assert_raise(Test::Unit::AssertionFailedError) do
+      select_form 'nonexistent'
+    end
+  end
+
   def test_select_form_when_enclosed
     render_html %Q{<div><form id="test"></form></div>}
     select_form "test"
@@ -39,7 +65,7 @@ class SelectFormTest < Test::Unit::TestCase
     render_html %Q{<form id="one"></form><form id="two"></form>}
     assert_raise(Test::Unit::AssertionFailedError) { select_form }
   end
-  
+    
   def test_selected_form_submits_to_action
     render_rhtml %Q{<%= form_tag({:action => 'create'}) + submit_tag + "</form>" %>}
     form = select_form "/test/create"
@@ -227,16 +253,49 @@ class SelectFormTest < Test::Unit::TestCase
     assert_equal value, @controller.params[:username]
     assert_equal({"commit"=>"Save changes", "username"=>value, "action"=>"create", "controller"=>@controller.controller_name}, @controller.params)
   end
+
+  def test_submit_with_multiple_submit_values_submitting_yes
+    value = "jason"
+    render_rhtml <<-EOD
+      <%= form_tag({:action => 'create'}, {:id => "test" }) %>
+        <%= text_field_tag "username", "#{value}" %>
+        <%= submit_tag "Yes", :value => "yes" %>
+        <%= submit_tag "No", :value => "no" %>
+      </form>
+    EOD
+    form = select_form "test", :submit_value => "yes"
+    form.submit
+    assert_response :success
+    assert_equal value, @controller.params[:username]
+    assert_equal({"commit"=>"yes", "username"=>value, "action"=>"create", "controller"=>@controller.controller_name}, @controller.params)
+  end
+
+  def test_submit_with_multiple_submit_values_submitting_no
+    value = "jason"
+    render_rhtml <<-EOD
+      <%= form_tag({:action => 'create'}, {:id => "test" }) %>
+        <%= text_field_tag "username", "#{value}" %>
+        <%= submit_tag "Yes", :value => "yes" %>
+        <%= submit_tag "No", :value => "no" %>
+      </form>
+    EOD
+    form = select_form "test", :submit_value => "no"
+    form.submit
+    assert_response :success
+    assert_equal value, @controller.params[:username]
+    assert_equal({"commit"=>"no", "username"=>value, "action"=>"create", "controller"=>@controller.controller_name}, @controller.params)
+  end
     
-  def test_submit_by_xhr
+  def test_submit_by_xhr_without_a_block
     render_for_xhr
-    form = select_form
     new_value = 'brent'
-    form.submit :username => new_value, :xhr => true
+    form = select_form :xhr => true
+    form.username = new_value
+    form.submit
     check_xhr_responses new_value
   end
     
-  
+          
   def test_text_field
     assert_select_form_works_with "article[name]", "My article" do |name, value|
       text_field_tag name, value

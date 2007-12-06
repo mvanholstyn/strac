@@ -22,6 +22,14 @@ ActionController::Routing.controller_paths.each do |path|
   Dir["#{path}/*.rb"].each { |f| require f }
 end
 
+# Rails Trunk is reloading routes on every request. We want to use
+# our custom routes so we're overriding the methods which do the dirty work
+class ActionController::Routing::RouteSet
+  def reload ; end
+  def load! ; end
+  def reload! ; end
+  def load ; end
+end
 
 module FormTestHelperAssertions
 
@@ -35,12 +43,10 @@ module FormTestHelperAssertions
     get :html
   end
 
-
   def render_rjs(&block)
     @controller.response_with &block
     get :rjs
   end
-
 
   def render_xml(xml)
     @controller.response_with = xml

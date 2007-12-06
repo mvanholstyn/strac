@@ -55,6 +55,58 @@ class SubmitFormTest < Test::Unit::TestCase
     assert_nothing_raised { submit_form }
   end
   
+  def test_submit_requires_submit_tag_with_value
+    render_rhtml <<-EOD
+      <%= form_tag(:action => 'create') %>
+        <%= text_field_tag "username", "jason" %>
+      </form>
+    EOD
+    assert_raise(FormTestHelper::Form::MissingSubmitError) { submit_form :submit_value => "yes" }
+    
+    render_rhtml <<-EOD
+      <%= form_tag(:action => 'create') %>
+        <BUTTON name="submit" value="yes" type="submit">Submit</BUTTON>
+      </form>
+    EOD
+    assert_nothing_raised { submit_form :submit_value => "yes"  }
+
+    render_rhtml <<-EOD
+      <%= form_tag(:action => 'create') %>
+        <BUTTON name="submit" value="no" type="submit">Submit</BUTTON>
+      </form>
+    EOD
+    assert_raise(FormTestHelper::Form::MissingSubmitError) { submit_form :submit_value => "yes"  }
+    
+    render_rhtml <<-EOD
+      <%= form_tag(:action => 'create') %>
+        <input type="submit" value="yes">
+      </form>
+    EOD
+    assert_nothing_raised { submit_form :submit_value => "yes"  }
+
+    render_rhtml <<-EOD
+      <%= form_tag(:action => 'create') %>
+        <input type="submit" value="no">
+      </form>
+    EOD
+    assert_raise(FormTestHelper::Form::MissingSubmitError) { submit_form :submit_value => "yes"  }
+    
+    render_rhtml <<-EOD
+      <%= form_tag(:action => 'create') %>
+        <%= image_submit_tag 'image.png', :value => "yes" %>
+      </form>
+    EOD
+    assert_nothing_raised { submit_form }    
+
+    render_rhtml <<-EOD
+      <%= form_tag(:action => 'create') %>
+        <%= image_submit_tag 'image.png', :value => "no" %>
+      </form>
+    EOD
+    assert_raise(FormTestHelper::Form::MissingSubmitError) { submit_form :submit_value => "yes"  }
+
+  end
+  
   def test_submit_form_accepts_block
     render_rhtml <<-EOD
       <%= form_tag(:action => 'create') %>
@@ -108,7 +160,7 @@ class SubmitFormTest < Test::Unit::TestCase
     assert_redirected_to :action => 'rhtml'
   end
   
-  def test_submit_by_xhr_using_a_block
+  def test_submit_form_by_xhr_using_a_block
     render_for_xhr
     new_value = 'brent'
     submit_form :xhr => true do | form |
@@ -232,4 +284,38 @@ class SubmitFormTest < Test::Unit::TestCase
     submit_form  
     assert_equal "created", @response.body
   end
+  
+  def test_submit_form_with_multiple_submit_values_submitting_with_a_block
+    value = "jason"
+    render_rhtml <<-EOD
+      <%= form_tag({:action => 'create'}, {:id => "test" }) %>
+        <%= text_field_tag "username", "#{value}" %>
+        <%= submit_tag "Yes", :value => "yes" %>
+        <%= submit_tag "No", :value => "no" %>
+        <%= submit_tag "Maybe", :value => "maybe" %>
+      </form>
+    EOD
+    form = submit_form "test", :submit_value => "maybe" do |form|
+    end
+    assert_response :success
+    assert_equal value, @controller.params[:username]
+    assert_equal({"commit"=>"maybe", "username"=>value, "action"=>"create", "controller"=>@controller.controller_name}, @controller.params)
+  end
+
+  def test_submit_form_with_multiple_submit_values_submitting_without_a_block
+    value = "jason"
+    render_rhtml <<-EOD
+      <%= form_tag({:action => 'create'}, {:id => "test" }) %>
+        <%= text_field_tag "username", "#{value}" %>
+        <%= submit_tag "Yes", :value => "yes" %>
+        <%= submit_tag "No", :value => "no" %>
+        <%= submit_tag "Maybe", :value => "maybe" %>
+      </form>
+    EOD
+    form = submit_form "test", :submit_value => "maybe"
+    assert_response :success
+    assert_equal value, @controller.params[:username]
+    assert_equal({"commit"=>"maybe", "username"=>value, "action"=>"create", "controller"=>@controller.controller_name}, @controller.params)
+  end
+  
 end
