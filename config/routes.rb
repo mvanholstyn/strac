@@ -10,6 +10,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :tags, :collection => { :auto_complete => :any }
   map.resources :projects do |project_map|
+    project_map.resources :phases
     project_map.resources :invitations
     project_map.resources :iterations, :name_prefix => nil, 
                           :collection => { :current => :get },
