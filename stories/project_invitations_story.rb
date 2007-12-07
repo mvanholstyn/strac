@@ -47,7 +47,7 @@ Story "Project Invitations", %|
       # we are on this page already
     end
     When "they login" do
-      login_as @user_accepting_the_project_invitation, "password"
+      login_as @user_accepting_the_project_invitation.email_address, "password"
     end
     And "they go to the dashboard page" do
       go_to_the_dashboard
@@ -84,7 +84,7 @@ Story "Project Invitations", %|
     And "each email contains the body that the user input" do
       see_each_email_contains_the_from_the_submitted_form
     end
-
+  
     Given "a user received an email invitation" do
       reset!
     end
@@ -104,7 +104,7 @@ Story "Project Invitations", %|
     Then "they see the errors regarding the mismatched passwords" do
       see_errors "Password must match".to_regexp
     end
-
+  
     Given "the user is viewing the signup or login page" do
       # we are on this page already
     end
@@ -121,18 +121,7 @@ Story "Project Invitations", %|
   
   def see_and_click_on_the_newly_accepted_project_link
     click_project_link_for @project
-  end
-  
-  def a_user_viewing_a_project
-    @project = Generate.project("ProjectA")
-    user = Generate.user("joe@blow.com")
-    user.projects << @project
-    
-    get login_path
-    login_as user, "password"
-    
-    click_project_link_for @project
-  end
+  end  
   
   def click_invitation_acceptance_link_in_email
     @user_accepting_the_project_invitation = Generate.user("bob@example.com")
@@ -171,15 +160,7 @@ Story "Project Invitations", %|
     emails.first.to.should == [@emails.first]
     emails.last.to.should == [@emails.last]
   end
-  
-  def login_as(user, password)
-    submit_form "login_form" do |form|
-      form.user.email_address = user.email_address
-      form.user.password = password
-    end
-    follow_redirect!
-  end
-  
+    
   def see_the_emails_each_have_a_unique_accept_link
     emails = ActionMailer::Base.deliveries
     invitations = Invitation.find(:all)
