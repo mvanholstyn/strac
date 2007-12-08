@@ -238,7 +238,10 @@ class FullMigrationTest < ActionController::IntegrationTest
     
     assert Privilege.find_by_name("user")  
     
-    assert Group.find_by_name("User")
+    assert Group.find_by_name("Developer")
+    assert Group.find_by_name("Customer")
+    assert Group.find_by_name("Customer Admin")
+    assert Group.find_by_name("Admin")
     
     assert User.find_by_email_address("admin@example.com")
 
