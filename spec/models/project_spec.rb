@@ -9,8 +9,12 @@ describe Project, "#new with no attributes" do
     @project.should_not be_valid
   end
 
-  it "can have many invitations" do
+  it "has many invitations" do
     assert_association Project, :has_many, :invitations, Invitation
+  end
+  
+  it "has many phases" do
+    assert_association Project, :has_many, :phases, Phase
   end
 end
 

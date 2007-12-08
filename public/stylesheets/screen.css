@@ -615,3 +615,19 @@ span.logged_in a{
 	background:url(../images/cancel.png);
   visibility: hidden;
 }
+
+/* PHASES
+------------------------------- */
+a.create_phase {
+  display: block;
+  float: right;
+}
+
+#phases {
+  margin-top: 30px;
+}
+
+#phases .mini_phase {
+  margin-bottom: 20px;
+}
+

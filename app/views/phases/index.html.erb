@@ -1,3 +1,14 @@
-<div id="phases">
+<%= link_to_remote "create phase", 
+  :url => new_project_phase_path(:project_id => @project.id), 
+  :method => :get,
+  :html => { :class => "create_phase" } %>
+
+<div id="new_phase">
   
+</div>
+
+<div id="phases">
+<% @phases.each do |phase| -%>
+  <%= render :partial => "phases/mini_phase", :locals => { :phase => phase } %>
+<% end -%>  
 </div>

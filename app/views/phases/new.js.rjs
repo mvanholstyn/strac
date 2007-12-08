@@ -1,0 +1,3 @@
+page["new_phase"].replace_html :partial => 'phases/new', :locals => { :phase => @phase }
+page.visual_effect :blind_down, "new_phase", :duration => 0.3
+page[:phase_form].focusFirstElement

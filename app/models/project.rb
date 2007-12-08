@@ -12,6 +12,7 @@
 class Project < ActiveRecord::Base
   validates_presence_of :name
   
+  has_many :phases
   has_many :invitations
   has_many :time_entries
   has_many :stories
