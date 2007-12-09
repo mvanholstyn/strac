@@ -5,6 +5,10 @@ describe Iteration do
     @iteration = Iteration.new
   end
 
+  it "is a Bucket" do
+    Iteration.new.should be_kind_of(Bucket)
+  end
+
   it "is valid with a name, project_id, start_date and end_date" do
     @iteration.name = "Iteration 1"
     @iteration.project_id = 1
@@ -13,24 +17,12 @@ describe Iteration do
     @iteration.should be_valid
   end
 
-  it "has many stories ordered by position" do
-    assert_association Iteration, :has_many, :stories, Story, :order => :position
-  end
-
   it "should always have a start date" do
     assert_validates_presence_of @iteration, :start_date
   end
 
   it "should always have a end date" do
     assert_validates_presence_of @iteration, :end_date
-  end
-  
-  it "should always belong to a project" do
-    assert_validates_presence_of @iteration, :project_id
-  end
-
-  it "should always have a name" do
-    assert_validates_presence_of @iteration, :name
   end
   
   it "should have have a start date that comes before its end date" do
@@ -114,3 +106,34 @@ describe "Iteration with stories" do
     @iteration.points_before_iteration.should == 5
   end
 end
+
+describe Iteration, '#display_name' do
+  before do
+    @start_date = Time.now.yesterday
+    @end_date = Time.now
+  end
+  
+  describe "with a blank name" do
+    before do
+      @iteration = Iteration.new :start_date => @start_date, :end_date => @end_date
+    end
+    
+    it "returns a string in the form of 'YY-MM-DD through YY-MM-DD" do
+      n = @iteration.display_name
+      n.should == @start_date.strftime( "%Y-%m-%d" ) + " through " + @end_date.strftime( "%Y-%m-%d" )
+    end
+  end
+  
+  describe "with a name" do
+    before do
+      @name = "FooBaz"
+      @iteration = Iteration.new :name => @name, :start_date => @start_date, :end_date => @end_date
+    end
+    
+    it "returns a string in the form of 'name (YY-MM-DD through YY-MM-DD)" do
+      n = @iteration.display_name
+      n.should == "#{@name} (#{@start_date.strftime( "%Y-%m-%d" )} through #{@end_date.strftime( "%Y-%m-%d" )})"    
+    end
+  end
+end
+

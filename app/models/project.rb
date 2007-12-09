@@ -12,13 +12,14 @@
 class Project < ActiveRecord::Base
   validates_presence_of :name
   
-  has_many :phases
   has_many :invitations
   has_many :time_entries
   has_many :stories
   has_many :activities
   has_many :project_permissions, :dependent => :destroy
   has_many_polymorphs :accessors, :through => :project_permissions, :from => [:users]
+  has_many :buckets
+  has_many :phases 
   has_many :iterations do 
     def find_current
       find :first, :conditions => [ "? BETWEEN start_date AND end_date", Date.today ]
@@ -28,6 +29,7 @@ class Project < ActiveRecord::Base
       find_current || build( :name => "Iteration #{size + 1}", :start_date => Date.today, :end_date =>  Date.today + 7 )
     end
   end
+
   
   def iterations_ordered_by_start_date
     iterations.find(:all, :order => :start_date)

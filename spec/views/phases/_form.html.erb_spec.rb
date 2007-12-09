@@ -2,38 +2,44 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe "/phases/_form.html.erb" do
   def render_it
-    render :partial => "/phases/form", :locals => { :phase => @phase }
+    render :partial => "phases/form.html.erb", :locals => { :phase => @phase }
   end
-  
+
   before do
     @project = mock_model(Project)
-    @phase = mock_model(Phase, :new_record? => true, :name => "", :project => @project)
+    @phase = mock_model(Phase, 
+      :project => @project, 
+      :name => nil, 
+      :description => nil)
     template.stub!(:error_messages_for)
   end
+
+  it "renders errors for the phase" do
+    template.should_receive(:error_messages_for).with(:phase).and_return(%|<p id="phase_errors" />|)
+    render_it
+    response.should have_tag('p#phase_errors')
+  end
   
-  it "renders errors on phase" do
-    template.should_receive(:error_messages_for).with(:phase).and_return(%|<p id="the_errors" />|)
+  it "renders a form to create a Phase" do
     render_it
-    response.should have_tag('p#the_errors')
+    response.should have_tag('form[action=?]', project_phase_path(@project, @phase))
   end
-
-  it "renders the new form" do
-    render_it
-    response.should have_tag("form.new_phase[method=post][id=phase_form][action=?]", project_phases_path(@project))
-  end
-
-  describe "the new phase form" do
+  
+  describe "create a Phase form" do
     it "has a name text field" do
-      @phase.should_receive(:name).and_return("")
       render_it
-      response.should have_tag("form.new_phase input[type=text][id=?]", "phase_name")
+      response.should have_tag('input[type=text][id=?]', 'phase_name')
+    end
+    
+    it "has a description text area" do
+      render_it
+      response.should have_tag('textarea[id=?]', 'phase_description')
     end
     
     it "has a submit button" do
       render_it
-      response.should have_tag("form.new_phase input[type=submit]")
+      response.should have_tag('input[type=submit]')
     end
   end
+
 end
-
-

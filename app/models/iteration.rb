@@ -13,21 +13,19 @@
 #  updated_at :datetime      
 #
 
-class Iteration < ActiveRecord::Base
-  has_many :stories, :order => :position
-  belongs_to :project
+class Iteration < Bucket
 
-  validates_presence_of :start_date, :end_date, :project_id, :name
+  validates_presence_of :start_date, :end_date
   validate :validate_iterations_do_not_overlap
   validate :validate_start_date_is_before_end_date
-  
+
   def points_before_iteration
     Story.sum( :points, 
       :conditions => ["created_at < :start_date", { :start_date => self.start_date } ] ) || 0
   end
   
   def points_completed
-    Story.sum( :points, :conditions => { :iteration_id => id,:status_id => Status.complete.id } ) || 0
+    Story.sum( :points, :conditions => { :bucket_id => id,:status_id => Status.complete.id } ) || 0
   end
   
   def points_remaining
@@ -35,7 +33,7 @@ class Iteration < ActiveRecord::Base
   end
 
   def total_points
-    Story.sum( :points, :conditions => { :iteration_id => id } ) || 0
+    Story.sum( :points, :conditions => { :bucket_id => id } ) || 0
   end
   
   def display_name
@@ -45,7 +43,7 @@ class Iteration < ActiveRecord::Base
       "#{name} (#{start_date.strftime( "%Y-%m-%d" ) + " through " + end_date.strftime( "%Y-%m-%d" )})"
     end
   end
-  
+
   private
   
   def validate_iterations_do_not_overlap
@@ -71,4 +69,5 @@ class Iteration < ActiveRecord::Base
   
     true
   end
+  
 end

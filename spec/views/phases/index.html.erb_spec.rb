@@ -2,43 +2,45 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe "/phases/index.html.erb" do
   def render_it
-    assigns[:project] = @project
     assigns[:phases] = @phases
-    render "/phases/index.html.erb"
+    assigns[:project] = @project
+    render "phases/index.html.erb"
   end
   
   before do
-    @phases = []
     @project = mock_model(Project)
-    template.stub_render(:partial => "phases/mini_phase", :locals => {:phase => @phase})
+    @phases = [ mock_model(Phase, :name => nil), mock_model(Phase, :name => nil) ]
   end
-
-  it "renders a remote link to create a new story" do
-    @project.should_receive(:id).and_return(98)
+  
+  it "renders the name of each phase" do
+    @phases.first.should_receive(:name).and_return("Foo")
+    @phases.last.should_receive(:name).and_return("Bar")
     render_it
-    response.should have_tag("a.create_phase[onclick*=?]", new_project_phase_path(98))
+    response.should have_text("Foo".to_regexp)
+    response.should have_text("Bar".to_regexp)
   end
-
-  it "renders a place holder for the new story form to go" do
+  
+  it "renders a link to each phase" do
     render_it
-    response.should have_tag("#new_phase")
+    response.should have_tag('a[href=?]', project_phase_path(@project, @phases.first))
+    response.should have_tag('a[href=?]', project_phase_path(@project, @phases.last))
   end
-
-  it "renders the phases list" do
+  
+  it "renders a link to each phase's edit page" do
     render_it
-    response.should have_tag('#phases')
+    response.should have_tag('a[href=?]', edit_project_phase_path(@project, @phases.first))
+    response.should have_tag('a[href=?]', edit_project_phase_path(@project, @phases.last))    
   end
-
-  describe "the phases list" do
-    it "renders the phases/mini_phase partial for each phase" do
-      @phases = [ stub("phase 1"), stub("phase 2") ]
-      template.expect_render(:partial => "phases/mini_phase", :locals => {:phase => @phases.first}).and_return(%|<p id="phase1" />|)
-      template.expect_render(:partial => "phases/mini_phase", :locals => {:phase => @phases.last}).and_return(%|<p id="phase2" />|)
-      render_it
-      response.should have_tag('p#phase1')
-      response.should have_tag('p#phase2')
-    end
+  
+  it "renders a link to destroy each phase" do
+    render_it
+    response.should have_tag('a[href=?][onclick*=?]', project_phase_path(@project, @phases.first), "delete")
+    response.should have_tag('a[href=?][onclick*=?]', project_phase_path(@project, @phases.last), "delete")
+  end
+  
+  it "renders a link to create a new phase" do
+    render_it
+    response.should have_tag('a[href=?]', new_project_phase_path(@project))
   end
   
 end
-

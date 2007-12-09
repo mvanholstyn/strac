@@ -5,7 +5,7 @@
     </td>
     <td align="right">
       <%= link_to_remote "create story", 
-        :url => new_story_path(:project_id => iteration.project.id, :iteration_id => iteration.id ), 
+        :url => new_story_path(:project_id => iteration.project.id, :bucket_id => iteration.id ), 
         :method => :get,
         :html => { :class => "create-story" } %></td>
   </tr>

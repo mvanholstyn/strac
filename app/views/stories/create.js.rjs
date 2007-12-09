@@ -4,13 +4,13 @@ page[:notice].show
 page.visual_effect :appear, :notice
 page.delay( 5 ) {  page.visual_effect :fade, :notice }
 
-iteration_id = "iteration_#{@story.iteration ? @story.iteration.id : 'nil'}"
-page.insert_html :bottom, iteration_id, :partial => 'list', :locals => { :stories => [ @story ] }
+bucket_id = "iteration_#{@story.iteration ? @story.iteration.id : 'nil'}"
+page.insert_html :bottom, bucket_id, :partial => 'list', :locals => { :stories => [ @story ] }
 
 
 iteration_list_ids = [ "iteration_nil" ] + @project.iterations.map{ |i| "iteration_#{i.id}" }
-page.sortable iteration_id, :url => reorder_stories_path(@project), :method => :put,
+page.sortable bucket_id, :url => reorder_stories_path(@project), :method => :put,
                             :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => iteration_list_ids
 
-@story = Story.new :iteration_id => @story.iteration_id # we want a fresh form
-page["#{iteration_id}_story_new"].replace_html :partial => 'new'
+@story = Story.new :bucket_id => @story.bucket_id # we want a fresh form
+page["#{bucket_id}_story_new"].replace_html :partial => 'new'

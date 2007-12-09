@@ -8,7 +8,7 @@
 #  description            :text          
 #  points                 :integer(11)   
 #  position               :integer(11)   
-#  iteration_id           :integer(11)   
+#  bucket_id           :integer(11)   
 #  project_id             :integer(11)   
 #  responsible_party_id   :integer(11)   
 #  responsible_party_type :string(255)   
@@ -20,7 +20,7 @@
 #
 
 class Story < ActiveRecord::Base
-  belongs_to :iteration
+  belongs_to :bucket
   belongs_to :project
   belongs_to :status
   belongs_to :priority
@@ -29,7 +29,7 @@ class Story < ActiveRecord::Base
   has_many :comments, :as => :commentable
   has_many :activities, :as => :affected 
 
-  acts_as_list :scope => :iteration_id
+  acts_as_list :scope => :bucket_id
   acts_as_taggable
   acts_as_textiled :description
   acts_as_comparable
@@ -54,23 +54,23 @@ class Story < ActiveRecord::Base
   #TODO: Is there a better way to put this into a single SQL statement?
   def self.reorder ids, options={}
     options = options.symbolize_keys
-    raise ArgumentError.new("iteration_id is required") unless options.has_key?(:iteration_id)
+    raise ArgumentError.new("bucket_id is required") unless options.has_key?(:bucket_id)
     
-    iteration_id = options[:iteration_id]
+    bucket_id = options[:bucket_id]
     values = []
     ids.each_with_index do |id, index|
-      values << [id, index+1, iteration_id]
+      values << [id, index+1, bucket_id]
     end
     
-    columns2import = [:id, :position, :iteration_id]
-    columns2update = [:position, :iteration_id]
+    columns2import = [:id, :position, :bucket_id]
+    columns2update = [:position, :bucket_id]
     Story.import( columns2import, values, :on_duplicate_key_update=>columns2update, :validate=>false )
     true
   end
   
   def self.find_backlog options = {}
     with_scope :find => options do
-      find :all, :conditions => { :iteration_id => nil }
+      find :all, :conditions => { :bucket_id => nil }
     end
   end
   

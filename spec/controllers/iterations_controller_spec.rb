@@ -84,7 +84,7 @@ end
 
 
 describe IterationsController, "user without 'user' privileges" do
-  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :iterations
+  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :buckets
 
   before do
     @user = login_as :user_without_privileges
@@ -113,7 +113,7 @@ end
 
 
 describe IterationsController, "user with 'user' privileges requesting index" do
-  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :iterations
+  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :buckets
 
   before do
     @user = login_as :joe
@@ -137,7 +137,7 @@ describe IterationsController, "user with 'user' privileges requesting index" do
 end
 
 describe IterationsController, "user with 'user' privileges requesting new" do
-  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :iterations
+  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :buckets
 
   before do
     @user = login_as :joe
@@ -160,7 +160,7 @@ describe IterationsController, "user with 'user' privileges requesting new" do
 end
 
 describe IterationsController, "user with 'user' privileges requesting show" do
-  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :iterations
+  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :buckets
 
   before do
     @user = login_as :joe
@@ -183,7 +183,7 @@ describe IterationsController, "user with 'user' privileges requesting show" do
 end
 
 describe IterationsController, "user with 'user' privileges requesting create successfully" do
-  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :iterations
+  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :buckets
 
   before do
     @user = login_as :joe
@@ -226,7 +226,7 @@ describe IterationsController, "user with 'user' privileges requesting create su
 end
 
 describe IterationsController, "user with 'user' privileges requesting create unsuccessfully" do
-  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :iterations
+  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :buckets
 
   before do
     @user = login_as :joe
@@ -254,7 +254,7 @@ describe IterationsController, "user with 'user' privileges requesting create un
 end
 
 describe IterationsController, "user with 'user' privileges requesting update successfully" do
-  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :iterations
+  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :buckets
 
   before do
     @user = login_as :joe
@@ -279,7 +279,7 @@ describe IterationsController, "user with 'user' privileges requesting update su
 end
 
 describe IterationsController, "user with 'user' privileges requesting update unsuccessfully" do
-  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :iterations
+  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :buckets
 
   before do
     @user = login_as :joe
@@ -312,7 +312,7 @@ end
 
 
 describe IterationsController, "user with 'user' privileges requesting edit" do
-  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :iterations
+  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :buckets
 
   before do
     @user = login_as :joe
@@ -335,7 +335,7 @@ describe IterationsController, "user with 'user' privileges requesting edit" do
 end
 
 describe IterationsController, "user with 'user' privileges requesting destroy" do
-  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :iterations
+  fixtures :users, :groups_privileges, :privileges, :groups, :projects, :buckets
   
   before do
     @user = login_as :joe

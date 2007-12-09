@@ -2,34 +2,69 @@ class PhasesController < ApplicationController
   before_filter :find_project
 
   def index
-    @phases = @project.phases
-  end
+    @phases = @project.phases.find(:all, :order => "name")
 
-  def new
-    @phase = @project.phases.build
     respond_to do |format|
-      format.js{ render :action => "new.js.rjs" }
+      format.html
+      format.xml { render :xml => @phases.to_xml }
     end
   end
   
+  def new
+    @phase = @project.phases.build
+  end
+
   def create
-    @phase = @project.phases.build(params[:phase])
+    @phase = @project.phases.build( params[:phase] )
     respond_to do |format|
-      format.js do
-        if @phase.save
-          flash[:notice] = "The phase has been created successfully"
-        else
-          flash[:error] = "The phase could not be created."
-        end
-        render :template => "phases/create.js.rjs"
+      if @phase.save
+        flash[:notice] = 'phase was successfully created.'
+        format.html { redirect_to project_phase_path(@project, @phase) }
+      else
+        flash[:error] = 'phase failed to create.'
+        format.html { render :action => "new" }
       end
     end
   end
 
-  private 
+  def show
+    @phase = @project.phases.find(params[:id])
+
+    respond_to do |format|
+      format.html
+      format.xml { render :xml => @phase.to_xml }
+    end
+  end
+
+  def edit
+    @phase = @project.phases.find(params[:id])
+  end
+
+  def update
+    @phase = @project.phases.find(params[:id])
+
+    respond_to do |format|
+      if @phase.update_attributes(params[:phase])
+        flash[:notice] = 'phase was successfully updated.'
+        format.html { redirect_to project_phase_path(@project, @phase) }
+      else
+        format.html { render :action => "edit" }
+      end
+    end
+  end
+
+  def destroy
+    @phase = @project.phases.find(params[:id])
+    @phase.destroy
+
+    respond_to do |format|
+      format.html { redirect_to project_phases_url( @project ) }
+    end
+  end
+
+  private
   
   def find_project
     @project = Project.find( params[:project_id] )
   end
-
 end

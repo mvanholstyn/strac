@@ -1,4 +1,4 @@
-iteration_id = @iteration.unique_id
-page[iteration_id].replace_html :partial => "stories/list", :locals => {:stories => @stories}
-page.sortable iteration_id, :url => reorder_stories_path(@iteration.project), :method => :put,
+bucket_id = @iteration.unique_id
+page[bucket_id].replace_html :partial => "stories/list", :locals => {:stories => @stories}
+page.sortable bucket_id, :url => reorder_stories_path(@iteration.project), :method => :put,
                 :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => @iterations.containment_ids

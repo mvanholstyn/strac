@@ -33,7 +33,7 @@ class StoriesController < ApplicationController
 
   # GET /stories/new
   def new
-    @story = @project.stories.build :iteration_id => params[:iteration_id]
+    @story = @project.stories.build :bucket_id => params[:bucket_id]
 
     respond_to do |format|
       format.js
@@ -113,7 +113,7 @@ class StoriesController < ApplicationController
       #TODO: This will fail if complete stories are hidden..."
       param_to_use = params.select { |k,v| k =~ /^iteration_(\d+|nil)$/ }.first
       if Story.reorder( param_to_use.last,
-                        :iteration_id => eval( param_to_use.first.scan( /^iteration_(\d+|nil)$/ ).flatten.first ) )
+                        :bucket_id => eval( param_to_use.first.scan( /^iteration_(\d+|nil)$/ ).flatten.first ) )
         format.js { render_notice "Priorities have been successfully updated." }
       else
         format.js do

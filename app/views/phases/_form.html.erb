@@ -1,5 +1,15 @@
 <%= error_messages_for :phase %>
-<% remote_form_for [phase.project, phase], :html => { :id => "phase_form" } do |form| %>
-  <p><%= form.label :name %><%= form.text_field :name %></p>
-  <%= form.submit "Create phase" %>
+
+<% form_for [phase.project, phase] do |f| %>
+  <p>
+    <b>Name</b><br />
+    <%= f.text_field :name, :size => 60 %>
+  </p>
+  <p>
+    <b>Description</b><br />
+    <%= f.text_area :description %>
+  </p>
+  <p>
+    <%= submit_tag "Create" %>
+  </p>
 <% end %>

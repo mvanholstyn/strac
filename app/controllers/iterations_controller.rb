@@ -95,7 +95,7 @@ class IterationsController < ApplicationController
   
   def current
     @iteration = @project.iterations.find_or_build_current
-    @stories = @project.stories.find( :all, :conditions => { :iteration_id => nil }, :order => :position )
+    @stories = @project.stories.find( :all, :conditions => { :bucket_id => nil }, :order => :position )
   end
 
   private

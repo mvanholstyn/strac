@@ -85,13 +85,15 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "updated_at", :datetime
       end
 
-      s.table "iterations" do |t|
+      s.table "buckets" do |t|
         t.column "id", :integer
         t.column "start_date", :date
         t.column "end_date", :date
         t.column "project_id", :integer
         t.column "name", :string
+        t.column "description", :text
         t.column "budget", :integer
+        t.column "type", :string
         t.column "created_at", :datetime
         t.column "updated_at", :datetime
       end
@@ -108,14 +110,6 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "created_at", :datetime
       end
       
-      s.table "phases" do |t|
-        t.column "id", :integer
-        t.column "name", :string
-        t.column "project_id", :integer
-        t.column "created_at", :datetime
-        t.column "updated_at", :datetime
-      end
-
       s.table "priorities" do |t|
         t.column "id", :integer
         t.column "name", :string
@@ -162,7 +156,7 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "description", :text
         t.column "points", :integer
         t.column "position", :integer
-        t.column "iteration_id", :integer
+        t.column "bucket_id", :integer
         t.column "project_id", :integer
         t.column "responsible_party_id", :integer
         t.column "responsible_party_type", :string

@@ -55,7 +55,18 @@
             <b>Iteration</b>
           </td>
           <td>
-            <%= form.collection_select :iteration_id, @project.iterations.find( :all, :order => :start_date ), :id, :display_name, :include_blank => true %>
+            
+            <%= 
+                bucket_hash = @project.buckets.find(:all, :order => :start_date).group_by(&:type)
+                buckets = bucket_hash.keys.inject([]) do |arr,key| 
+                  values = bucket_hash[key]
+                  def values.name ; first.type; end
+                  def values.group ; self ; end
+                  arr << values
+                end
+                select_tag "story[bucket_id]", 
+                  "<option></option>" + option_groups_from_collection_for_select(buckets, :group, :name, :id, :name, @story.bucket_id)
+                  %>
           </td>
         </tr>
         <tr>

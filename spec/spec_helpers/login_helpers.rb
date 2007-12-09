@@ -3,6 +3,7 @@ class Spec::Rails::Example::ControllerExampleGroup
     @user = mock_model(User)
     @project = mock_model(Project, :id => 91)
 
+    controller.stub!(:current_user).and_return(@user)
     controller_klass.login_model.stub!(:find).and_return(@user)
     @user.stub!(:has_privilege?).and_return(true)
   end

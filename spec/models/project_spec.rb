@@ -9,12 +9,8 @@ describe Project, "#new with no attributes" do
     @project.should_not be_valid
   end
 
-  it "has many invitations" do
+  it "can have many invitations" do
     assert_association Project, :has_many, :invitations, Invitation
-  end
-  
-  it "has many phases" do
-    assert_association Project, :has_many, :phases, Phase
   end
 end
 
@@ -90,7 +86,7 @@ describe Project, "#backlog_stories" do
     @story1 = Generate.story "story1", :project => @project
     @story2 = Generate.story "story2", :project => @project
     @story3 = Generate.story "story3", :project => @project ; @story3.move_higher #acts_as_list
-    @story4 = Generate.story "story4", :project => @project, :iteration => @iteration
+    @story4 = Generate.story "story4", :project => @project, :bucket => @iteration
   end
   
   it "finds all of the project not assigned to an iteration ordered by position" do

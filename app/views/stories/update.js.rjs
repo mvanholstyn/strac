@@ -4,12 +4,18 @@ page[:notice].show
 page.visual_effect :appear, :notice
 page.delay( 5 ) {  page.visual_effect :fade, :notice }
 
-id_to_hide = "story_#{@story.id}_edit"
-page.visual_effect :blind_up, id_to_hide, :duration => 0.3
+if @story.bucket.is_a?(Iteration)
+  id_to_hide = "story_#{@story.id}_edit"
+  page.visual_effect :blind_up, id_to_hide, :duration => 0.3
 
-page["story_#{@story.id}_mini"].replace_html :partial => 'mini_story', :locals => { :story => @story }
-page["story_#{@story.id}_view"].replace_html :partial => 'mini_show', :locals => { :story => @story }
+  page["story_#{@story.id}_mini"].replace_html :partial => 'mini_story', :locals => { :story => @story }
+  page["story_#{@story.id}_view"].replace_html :partial => 'mini_show', :locals => { :story => @story }
 
-iteration_list_ids = [ "iteration_nil" ] + @project.iterations.map{ |i| "iteration_#{i.id}" }
-page.sortable "iteration_#{@story.iteration_id}", :url => reorder_stories_path(@project), :method => :put,
-                            :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => iteration_list_ids
+  iteration_list_ids = [ "iteration_nil" ] + @project.iterations.map{ |i| "iteration_#{i.id}" }
+  page.sortable "iteration_#{@story.bucket_id}", :url => reorder_stories_path(@project), :method => :put,
+                              :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => iteration_list_ids
+else
+  id_to_remove = "story_#{@story.id}"
+  page.visual_effect :blind_up, id_to_remove, :duration => 0.3
+  page.remove id_to_remove
+end

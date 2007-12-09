@@ -1,14 +1,16 @@
-<%= link_to_remote "create phase", 
-  :url => new_project_phase_path(:project_id => @project.id), 
-  :method => :get,
-  :html => { :class => "create_phase" } %>
+<h1>Phases</h1>
 
-<div id="new_phase">
-  
-</div>
+<table>
+<% for phase in @phases %>
+  <tr>
+    <td><%= h phase.name %></td>
+    <td><%= link_to 'Show', project_phase_path(@project, phase) %></td>
+    <td><%= link_to 'Edit', edit_project_phase_path(@project, phase) %></td>
+    <td><%= link_to 'Destroy', project_phase_path(@project, phase), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
 
-<div id="phases">
-<% @phases.each do |phase| -%>
-  <%= render :partial => "phases/mini_phase", :locals => { :phase => phase } %>
-<% end -%>  
-</div>
+<br />
+
+<%= link_to 'New phase', new_project_phase_path( @project ) %>
