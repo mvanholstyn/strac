@@ -1,4 +1,6 @@
 class StoriesController < ApplicationController
+  include ERB::Util
+
   before_filter :find_project
   before_filter :find_priorities_and_statuses, :only => [ :new, :edit ]
 
@@ -45,7 +47,8 @@ class StoriesController < ApplicationController
     @story = @project.stories.find(params[:id], :include => :tags)
 
     respond_to do |format|
-      format.js
+      format.html
+      format.js{ render :template => 'stories/edit.js.rjs' }
     end
   end
 
@@ -70,20 +73,25 @@ class StoriesController < ApplicationController
     end
   end
 
-  # PUT /stories/1
-  # PUT /stories/1.xml
   def update
     @story = @project.stories.find(params[:id], :include => :tags)
 
     respond_to do |format|
       if @story.update_attributes(params[:story])
         #TODO: If this stories iteration is changed, then it should move
-        format.js
+        format.html do 
+          flash[:notice] = %("#{h(@story.summary)}" was successfully updated.)
+          redirect_to story_path(@project, @story)
+        end
+        format.js { render :template => "stories/update.js.rjs" }
         format.xml { head :ok }
       else
+        format.html do
+          render :action => 'edit'
+        end
         format.js do
           find_priorities_and_statuses
-          render :action => "edit"
+          render :template => "stories/edit.js.rjs"
         end
         format.xml { render :xml => @story.errors.to_xml }
       end

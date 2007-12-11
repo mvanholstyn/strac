@@ -3,3 +3,7 @@
 
   <%= render :partial=>"show", :locals => { :story => @story } %>
 </div>
+
+<% javascript_tag do -%>
+  setTimeout(function() { new Effect.Fade("notice",{}) }, 5000);
+<% end -%>

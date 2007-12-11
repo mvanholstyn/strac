@@ -2,7 +2,7 @@
 
 <table>
 <% for phase in @phases %>
-  <tr>
+  <tr class="phase">
     <td><%= h phase.name %></td>
     <td><%= link_to 'Show', project_phase_path(@project, phase) %></td>
     <td><%= link_to 'Edit', edit_project_phase_path(@project, phase) %></td>

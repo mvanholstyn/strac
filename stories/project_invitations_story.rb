@@ -44,7 +44,7 @@ Story "Project Invitations", %|
     end
     
     Given "the existing user is viewing the signup or login page" do
-      # we are on this page already
+      see_signup_or_login_page
     end
     When "they login" do
       login_as @user_accepting_the_project_invitation.email_address, "password"
@@ -70,7 +70,7 @@ Story "Project Invitations", %|
     end
     
     Given "the user is viewing an invitation form" do
-      # already here
+      see_the_project_invitation_form
     end
     When "they fill out the form and submit it" do
       submit_the_project_invitation_form
@@ -96,7 +96,7 @@ Story "Project Invitations", %|
     end
     
     Given "the user is viewing the signup or login page" do
-      # we are on this page already
+      see_signup_or_login_page
     end
     When "they submit the create an account form with mismatched passwords" do
       submit_signup_form :password => "blah", :password_confirmation => "foo"
@@ -106,7 +106,7 @@ Story "Project Invitations", %|
     end
   
     Given "the user is viewing the signup or login page" do
-      # we are on this page already
+      see_signup_or_login_page
     end
     When "they submit the create an account form" do
       submit_signup_form

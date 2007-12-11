@@ -15,12 +15,12 @@
         <tr>
           <td>
             <b>Description</b>
-						<%= check_box_tag "story_#{@story.id}_description_preview_checkbox", 1, true %> show preview
+						<%= check_box_tag "story_#{story.id}_description_preview_checkbox", 1, true %> show preview
           </td>
         </tr>
         <tr>
           <td>
-            <%= form.text_area :description, :id => "story_#{@story.id}_description" %>
+            <%= form.text_area :description, :id => "story_#{story.id}_description" %>
           </td>
         </tr>
         <tr>
@@ -30,9 +30,9 @@
 				</tr>
 				<tr>
           <td>
-						<%= form.text_field :tag_list, :size => 41, :id => "story_#{@story.id || "nil"}_tag_list" %>
-						<div id="story_<%= @story.id || "nil" %>_tag_list_auto_complete" class="auto_complete_results"></div>
-						<%= auto_complete_field "story_#{@story.id || "nil"}_tag_list", :url => auto_complete_tags_path, :tokens => ",", :param_name => 'tag' %>
+						<%= form.text_field :tag_list, :size => 41, :id => "story_#{story.id || "nil"}_tag_list" %>
+						<div id="story_<%= story.id || "nil" %>_tag_list_auto_complete" class="auto_complete_results"></div>
+						<%= auto_complete_field "story_#{story.id || "nil"}_tag_list", :url => auto_complete_tags_path, :tokens => ",", :param_name => 'tag' %>
           </td>
         </tr>
       </table>
@@ -40,7 +40,7 @@
     <td valign="top">
       <table>
 				<tr>
-					<td colspan="2" id="<%= "story_#{@story.id}_description_preview" %>"></td>
+					<td colspan="2" id="<%= "story_#{story.id}_description_preview" %>"></td>
 				</tr>
         <tr>
           <td>
@@ -65,7 +65,7 @@
                   arr << values
                 end
                 select_tag "story[bucket_id]", 
-                  "<option></option>" + option_groups_from_collection_for_select(buckets, :group, :name, :id, :name, @story.bucket_id)
+                  "<option></option>" + option_groups_from_collection_for_select(buckets, :group, :name, :id, :name, story.bucket_id)
                   %>
           </td>
         </tr>
@@ -74,7 +74,7 @@
             <b>Responsible Party</b>
           </td>
           <td>
-            <%= select_tag "story[responsible_party_type_id]", options_for_responsible_parties(@project, @story.responsible_party_type_id) %>
+            <%= select_tag "story[responsible_party_type_id]", options_for_responsible_parties(@project, story.responsible_party_type_id) %>
           </td>
         </tr>
         <tr>
@@ -97,5 +97,5 @@
     </td>
   </tr>
 </table>
-<%= observe_field "story_#{@story.id}_description", :url => textile_preview_path, :update => "story_#{@story.id}_description_preview", 
- 																										:with => "'textile=' + encodeURIComponent( value )", :frequency => 5, :condition => "$('story_#{@story.id}_description_preview_checkbox').checked" %>
+<%= observe_field "story_#{story.id}_description", :url => textile_preview_path, :update => "story_#{story.id}_description_preview", 
+ 																										:with => "'textile=' + encodeURIComponent( value )", :frequency => 5, :condition => "$('story_#{story.id}_description_preview_checkbox').checked" %>

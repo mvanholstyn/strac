@@ -45,6 +45,13 @@ class Generate
     Privilege.create!(attributes.merge(:name=>name))
   end
   
+  def self.phase(name, attributes={})
+    if attributes[:project].nil?
+      attributes[:project] = Generate.project("Project for phase #{name}")
+    end
+    Phase.create!(attributes.merge(:name=>name))
+  end
+  
   def self.project(name, attributes={})
     Project.create!(attributes.merge(:name=>name))
   end

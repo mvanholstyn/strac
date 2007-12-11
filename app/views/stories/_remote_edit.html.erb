@@ -1,6 +1,8 @@
+<%= render :partial => "stories/toolbar", :locals => { :story => story } %>
+
 <%= error_messages_for :story %>
 
-<% form_for(:story, :url => story_path(story.project, story), :html => { :method => :put, :id => 'edit_form' }) do |form| -%>
+<% remote_form_for(:story, :url => story_path(story.project, story), :html => { :method => :put }) do |form| -%>
   <%= render :partial => 'stories/form', :locals => { :form => form, :story => story } %>
   <p>
     <%= submit_tag "Update" %> or 

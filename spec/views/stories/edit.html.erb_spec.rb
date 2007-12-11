@@ -1,19 +1,21 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe "/stories/edit.html.erb" do
-  include StoriesHelper
+  def render_it
+    assigns[:story] = @story
+    render "stories/edit"
+  end
   
   before do
     @story = mock_model(Story)
-    assigns[:story] = @story
+    template.stub_render :partial => "stories/edit", :locals => { :story => @story }
   end
 
-  it "should render edit form" do
-    # render "/stories/edit.html.erb"
-    # 
-    # response.should have_tag("form[action=#{story_path(@story)}][method=post]") do
-    # end
+  it "renders the stories/edit partial" do
+    template.expect_render(:partial => "stories/edit", :locals => { :story => @story }).and_return(%|<p id="edit_partial" />|)
+    render_it
   end
+  
 end
 
 

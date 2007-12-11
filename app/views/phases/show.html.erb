@@ -11,6 +11,8 @@
 <hr />
 </h3>
 
-<div id="phase_<%= @phase.id %>">
-<%= render :partial => 'stories/list', :locals => { :stories => @phase.stories } %>
+<div id="phase_<%= @phase.id %>" class="phase">
+  <div class="stories">
+    <%= render :partial => 'stories/list', :locals => { :stories => @phase.stories } %>
+  </div>
 </div>

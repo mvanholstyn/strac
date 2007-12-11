@@ -3,7 +3,7 @@
 <%= error_messages_for :story %>
 
 <% remote_form_for :story, :url => stories_path( @project ) do |form| -%>
-  <%= render :partial => 'form', :locals => { :form => form } %>
+  <%= render :partial => 'form', :locals => { :form => form, :story => story } %>
   <p>
     <%= submit_tag "Create" %> or 
 		<%= link_to( "cancel", "#", :onclick => update_page { |page| page.visual_effect( :blind_up, "iteration_#{@story.bucket_id.inspect}_story_new", :duration => 0.3 ); page << "return false;" } ) %>

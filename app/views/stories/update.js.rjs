@@ -1,4 +1,4 @@
-page[:notice].replace_html %("#{@story.summary}" was successfully updated.)
+page[:notice].replace_html %("#{h(@story.summary)}" was successfully updated.)
 page[:error].hide
 page[:notice].show
 page.visual_effect :appear, :notice
