@@ -14,7 +14,6 @@ class Status < ActiveRecord::Base
   
   validates_presence_of :color
   
-
   class << self
     def defined 
       Status.find( :first, :conditions=>{:name=>"defined"} )
@@ -36,5 +35,5 @@ class Status < ActiveRecord::Base
       Status.find( :first, :conditions=>{:name=>"blocked"} )
     end
   end
-  
+    
 end

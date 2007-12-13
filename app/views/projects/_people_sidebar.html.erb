@@ -1,0 +1,7 @@
+<ul>
+  <% for user in project.users.find(:all) -%>
+    <li>
+      <%= user.full_name %>
+    </li>
+  <% end -%>
+</ul>

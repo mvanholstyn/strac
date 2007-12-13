@@ -73,8 +73,9 @@ Story "Project Phases", %|
   end
   
   Scenario "adding a story to a phase" do
-    Given "a phase exists in the system" do
+    Given "a phase with no stories exists in the system" do
       @phase = Generate.phase "Phazaloopa", :description => "El Phazaloopa"
+      @phase.stories.should be_empty
     end
     And "a story exists in the system" do
       @story = Generate.story "some story", :project => @phase.project
@@ -105,6 +106,47 @@ Story "Project Phases", %|
     end
   end
   
+  Scenario "how the project summary is affected by adding a story to a phase" do
+    Given "a completed story exists that does not belong to a phase" do
+      @phase = Generate.phase "Another Day Another Phase", :description => "woohah"
+      @story = Generate.story "story1", :project => @phase.project, :points => 10, :status => Status.complete
+    end
+    And "a user viewing a project (4)" do
+      a_user_viewing_a_project(:project => @phase.project)
+      @total_points = grab_project_summary(".total_points").to_i
+      @completed_points = grab_project_summary(".completed_points").to_i
+    end
+    When "they move the completed story to a phase" do
+      move_story_to_phase(@story, @phase)
+    end
+    Then "they will see the points for that story are removed from the total points and completed points" do
+      updated_total_points = grab_project_summary(".total_points").to_i
+      updated_total_points.should == @total_points - @story.points
+      updated_completed_points = grab_project_summary(".completed_points").to_i
+      updated_completed_points.should == @completed_points - @story.points
+    end
+    
+    Given "an incomplete story exists that has been estimated" do
+      reset!
+      @phase = Generate.phase "Another Day Another Phase", :description => "woohah"
+      @story = Generate.story "story1", :project => @phase.project, :points => 10
+    end
+    And "a user viewing a project (5)" do
+      a_user_viewing_a_project(:project => @phase.project)
+      @total_points = grab_project_summary(".total_points").to_i
+      @remaining_points = grab_project_summary(".remaining_points").to_i
+    end
+    When "they move the incomplete story to a phase" do
+      move_story_to_phase(@story, @phase)
+    end
+    Then "they will see the points for that story are removed from the total points and completed points" do
+      updated_total_points = grab_project_summary(".total_points").to_i
+      updated_total_points.should == @total_points - @story.points
+      updated_remaining_points = grab_project_summary(".remaining_points").to_i
+      updated_remaining_points.should == @remaining_points - @story.points 
+    end
+  end
+  
   def a_user_viewing_a_projects_phase_list
     a_user_viewing_a_project
     click_project_phases_link_for(@project)
@@ -112,6 +154,18 @@ Story "Project Phases", %|
   
   def click_create_phase_link
     click_link(new_project_phase_path(@project))
+  end
+  
+  def grab_project_summary(selector)
+    assert_select(".project_summary #{selector}").first.children.to_s
+  end
+  
+  def move_story_to_phase(story, phase)
+    go_to_edit_story(story.project, story)
+    submit_form 'edit_form' do |form|
+      form.story.bucket_id = phase.id.to_s
+    end
+    follow_redirect! while response.redirect?
   end
   
   def see_story(story)

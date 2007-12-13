@@ -1,0 +1,17 @@
+<div id="sidebar">
+  <% if project and project.id -%>
+    <h2><%= project.name %>: summary</h2>
+    <%= render :partial => "projects/summary", :locals => { :project => project } %>
+    
+    <h2><%= project.name %>: iterations</h2>
+    <%= render :partial => "projects/iterations_sidebar", :locals => { :project => project } %>
+    
+    <h2><%= project.name %>: people</h2>
+    <%= render :partial => "projects/people_sidebar", :locals => { :project => project } %>
+  <% end -%>
+  
+  <h2 style="display: inline;" class="your_projects">your projects</h2>
+  <%= render :partial => "projects/user_sidebar", :locals => { :project => project } %>
+</div>
+
+

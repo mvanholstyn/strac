@@ -1,0 +1,7 @@
+<ul>
+  <% for project in ProjectPermission.find_all_projects_for_user( current_user ) -%>
+    <li>
+      <%= link_to project.name, project_path( project ) %>
+    </li>
+  <% end -%>
+</ul>

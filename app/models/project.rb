@@ -36,15 +36,27 @@ class Project < ActiveRecord::Base
   end
   
   def total_points
-    stories.sum( :points, :conditions => [ "status_id NOT IN (?) OR status_id IS NULL", Status.find( :all, :conditions => [ "name IN (?)", [ "rejected" ] ] ).map( &:id) ] ) || 0
+    sum = stories.sum( :points, 
+      :joins => "LEFT JOIN #{Bucket.table_name} b ON b.id=#{Story.table_name}.bucket_id",
+      :conditions => [ "(b.type = ? OR b.type IS NULL) AND (status_id NOT IN (?) OR status_id IS NULL)", 
+          Iteration.name, [Status.rejected.id]] ) 
+    sum || 0
   end
   
   def completed_points
-    stories.sum( :points, :conditions => [ "status_id IN (?)", Status.find( :all, :conditions => [ "name IN (?)", [ "complete" ] ] ).map( &:id) ] ) || 0
+    sum = stories.sum( :points, 
+      :joins => "LEFT JOIN #{Bucket.table_name} b ON b.id=#{Story.table_name}.bucket_id",
+      :conditions => [ "(b.type = ? OR b.type IS NULL) AND status_id IN (?)", 
+        Iteration.name, [Status.complete.id] ] ) 
+    sum || 0
   end
   
   def remaining_points
-    stories.sum( :points, :conditions => [ "status_id NOT IN (?) OR status_id IS NULL", Status.find( :all, :conditions => [ "name IN (?)", [ "complete", "rejected" ] ] ).map( &:id) ] ) || 0
+    sum = stories.sum( :points, 
+      :joins => "LEFT JOIN #{Bucket.table_name} b ON b.id=#{Story.table_name}.bucket_id",
+      :conditions => [ "(b.type = ? OR b.type IS NULL) AND (status_id NOT IN (?) OR status_id IS NULL)",
+         Iteration.name, [Status.complete.id, Status.rejected.id] ] )
+    sum || 0
   end
   
   def average_velocity
@@ -77,4 +89,5 @@ class Project < ActiveRecord::Base
   def backlog_stories
     stories.find_backlog(:order => :position)
   end
+    
 end

@@ -1,0 +1,31 @@
+<table class="project_summary">
+  <tr>
+    <th>Total Points:</th>
+    <td class="total_points"><%= project.total_points %></td>
+  </tr>
+  <tr>
+    <th>Completed Points:</th>
+    <td class="completed_points"><%= project.completed_points %></td>
+  </tr>
+  <tr>
+    <th>Remaining Points:</th>
+    <td class="remaining_points"><%= project.remaining_points %></td>
+  </tr>
+  <tr>
+    <th>Completed Iterations:</th>
+    <td class="iterations"><%= project.iterations.size %></td>
+  </tr>
+  <tr>
+    <th>Average Velocity:</th>
+    <td class="average_velocity"><%= project.average_velocity.floor %></td>
+  </tr>
+  <tr>
+    <th>Estimated Remaining Iterations:</th>
+    <td class="estimated_remaining_iterations"><%= project.estimated_remaining_iterations.ceil %></td>
+  </tr>
+  <tr>
+    <th>Estimated Completion Date:</th>
+    <td class="estimated_completion_date"><%= project.estimated_completion_date %></td>
+  </tr>
+</table>
+

@@ -6,8 +6,8 @@ describe Bucket do
     @bucket = Bucket.new
   end
   
-  it "has many stories ordered by position" do
-    assert_association Bucket, :has_many, :stories, Story, :order => :position
+  it "has many stories ordered by position which are nullified on destroy" do
+    assert_association Bucket, :has_many, :stories, Story, :order => :position, :dependent => :nullify
   end
   
   it "should always belong to a project" do
