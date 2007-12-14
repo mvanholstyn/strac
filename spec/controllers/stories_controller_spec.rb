@@ -1,22 +1,17 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe StoriesController, "user with privileges requesting #index " do
-  def get_index
-    get :index, { :project_id=>'1' }, {:current_user_id=>2}    
+  def get_index(attrs={})
+    get :index, {:project_id=>'1'}.merge(attrs), {:current_user_id=>2}    
   end
 
   before do
     @user = mock_model(User)
     @project = mock_model(Project)
-    @iterations = mock "iterations"
-
     StoriesController.login_model.stub!(:find).and_return(@user)
     @user.stub!(:has_privilege?).and_return(true)
-    
-    @project.stub!(:iterations_ordered_by_start_date)
-    @project.stub!(:backlog_iteration)
-    IterationsPresenter.stub!(:new)
-
+    @stories_index_presenter = stub("story index presenter")
+    StoriesIndexPresenter.stub!(:new).and_return(@stories_index_presenter)
     Project.stub!(:find).and_return(@project)
   end
 
@@ -24,26 +19,44 @@ describe StoriesController, "user with privileges requesting #index " do
     get_index
     response.should be_success
   end
+
+  it "creates a StoriesIndexPresenter" do
+    StoriesIndexPresenter.should_receive(:new).with(
+      anything
+    ).and_return(@stories_index_presenter)
+    get_index
+  end
+  
+  it "assigns @stories_presenter" do
+    StoriesIndexPresenter.stub!(:new).and_return(@stories_index_presenter)
+    get_index
+    assigns[:stories_presenter].should == @stories_index_presenter
+  end
   
   it "renders the index.html.erb template" do
     get_index
     response.should render_template("index")
   end
   
-  it "assigns @iterations to a IterationsPresenter" do
-    @iterations_presenter = mock "iterations presenter"
-    @backlog_iteration = mock "backlog iteration"
-    @project.should_receive(:iterations_ordered_by_start_date).and_return(@iterations)
-    @project.should_receive(:backlog_iteration).and_return(@backlog_iteration)
-    IterationsPresenter.should_receive(:new).with(
-      :iterations => @iterations, 
-      :backlog => @backlog_iteration,
-      :project => @project).and_return(@iterations_presenter)
-    get_index
+  describe "creating the StoriesIndexPresenter" do
+    it "passes in a the current @project into the StoriesIndexPresenter constructor" do
+      StoriesIndexPresenter.should_receive(:new).with(
+        has_entry(:project, @project)
+      ).and_return(@stories_index_presenter)
+      get_index
+    end
 
-    assigns[:iterations].should == @iterations_presenter
+    describe "when a :view parameter is passed in" do
+      it "passes params['view'] into the StoriesIndexPresenter constructor" do
+        view = "foo"
+        StoriesIndexPresenter.should_receive(:new).with(
+          has_entry(:view, view)
+        ).and_return(@stories_index_presenter)
+        get_index :view => view
+      end
+    end
   end
-    
+ 
 end
 
 describe StoriesController, '#edit' do
@@ -192,22 +205,3 @@ describe StoriesController, '#update' do
   end
 end
 
-
-__END__
-  def update
-    @story = @project.stories.find(params[:id], :include => :tags)
-
-    respond_to do |format|
-      if @story.update_attributes(params[:story])
-        #TODO: If this stories iteration is changed, then it should move
-        format.js
-        format.xml { head :ok }
-      else
-        format.js do
-          find_priorities_and_statuses
-          render :action => "edit"
-        end
-        format.xml { render :xml => @story.errors.to_xml }
-      end
-    end
-  end

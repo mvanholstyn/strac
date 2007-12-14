@@ -6,13 +6,8 @@ class StoriesController < ApplicationController
 
   helper :comments
 
-  # GET /stories
-  # GET /stories.xml
   def index
-    @iterations = IterationsPresenter.new(
-      :iterations => @project.iterations_ordered_by_start_date,
-      :backlog => @project.backlog_iteration,
-      :project => @project)
+    @stories_presenter = StoriesIndexPresenter.new(:project => @project, :view => params['view'])
     respond_to do |format|
       format.html
       format.xml { render :xml => @project.stories.to_xml }

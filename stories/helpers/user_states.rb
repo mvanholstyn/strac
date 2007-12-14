@@ -10,3 +10,8 @@ def a_user_viewing_a_project(options={})
   login_as @user.email_address, "password"
   click_project_link_for @project
 end
+
+def a_user_viewing_the_stories_page_of_a_project
+  a_user_viewing_a_project
+  click_stories_link @project
+end

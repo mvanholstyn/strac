@@ -1,0 +1,6 @@
+require File.dirname(__FILE__) + "/../../../../config/environment"
+ENV["RAILS_ENV"] = "test"
+RAILS_ENV="test"
+$LOAD_PATH << File.dirname(__FILE__) + "/../vendor/behaviors/lib"
+require File.dirname(__FILE__) + "/../vendor/behaviors/init"
+require File.dirname(__FILE__) + "/../lib/presentation_object"

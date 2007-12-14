@@ -82,3 +82,4 @@ Rails::Initializer.run do |config|
 end
 
 require 'metaid'
+require 'constructor'
