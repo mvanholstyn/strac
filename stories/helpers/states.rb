@@ -1,0 +1,3 @@
+def there_are_no_stories_in_the_system
+  Story.destroy_all
+end

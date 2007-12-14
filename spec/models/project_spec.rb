@@ -26,6 +26,46 @@ describe Project, "#new with name attribute" do
   end
 end
 
+describe Project, '#story_tags' do
+  before do
+    @project = Generate.project :name => "foo"
+    @stories = [
+      Generate.story("story 1", :project => @project),
+      Generate.story("story 2", :project => @project) ]
+    @stories.first.tag_list = "foo, baz"
+    @stories.last.tag_list = "foo, baz, bar"
+    @stories.each{ |s| s.save! }
+  end
+  
+  it "returns the unique tags that belong to the stories on this project" do
+    @project.story_tags.should == (@stories.first.tags + @stories.last.tags).uniq
+  end
+end
+
+describe Project, '#tagless_stories' do
+  before do
+    @project = Generate.project :name => "foo"
+    @stories = [
+      Generate.story("story1", :project => @project),
+      Generate.story("story2", :project => @project),
+      Generate.story("story3", :project => @project) ]
+    @stories[0].tag_list = ""
+    @stories[1].tag_list = "foo, baz, bar"    
+    @stories[2].tag_list = ""
+    @stories.each{ |s| s.save! }
+  end
+  
+  it "returns stories which are not tagged" do
+    @project.tagless_stories.should == [@stories[0], @stories[2]]
+  end
+  
+  it "doesn't include stories from other projects" do
+    @project2 = Generate.project :name => "baz"
+    @story2 = Generate.story "another project's story", :project => @project2
+    @project.tagless_stories.should_not include(@story2)
+  end
+end
+
 describe Project, "#total_points" do
   before do
     Story.delete_all

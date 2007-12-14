@@ -9,5 +9,5 @@ module IterationsHelper
         :loading => "Element.update('notice', 'Loading #{iteration.name}...') ; Element.show('notice')", 
         :success => "Element.hide('notice')"
     end
-  end
+  end  
 end

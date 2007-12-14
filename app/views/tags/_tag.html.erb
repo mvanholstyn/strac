@@ -1,0 +1,9 @@
+<table width="100%">
+  <tr>
+    <td>
+			<%= render :partial => 'tags/header', :locals => { :tag => tag } %>
+    </td>
+  </tr>
+</table>
+<%= render :partial => "tags/stories", :locals => {:tag=>tag, :stories=>tag.stories} %>
+<br />

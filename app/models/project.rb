@@ -29,6 +29,23 @@ class Project < ActiveRecord::Base
       find_current || build( :name => "Iteration #{size + 1}", :start_date => Date.today, :end_date =>  Date.today + 7 )
     end
   end
+  has_many :story_tags, :class_name => Tag.name, :finder_sql => '
+    SELECT tags.*
+    FROM projects
+    INNER JOIN stories ON stories.project_id=projects.id
+    INNER JOIN taggings ON (taggings.taggable_id=stories.id AND taggings.taggable_type=\'Story\')
+    INNER JOIN tags ON tags.id=taggings.tag_id
+    WHERE
+      projects.id = #{id}
+    GROUP BY tags.id'
+  has_many :tagless_stories, :class_name => Story.name, :finder_sql => '
+    SELECT stories.*
+    FROM projects
+    INNER JOIN stories ON stories.project_id=projects.id
+    LEFT JOIN taggings ON (taggings.taggable_id=stories.id AND taggings.taggable_type=\'Story\')
+    WHERE
+      projects.id = #{id} AND
+      taggings.taggable_id IS NULL'
 
   
   def iterations_ordered_by_start_date

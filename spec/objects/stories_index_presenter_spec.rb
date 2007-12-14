@@ -44,7 +44,7 @@ describe StoriesIndexPresenter, '#tags?' do
   end
 end
 
-describe StoriesIndexPresenter, '#iterations_presenter' do
+describe StoriesIndexPresenter, '#iterations' do
   before do
     @project = stub("project", 
       :iterations_ordered_by_start_date => nil, 
@@ -55,12 +55,12 @@ describe StoriesIndexPresenter, '#iterations_presenter' do
   
   it "finds all iterations ordered by start date" do
     @project.should_receive(:iterations_ordered_by_start_date)
-    @presenter.iterations_presenter
+    @presenter.iterations
   end
   
   it "finds the backlog iteration" do
     @project.should_receive(:backlog_iteration)
-    @presenter.iterations_presenter
+    @presenter.iterations
   end
   
   it "creates a new IterationsPresenter" do
@@ -71,18 +71,48 @@ describe StoriesIndexPresenter, '#iterations_presenter' do
       :iterations => iterations, 
       :backlog => backlog_iteration,
       :project => @project)
-    @presenter.iterations_presenter
+    @presenter.iterations
   end
   
-  it "returns the newly created iterations_presenter" do
-    iterations_presenter = stub("iterations presenter")
-    IterationsPresenter.stub!(:new).and_return(iterations_presenter)
-    @presenter.iterations_presenter.should == iterations_presenter
+  it "returns the newly created iterations" do
+    iterations = stub("iterations presenter")
+    IterationsPresenter.stub!(:new).and_return(iterations)
+    @presenter.iterations.should == iterations
   end
   
   it "caches the return value for subsequent calls" do
     IterationsPresenter.should_receive(:new).once.and_return(:foo)
-    @presenter.iterations_presenter.should == :foo
-    @presenter.iterations_presenter.should == :foo # only the call is executed, this one is cached
+    @presenter.iterations.should == :foo
+    @presenter.iterations.should == :foo 
   end
+end
+
+describe StoriesIndexPresenter, '#tags' do
+  before do
+    @tags = stub("tags")
+    @stories = stub("tagless stories")
+    @project = stub("project", :story_tags => @tags)
+    @presenter = StoriesIndexPresenter.new :project => @project
+    StoryTagsPresenter.stub!(:new)
+  end
+
+  it "finds all tags that belong to the project" do
+    @project.should_receive(:story_tags).and_return(@tags)
+    @presenter.tags
+  end
+  
+  it "creates a new StoryTagsPresenter" do
+    @project.stub!(:story_tags).and_return(@tags)
+    StoryTagsPresenter.should_receive(:new).with(
+      :tags => @tags,
+      :project => @project)
+    @presenter.tags
+  end
+  
+  it "caches the return value for subsequent calls" do
+    StoryTagsPresenter.stub!(:new).once.and_return(:foo)
+    @presenter.tags.should == :foo
+    @presenter.tags.should == :foo
+  end
+  
 end

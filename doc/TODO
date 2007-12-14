@@ -1,0 +1,30 @@
+Add tests for new view files:
+
+?      strac.dump
+?      strac_production.sqldump.gz
+M      app/helpers/iterations_helper.rb
+M      app/models/project.rb
+?      app/views/stories/_tags.html.erb
+M      app/views/stories/index.html.erb
+?      app/views/tags/_header.html.erb
+?      app/views/tags/_stories.html.erb
+?      app/views/tags/_list.html.erb
+?      app/views/tags/_tag.html.erb
+?      stories/helpers/states.rb
+M      spec/models/project_spec.rb
+?      spec/objects/story_tags_presenter_spec.rb
+M      spec/objects/stories_index_presenter_spec.rb
+?      spec/views/stories/_tags.html.erb_spec.rb
+M      spec/views/stories/index.html.erb_spec.rb
+X      vendor/rails
+X      vendor/plugins/lwt_filters
+X      vendor/plugins/acts_as_comparable
+X      vendor/plugins/lwt_deployment
+X      vendor/plugins/lwt_authentication_system
+!      vendor/plugins/textmate_footnotes
+M      vendor/plugins/acts_as_taggable_on_steroids/init.rb
+M      vendor/plugins/acts_as_taggable_on_steroids/lib/tag.rb
+M      config/environment.rb
+?      config/initializers/old_style_authentication.rb
+?      lib/story_tags_presenter.rb
+M      lib/stories_index_presenter.rb

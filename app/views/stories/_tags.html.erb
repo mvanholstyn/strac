@@ -1,0 +1,11 @@
+<%= render :partial => "tags/list", :locals => {:tags => tags} %>
+
+<table width="100%">
+  <tr>
+    <td>
+			<%= render :partial => 'tags/header', :locals => { :tag => tags.tagless} %>
+    </td>
+  </tr>
+</table>
+<%= render :partial => "tags/stories", :locals => {:tag=>tags.tagless, :stories=>tags.tagless_stories} %>
+<br />

@@ -12,10 +12,17 @@ class StoriesIndexPresenter < PresentationObject
     VIEWS.include?(@view) ? @view : VIEWS.first
   end
     
-  declare :iterations_presenter do
+  declare :iterations do
     IterationsPresenter.new(
       :iterations => @project.iterations_ordered_by_start_date,
       :backlog => @project.backlog_iteration,
       :project => @project)
+  end
+  
+  declare :tags do
+    StoryTagsPresenter.new(
+      :tags => @project.story_tags,
+      :project => @project
+    )
   end
 end

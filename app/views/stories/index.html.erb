@@ -2,6 +2,10 @@
   <div class="section_header">Stories</div>
 
   <div id="stories" class="section_content">
-    <%= render :partial => 'stories/iterations', :locals => { :iterations => @stories_presenter.iterations_presenter } %>
+    <% if @stories_presenter.iterations? %>
+      <%= render :partial => 'stories/iterations', :locals => { :iterations => @stories_presenter.iterations } %>
+    <% elsif @stories_presenter.tags? %>
+      <%= render :partial => 'stories/tags', :locals => { :tags => @stories_presenter.tags } %>    
+    <% end %>
   </div>
 </div>
