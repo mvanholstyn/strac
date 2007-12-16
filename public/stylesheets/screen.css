@@ -379,6 +379,20 @@ th {
 	color: #ccc;
 }
 
+/* SECTIONS
+****************************************************/
+.section .links {
+ float:right; 
+ padding-top: 5px;
+}
+
+.section .links a.action {
+  text-decoration: none; 
+  color: #79B933;
+}
+
+/* STORIES
+****************************************************/
 .story_list {
   min-height: 20px; 
 }
@@ -482,6 +496,9 @@ th {
 	padding: 0;
 }
 
+
+/* ITERATIONS
+****************************************************/
 .iteration .header-stats {
   float: right;
   white-space: nowrap;
@@ -615,3 +632,4 @@ span.logged_in a{
 	background:url(../images/cancel.png);
   visibility: hidden;
 }
+

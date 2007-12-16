@@ -1,16 +1,18 @@
-<h1>Phases</h1>
+<div class="section">
+  <h2>Phases</h2>
 
-<table>
-<% for phase in @phases %>
-  <tr class="phase">
-    <td><%= h phase.name %></td>
-    <td><%= link_to 'Show', project_phase_path(@project, phase) %></td>
-    <td><%= link_to 'Edit', edit_project_phase_path(@project, phase) %></td>
-    <td><%= link_to 'Destroy', project_phase_path(@project, phase), :confirm => 'This will move all stories associated with this phase into the backlog. Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
-</table>
+  <table>
+  <% for phase in @phases %>
+    <tr class="phase">
+      <td><%= h phase.name %></td>
+      <td><%= link_to 'Show', project_phase_path(@project, phase) %></td>
+      <td><%= link_to 'Edit', edit_project_phase_path(@project, phase) %></td>
+      <td><%= link_to 'Destroy', project_phase_path(@project, phase), :confirm => 'This will move all stories associated with this phase into the backlog. Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+  </table>
 
-<br />
+  <br />
 
-<%= link_to 'New phase', new_project_phase_path( @project ) %>
+  <%= link_to 'New phase', new_project_phase_path( @project ) %>
+</div>
