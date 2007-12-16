@@ -7,6 +7,8 @@ class TaggingGenerator < Rails::Generator::NamedBase
   attr_reader :taggable_models
 
   def initialize(runtime_args, runtime_options = {})
+    parse!(runtime_args, runtime_options)
+    
     @parent_association_name = (runtime_args.include?("--self-referential") ? "tagger" : "tag")
     @taggable_models = runtime_args.reject{|opt| opt =~ /^--/}.map do |taggable|
       ":" + taggable.underscore.pluralize
@@ -82,5 +84,14 @@ class TaggingGenerator < Rails::Generator::NamedBase
              "Don't generate a migration file for this model") { |v| options[:skip_migration] = v }
       opt.on("--self-referential",
              "Allow tags to tag themselves.") { |v| options[:self_referential] = v }
+    end
+    
+    # Useful for generating tests/fixtures
+    def model_one
+      taggable_models[0][1..-1].classify
+    end
+    
+    def model_two
+      taggable_models[1][1..-1].classify rescue model_one
     end
 end

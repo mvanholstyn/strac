@@ -153,7 +153,7 @@ module ActiveRecord #:nodoc:
         raise PolymorphicMethodNotSupportedError, "You can't associate new records."
       end      
 
-    end
-    
+    end   
+        
   end
 end

@@ -1,12 +1,22 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class TaggingTest < Test::Unit::TestCase
-  fixtures :taggings, :tags, :posts, :recipes
+  fixtures :tags, :taggings, <%= taggable_models[0..1].join(", ") -%>
 
   def setup
-    @obj1 = Recipe.find(1)
-    @obj2 = Recipe.find(2)
-    @obj3 = Post.find(1)
+    @objs = <%= model_two %>.find(:all, :limit => 2)
+    
+    @obj1 = @objs[0]
+    @obj1.tag_with("delicious")
+    @obj1.reload
+    
+    @obj2 = @objs[1]
+    @obj2.tag_with("delicious sexy")
+    @obj2.reload
+    
+<% if taggable_models.size > 1 -%>
+    @obj3 = <%= model_one -%>.find(:first)
+<% end -%>
     @tag1 = Tag.find(1)  
     @tag2 = Tag.find(2)  
     @tagging1 = Tagging.find(1)
@@ -15,6 +25,21 @@ class TaggingTest < Test::Unit::TestCase
   def test_tag_with
     @obj2.tag_with "dark columbian"
     assert_equal "columbian dark", @obj2.tag_list
+  end
+  
+  def test_find_tagged_with
+    @obj1.tag_with "ruby perl php"
+    @obj2.tag_with ["perl", "java", "fcuk", "ruby"]
+    
+    result1 = [@obj1]
+    assert_equal <%= model_two %>.tagged_with("php"), result1
+    assert_equal <%= model_two %>.tagged_with("php perl"), result1
+    assert_equal <%= model_two %>.tagged_with("php", "perl"), result1
+    
+    result2 = [@obj1.id, @obj2.id].sort
+    assert_equal <%= model_two %>.tagged_with("ruby").map(&:id).sort, result2
+    assert_equal <%= model_two %>.tagged_with("ruby perl").map(&:id).sort, result2
+    assert_equal <%= model_two %>.tagged_with("ruby", "perl").map(&:id).sort, result2
   end
   
 <% if options[:self_referential] -%>  
@@ -49,7 +74,9 @@ class TaggingTest < Test::Unit::TestCase
       @tagging1.send(:taggable?, true) 
     end
     assert !@tagging1.send(:taggable?)
+<% if taggable_models.size > 1 -%>
     assert @obj3.send(:taggable?)
+<% end -%>
 <% if options[:self_referential] -%>  
     assert @tag1.send(:taggable?)
 <% end -%>    

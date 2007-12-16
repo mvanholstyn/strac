@@ -26,13 +26,13 @@ class ActiveRecord::Base #:nodoc:
       outgoing = tag_cast_to_string(outgoing)
   <% if options[:self_referential] %>  
       # because of http://dev.rubyonrails.org/ticket/6466
-      taggings.destroy(taggings.find(:all, :include => :<%= parent_association_name -%>).select do |tagging| 
+      taggings.destroy(*(taggings.find(:all, :include => :<%= parent_association_name -%>).select do |tagging| 
         outgoing.include? tagging.<%= parent_association_name -%>.name
-      end)
+      end))
   <% else -%>   
-      <%= parent_association_name -%>s.delete(<%= parent_association_name -%>s.select do |tag|
+      <%= parent_association_name -%>s.delete(*(<%= parent_association_name -%>s.select do |tag|
         outgoing.include? tag.name    
-      end)
+      end))
   <% end -%>
     end
 
@@ -67,10 +67,6 @@ class ActiveRecord::Base #:nodoc:
       #:startdoc:
     end
     
-    #:stopdoc:
-    alias :<%= parent_association_name -%>s= :tag_with
-    #:startdoc:
-    
     private 
     
     def tag_cast_to_string obj #:nodoc:
@@ -103,8 +99,55 @@ class ActiveRecord::Base #:nodoc:
     end
 
   end
+  
+  module TaggingFinders
+    # 
+    # Find all the objects tagged with the supplied list of tags
+    # 
+    # Usage : Model.tagged_with("ruby")
+    #         Model.tagged_with("hello", "world")
+    #         Model.tagged_with("hello", "world", :limit => 10)
+    #
+    def tagged_with(*tag_list)
+      options = tag_list.last.is_a?(Hash) ? tag_list.pop : {}
+      tag_list = parse_tags(tag_list)
+      
+      scope = scope(:find)
+      options[:select] ||= "#{table_name}.*"
+      options[:from] ||= "#{table_name}, tags, taggings"
+      
+      sql  = "SELECT #{(scope && scope[:select]) || options[:select]} "
+      sql << "FROM #{(scope && scope[:from]) || options[:from]} "
+
+      add_joins!(sql, options, scope)
+      
+      sql << "WHERE #{table_name}.#{primary_key} = taggings.taggable_id "
+      sql << "AND taggings.taggable_type = '#{ActiveRecord::Base.send(:class_name_of_active_record_descendant, self).to_s}' "
+      sql << "AND taggings.tag_id = tags.id "
+      
+      tag_list_condition = tag_list.map {|t| "'#{t}'"}.join(", ")
+      
+      sql << "AND (tags.name IN (#{sanitize_sql(tag_list_condition)})) "
+      sql << "AND #{sanitize_sql(options[:conditions])} " if options[:conditions]
+      sql << "GROUP BY #{table_name}.id "
+      sql << "HAVING COUNT(taggings.tag_id) = #{tag_list.size}"
+      
+      add_order!(sql, options[:order], scope)
+      add_limit!(sql, options, scope)
+      add_lock!(sql, options, scope)
+      
+      find_by_sql(sql)
+    end
+    
+    def parse_tags(tags)
+      return [] if tags.blank?
+      tags = Array(tags).first
+      tags = tags.respond_to?(:flatten) ? tags.flatten : tags.split(Tag::DELIMITER)
+      tags.map { |tag| tag.strip.squeeze(" ") }.flatten.compact.map(&:downcase).uniq
+    end
+    
+  end
 
   include TaggingExtensions
-
+  extend  TaggingFinders
 end
-
