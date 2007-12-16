@@ -34,7 +34,7 @@ class FootnoteFilter
   
   def add_footnotes!
     if performed_render? and first_render?
-      if ["haml", "rhtml", "rxhtml"].include?(template_extension) && (content_type =~ /html/ || content_type.nil?) && !xhr?
+      if ["html.erb", "haml", "rhtml", "rxhtml"].include?(template_extension) && (content_type =~ /html/ || content_type.nil?) && !xhr?
         # If the user would like to be responsible for the styles, let them opt out of the styling here
         insert_styles unless FootnoteFilter.no_style
         insert_footnotes
@@ -77,11 +77,11 @@ class FootnoteFilter
   end
   
   def template_path
-    @template.first_render.sub(/\.(rhtml|rxhtml|rxml|rjs)$/, "")
+    @template.first_render.sub(/\.(html\.erb|rhtml|rxhtml|rxml|rjs)$/, "")
   end
   
   def template_extension
-    @template.first_render.scan(/\.(rhtml|rxhtml|rxml|rjs)$/).flatten.first ||
+    @template.first_render.scan(/\.(html\.erb|rhtml|rxhtml|rxml|rjs)$/).flatten.first ||
     @template.pick_template_extension(template_path).to_s
   end
   
@@ -90,7 +90,10 @@ class FootnoteFilter
   end
   
   def layout_file_name
-    File.expand_path(@template.send(:full_template_path, @controller.active_layout, "rhtml"))
+    ["html.erb", "rhtml"].each do |extension|
+      path = File.expand_path(@template.send(:full_template_path, @controller.active_layout, extension))
+      return path if File.exist?(path)
+    end
   end
   
   def content_type
@@ -149,7 +152,6 @@ class FootnoteFilter
       <a href="#" onclick="#{tm_footnotes_toggle('session_debug_info')};return false">Session</a> |
       <a href="#" onclick="#{tm_footnotes_toggle('cookies_debug_info')};return false">Cookies</a> |
       <a href="#" onclick="#{tm_footnotes_toggle('params_debug_info')};return false">Params</a> |
-      <a href="#" onclick="#{tm_footnotes_toggle('log_debug_info')};return false">Log</a> |
       <a href="#" onclick="#{tm_footnotes_toggle('general_debug_info')};return false">General Debug</a>
       <br/>(<a href="http://blog.inquirylabs.com/2006/09/28/textmate-footnotes-v16-released/"><b>TextMate Footnotes</b></a>)
       #{@extra_html}
@@ -164,10 +166,6 @@ class FootnoteFilter
       <fieldset id="params_debug_info" class="tm_footnotes_debug_info" style="display: none">
         <legend>Params</legend>
         <code>#{escape(@controller.params.inspect)}</code>
-      </fieldset>
-      <fieldset id="log_debug_info" class="tm_footnotes_debug_info" style="display: none">
-        <legend>Log</legend>
-        <code><pre>#{escape(log_tail)}</pre></code>
       </fieldset>
       <fieldset id="general_debug_info" class="tm_footnotes_debug_info" style="display: none">
         <legend>General (id="tm_debug")</legend>
@@ -199,11 +197,6 @@ class FootnoteFilter
       html += "<br/>"
     end
     html
-  end
-  
-  def log_tail
-    ansi = `tail -n 200 #{RAILS_DEFAULT_LOGGER.instance_variable_get("@logdev").filename}`
-    html = ansi.gsub(/\e\[.+?m/, '')
   end
   
   def asset_file_links(link_text, files)
