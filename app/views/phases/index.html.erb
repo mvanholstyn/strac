@@ -1,13 +1,13 @@
 <div class="section">
   <h2>Phases</h2>
 
-  <table>
+  <table class="phases">
   <% for phase in @phases %>
     <tr class="phase">
-      <td><%= h phase.name %></td>
-      <td><%= link_to 'Show', project_phase_path(@project, phase) %></td>
-      <td><%= link_to 'Edit', edit_project_phase_path(@project, phase) %></td>
-      <td><%= link_to 'Destroy', project_phase_path(@project, phase), :confirm => 'This will move all stories associated with this phase into the backlog. Are you sure?', :method => :delete %></td>
+      <td class="name"><%= link_to h(phase.name), project_phase_path(@project, phase) %></td>
+      <td><%= link_to "", project_phase_path(@project, phase), :class => "show", :title => "Show" %></td>
+      <td><%= link_to '', edit_project_phase_path(@project, phase), :class => "edit", :title => "Edit" %></td>
+      <td><%= link_to '', project_phase_path(@project, phase), :confirm => 'This will move all stories associated with this phase into the backlog. Are you sure?', :method => :delete, :class => "destroy", :title => "Destroy" %></td>
     </tr>
   <% end %>
   </table>

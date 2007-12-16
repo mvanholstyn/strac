@@ -448,7 +448,7 @@ th {
 	display :inline;
 }
 
-.story_card .content .toolbar .show {
+.story_card .content .toolbar .show, .phases .phase .show, .iterations .iteration .show {
 	background: url(../images/show.png) no-repeat;
 	padding: 1px 0 1px 20px;
 }
@@ -458,7 +458,7 @@ th {
 	padding: 1px 0 1px 20px;
 }
 
-.story_card .toolbar .edit {
+.story_card .toolbar .edit, .phases .phase .edit, .iterations .iteration .edit {
 	background: url(../images/edit.png) no-repeat;
 	padding: 1px 0 1px 20px;
 }
@@ -468,7 +468,7 @@ th {
 	padding: 1px 0 1px 20px;
 }
 
-.story_card .toolbar .destroy {
+.story_card .toolbar .destroy, .phases .phase .destroy, .iterations .iteration .destroy {
 	background: url(../images/destroy.png) no-repeat;
 	padding: 1px 0 1px 20px;
 }
@@ -507,6 +507,20 @@ th {
 .iteration .header-stats .stat {
   margin-right: 5px;
   font-size: 0.8em;
+}
+
+.iterations .iteration .name a, .phases .phase .name a{
+  font-size: 120%;
+  text-decoration: none;
+  margin-right: 1em;   
+}
+
+.iterations .iteration .name a {
+  margin-right: 0em;
+}
+
+.iterations .iteration .name {
+  padding-right: 1em;
 }
 
 option.group {

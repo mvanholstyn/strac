@@ -1,15 +1,16 @@
 <div class="section">
   <h2>Iterations</h2>
 
-  <table>
+  <table class="iterations">
   <% for iteration in @iterations %>
-    <tr>
-      <td>
-  			<%=h iteration.name ? "#{iteration.name} (" : "" %><%=h iteration.start_date.strftime( "%Y-%m-%d" ) + " through " + iteration.end_date.strftime( "%Y-%m-%d" ) %><%=h iteration.name ? ")" : "" %>
+    <tr class="iteration">
+      <td class="name">
+        <%= link_to h(iteration.name), iteration_path(@project, iteration) %>
+  			<%= h("("+iteration.start_date.strftime( "%Y-%m-%d" )+" thru "+iteration.end_date.strftime( "%Y-%m-%d" )+")") %>
   		</td>
-      <td><%= link_to 'Show', iteration_path(@project, iteration) %></td>
-      <td><%= link_to 'Edit', edit_iteration_path(@project, iteration) %></td>
-      <td><%= link_to 'Destroy', iteration_path(@project, iteration), :confirm => 'Are you sure?', :method => :delete %></td>
+      <td><%= link_to '', iteration_path(@project, iteration), :class => "show", :title => "Show" %></td>
+      <td><%= link_to '', edit_iteration_path(@project, iteration), :class => "edit", :title => "Edit" %></td>
+      <td><%= link_to '', iteration_path(@project, iteration), :confirm => 'Are you sure?', :method => :delete, :class => "destroy", :title => "Destroy" %></td>
     </tr>
   <% end %>
   </table>
