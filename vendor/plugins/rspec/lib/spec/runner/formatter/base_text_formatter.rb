@@ -7,6 +7,7 @@ module Spec
       # non-text based ones too - just ignore the +output+ constructor
       # argument.
       class BaseTextFormatter < BaseFormatter
+        attr_reader :output, :pending_examples
         # Creates a new instance that will write to +where+. If +where+ is a
         # String, output will be written to the File with that name, otherwise
         # +where+ is exected to be an IO (or an object that responds to #puts and #write).
@@ -25,8 +26,8 @@ module Spec
           @pending_examples = []
         end
         
-        def example_pending(example_group_description, example_name, message)
-          @pending_examples << ["#{example_group_description} #{example_name}", message]
+        def example_pending(example_group_description, example, message)
+          @pending_examples << ["#{example_group_description} #{example.description}", message]
         end
         
         def dump_failure(counter, failure)

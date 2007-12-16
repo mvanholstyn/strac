@@ -15,10 +15,7 @@ class EmptyStackExamples < StackExamples
   end
 end
 
-class NonEmptyStackExamples < StackExamples
-end
-
-class AlmostFullStackExamples < NonEmptyStackExamples
+class AlmostFullStackExamples < StackExamples
   describe("when almost full")
   before(:each) do
     (1..9).each {|n| @stack.push n}
@@ -28,7 +25,7 @@ class AlmostFullStackExamples < NonEmptyStackExamples
   end
 end
 
-class FullStackExamples < NonEmptyStackExamples
+class FullStackExamples < StackExamples
   describe("when full")
   before(:each) do
     (1..10).each {|n| @stack.push n}
@@ -37,15 +34,3 @@ class FullStackExamples < NonEmptyStackExamples
     @stack.should be_full
   end
 end
-
-# TODO
-# The output from this should read:
-# 
-# Stack when empty
-# - should be empty
-# 
-# Stack when almost full
-# - should not be full
-# 
-# Stack when full
-# - should be full

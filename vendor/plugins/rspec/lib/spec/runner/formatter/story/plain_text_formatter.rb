@@ -16,7 +16,7 @@ module Spec
         
           def run_started(count)
             @count = count
-            @output.puts "Running #@count scenarios:\n"
+            @output.puts "Running #@count scenarios\n\n"
           end
 
           def story_started(title, narrative)
@@ -34,7 +34,7 @@ module Spec
 
           def scenario_started(story_title, scenario_name)
             @scenario_already_failed = false
-            @output.print "\n\nScenario: #{scenario_name}"
+            @output.print "\n\n  Scenario: #{scenario_name}"
             @scenario_ok = true
           end
         
@@ -54,7 +54,7 @@ module Spec
           end
         
           def run_ended
-            @output.puts "\n\n#@count scenarios: #@successful_scenario_count succeeded, #{@failed_scenarios.size} failed, #@pending_scenario_count pending"
+            @output.puts "#@count scenarios: #@successful_scenario_count succeeded, #{@failed_scenarios.size} failed, #@pending_scenario_count pending"
             unless @pending_steps.empty?
               @output.puts "\nPending Steps:"
               @pending_steps.each_with_index do |pending, i|
@@ -93,14 +93,18 @@ module Spec
           
           def collected_steps(steps)
           end
+          
+          def method_missing(sym, *args, &block) #:nodoc:
+            # noop - ignore unknown messages
+          end
 
         private
 
           def found_step(type, description, failed, *args)
             text = if(type == @previous_type)
-              "\n  And "
+              "\n    And "
             else
-              "\n\n  #{type.to_s.capitalize} "
+              "\n\n    #{type.to_s.capitalize} "
             end
             i = -1
             text << description.gsub(::Spec::Story::Step::PARAM_PATTERN) { |param| args[i+=1] }

@@ -1,4 +1,19 @@
-== Version 1.1.0 (in SVN)
+== Version 1.1.1 (In SCM)
+
+* Applied patch from Bob Cotton to reintroduce ExampleGroup.description_options. Closes LH[#186]
+
+== Version 1.1.0
+
+The "tell me a story and go nest yourself" release.
+
+* Applied patch from Mike Vincent to handle generators rails > 2.0.1. Closes LH[#181]
+* Formatter.pending signature changed so it gets passed an ExampleGroup instance instead of the name ( LH[#180])
+* Fixed LH[#180] Spec::Rails::Example::ModelExampleGroup and friends show up in rspec/rails output
+* Spec::Rails no longer loads ActiveRecord extensions if it's disablet in config/boot.rb
+* Applied LH[#178] small annoyances running specs with warnings enabled (Patch from Mikko Lehtonen)
+* Tighter integration with Rails fixtures. Take advantage of fixture caching to get performance improvements (Thanks to Pat Maddox, Nick Kallen, Jonathan Barnes, and Curtis)
+
+== Version 1.1.0-RC1
 
 Textmate Bundle users - this release adds a new RSpec bundle that highlights describe, it, before and after and
 provides navigation to descriptions and examples (rather than classes and methods). When you first install this,
@@ -15,6 +30,8 @@ CMD-OPT-R runs any files or directories selected in the TextMate drawer
 
 rspec_on_rails users - don't forget to run script/generate rspec
 
+* Added shared_examples_for method, which you can (should) use instead of describe Foo, :shared => true
+* Applied LH[#168] Fix describe Object, "description contains a # in it" (Patch from Martin Emde)
 * Applied LH[#15] Reverse loading of ActionView::Base helper modules (Patch from Mark Van Holstyn)
 * Applied LH[#149] Update contribute page to point towards lighthouse (Patch from Josh Knowles)
 * Applied LH[#142] verify_rcov fails with latest rcov (Patch from Kyle Hargraves)
@@ -26,6 +43,7 @@ rspec_on_rails users - don't forget to run script/generate rspec
 * Applied LH[#134] Only load spec inside spec_helper.rb (Patch from Mark Van Holstyn)
 * RSpec now bails immediately if there are examples with identical names.
 * Applied LH[#132]  Plain Text stories should support Given and Given: (Patch from Jarkko Laine)
+* Applied patch from Pat Maddox: Story Mediator - the glue that binds the plain text story parser with the rest of the system
 * Applied LH[#16] Have SimpleMatchers expose their description for specdocs (Patch from Bryan Helmkamp)
 * Stories now support --colour
 * Changed the DSL modules to Example (i.e. Spec::Example instead of Spec::DSL)

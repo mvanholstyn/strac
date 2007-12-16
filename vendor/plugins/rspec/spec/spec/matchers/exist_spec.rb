@@ -30,7 +30,7 @@ describe "should exist," do
     @imaginary = Substance.new false, 'something imaginary'
   end
 
-  describe "within a behaviour" do
+  describe "within an example group" do
   
     it "should pass if target exists" do
       @real.should exist
@@ -40,9 +40,12 @@ describe "should exist," do
       lambda { @imaginary.should exist }.should fail
     end
     
+    it "should pass if target doesn't exist" do
+      lambda { @real.should_not exist }.should fail
+    end
   end
 
-  describe "outside of a behavior" do
+  describe "outside of an example group" do
 
     it "should pass if target exists" do
       real_tester = SubstanceTester.new @real

@@ -22,8 +22,8 @@ module Spec
     <meta http-equiv="Pragma" content="no-cache" />
     <script src="javascripts/prototype.js" type="text/javascript"></script>
     <script src="javascripts/scriptaculous.js" type="text/javascript"></script>
-    <script src="javascripts/application.js" type="text/javascript"></script>
-    <link href="stylesheets/style.css" rel="stylesheet" type="text/css" />
+    <script src="javascripts/rspec.js" type="text/javascript"></script>
+    <link href="stylesheets/rspec.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
     <div id="container">
@@ -51,7 +51,7 @@ EOF
           def story_started(title, narrative)
             @output.puts <<-EOF
       <dl class="story passed">
-        <dt>#{h title}</dt>
+        <dt>Story: #{h title}</dt>
         <dd>
           <p>
             #{h(narrative).split("\n").join("<br />")}
@@ -69,7 +69,7 @@ EOF
           def scenario_started(story_title, scenario_name)
             @output.puts <<-EOF
           <dl class="passed">
-            <dt>#{h scenario_name}</dt>
+            <dt>Scenario: #{h scenario_name}</dt>
             <dd>
               <ul class="steps">
 EOF

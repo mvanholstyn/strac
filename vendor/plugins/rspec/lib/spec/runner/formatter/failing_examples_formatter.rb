@@ -4,12 +4,8 @@ module Spec
   module Runner
     module Formatter
       class FailingExamplesFormatter < BaseTextFormatter      
-        def add_example_group(example_group_description)
-          @example_group_description = example_group_description
-        end
-      
         def example_failed(example, counter, failure)
-          @output.puts "#{@example_group_description} #{example}"
+          @output.puts "#{example_group.description} #{example.description}"
           @output.flush
         end
 

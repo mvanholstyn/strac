@@ -1,6 +1,4 @@
 require 'stringio'
-require 'rbconfig'
-require 'tmpdir'
 
 dir = File.dirname(__FILE__)
 lib_path = File.expand_path("#{dir}/../lib")
@@ -85,4 +83,21 @@ def exception_from(&block)
     exception = e
   end
   exception
+end
+
+describe "sandboxed rspec_options", :shared => true do
+  attr_reader :options
+
+  before(:all) do
+    @original_rspec_options = $rspec_options
+  end
+
+  before(:each) do
+    @options = ::Spec::Runner::Options.new(StringIO.new, StringIO.new)
+    $rspec_options = options
+  end
+
+  after do
+    $rspec_options = @original_rspec_options
+  end
 end

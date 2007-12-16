@@ -22,7 +22,7 @@ module Spec
       result; \
     end
     attr_writer :run
-
+    
     def exit?; \
       !Object.const_defined?(:Test) || Test::Unit.run?; \
     end
