@@ -8,12 +8,14 @@ describe StoryTagsPresenter, '#each' do
     @presenter = StoryTagsPresenter.new :tags => @tags, :project => nil
   end
   
-  it "iterates over the tags" do
-    @tags.first.should_receive(:name)
-    @tags.last.should_receive(:name)
+  it "iterates over the tags in alphabetical order" do
+    @tags.first.stub!(:name).and_return("foo")
+    @tags.last.stub!(:name).and_return("bar")
+    names = []
     @presenter.each do |tag|
-      tag.name
+      names << tag.name
     end
+    names.should == [ "bar", "foo" ]
   end
 end
 

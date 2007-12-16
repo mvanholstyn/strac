@@ -10,6 +10,6 @@ class StoryTagsPresenter < PresentationObject
   end
   
   def each &block
-    @tags.each &block
+    @tags.sort_by(&:name).each &block
   end
 end
