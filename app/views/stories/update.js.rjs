@@ -4,7 +4,12 @@ page[:notice].show
 page.visual_effect :appear, :notice
 page.delay( 5 ) {  page.visual_effect :fade, :notice }
 
-if @story.bucket.is_a?(Iteration) or @story.bucket.nil?
+# TODO - find a better way to determine when to remove stories
+viewing_phases = request.referer =~ /projects\/.+\/phases/ ? true : false
+# TODO - this should be passed in with every request if present as a param
+viewing_tags = request.referer =~ /view=tags/ ? true : false
+
+if @story.bucket.is_a?(Iteration) || @story.bucket.nil? || viewing_phases || viewing_tags
   bucket_id = @story.bucket.nil? ? "nil" : @story.bucket.id
   id_to_hide = "story_#{@story.id}_edit"
   page.visual_effect :blind_up, id_to_hide, :duration => 0.3
@@ -12,10 +17,12 @@ if @story.bucket.is_a?(Iteration) or @story.bucket.nil?
   page["story_#{@story.id}_mini"].replace_html :partial => 'mini_story', :locals => { :story => @story }
   page["story_#{@story.id}_view"].replace_html :partial => 'mini_show', :locals => { :story => @story }
 
-  iteration_list_ids = [ "iteration_nil" ] + @project.iterations.map{ |i| "iteration_#{i.id}" }
-  page.sortable "iteration_#{bucket_id}", :url => reorder_stories_path(@project), :method => :put,
-                              :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => iteration_list_ids
-else
+  if !viewing_tags && !viewing_phases
+    iteration_list_ids = [ "iteration_nil" ] + @project.iterations.map{ |i| "iteration_#{i.id}" }
+    page.sortable "iteration_#{bucket_id}", :url => reorder_stories_path(@project), :method => :put,
+                                :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => iteration_list_ids
+  end
+elsif @story.bucket.is_a?(Phase)
   id_to_remove = "story_#{@story.id}"
   page.visual_effect :blind_up, id_to_remove, :duration => 0.3
   page.remove id_to_remove
