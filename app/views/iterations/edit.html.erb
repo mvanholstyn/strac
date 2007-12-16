@@ -1,32 +1,35 @@
-<h1>Editing iteration</h1>
+<div class="section">
+  <div class="links">
+    <%= link_to 'Show', iteration_path(@project, @iteration), :class => "action" %> |
+    <%= link_to 'Back', iterations_path( @project ), :class => "action" %>
+  </div>
+  <h2>Editing iteration</h2>
 
-<%= error_messages_for :iteration %>
+  <%= error_messages_for :iteration %>
 
-<% form_for(:iteration, :url => iteration_path(@project, @iteration), :html => { :method => :put }) do |f| %>
-  <p>
-    <b>Name</b><br />
-    <%= f.text_field :name %>
-  </p>
+  <% form_for(:iteration, :url => iteration_path(@project, @iteration), :html => { :method => :put }) do |f| %>
+    <p>
+      <b>Name</b><br />
+      <%= f.text_field :name %>
+    </p>
 
-  <p>
-    <b>Start date</b><br />
-    <%= f.date_select :start_date %>
-  </p>
+    <p>
+      <b>Start date</b><br />
+      <%= f.date_select :start_date %>
+    </p>
 
-  <p>
-    <b>End date</b><br />
-    <%= f.date_select :end_date %>
-  </p>
+    <p>
+      <b>End date</b><br />
+      <%= f.date_select :end_date %>
+    </p>
 
-  <p>
-    <b>Budget</b><br />
-    <%= f.text_field :budget %>
-  </p>
+    <p>
+      <b>Budget</b><br />
+      <%= f.text_field :budget %>
+    </p>
 
-  <p>
-    <%= submit_tag "Update" %>
-  </p>
-<% end %>
-
-<%= link_to 'Show', iteration_path(@project, @iteration) %> |
-<%= link_to 'Back', iterations_path( @project ) %>
+    <p>
+      <%= submit_tag "Update" %>
+    </p>
+  <% end %>
+</div>

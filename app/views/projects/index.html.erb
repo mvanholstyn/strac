@@ -1,4 +1,8 @@
-<h1>Projects</h1>
+<div class="section">
+  <div class="links">
+    <%= link_to 'New Project', new_project_path, :class => "action" %>
+  </div>
+<h2>Projects</h2>
 
 <table>
 <% for project in @projects %>
@@ -13,4 +17,3 @@
 
 <br />
 
-<%= link_to 'New project', new_project_path %>

@@ -1,34 +1,36 @@
-<h1>My Profile</h1>
+<div class="section">
+  <h2>My Profile</h2>
 
-<%= error_messages_for :user %>
+  <%= error_messages_for :user %>
 
-<% form_for(:user, current_user, :html => { :method => :put }) do |form| %>
-  <p>
-    <b>First name</b><br />
-    <%= form.text_field :first_name %>
-  </p>
+  <% form_for(:user, current_user, :html => { :method => :put }) do |form| %>
+    <p>
+      <b>First name</b><br />
+      <%= form.text_field :first_name %>
+    </p>
 
-  <p>
-    <b>Last name</b><br />
-    <%= form.text_field :last_name %>
-  </p>
+    <p>
+      <b>Last name</b><br />
+      <%= form.text_field :last_name %>
+    </p>
 
-  <p>
-    <b>Email address</b><br />
-    <%= form.text_field :email_address %>
-  </p>
+    <p>
+      <b>Email address</b><br />
+      <%= form.text_field :email_address %>
+    </p>
 
-  <p>
-    <b>Password</b><br />
-    <%= form.password_field :password %>
-  </p>
+    <p>
+      <b>Password</b><br />
+      <%= form.password_field :password %>
+    </p>
 
-  <p>
-    <b>Password confirmation</b><br />
-    <%= form.password_field :password_confirmation %>
-  </p>
+    <p>
+      <b>Password confirmation</b><br />
+      <%= form.password_field :password_confirmation %>
+    </p>
 
-  <p>
-    <%= submit_tag "Update" %>
-  </p>
-<% end %>
+    <p>
+      <%= submit_tag "Update" %>
+    </p>
+  <% end %>
+</div>

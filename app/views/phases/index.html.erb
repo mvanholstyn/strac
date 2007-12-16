@@ -1,4 +1,8 @@
 <div class="section">
+  <div class="links">
+    <%= link_to 'New Phase', new_project_phase_path( @project ), :class => "action" %>
+  </div>
+
   <h2>Phases</h2>
 
   <table class="phases">
@@ -14,5 +18,4 @@
 
   <br />
 
-  <%= link_to 'New phase', new_project_phase_path( @project ) %>
 </div>

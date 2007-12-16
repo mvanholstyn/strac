@@ -1,4 +1,7 @@
 <div class="section">
+  <div class="links">
+    <%= link_to 'New Iteration', new_iteration_path( @project ), :class => "action" %>
+  </div>
   <h2>Iterations</h2>
 
   <table class="iterations">
@@ -17,5 +20,4 @@
 
   <br />
 
-  <%= link_to 'New iteration', new_iteration_path( @project ) %>
 </div>

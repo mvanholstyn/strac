@@ -1,3 +1,9 @@
-<h1>Edit phase</h1>
-<%= render :partial => "phases/form", :locals => { :phase => @phase } %>
-<%= link_to 'Back', project_phases_path( @project ) %>
+<div class="section">
+  <div class="links">
+    <%= link_to 'Show', project_phase_path(@project, @phase), :class => "action" %> |
+    <%= link_to 'Back', project_phases_path(@project), :class => "action" %>
+  </div>
+  <h2>Edit phase</h2>
+
+  <%= render :partial => "phases/form", :locals => { :phase => @phase } %>
+</div>

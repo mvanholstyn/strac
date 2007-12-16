@@ -2,6 +2,7 @@
   <h2>Current Iteration</h2>
 
   <% if @iteration.new_record? -%>
+    Oops! No current iteration exists. Please take a moment to create one below.
   	<%= render "iterations/new" %>
   <% else -%>
   	<table width="100%">

@@ -1,9 +1,9 @@
 <div class="section">
   <div class="links">
     <% if @stories_presenter.iterations? %>
-      <%= link_to 'view by tags', stories_path(@project, :view=>'tags'), :class => 'tags_view action' %>
+      <%= link_to 'View By Tags', stories_path(@project, :view=>'tags'), :class => 'tags_view action' %>
     <% elsif @stories_presenter.tags? %>
-      <%= link_to 'view by iterations', stories_path(@project, :view=>'iterations'), :class => 'iterations_view action' %>
+      <%= link_to 'View By Iterations', stories_path(@project, :view=>'iterations'), :class => 'iterations_view action' %>
     <% end %>
   </div>
   <h2>Stories</h2>

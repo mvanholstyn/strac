@@ -1,2 +1,2 @@
-page["iteration_#{@story.bucket_id.inspect}_story_new"].replace_html :partial => 'new'
+page["iteration_#{@story.bucket_id.inspect}_story_new"].replace_html :partial => 'new', :locals => { :story => @story }
 page.visual_effect :blind_down, "iteration_#{@story.bucket_id.inspect}_story_new", :duration => 0.3

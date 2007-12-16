@@ -1,18 +1,20 @@
-<div style="float:right; background-color: transparent;">
-  <em>Dragging stories is currently disabled.</em>
-</div>
-<h1>Phase - <%= h @phase.name %></h1>
+<div class="section">
+  <div class="links">
+    <em>Dragging stories is currently disabled.</em>
+  </div>
+  <h2>Phase - <%= h @phase.name %></h2>
 
-<p>
-  <%= h @phase.description %>
-</p>
+  <p>
+    <%= h @phase.description %>
+  </p>
 
-<h3>Stories<br/>
-<hr />
-</h3>
+  <h3>Stories<br/>
+  <hr />
+  </h3>
 
-<div id="phase_<%= @phase.id %>" class="phase">
-  <div class="stories">
-    <%= render :partial => 'stories/list', :locals => { :stories => @phase.stories } %>
+  <div id="phase_<%= @phase.id %>" class="phase">
+    <div class="stories">
+      <%= render :partial => 'stories/list', :locals => { :stories => @phase.stories } %>
+    </div>
   </div>
 </div>
