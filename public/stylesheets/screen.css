@@ -448,7 +448,8 @@ th {
 	display :inline;
 }
 
-.story_card .content .toolbar .show, .phases .phase .show, .iterations .iteration .show {
+.story_card .content .toolbar .show, .phases .phase .show, .iterations .iteration .show,
+.projects .project .show {
 	background: url(../images/show.png) no-repeat;
 	padding: 1px 0 1px 20px;
 }
@@ -458,7 +459,8 @@ th {
 	padding: 1px 0 1px 20px;
 }
 
-.story_card .toolbar .edit, .phases .phase .edit, .iterations .iteration .edit {
+.story_card .toolbar .edit, .phases .phase .edit, .iterations .iteration .edit,
+.projects .project .edit {
 	background: url(../images/edit.png) no-repeat;
 	padding: 1px 0 1px 20px;
 }
@@ -468,7 +470,8 @@ th {
 	padding: 1px 0 1px 20px;
 }
 
-.story_card .toolbar .destroy, .phases .phase .destroy, .iterations .iteration .destroy {
+.story_card .toolbar .destroy, .phases .phase .destroy, .iterations .iteration .destroy,
+.projects .project .destroy {
 	background: url(../images/destroy.png) no-repeat;
 	padding: 1px 0 1px 20px;
 }
@@ -509,7 +512,7 @@ th {
   font-size: 0.8em;
 }
 
-.iterations .iteration .name a, .phases .phase .name a{
+.iterations .iteration .name a, .phases .phase .name a, .projects .project .name a{
   font-size: 120%;
   text-decoration: none;
   margin-right: 1em;   
@@ -520,6 +523,7 @@ th {
 }
 
 .iterations .iteration .name {
+  white-space: nowrap;
   padding-right: 1em;
 }
 

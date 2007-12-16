@@ -2,18 +2,18 @@
   <div class="links">
     <%= link_to 'New Project', new_project_path, :class => "action" %>
   </div>
-<h2>Projects</h2>
+  <h2>Projects</h2>
 
-<table>
-<% for project in @projects %>
-  <tr>
-    <td><%=h project.name %></td>
-    <td><%= link_to 'Show', project_path(project) %></td>
-    <td><%= link_to 'Edit', edit_project_path(project) %></td>
-    <td><%= link_to 'Destroy', project_path(project), :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
-</table>
+  <table class="projects">
+  <% for project in @projects %>
+    <tr class="project">
+      <td class="name"><%= link_to h(project.name), project_path(project) %></td>
+      <td><%= link_to 'show', project_path(project), :class => "show", :title => "Show" %></td>
+      <td><%= link_to 'edit', edit_project_path(project), :class => "edit", :title => "Edit" %></td>
+      <td><%= link_to 'destroy', project_path(project), :confirm => 'Are you sure?', :method => :delete, :class => "destroy", :title => "Destroy" %></td>
+    </tr>
+  <% end %>
+  </table>
 
-<br />
-
+  <br />
+</div>

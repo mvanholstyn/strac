@@ -11,13 +11,12 @@
         <%= link_to h(iteration.name), iteration_path(@project, iteration) %>
   			<%= h("("+iteration.start_date.strftime( "%Y-%m-%d" )+" thru "+iteration.end_date.strftime( "%Y-%m-%d" )+")") %>
   		</td>
-      <td><%= link_to '', iteration_path(@project, iteration), :class => "show", :title => "Show" %></td>
-      <td><%= link_to '', edit_iteration_path(@project, iteration), :class => "edit", :title => "Edit" %></td>
-      <td><%= link_to '', iteration_path(@project, iteration), :confirm => 'Are you sure?', :method => :delete, :class => "destroy", :title => "Destroy" %></td>
+      <td><%= link_to 'show', iteration_path(@project, iteration), :class => "show", :title => "Show" %></td>
+      <td><%= link_to 'edit', edit_iteration_path(@project, iteration), :class => "edit", :title => "Edit" %></td>
+      <td><%= link_to 'destroy', iteration_path(@project, iteration), :confirm => 'Are you sure?', :method => :delete, :class => "destroy", :title => "Destroy" %></td>
     </tr>
   <% end %>
   </table>
 
   <br />
-
 </div>
