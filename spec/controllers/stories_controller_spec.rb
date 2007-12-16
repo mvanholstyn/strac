@@ -27,6 +27,11 @@ describe StoriesController, "user with privileges requesting #index " do
     get_index
   end
   
+  it "assigns @project" do
+    get_index
+    assigns[:project].should == @project
+  end
+  
   it "assigns @stories_presenter" do
     StoriesIndexPresenter.stub!(:new).and_return(@stories_index_presenter)
     get_index

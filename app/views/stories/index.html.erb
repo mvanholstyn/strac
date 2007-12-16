@@ -3,8 +3,10 @@
 
   <div id="stories" class="section_content">
     <% if @stories_presenter.iterations? %>
+      <%= link_to '(view by tags)', stories_path(@project, :view=>'tags'), :class => 'tags_view' %>
       <%= render :partial => 'stories/iterations', :locals => { :iterations => @stories_presenter.iterations } %>
     <% elsif @stories_presenter.tags? %>
+      <%= link_to '(view by iterations)', stories_path(@project, :view=>'iterations'), :class => 'iterations_view' %>
       <%= render :partial => 'stories/tags', :locals => { :tags => @stories_presenter.tags } %>    
     <% end %>
   </div>
