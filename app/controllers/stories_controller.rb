@@ -1,6 +1,8 @@
 class StoriesController < ApplicationController
   include ERB::Util
-
+  
+  in_place_edit_for :story, :points
+  
   before_filter :find_project
   before_filter :find_priorities_and_statuses, :only => [ :new, :edit ]
 
@@ -177,6 +179,7 @@ class StoriesController < ApplicationController
         format.js do
           render_notice %("#{@story.summary}" was successfully updated.) do |page|
             page["story_#{@story.id}_points"].replace_html( @story.points || "&infin;" )
+            page[:project_summary].replace :partial => "projects/summary", :locals => { :project => @project }
           end
         end
       else

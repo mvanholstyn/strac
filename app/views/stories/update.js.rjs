@@ -27,3 +27,5 @@ elsif @story.bucket.is_a?(Phase)
   page.visual_effect :blind_up, id_to_remove, :duration => 0.3
   page.remove id_to_remove
 end
+
+page[:project_summary].replace :partial => "projects/summary", :locals => { :project => @project }
