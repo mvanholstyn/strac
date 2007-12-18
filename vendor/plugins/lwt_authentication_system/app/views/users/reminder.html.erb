@@ -1,0 +1,12 @@
+<% form_for :user do |form| -%>
+	<p>
+  	<b>Email Address</b><br />
+		<%= form.text_field :email_address %>
+  </p>
+
+	<p>
+  	<%= form.submit 'Submit' %>
+	</p>
+<% end -%>
+
+<%= link_to "Login", login_path %>

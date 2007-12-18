@@ -1,0 +1,8 @@
+LwtAuthenticationSystem
+=======================
+
+This authentication system allows for an easy, plug and play solution
+to all you authentication and privilege needs.
+
+ * The currently logged in user's id is stored in the sessionas :current_user_id.
+ * When creating fixture data, you can use User.hash_password( 'password' ) 

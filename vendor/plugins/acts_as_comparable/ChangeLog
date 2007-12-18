@@ -1,0 +1,14 @@
+2007-06-30  zdennis  <zdennis@elijah.local>
+
+	* Renamed MockModel to DummyModel in test_helper.rb
+
+	* Added/Updated tests for acts_as_comparable with different options
+
+	* Removed tests for the now private method comparables_attributes_for
+
+	* Made comparable_attributes_for a private method
+
+2007-04-20  zdennis  <zdennis@elijah.local>
+
+	* Made script/plugin installation friendly
+

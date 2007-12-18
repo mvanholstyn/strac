@@ -1,0 +1,51 @@
+Overall
+ ! Add Tests
+ ! Add routes
+
+Controller
+ ? Update how restrict_to works so that it can be ignored in subclasses
+
+Model
+ ? Allow custom validation msg for group and priv validations
+ ? allow configuration of password_hash, and salt column names
+ ! Revisit mixin for group/priv/group_priv/forgot_pass/forgot_pass_mailer
+
+Ideas
+ * Signup hooks and options
+ * Account activation
+ * Object level privileges
+ * Attribute level privileges
+ ? controller/action privileges
+ * Profile options
+ * Preferences system
+ ? view helpers (link_to, form_for, etc...)
+ ? Syntax for asking for permission a & b (not just or)
+ ? Users can belong to many groups
+ ? Rename Group to Role
+ ? can_xxx? helpers for privileges
+
+Object level privileges
+	http://agilewebdevelopment.com/plugins/scoped_access
+
+Remember Me/Signup/Forgot Password/Activation 
+	http://svn.rails-engines.org/plugins/login_engine/
+	http://svn.rails-engines.org/plugins/user_engine/
+
+Privilege Syntax
+  http://agilewebdevelopment.com/plugins/simple_access_control
+    uses "admin || manager" style syntax
+    adds has_permission? helper on view
+
+  http://opensvn.csie.org/ezra/rails/plugins/dev/acl_system2/
+    uses "admin || manager" style syntax
+    adds has_permission? helper on view
+
+Privilege
+  http://activeacl.rubyforge.org/
+    has object level permissions
+    you can explicitely deny users privileges (not sure if i like this)
+    seems very complex, and the API does not seem very easy
+
+	https://activerbac.turingstudio.com/
+	
+	http://www.writertopia.com/developers/authorization

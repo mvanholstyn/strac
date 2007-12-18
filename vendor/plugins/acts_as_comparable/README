@@ -1,0 +1,29 @@
+acts_as_comparable
+-------------------
+
+acts_as_comparable allows you to compare ActiveRecord models.
+To test or build documentation see the rake tasks available.
+  rake -T
+
+
+TESTING 
+-------
+Testing acts_as_comparable relies on:
+ * ActiveRecord (any version, tested up to 1.15.3)
+ * Mocha 0.4.0 or higher (tested with 0.4.0)
+ * Ruby 1.8.4, 1.8.5 or 1.8.6
+ 
+DOCS
+----
+http://www.continuousthining.com/tags/acts_as_comparable 
+ 
+SVN
+----
+Public anonymous read svn:
+   http://rails.lotswholetime.com/svn/acts_as_comparable/trunk
+
+AUTHORS
+-------
+* Mark Van Holstyn - http://www.lotswholetime.com
+* Zach Dennis - http://www.continuousthinking.com 
+

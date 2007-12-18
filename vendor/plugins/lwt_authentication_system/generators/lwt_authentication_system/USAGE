@@ -1,0 +1,16 @@
+Description:
+    The generator will create the default files necessary to get the lwt_authentication_system up and running.
+
+Example:
+    ./script/generate lwt_authentication_system
+
+    This will create:
+        Model:      app/models/user.rb
+        Controller: app/controller/users_controller.rb
+        View:       app/view/users/login.erb
+        Migration:  db/migrate/XXX_add_lwt_authentication_system.rb
+        Fixtures:   test/fixtures/privileges.yml
+                    test/fixtures/groups.yml
+                    test/fixtures/groups_privileges.yml
+                    test/fixtures/users.yml
+

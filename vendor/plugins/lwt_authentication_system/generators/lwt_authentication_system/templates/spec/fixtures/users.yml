@@ -1,0 +1,7 @@
+admin:
+  id: 1
+  email_address: admin@example.com
+  salt: 29c4e39ef3ef59e9f71c612e6456675c0f21727f
+  password_hash: <%%= User.hash_password 'password', '29c4e39ef3ef59e9f71c612e6456675c0f21727f' %>
+  group_id: 1
+  active: true
