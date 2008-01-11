@@ -7,7 +7,8 @@ class AddCompletedAtToStories < ActiveRecord::Migration
     add_column :stories, :completed_at, :datetime
     
     status = Status.find_by_name("complete")
-    Story.update_all "completed_at = CURDATE()", "status_id=#{status.id}"
+    curdate = Time.now.to_s(:db)
+    Story.update_all "completed_at = '#{curdate}'", "status_id=#{status.id}"
   end
 
   def self.down

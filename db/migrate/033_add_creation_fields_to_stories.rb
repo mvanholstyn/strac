@@ -14,7 +14,8 @@ class AddCreationFieldsToStories < ActiveRecord::Migration
     end
 
     # update all backlog stories to have a creation date of today
-    Story.update_all "created_at=NOW()", "created_at IS NULL"
+    now = Time.now.to_s(:db)
+    Story.update_all "created_at='#{now}'", "created_at IS NULL"
   end
 
   def self.down
