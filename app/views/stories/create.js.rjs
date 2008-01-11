@@ -4,7 +4,7 @@ page[:notice].show
 page.visual_effect :appear, :notice
 page.delay( 5 ) {  page.visual_effect :fade, :notice }
 
-bucket_id = "iteration_#{@story.iteration ? @story.iteration.id : 'nil'}"
+bucket_id = "iteration_#{@story.bucket ? @story.bucket.id : 'nil'}"
 page.insert_html :bottom, bucket_id, :partial => 'list', :locals => { :stories => [ @story ] }
 
 iteration_list_ids = [ "iteration_nil" ] + @project.iterations.map{ |i| "iteration_#{i.id}" }
