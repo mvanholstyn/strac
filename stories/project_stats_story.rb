@@ -23,6 +23,9 @@ Story "Project Stats", %|
     And "they will see zero remaining points for the project" do
       see_zero_remaining_points
     end
+    And "they will see zero completed iterations" do
+      see_zero_completed_iterations
+    end
     And "they will see zero as the average velocity for the project" do
       see_zero_average_velocity
     end
@@ -56,6 +59,9 @@ Story "Project Stats", %|
     And "they will see remaining points for the project (2)" do
       see_remaining_points @stories.sum(&:points)
     end
+    And "they will see zero completed iterations" do
+      see_zero_completed_iterations
+    end
     And "they will see zero as the average velocity for the project (2)" do
       see_zero_average_velocity
     end
@@ -88,6 +94,9 @@ Story "Project Stats", %|
     And "they will see the correct number of remaining points for the project (3)" do
       see_remaining_points @incomplete_stories.sum(&:points)
     end
+    And "they will see zero completed iterations" do
+      see_zero_completed_iterations
+    end
     And "they will see zero as the average velocity for the project (3)" do
       see_zero_average_velocity
     end
@@ -101,7 +110,7 @@ Story "Project Stats", %|
     Given "the user logs out (4)" do
       reset! 
     end
-    And "the completed stories are added to an completed iteration(4)" do
+    And "the completed stories are added to a completed iteration (4)" do
       @iteration = Generate.iteration("Iteration 1", 
         :project => @project, 
         :start_date => 1.week.ago, 
@@ -122,6 +131,9 @@ Story "Project Stats", %|
     And "they will see the correct number of remaining points for the project (4)" do
       @remaining_points = @incomplete_stories.sum(&:points)
       see_remaining_points @remaining_points
+    end
+    And "they will see one completed iterations" do
+      see_completed_iterations 1
     end
     And "they will see the sum of completed points for the iteration as the average velocity for the project (4)" do
       @average_velocity = @completed_stories.sum(&:points)
@@ -176,6 +188,16 @@ Story "Project Stats", %|
     see_project_summary do
       assert_select '.average_velocity', velocity.to_s.to_regexp
     end            
+  end
+  
+  def see_completed_iterations(num)
+    see_project_summary do
+      response.should have_tag('.completed_iterations', num.to_s.to_regexp)
+    end
+  end
+  
+  def see_zero_completed_iterations
+    see_completed_iterations 0
   end
   
   def see_zero_estimated_remaining_iterations

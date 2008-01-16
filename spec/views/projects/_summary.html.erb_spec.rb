@@ -10,7 +10,7 @@ describe "/projects/_summary.html.erb" do
       :total_points => 0, 
       :completed_points => 0, 
       :remaining_points => 0,
-      :iterations => [], 
+      :completed_iterations => [], 
       :average_velocity => 0, 
       :estimated_remaining_iterations => 0,
       :estimated_completion_date => nil)
@@ -36,9 +36,9 @@ describe "/projects/_summary.html.erb" do
   
   it "renders the project's completed iteration count" do
     iterations = [1,2,3,4]
-    @project.should_receive(:iterations).and_return(iterations)
+    @project.should_receive(:completed_iterations).and_return(iterations)
     render_it
-    response.should have_tag('.project_summary .iterations', iterations.size.to_s)
+    response.should have_tag('.project_summary .completed_iterations', iterations.size.to_s)
   end
   
   it "renders the project's average velocity" do
