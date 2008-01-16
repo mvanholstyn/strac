@@ -31,7 +31,7 @@ describe Story do
     it "associates with another model" do
       @user = Generate.user("some user")
       @project = Generate.project("Some Project")
-      @story = Generate.story("story summary", :responsible_party => @user)
+      @story = Generate.story(:summary => "story summary", :responsible_party => @user)
       @story.responsible_party.should be(@user)
     end
   end

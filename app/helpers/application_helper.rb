@@ -30,26 +30,31 @@ module ApplicationHelper
   end
   
   class Conversion
-    CONVERSIONS = {}
     attr_reader :keyword, :model, :link
+    
+    class << self
+      def conversions
+        @conversions ||= {
+          :S => new( :S, Story, [ :story, :project_id, :id ] ),
+          :B => new( :B, Bucket ),
+          :I => new( :I, Iteration, [ :iteration, :project_id, :id ] ),
+          :USER => new( :USER, User ),
+          :P => new( :P, Project, [ :project, :id ] ),
+          :STATUS =>new( :STATUS, Status ),
+          :PRIORITY => new( :PRIORITY, Priority ) }
+      end
+    end    
     
     def initialize( keyword, model, link = nil )
       @keyword, @model, @link = keyword, model, link
-      CONVERSIONS[keyword] = self
     end
   end
   
-  Conversion.new( :S, Story, [ :story, :project_id, :id ] )
-  Conversion.new( :I, Iteration, [ :iteration, :project_id, :id ] )
-  Conversion.new( :USER, User )
-  Conversion.new( :P, Project, [ :project, :id ] )
-  Conversion.new( :STATUS, Status )
-  Conversion.new( :PRIORITY, Priority )
   
   # TODO - come up with a great way to test this or extract it out in a couple objects or methods and test those
   def expand_ids( data )
-    data.gsub( /(^|\W)((#{Conversion::CONVERSIONS.map{ |k,c| k.to_s }.join( '|' )})(\d+))(\W|$)/ ) do |match|
-      conversion = Conversion::CONVERSIONS[$3.to_sym]
+    data.gsub( /(^|\W)((#{Conversion.conversions.map{ |k,c| k.to_s }.join( '|' )})(\d+))(\W|$)/ ) do |match|
+      conversion = Conversion.conversions[$3.to_sym]
       object = conversion.model.find_by_id( $4 )
       if object
         if conversion.link

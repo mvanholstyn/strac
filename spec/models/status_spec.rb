@@ -16,7 +16,7 @@ describe Status do
 
 end
 
-describe "Status class methods" do
+describe Status, "class methods" do
   fixtures :statuses
   
   it "should have a 'defined' status" do
@@ -43,5 +43,14 @@ describe "Status class methods" do
     Status.rejected.should be_an_instance_of(Status)
     Status.rejected.name.should == "rejected"
   end
+end
 
+describe Status, '.statuses' do
+  def statuses
+    Status.statuses
+  end
+  
+  it "returns an array of the statuses: defined, in progress, complete, blocked and rejected" do
+    statuses.should == [ Status.defined, Status.in_progress, Status.complete, Status.rejected, Status.blocked ]
+  end
 end

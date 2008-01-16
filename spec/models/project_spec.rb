@@ -9,9 +9,9 @@ describe Project, "#new with no attributes" do
     @project.should_not be_valid
   end
 
-  it "can have many invitations" do
+  it "has many invitations" do
     assert_association Project, :has_many, :invitations, Invitation
-  end
+  end  
 end
 
 describe Project, "#new with name attribute" do
@@ -30,8 +30,8 @@ describe Project, '#story_tags' do
   before do
     @project = Generate.project :name => "foo"
     @stories = [
-      Generate.story("story 1", :project => @project),
-      Generate.story("story 2", :project => @project) ]
+      Generate.story(:summary => "story 1", :project => @project),
+      Generate.story(:summary => "story 2", :project => @project) ]
     @stories.first.tag_list = "foo, baz"
     @stories.last.tag_list = "foo, baz, bar"
     @stories.each{ |s| s.save! }
@@ -46,9 +46,9 @@ describe Project, '#tagless_stories' do
   before do
     @project = Generate.project :name => "foo"
     @stories = [
-      Generate.story("story1", :project => @project),
-      Generate.story("story2", :project => @project),
-      Generate.story("story3", :project => @project) ]
+      Generate.story(:summary => "story1", :project => @project),
+      Generate.story(:summary => "story2", :project => @project),
+      Generate.story(:summary => "story3", :project => @project) ]
     @stories[0].tag_list = ""
     @stories[1].tag_list = "foo, baz, bar"    
     @stories[2].tag_list = ""
@@ -61,7 +61,7 @@ describe Project, '#tagless_stories' do
   
   it "doesn't include stories from other projects" do
     @project2 = Generate.project :name => "baz"
-    @story2 = Generate.story "another project's story", :project => @project2
+    @story2 = Generate.story :summary => "another project's story", :project => @project2
     @project.tagless_stories.should_not include(@story2)
   end
 end
@@ -71,9 +71,9 @@ describe Project, "#total_points" do
     Story.delete_all
     @project = Generate.project "foo"
     @stories = [
-      Generate.story("story 1", :project => @project, :points => 1),
-      Generate.story("story 2", :project => @project, :points => 2),
-      Generate.story("story 3", :project => @project, :points => 4) ]
+      Generate.story(:summary => "story 1", :project => @project, :points => 1),
+      Generate.story(:summary => "story 2", :project => @project, :points => 2),
+      Generate.story(:summary => "story 3", :project => @project, :points => 4) ]
   end
   
   it "returns the sum of points for stories that belong to this project" do
@@ -81,27 +81,27 @@ describe Project, "#total_points" do
   end
 
   it "includes points for stories that are defined" do
-    story = Generate.story "story", :project => @project, :points => 10, :status => Status.defined
+    story = Generate.story :summary => "story", :project => @project, :points => 10, :status => Status.defined
     @project.total_points.should == @stories.map(&:points).sum + story.points
   end
 
   it "includes points for stories that are in progress" do
-    story = Generate.story "story", :project => @project, :points => 10, :status => Status.in_progress
+    story = Generate.story :summary => "story", :project => @project, :points => 10, :status => Status.in_progress
     @project.total_points.should == @stories.map(&:points).sum + story.points
   end
 
   it "includes points for stories that are complete" do
-    story = Generate.story "story", :project => @project, :points => 10, :status => Status.complete
+    story = Generate.story :summary => "story", :project => @project, :points => 10, :status => Status.complete
     @project.total_points.should == @stories.map(&:points).sum + story.points
   end
 
   it "includes points for stories that are blocked" do
-    story = Generate.story "story", :project => @project, :points => 10, :status => Status.blocked
+    story = Generate.story :summary => "story", :project => @project, :points => 10, :status => Status.blocked
     @project.total_points.should == @stories.map(&:points).sum + story.points
   end
   
   it "ignores points for stories that are rejected" do
-    story = Generate.story "story", :project => @project, :points => 10, :status => Status.rejected
+    story = Generate.story :summary => "story", :project => @project, :points => 10, :status => Status.rejected
     @project.total_points.should == @stories.map(&:points).sum
   end
   
@@ -109,7 +109,7 @@ describe Project, "#total_points" do
   describe "with stories that belong to an iteration" do
     it "includes the points that belong to stories attached to an iteration" do
       iteration = Generate.iteration "iteration1", :project => @project
-      story = Generate.story "story that belongs to iteration", :project => @project, :bucket => iteration, :points => 10
+      story = Generate.story :summary => "story that belongs to iteration", :project => @project, :bucket => iteration, :points => 10
       @project.total_points.should == @stories.map(&:points).sum + story.points
     end
   end
@@ -117,9 +117,54 @@ describe Project, "#total_points" do
   describe "with stories that belong to a phase" do
     it "does not include points that belong to stories attached to a phase" do
       phase = Generate.phase "phase1", :project => @project
-      story = Generate.story "story that belongs to phase", :project => @project, :bucket => phase, :points => 10
+      story = Generate.story :summary => "story that belongs to phase", :project => @project, :bucket => phase, :points => 10
       @project.total_points.should == @stories.map(&:points).sum
     end
+  end
+end
+
+describe Project, '#average_velocity' do
+  def average_velocity
+    velocity = @stories.sum(&:points).to_f / @completed_iterations.size.to_f
+    @project.average_velocity.should == velocity
+  end
+
+  before do
+    @project = Generate.project "project foo"
+    @completed_iterations = [
+      Generate.iteration("completed 1", :start_date => 1.week.ago, :end_date => Time.now.yesterday, :project => @project),
+      Generate.iteration("completed 2", :start_date => 3.weeks.ago, :end_date => 2.weeks.ago, :project => @project) 
+    ]
+    @stories = [
+      Generate.story(:summary => "A", :bucket => @completed_iterations.first, :points => 100, :project => @project, :status => Status.complete),
+      Generate.story(:summary => "B", :bucket => @completed_iterations.last, :points => 50, :project => @project, :status => Status.complete) 
+    ]
+  end
+  
+  it "computes the average number of completed points from completed iterations" do
+    average_velocity
+  end
+  
+  it "ignores points associated with incomplete stories" do
+    Generate.story(:summary => "incomplete 1", :bucket => @completed_iterations.first, :points => 100, :project => @project)
+    Generate.story(:summary => "incomplete 1", :bucket => @completed_iterations.first, :points => 100, :project => @project, :status => Status.defined)
+    Generate.story(:summary => "incomplete 1", :bucket => @completed_iterations.first, :points => 100, :project => @project, :status => Status.blocked)
+    Generate.story(:summary => "incomplete 1", :bucket => @completed_iterations.first, :points => 100, :project => @project, :status => Status.rejected)
+    Generate.story(:summary => "incomplete 1", :bucket => @completed_iterations.first, :points => 100, :project => @project, :status => Status.in_progress)
+    average_velocity
+  end
+  
+  it "ignores points associated with phases" do
+    phase = Generate.phase "phase", :project => @project
+    Generate.story :summary => "story for phase", :bucket => @phase, :project => @project, :points => 200
+    average_velocity
+  end
+  
+  it "ignores points associated with iterations that haven't completed" do
+    iteration = Generate.iteration "future iteration", :project => @project, :start_date => 3.weeks.from_now, :end_date => 4.weeks.from_now
+    Generate.story :summary => "1 for future iteration", :bucket => iteration, :points => 300, :project => @project
+    Generate.story :summary => "2 for future iteration", :bucket => iteration, :points => 400, :project => @project, :status => Status.complete
+    average_velocity
   end
 end
 
@@ -128,11 +173,11 @@ describe Project, "#completed_points" do
     Story.delete_all
     @project = Generate.project "foo"
     @completed_stories = [
-      Generate.story("story 1", :project => @project, :points => 1, :status => Status.complete),
-      Generate.story("story 2", :project => @project, :points => 2, :status => Status.complete),
-      Generate.story("story 3", :project => @project, :points => 4, :status => Status.complete) ]
+      Generate.story(:summary => "story 1", :project => @project, :points => 1, :status => Status.complete),
+      Generate.story(:summary => "story 2", :project => @project, :points => 2, :status => Status.complete),
+      Generate.story(:summary => "story 3", :project => @project, :points => 4, :status => Status.complete) ]
     @not_completed_stories = [
-      Generate.story("story a", :project => @project, :points => 1) ]
+      Generate.story(:summary => "story a", :project => @project, :points => 1) ]
   end
   
   it "returns the sum of points for completed stories that belong to this project" do
@@ -140,36 +185,36 @@ describe Project, "#completed_points" do
   end
 
   it "ignores points for stories that are defined" do
-    story = Generate.story "story", :project => @project, :points => 10, :status => Status.defined
+    story = Generate.story :summary => "story", :project => @project, :points => 10, :status => Status.defined
     @project.completed_points.should == @completed_stories.map(&:points).sum
   end
 
   it "ignores points for stories that are in_progress" do
-    story = Generate.story "story", :project => @project, :points => 10, :status => Status.in_progress
+    story = Generate.story :summary => "story", :project => @project, :points => 10, :status => Status.in_progress
     @project.completed_points.should == @completed_stories.map(&:points).sum
   end
 
   it "ignores points for stories that are rejected" do
-    story = Generate.story "story", :project => @project, :points => 10, :status => Status.rejected
+    story = Generate.story :summary => "story", :project => @project, :points => 10, :status => Status.rejected
     @project.completed_points.should == @completed_stories.map(&:points).sum
   end
 
   it "ignores points for stories that are blocked" do
-    story = Generate.story "story", :project => @project, :points => 10, :status => Status.blocked
+    story = Generate.story :summary => "story", :project => @project, :points => 10, :status => Status.blocked
     @project.completed_points.should == @completed_stories.map(&:points).sum
   end
 
   describe "with stories that belong to an iteration" do
     it "includes the points that belong to completed stories attached to an iteration" do
       iteration = Generate.iteration "iteration1", :project => @project
-      story = Generate.story "story that belongs to iteration", :project => @project, :bucket => iteration, :points => 10, :status => Status.complete
+      story = Generate.story :summary => "story that belongs to iteration", :project => @project, :bucket => iteration, :points => 10, :status => Status.complete
       sum = @completed_stories.map(&:points).sum + story.points
       @project.completed_points.should == sum
     end
     
     it "ignores points that belong to incomplete stories attached to an iteration" do
       iteration = Generate.iteration "iteration1", :project => @project
-      story = Generate.story "story that belongs to iteration", :project => @project, :bucket => iteration, :points => 10
+      story = Generate.story :summary => "story that belongs to iteration", :project => @project, :bucket => iteration, :points => 10
       @project.completed_points.should == @completed_stories.map(&:points).sum
     end
   end
@@ -177,8 +222,8 @@ describe Project, "#completed_points" do
   describe "with stories that belong to a phase" do
     it "ignores points that belong to stories attached to a phase" do
       phase = Generate.phase "phase1", :project => @project
-      story = Generate.story "story that belongs to phase", :project => @project, :bucket => phase, :points => 10
-      story = Generate.story "story2 that belongs to phase", :project => @project, :bucket => phase, :points => 10, :status => Status.complete
+      story = Generate.story :summary => "story that belongs to phase", :project => @project, :bucket => phase, :points => 10
+      story = Generate.story :summary => "story2 that belongs to phase", :project => @project, :bucket => phase, :points => 10, :status => Status.complete
       @project.completed_points.should == @completed_stories.map(&:points).sum
     end
   end
@@ -189,12 +234,12 @@ describe Project, "#remaining_points" do
     Story.delete_all
     @project = Generate.project "foo"
     @complete_stories = [
-      Generate.story("story 1", :project => @project, :points => 1, :status => Status.complete),
-      Generate.story("story 2", :project => @project, :points => 2, :status => Status.complete),
-      Generate.story("story 3", :project => @project, :points => 4, :status => Status.complete) ]
+      Generate.story(:summary => "story 1", :project => @project, :points => 1, :status => Status.complete),
+      Generate.story(:summary => "story 2", :project => @project, :points => 2, :status => Status.complete),
+      Generate.story(:summary => "story 3", :project => @project, :points => 4, :status => Status.complete) ]
     @remaining_stories = [
-      Generate.story("story 1", :project => @project, :points => 1),
-      Generate.story("story 2", :project => @project, :points => 2) ]
+      Generate.story(:summary => "story 1", :project => @project, :points => 1),
+      Generate.story(:summary => "story 2", :project => @project, :points => 2) ]
   end
   
   it "returns the sum of points for incomplete stories belong to this project" do
@@ -202,34 +247,34 @@ describe Project, "#remaining_points" do
   end
   
   it "includes points for stories that are defined" do
-    story = Generate.story "story", :project => @project, :points => 10, :status => Status.defined
+    story = Generate.story :summary => "story", :project => @project, :points => 10, :status => Status.defined
     @project.remaining_points.should == @remaining_stories.map(&:points).sum + story.points
   end
 
   it "includes points for stories that are in progress" do
-    story = Generate.story "story", :project => @project, :points => 10, :status => Status.in_progress
+    story = Generate.story :summary => "story", :project => @project, :points => 10, :status => Status.in_progress
     @project.remaining_points.should == @remaining_stories.map(&:points).sum + story.points
   end
 
   it "ignores points for stories that are completed" do
-    story = Generate.story "story", :project => @project, :points => 10, :status => Status.complete
+    story = Generate.story :summary => "story", :project => @project, :points => 10, :status => Status.complete
     @project.remaining_points.should == @remaining_stories.map(&:points).sum
   end
 
   it "includes points for stories that are blocked" do
-    story = Generate.story "story", :project => @project, :points => 10, :status => Status.blocked
+    story = Generate.story :summary => "story", :project => @project, :points => 10, :status => Status.blocked
     @project.remaining_points.should == @remaining_stories.map(&:points).sum + story.points
   end
   
   it "ignores points for stories that are rejected" do
-    story = Generate.story "story", :project => @project, :points => 10, :status => Status.rejected
+    story = Generate.story :summary => "story", :project => @project, :points => 10, :status => Status.rejected
     @project.remaining_points.should == @remaining_stories.map(&:points).sum
   end
   
   describe "with stories that belong to an iteration" do
     it "includes points that belong to incomplete stories attached to an iteration" do
       iteration = Generate.iteration "iteration1", :project => @project
-      story = Generate.story "story that belongs to iteration", :project => @project, :bucket => iteration, :points => 10
+      story = Generate.story :summary => "story that belongs to iteration", :project => @project, :bucket => iteration, :points => 10
       @project.remaining_points.should == @remaining_stories.map(&:points).sum + story.points
     end
   end
@@ -237,14 +282,32 @@ describe Project, "#remaining_points" do
   describe "with stories that belong to a phase" do
     it "ignores points that belong to stories attached to a phase" do
       phase = Generate.phase "phase1", :project => @project
-      story = Generate.story "story that belongs to phase", :project => @project, :bucket => phase, :points => 10
+      story = Generate.story :summary => "story that belongs to phase", :project => @project, :bucket => phase, :points => 10
       @project.remaining_points.should == @remaining_stories.map(&:points).sum
     end
   end
 end
 
+describe Project, '#completed_iterations' do
+  before do
+    @project = Project.create :name=>"Project w/Activities"
+    @completed_iterations = [
+      Generate.iteration("iteration 1", :project => @project, :start_date => 4.weeks.ago, :end_date => 3.weeks.ago),
+      Generate.iteration("iteration 2", :project => @project, :start_date => 2.weeks.ago, :end_date => 1.week.ago)
+    ]
+    Generate.iteration "iteration 3", :project => @project, :start_date => Time.now, :end_date => 1.week.from_now
+    Generate.iteration "iteration 4", :project => @project, :start_date => 2.weeks.from_now, :end_date => 3.weeks.from_now
+  end
 
-describe Project, "recent_activities" do
+  it "returns only iterations whose end_date are before today" do
+    @project.completed_iterations.size.should == @completed_iterations.size
+    @completed_iterations.each do |iteration|
+      @project.completed_iterations.should include(iteration)
+    end
+  end
+end
+
+describe Project, "#recent_activities" do
   before do
     @project = Project.create :name=>"Project w/Activities"
     
@@ -301,10 +364,10 @@ describe Project, "#backlog_stories" do
     @project = Generate.project "ProjectA"
     @iteration = Generate.iteration "Iteration1", :project => @project
     
-    @story1 = Generate.story "story1", :project => @project
-    @story2 = Generate.story "story2", :project => @project
-    @story3 = Generate.story "story3", :project => @project ; @story3.move_higher #acts_as_list
-    @story4 = Generate.story "story4", :project => @project, :bucket => @iteration
+    @story1 = Generate.story :summary => "story1", :project => @project
+    @story2 = Generate.story :summary => "story2", :project => @project
+    @story3 = Generate.story :summary => "story3", :project => @project ; @story3.move_higher #acts_as_list
+    @story4 = Generate.story :summary => "story4", :project => @project, :bucket => @iteration
   end
   
   it "finds all of the project not assigned to an iteration ordered by position" do

@@ -8,6 +8,10 @@ class ActionController::IntegrationTest
       response.should have_text(error)
     end
   end
+  
+  def see_project_summary(&blk)
+    assert_select '#project_summary', &blk
+  end
 
   def see_stories_header(text)
     assert_select '#stories .header', text.to_regexp

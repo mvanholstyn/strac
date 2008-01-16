@@ -1,26 +1,33 @@
 # == Schema Information
-# Schema version: 27
+# Schema version: 41
 #
 # Table name: statuses
 #
-#  id    :integer(11)   not null, primary key
-#  name  :string(255)   
-#  color :string(255)   
+#  id         :integer(11)   not null, primary key
+#  name       :string(255)   
+#  color      :string(255)   
+#  created_at :datetime      
+#  updated_at :datetime      
 #
 
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 defined:
   id: 1
   name: defined
+  color: blue
 inprogress:
   id: 2
   name: in progress
+  color: yellow
 complete:
   id: 3
   name: complete
+  color: green
 rejected:
   id: 4
   name: rejected
+  color: black
 blocked:
   id: 5
   name: blocked
+  color: red

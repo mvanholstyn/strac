@@ -9,6 +9,13 @@ class Generate
     attributes[:actor] = Generate.user(attributes[:actor]) unless attributes[:actor].is_a?(ActiveRecord::Base)
     Activity.create!(attributes.merge(:action=>action))
   end
+
+  def self.bucket(options={})
+    @bucket_count ||= 0
+    name = options.delete(:name) || "Bucket #{@bucket_count+=1}"
+    project_id = options.delete(:project_id) || Generate.project.id
+    Bucket.create!(:name => name, :project_id => project_id)
+  end
       
   def self.group(name, attributes={})
     privilege = Generate.privilege("user")
@@ -52,11 +59,15 @@ class Generate
     Phase.create!(attributes.merge(:name=>name))
   end
   
-  def self.project(name, attributes={})
+  def self.project(name=nil, attributes={})
+    @project_count ||= 0
+    name ||= "Project #{@project_count+=1}"
     Project.create!(attributes.merge(:name=>name))
   end
   
-  def self.story(summary, attributes={})
+  def self.story(attributes={})
+    @story_count ||= 0
+    summary ||= attributes.delete(:summary) || "Summary #{@story_count+=1}"
     if attributes[:project].nil?
       attributes[:project] = Generate.project("Project for #{summary}")
     end

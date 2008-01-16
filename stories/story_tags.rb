@@ -62,7 +62,7 @@ Story "Story Tags", %|
   def add_stories_to_the_project_with_tag(tag, options)
     stories = []
     options[:count].times do |i|
-      stories << Generate.story("story #{i} for tag #{tag}", :project => @project, :tag_list => tag)
+      stories << Generate.story(:summary => "story #{i} for tag #{tag}", :project => @project, :tag_list => tag)
     end
     stories
   end

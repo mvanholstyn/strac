@@ -14,15 +14,20 @@
 defined:
   id: 1
   name: defined
+  color: blue
 inprogress:
   id: 2
   name: in progress
+  color: yellow
 complete:
   id: 3
   name: complete
+  color: green
 rejected:
   id: 4
   name: rejected
+  color: black
 blocked:
   id: 5
   name: blocked
+  color: red

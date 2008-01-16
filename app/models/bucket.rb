@@ -4,6 +4,10 @@ class Bucket < ActiveRecord::Base
 
   validates_presence_of :project_id, :name
 
+  def completed_stories
+    stories.find(:all, :conditions => ['status_id=?', Status.complete.id], :order => "position ASC")
+  end
+
   def display_name
     name
   end

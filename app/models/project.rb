@@ -29,6 +29,7 @@ class Project < ActiveRecord::Base
       find_current || build( :name => "Iteration #{size + 1}", :start_date => Date.today, :end_date =>  Date.today + 7 )
     end
   end
+  has_many :completed_iterations, :source => :iterations, :class_name => Iteration.name, :conditions => [ "end_date < ?", Date.today ]
   has_many :story_tags, :class_name => Tag.name, :finder_sql => '
     SELECT tags.*
     FROM projects
@@ -77,10 +78,10 @@ class Project < ActiveRecord::Base
   end
   
   def average_velocity
-    velocity = iterations.inject( 0 ) do |sum,iteration|
-      sum + ( iteration.stories.sum( :points, :conditions => [ "status_id IN (?)", Status.find( :all, :conditions => [ "name IN (?)", [ "complete" ] ] ).map( &:id) ] ) || 0 )
+    velocity = completed_iterations.inject(0) do |sum,iteration|
+      sum + iteration.completed_stories.sum(&:points)
     end
-    iterations.empty? ? 0 : velocity.to_f / iterations.size.to_f
+    completed_iterations.empty? ? 0 : velocity.to_f / completed_iterations.size.to_f
   end
   
   def estimated_remaining_iterations
@@ -106,5 +107,4 @@ class Project < ActiveRecord::Base
   def backlog_stories
     stories.find_backlog(:order => :position)
   end
-    
 end

@@ -78,7 +78,7 @@ Story "Project Phases", %|
       @phase.stories.should be_empty
     end
     And "a story exists in the system" do
-      @story = Generate.story "some story", :project => @phase.project
+      @story = Generate.story :summary => "some story", :project => @phase.project
     end
     And "a user is editing the story" do
       a_user_viewing_a_project(:project => @phase.project)
@@ -109,7 +109,7 @@ Story "Project Phases", %|
   Scenario "how the project summary is affected by adding a story to a phase" do
     Given "a completed story exists that does not belong to a phase" do
       @phase = Generate.phase "Another Day Another Phase", :description => "woohah"
-      @story = Generate.story "story1", :project => @phase.project, :points => 10, :status => Status.complete
+      @story = Generate.story :summary => "story1", :project => @phase.project, :points => 10, :status => Status.complete
     end
     And "a user viewing a project (4)" do
       a_user_viewing_a_project(:project => @phase.project)
@@ -129,7 +129,7 @@ Story "Project Phases", %|
     Given "an incomplete story exists that has been estimated" do
       reset!
       @phase = Generate.phase "Another Day Another Phase", :description => "woohah"
-      @story = Generate.story "story1", :project => @phase.project, :points => 10
+      @story = Generate.story :summary => "story1", :project => @phase.project, :points => 10
     end
     And "a user viewing a project (5)" do
       a_user_viewing_a_project(:project => @phase.project)

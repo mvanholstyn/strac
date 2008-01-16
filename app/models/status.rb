@@ -13,26 +13,35 @@
 class Status < ActiveRecord::Base
   
   validates_presence_of :color
-  
+
   class << self
     def defined 
-      Status.find( :first, :conditions=>{:name=>"defined"} )
+      @defined ||= Status.find( :first, :conditions=>{:name=>"defined"} ) || 
+        Status.create!(:name => "defined", :color => "blue")
     end
     
     def in_progress
-      Status.find( :first, :conditions=>{:name=>"in progress"} )
+      @in_progress ||= Status.find( :first, :conditions=>{:name=>"in progress"} ) || 
+        Status.create!(:name => "in progress", :color => "yellow")
     end
     
     def complete
-      Status.find( :first, :conditions=>{:name=>"complete"} )
+      @complete ||= Status.find( :first, :conditions=>{:name=>"complete"} ) || 
+        Status.create!(:name => "complete", :color => "green" )
     end
     
     def rejected
-      Status.find( :first, :conditions=>{:name=>"rejected"} )
+      @rejected ||= Status.find( :first, :conditions=>{:name=>"rejected"} ) || 
+        Status.create!(:name => "rejected", :color => "black")
     end
     
     def blocked
-      Status.find( :first, :conditions=>{:name=>"blocked"} )
+      @blocked ||= Status.find( :first, :conditions=>{:name=>"blocked"} ) || 
+        Status.create!(:name => "blocked", :color => "blocked")
+    end
+    
+    def statuses
+      [ defined, in_progress, complete, rejected, blocked ]
     end
   end
     
