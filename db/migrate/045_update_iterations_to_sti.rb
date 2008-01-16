@@ -16,5 +16,11 @@ class UpdateIterationsToSti < ActiveRecord::Migration
     remove_column :buckets, :description
     rename_table :buckets, :iterations
     rename_column :stories, :bucket_id, :iteration_id
+
+    create_table :phases do |t|
+      t.string :name
+      t.integer :project_id
+      t.timestamps
+    end    
   end
 end

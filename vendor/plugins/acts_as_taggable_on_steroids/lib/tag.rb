@@ -1,9 +1,5 @@
 class Tag < ActiveRecord::Base
   has_many :taggings
-  # extend the existing Tag class
-  # Tag.class_eval do
-    has_many_polymorphs :taggables, :from => [:stories], :through => :taggings
-  # end
   
   def self.parse(list)
     tags = []
