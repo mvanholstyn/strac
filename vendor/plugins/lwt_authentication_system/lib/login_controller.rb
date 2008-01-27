@@ -33,7 +33,7 @@ module LWT
             :signup_flash => "Please signup",
             :successful_signup_flash => "You have successfully signed up",
             :allow_signup => false,
-            :require_activation => false
+            :require_activation => false,
             :reminder_flash => "Please enter the email address of the account whose information you would like to retrieve",
             :reminder_error_flash => "The email address you entered was not found",
             :reminder_success_flash => "Please check your email to retrieve your account information",
