@@ -33,6 +33,7 @@ module LWT
             :signup_flash => "Please signup",
             :successful_signup_flash => "You have successfully signed up",
             :allow_signup => false,
+            :require_activation => false
             :reminder_flash => "Please enter the email address of the account whose information you would like to retrieve",
             :reminder_error_flash => "The email address you entered was not found",
             :reminder_success_flash => "Please check your email to retrieve your account information",
@@ -228,7 +229,7 @@ module LWT
         def signup
           instance_variable_set( "@#{self.class.login_model_name}", model = self.class.login_model.new( params[self.class.login_model_name.to_sym] ) )
           if request.post?
-            model.active = false
+            model.active = self.class.lwt_authentication_system_options[:require_activation] ? false : true
             if model.save
               reminder = UserReminder.create_for_user( model, Time.now + self.class.lwt_authentication_system_options[:reminder_login_duration] )
               url = url_for(:action => 'login', :id => model, :token => reminder.token)
