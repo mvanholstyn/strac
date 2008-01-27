@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
-  acts_as_login_controller :allow_signup => true, :email_from => "admin@lotswholetime.com"
+  acts_as_login_controller :allow_signup => true, :email_from => "admin@lotswholetime.com",
+                           :signup_email_subject => "Welcome to strac"
 
   after_filter :process_invitation, :only => :login
 
