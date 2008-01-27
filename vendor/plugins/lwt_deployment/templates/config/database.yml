@@ -1,6 +1,6 @@
 <%= rails_env %>:
   adapter: mysql
   database: <%= application %>_<%= rails_env %>
-  username: root
-  password: 
+  username: <%= application %>
+  password: <%= Capistrano::CLI.password_prompt("DB Password: ") %>
   host: localhost

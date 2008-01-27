@@ -1,0 +1,30 @@
+Wingnut:
+ * Cleanup task for backups
+ * Add ability to push backup somewhere else (ftp)
+ * crontab for backups
+ * setup god/monit scripts
+
+Long Term:
+ * gems/dependencies
+ * pull backup to dev machine
+    task :remote_to_local, :roles => :db, :only => {:primary => true} do
+      latest = capture("cd #{current_path}; rake -s backup:latest BACKUP_DIR=#{backup_path}").strip
+      run "tar -C #{backup_path} -czf #{backup_path}/#{latest}.tar.gz #{latest}"
+      `mkdir -p backups`
+      get "#{backup_path}/#{latest}.tar.gz", "backups/#{latest}.tar.gz"
+      `tar -C backups -zxf backups/#{latest}.tar.gz`
+      run "rm #{backup_path}/#{latest}.tar.gz"
+      `rm backups/#{latest}.tar.gz`
+      `rake backup:restore`
+    end
+ * Add :sql format database backup
+ * get db:shell working
+ * create database
+ * create logrotate
+ * create deploy_to (as root)
+ * create apache vhost
+    run "umask 02 && mkdir -p /etc/apache2/sites-available /etc/apache2/sites-enabled"
+    template = File.read(File.join(File.dirname(__FILE__), "..", "templates", "config", "virtual_host.conf"))
+    result = ERB.new(template).result(binding)
+    put result, "/etc/apache2/sites-available/#{application}-#{rails_env}.conf", :mode => 0644
+    run "rm -f /etc/apache2/sites-enabled/#{application}-#{rails_env}.conf && ln -s /etc/apache2/sites-available/#{application}-#{rails_env}.conf /etc/apache2/sites-enabled/#{application}-#{rails_env}.conf"
