@@ -22,3 +22,5 @@ Long Term:
  * create database
  * create logrotate
  * create deploy_to (as root)
+ * apache:configure servername
+ * apache:configure symlink (as root)
