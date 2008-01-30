@@ -5,8 +5,8 @@
   end
 end
 
-Dir[File.join(RAILS_ROOT, "config", "deploy", "*.rb")].each do |deploy_file|
-  task deploy_file.gsub(".rb", "") do
+Dir[File.join(File.dirname(__FILE__), *%w[.. .. .. .. config deploy *.rb])].each do |deploy_file|
+  task File.basename(deploy_file).gsub(".rb", "") do
     load deploy_file
   end
 end
