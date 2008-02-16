@@ -13,7 +13,7 @@ Story "Project Stats", %|
       @project = Generate.project
     end
     When "the user views the project summary" do
-      a_user_viewing_a_project
+      a_user_viewing_a_project :project => @project
     end
     Then "they will see zero total points for the project" do
       see_zero_total_points
