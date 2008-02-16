@@ -125,7 +125,7 @@ end
 
 describe Project, '#average_velocity' do
   def average_velocity
-    velocity = @stories.sum(&:points).to_f / @completed_iterations.size.to_f
+    velocity = @stories.sum{|s| s.points.blank? ? 0 : s.points}.to_f / @completed_iterations.size.to_f
     @project.average_velocity.should == velocity
   end
 
@@ -165,6 +165,13 @@ describe Project, '#average_velocity' do
     Generate.story :summary => "1 for future iteration", :bucket => iteration, :points => 300, :project => @project
     Generate.story :summary => "2 for future iteration", :bucket => iteration, :points => 400, :project => @project, :status => Status.complete
     average_velocity
+  end
+  
+  it "treats unestimated stories for completed iterations as having zero point estimates" do
+    iteration = @completed_iterations.first
+    Generate.story :summary => "not estimated 1", :points => nil, :bucket => iteration, :project => @project, :status => Status.complete
+    Generate.story :summary => "not estimated 2", :points => nil, :bucket => iteration, :project => @project, :status => Status.complete
+    average_velocity    
   end
 end
 

@@ -79,7 +79,7 @@ class Project < ActiveRecord::Base
   
   def average_velocity
     velocity = completed_iterations.inject(0) do |sum,iteration|
-      sum + iteration.completed_stories.sum(&:points)
+      sum + iteration.completed_stories.sum{ |story| story.points.blank? ? 0 : story.points }
     end
     completed_iterations.empty? ? 0 : velocity.to_f / completed_iterations.size.to_f
   end

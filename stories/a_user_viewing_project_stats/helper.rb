@@ -13,12 +13,21 @@ module ProjectStatsStoryHelper
     end
   end
 
-  def generate_stories_for_project(project)
+  def generate_unestimated_stories_for_project(project)
     [
-      Generate.story(:summary => "story 1", :points => "1", :project => project),
-      Generate.story(:summary => "story 2", :points => "2", :project => project),
-      Generate.story(:summary => "story 3", :points => "4", :project => project),
-      Generate.story(:summary => "story 4", :points => "0", :project => project) 
+      Generate.story(:summary => "un-estimated story 1", :project => project),
+      Generate.story(:summary => "un-estimated story 2", :project => project),
+      Generate.story(:summary => "un-estimated story 3", :project => project),
+      Generate.story(:summary => "un-estimated story 4", :project => project) 
+    ]    
+  end
+
+  def generate_estimated_stories_for_project(project)
+    [
+      Generate.story(:summary => "estimated story 1", :points => "1", :project => project),
+      Generate.story(:summary => "estimated story 2", :points => "2", :project => project),
+      Generate.story(:summary => "estimated story 3", :points => "4", :project => project),
+      Generate.story(:summary => "estimated story 4", :points => "0", :project => project) 
     ]
   end
 
