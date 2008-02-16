@@ -7,7 +7,7 @@ describe CommentsController, "User without privileges" do
     @project_id = '1' 
     @story_id = '2'
 
-    login_as 'user_without_privileges'
+    old_login_as 'user_without_privileges'
   end
 
   is "redirected to the dashboard when requesting index" do
@@ -43,7 +43,7 @@ describe CommentsController, "listing comments as a User with privilege user" do
     Story.should_receive(:find).with(@story_id).and_return(story)
     story.should_receive(:comments).and_return("comments")
 
-    @user = login_as 'joe'
+    @user = old_login_as 'joe'
     @user.group.privileges.should include(privileges(:user))
   end
 
@@ -86,7 +86,7 @@ describe CommentsController, "creating comments as a User with privilege user" d
     Story.should_receive(:find).with(@story_id).and_return(@story)
     @story.should_receive(:comments).and_return(@comments)
 
-    @user = login_as 'joe'
+    @user = old_login_as 'joe'
   end
   
   it "should render new" do

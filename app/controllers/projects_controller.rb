@@ -4,8 +4,8 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.xml
   def index
-    @projects = ProjectPermission.find_all_projects_for_user( current_user )
-    
+    @projects = Strac::ProjectManager.all_projects_for_user current_user
+
     respond_to do |format|
       format.html
       format.xml { render :xml => @projects.to_xml }
@@ -15,11 +15,14 @@ class ProjectsController < ApplicationController
   # GET /projects/1
   # GET /projects/1.xml
   def show
-    @project = ProjectPermission.find_project_for_user( params[:id], current_user )
-    
+    # @project = ProjectPermission.find_project_for_user( params[:id], current_user )
+    # 
+    @project = Strac::ProjectManager.get_project_for_user(params[:id], current_user)
     respond_to do |format|
       format.html
-      format.xml { render :xml => @project.to_xml }
+      format.xml { 
+        render :xml => @project.to_xml
+       }
     end
   end
 
@@ -30,14 +33,14 @@ class ProjectsController < ApplicationController
 
   # GET /projects/1;edit
   def edit
-    @project = ProjectPermission.find_project_for_user( params[:id], current_user )
+    @project = Strac::ProjectManager.get_project_for_user(params[:id], current_user)
   end
 
   # POST /projects
   # POST /projects.xml
   def create
     @project = Project.new(params[:project])
-
+    
     respond_to do |format|
       if @project.save 
         current_user.projects << @project
@@ -54,22 +57,19 @@ class ProjectsController < ApplicationController
   # PUT /projects/1
   # PUT /projects/1.xml
   def update
-    unless @project = ProjectPermission.find_project_for_user( params[:id], current_user )
-      redirect_to dashboard_path
-      return
-    end
-
-    respond_to do |format|
-      if @project.update_attributes(params[:project])
-        @project.users.clear
-        User.find( params[:users] ).each { |u| @project.users << u } unless params[:users].blank?
-        
-        flash[:notice] = 'Project was successfully updated.'
-        format.html { redirect_to project_path(@project) }
-        format.xml { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml { render :xml => @project.errors.to_xml }
+    Strac::ProjectManager.update_project_for_user(params[:id], current_user) do |project_update|
+      respond_to do |format|
+        @project = project_update.project
+        project_update.success do
+          flash[:notice] = 'Project was successfully updated.'
+          format.html { redirect_to project_path(@project) }
+          format.xml { head :ok }
+        end
+      
+        project_update.failure do
+          format.html { render :action => "edit" }          
+          format.xml { render :xml => @project.errors.to_xml }
+        end
       end
     end
   end
@@ -77,7 +77,7 @@ class ProjectsController < ApplicationController
   # DELETE /projects/1
   # DELETE /projects/1.xml
   def destroy
-    @project = ProjectPermission.find_project_for_user( params[:id], current_user )
+    @project = Strac::ProjectManager.get_project_for_user(params[:id], current_user)
     @project.destroy
     respond_to do |format|
       format.html { redirect_to projects_path }

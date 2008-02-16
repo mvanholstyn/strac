@@ -87,7 +87,7 @@ describe IterationsController, "user without 'user' privileges" do
   fixtures :users, :groups_privileges, :privileges, :groups, :projects, :buckets
 
   before do
-    @user = login_as :user_without_privileges
+    @user = old_login_as :user_without_privileges
     @user.has_privilege?(:user).should_not be_true
     @project = projects(:project1)
     @project.iterations.should_not be_empty
@@ -116,7 +116,7 @@ describe IterationsController, "user with 'user' privileges requesting index" do
   fixtures :users, :groups_privileges, :privileges, :groups, :projects, :buckets
 
   before do
-    @user = login_as :joe
+    @user = old_login_as :joe
     @user.has_privilege?(:user).should be_true
     @project = projects(:project1)
     @project.iterations.should_not be_empty
@@ -140,7 +140,7 @@ describe IterationsController, "user with 'user' privileges requesting new" do
   fixtures :users, :groups_privileges, :privileges, :groups, :projects, :buckets
 
   before do
-    @user = login_as :joe
+    @user = old_login_as :joe
     @user.has_privilege?(:user).should be_true
     @project = projects(:project1)
     @project.iterations.should_not be_empty
@@ -163,7 +163,7 @@ describe IterationsController, "user with 'user' privileges requesting show" do
   fixtures :users, :groups_privileges, :privileges, :groups, :projects, :buckets
 
   before do
-    @user = login_as :joe
+    @user = old_login_as :joe
     @user.has_privilege?(:user).should be_true
     @project = projects(:project1)
     @project.iterations.should_not be_empty
@@ -186,7 +186,7 @@ describe IterationsController, "user with 'user' privileges requesting create su
   fixtures :users, :groups_privileges, :privileges, :groups, :projects, :buckets
 
   before do
-    @user = login_as :joe
+    @user = old_login_as :joe
     @user.has_privilege?(:user).should be_true
     @project = projects(:project1)
     @project.iterations.destroy_all
@@ -229,7 +229,7 @@ describe IterationsController, "user with 'user' privileges requesting create un
   fixtures :users, :groups_privileges, :privileges, :groups, :projects, :buckets
 
   before do
-    @user = login_as :joe
+    @user = old_login_as :joe
     @user.has_privilege?(:user).should be_true
     @project = projects(:project1)
     @project.iterations.destroy_all
@@ -257,7 +257,7 @@ describe IterationsController, "user with 'user' privileges requesting update su
   fixtures :users, :groups_privileges, :privileges, :groups, :projects, :buckets
 
   before do
-    @user = login_as :joe
+    @user = old_login_as :joe
     @user.has_privilege?(:user).should be_true
     @project = projects(:project1)
     @project.iterations.should_not be_empty
@@ -282,7 +282,7 @@ describe IterationsController, "user with 'user' privileges requesting update un
   fixtures :users, :groups_privileges, :privileges, :groups, :projects, :buckets
 
   before do
-    @user = login_as :joe
+    @user = old_login_as :joe
     @user.has_privilege?(:user).should be_true
     @project = projects(:project1)
     @project.iterations.should_not be_empty
@@ -315,7 +315,7 @@ describe IterationsController, "user with 'user' privileges requesting edit" do
   fixtures :users, :groups_privileges, :privileges, :groups, :projects, :buckets
 
   before do
-    @user = login_as :joe
+    @user = old_login_as :joe
     @user.has_privilege?(:user).should be_true
     @project = projects(:project1)
     @project.iterations.should_not be_empty
@@ -338,7 +338,7 @@ describe IterationsController, "user with 'user' privileges requesting destroy" 
   fixtures :users, :groups_privileges, :privileges, :groups, :projects, :buckets
   
   before do
-    @user = login_as :joe
+    @user = old_login_as :joe
     @user.has_privilege?(:user).should be_true
     @project = projects(:project1)
     @project.iterations.should_not be_empty
@@ -353,7 +353,7 @@ describe IterationsController, "user with 'user' privileges requesting destroy" 
   end
 
   it "redirects the user to the iterations index page" do
-    assert_redirected_to iterations_path    
+    assert_redirected_to iterations_path(@project)    
   end
   
 end

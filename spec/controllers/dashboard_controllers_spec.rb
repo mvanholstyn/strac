@@ -4,7 +4,7 @@ describe DashboardController, "user without 'user' privileges viewing the projec
   fixtures :users, :groups_privileges, :privileges, :groups
 
   before do
-    @user = login_as :user_without_privileges
+    @user = old_login_as :user_without_privileges
     @user.has_privilege?(:user).should_not be_true
   
     get :index
@@ -21,7 +21,7 @@ describe DashboardController, "user with 'user' privileges viewing the project p
   fixtures :users, :groups_privileges, :privileges, :groups
 
   before do
-    @user = login_as :joe
+    @user = old_login_as :joe
     @user.has_privilege?(:user).should be_true
     @user.projects.destroy_all
     @project = Project.create! :name => "Test Project"

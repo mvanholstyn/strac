@@ -15,6 +15,10 @@ class ApplicationController < ActionController::Base
     flash[:error] = "You do not have the proper privileges to access this page."
     redirect_to dashboard_path
   end
+  
+  rescue_from Strac::AccessDenied do |exception|
+    redirect_to "/access_denied.html"
+  end
 
   private
 
