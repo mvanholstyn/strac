@@ -39,6 +39,8 @@ module Spec
                                                     @expected_received_count < values.size
         end
         @return_block = block_given? ? return_block : lambda { value }
+        # Ruby 1.9 - see where this is used below
+        @ignore_args = !block_given?
       end
       
       # :call-seq:
@@ -110,12 +112,14 @@ module Spec
         if block.nil?
           @error_generator.raise_missing_block_error @args_to_yield
         end
+        value = nil
         @args_to_yield.each do |args_to_yield_this_time|
           if block.arity > -1 && args_to_yield_this_time.length != block.arity
             @error_generator.raise_wrong_arity_error args_to_yield_this_time, block.arity
           end
-          block.call(*args_to_yield_this_time)
+          value = block.call(*args_to_yield_this_time)
         end
+        value
       end
       
       def invoke_consecutive_return_block(args, block)
@@ -128,9 +132,14 @@ module Spec
       
       def invoke_return_block(args, block)
         args << block unless block.nil?
-        value = @return_block.call(*args)
-    
-        value
+        # Ruby 1.9 - when we set @return_block to return values
+        # regardless of arguments, any arguments will result in
+        # a "wrong number of arguments" error
+        if @ignore_args
+          @return_block.call()
+        else
+          @return_block.call(*args)
+        end
       end
     end
     

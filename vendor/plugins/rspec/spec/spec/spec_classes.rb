@@ -51,6 +51,9 @@ module Spec
           [1]
         end
         
+        def items
+          @items_in_collection_with_size_method
+        end
       end
 
       class HandCodedMock
@@ -118,6 +121,10 @@ module Custom
     attr_reader :options
     def initialize(options)
       @options = options
+    end
+
+    def diff_as_object(target, expected)
+      ""
     end
   end
 end
