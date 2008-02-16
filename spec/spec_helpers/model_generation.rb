@@ -48,6 +48,12 @@ class Generate
     Iteration.create!(attributes.merge(:name => name))
   end
   
+  def self.project_permission(attributes)
+    raise ArgumentError, "requires project" unless attributes[:project]
+    raise ArgumentError, "requires accessor" unless attributes[:accessor]
+    ProjectPermission.create! :project => attributes[:project], :accessor => attributes[:accessor]
+  end
+  
   def self.privilege(name, attributes={})
     Privilege.create!(attributes.merge(:name=>name))
   end
@@ -62,7 +68,12 @@ class Generate
   def self.project(name=nil, attributes={})
     @project_count ||= 0
     name ||= "Project #{@project_count+=1}"
-    Project.create!(attributes.merge(:name=>name))
+    members = attributes.delete(:members)
+    returning Project.create!(attributes.merge(:name=>name)) do |project|
+      if members
+        members.each { |member| Generate.project_permission(:project => project, :accessor => member)}
+      end
+    end
   end
   
   def self.story(attributes={})
@@ -78,7 +89,9 @@ class Generate
     TimeEntry.create!(attributes.merge(:hours => hours, :date => date))
   end
   
-  def self.user(email_address, attributes={})
+  def self.user(email_address=nil, attributes={})
+    @user_count ||= 0
+    email_address ||= "generic#{@user_count+=1}@example.com"
     if attributes[:group].nil?
       attributes[:group] = Generate.group("some group")
     elsif ! attributes[:group].is_a?(Group)

@@ -15,8 +15,6 @@ class ProjectsController < ApplicationController
   # GET /projects/1
   # GET /projects/1.xml
   def show
-    # @project = ProjectPermission.find_project_for_user( params[:id], current_user )
-    # 
     @project = Strac::ProjectManager.get_project_for_user(params[:id], current_user)
     respond_to do |format|
       format.html
@@ -57,16 +55,17 @@ class ProjectsController < ApplicationController
   # PUT /projects/1
   # PUT /projects/1.xml
   def update
-    Strac::ProjectManager.update_project_for_user(params[:id], current_user) do |project_update|
+    Strac::ProjectManager.update_project_for_user(params[:id], current_user, params[:project], params[:users]) do |project_update|
       respond_to do |format|
-        @project = project_update.project
-        project_update.success do
+        project_update.success do |project|
+          @project = project
           flash[:notice] = 'Project was successfully updated.'
           format.html { redirect_to project_path(@project) }
           format.xml { head :ok }
         end
       
-        project_update.failure do
+        project_update.failure do |project|
+          @project = project
           format.html { render :action => "edit" }          
           format.xml { render :xml => @project.errors.to_xml }
         end

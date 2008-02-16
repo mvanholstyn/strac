@@ -107,4 +107,11 @@ class Project < ActiveRecord::Base
   def backlog_stories
     stories.find_backlog(:order => :position)
   end
+
+  def update_members(member_ids)
+    self.users.clear
+    member_ids.each do |member|
+      self.users << User.find(member)
+    end
+  end
 end

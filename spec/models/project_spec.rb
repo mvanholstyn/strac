@@ -383,7 +383,7 @@ describe Project, "#backlog_stories" do
 end
 
 describe Project, "#backlog_iteration" do
-  setup do
+  before do
     @project = Generate.project "ProjectA"
     @backlog = @project.backlog_iteration
   end
@@ -395,4 +395,18 @@ describe Project, "#backlog_iteration" do
   it "returns an Iteration named 'Backlog'" do
     @backlog.name.should == "Backlog"
   end
+end
+
+describe Project, '#update_members' do
+  before do
+    @members = [ Generate.user, Generate.user, Generate.user ]
+    @project = Generate.project "Foo", :members => @members
+    @project.users.should == @members
+  end
+  
+  it "grants permissions on the project to only the users with the passed ids" do
+    @project.update_members [@members.first.id, @members.last.id]
+    @project.users.reload.should == [@members.first, @members.last]
+  end
+    
 end

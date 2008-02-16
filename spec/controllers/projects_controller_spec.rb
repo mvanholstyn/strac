@@ -200,40 +200,40 @@ end
 
 describe ProjectsController, '#update' do
   def put_update(params={})
-    put :update, {:id => @project.id, :project => @project_params}.merge(params)
+    put :update, {:id => @project.id, :project => @project_params, :users => @users_params}.merge(params)
   end
   
   before do
     @user = mock_model(User)
     login_as @user
     @project = mock_model(Project)
-    @project_params = { :name => "Project HRM" }
+    @project_params = { 'name' => "Project HRM" }
+    @users_params = [1,2,3,4]
     Strac::ProjectManager.stub!(:update_project_for_user)
   end
   
   it "asks the ProjectManager to update the project for the current user" do
-    Strac::ProjectManager.should_receive(:update_project_for_user).with(@project.id.to_s, @user)
+    Strac::ProjectManager.should_receive(:update_project_for_user).with(@project.id.to_s, @user, @project_params, @users_params)
     put_update
   end
   
   describe "when a user with proper privileges updates a project" do
     before do
-      @project_update = stub("project update", :project => @project, :success => nil, :failure => nil)
+      @project_update = stub("project update", :success => nil, :failure => nil)
       Strac::ProjectManager.stub!(:update_project_for_user).and_yield(@project_update)
-      @project_update.stub!(:failure).and_yield
+      @project_update.stub!(:failure).and_yield(@project)
     end
 
-    it "assigns the @project to the updated project" do
-      @project_update.should_receive(:project).and_return(@project)
-      put_update
-      assigns[:project].should == @project
-    end
-    
     describe "when the project successfully updates" do
       before do
-        @project_update.stub!(:success).and_yield
+        @project_update.stub!(:success).and_yield(@project)
         @project_update.stub!(:failure)
       end
+
+      it "assigns the @project to passed in project" do
+        put_update
+        assigns[:project].should == @project
+      end    
     
       it "sets the flash[:notice] telling the user the project was updated" do
         put_update
@@ -257,8 +257,13 @@ describe ProjectsController, '#update' do
     
     describe "when the project fails to update" do
       before do
-        @project_update.stub!(:failure).and_yield
+        @project_update.stub!(:failure).and_yield(@project)
       end
+      
+      it "assigns the @project to passed in project" do
+        put_update
+        assigns[:project].should == @project
+      end      
 
       describe "when the request is an html request" do
         it "renders the projects/edit template" do
