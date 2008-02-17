@@ -54,21 +54,12 @@ describe CommentsController, "listing comments as a User with privilege user" do
     assigns[:comments].should == "comments"
   end
   
-  it "should should list comments with is rendering popup comments as false" do
-    get :index, :story_id=>@story_id, :project_id=>@project_id, :inline=>'false'
+  it "should should list comments" do
+    get :index, :story_id=>@story_id, :project_id=>@project_id
     response.should be_success
     
     assigns[:comments].should == "comments"
   end
-  
-  it "should should list comments inline" do
-    get :index, :story_id=>@story_id, :project_id=>@project_id, :inline=>'true'
-    response.should be_success
-    
-    assigns[:comments].should == "comments"
-    assigns[:is_rendering_inline_comments].should == true
-  end
-
 end
 
 

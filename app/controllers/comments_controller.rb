@@ -1,5 +1,4 @@
 class CommentsController < ApplicationController
-  before_filter :initialize_params
   before_filter :find_story
       
   def index
@@ -29,9 +28,5 @@ private
  
   def find_story
     @story = Story.find(params[:story_id])
-  end
-  
-  def initialize_params
-    @is_rendering_inline_comments = true
   end
 end
