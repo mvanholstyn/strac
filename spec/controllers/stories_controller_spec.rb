@@ -100,7 +100,7 @@ describe StoriesController, '#edit' do
   describe StoriesController, 'xhr request' do
     it "renders the 'edit.js.rjs' template" do
       xhr :get, :edit, :project_id => '1', :id => '2'
-      response.should render_template('stories/edit.js.rjs')
+      response.should render_template('stories/edit')
     end
   end
 end

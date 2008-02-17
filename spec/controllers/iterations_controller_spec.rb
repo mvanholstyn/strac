@@ -355,5 +355,4 @@ describe IterationsController, "user with 'user' privileges requesting destroy" 
   it "redirects the user to the iterations index page" do
     assert_redirected_to iterations_path(@project)    
   end
-  
 end

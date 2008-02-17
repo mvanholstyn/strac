@@ -107,4 +107,15 @@ describe CommentsController, "creating comments as a User with privilege user" d
     response.should render_template("create")
   end
   
+
+  it "should create a comment unsuccessfully" do
+    comment_params = { 'content'=>'test comment', 'commenter_id'=>'1' }
+    @comments.should_receive(:build).with(comment_params).and_return(@comment)
+    @comment.should_receive(:commenter=).with(@user)
+    @comment.should_receive(:save).and_return(false)
+    
+    xhr :post, :create, :comment => comment_params, :story_id=>@story_id, :project_id=>@project_id
+    response.should be_success
+    response.should render_template("new")
+  end
 end

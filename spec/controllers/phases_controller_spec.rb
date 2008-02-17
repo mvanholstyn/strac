@@ -31,19 +31,6 @@ describe PhasesController, "#index" do
       response.should render_template("index")
     end
   end
-  
-  describe "xml request" do
-    before do
-      @phase_array = stub("array of phases")
-      @phases.stub!(:find).and_return(@phase_array)
-    end
-    
-    it "renders an xml response" do
-      @phase_array.should_receive(:to_xml).and_return(:foo)
-      controller.expect_render(:xml => :foo)
-      get_index 'format' => 'xml'
-    end
-  end
 end
 
 describe PhasesController, "#new" do
@@ -154,14 +141,6 @@ describe PhasesController, "#show" do
     it "rendres the show template" do
       get_show
       response.should render_template('show')
-    end
-  end
-  
-  describe "xml request" do
-    it "renders the phase as xml" do
-      @phase.should_receive(:to_xml).and_return(:foo)
-      controller.expect_render(:xml => :foo)
-      get_show 'format' => 'xml'
     end
   end
 end
@@ -291,6 +270,4 @@ describe PhasesController, "#destroy" do
     delete_destroy
     response.should redirect_to(project_phases_path(@project))
   end
-  
 end
-

@@ -33,7 +33,6 @@ describe ApplicationController, 'when Strac::AccessDenied is raised' do
     login_as @user
   end
 
-  
   it "redirects to the /access_denied.html page" do
     get :raise_access_denied
     response.should redirect_to("/access_denied.html")

@@ -3,11 +3,6 @@ class PhasesController < ApplicationController
 
   def index
     @phases = @project.phases.find(:all, :order => "name")
-
-    respond_to do |format|
-      format.html
-      format.xml { render :xml => @phases.to_xml }
-    end
   end
   
   def new
@@ -15,25 +10,18 @@ class PhasesController < ApplicationController
   end
 
   def create
-    @phase = @project.phases.build( params[:phase] )
-    respond_to do |format|
-      if @phase.save
-        flash[:notice] = 'phase was successfully created.'
-        format.html { redirect_to project_phase_path(@project, @phase) }
-      else
-        flash[:error] = 'phase failed to create.'
-        format.html { render :action => "new" }
-      end
+    @phase = @project.phases.build(params[:phase])
+    if @phase.save
+      flash[:notice] = 'phase was successfully created.'
+      redirect_to project_phase_path(@project, @phase)
+    else
+      flash[:error] = 'phase failed to create.'
+      render :action => "new"
     end
   end
 
   def show
     @phase = @project.phases.find(params[:id])
-
-    respond_to do |format|
-      format.html
-      format.xml { render :xml => @phase.to_xml }
-    end
   end
 
   def edit
@@ -43,28 +31,23 @@ class PhasesController < ApplicationController
   def update
     @phase = @project.phases.find(params[:id])
 
-    respond_to do |format|
-      if @phase.update_attributes(params[:phase])
-        flash[:notice] = 'phase was successfully updated.'
-        format.html { redirect_to project_phase_path(@project, @phase) }
-      else
-        format.html { render :action => "edit" }
-      end
+    if @phase.update_attributes(params[:phase])
+      flash[:notice] = 'phase was successfully updated.'
+      redirect_to project_phase_path(@project, @phase)
+    else
+      render :action => "edit"
     end
   end
 
   def destroy
     @phase = @project.phases.find(params[:id])
     @phase.destroy
-
-    respond_to do |format|
-      format.html { redirect_to project_phases_url( @project ) }
-    end
+    redirect_to project_phases_url(@project)
   end
 
-  private
+private
   
   def find_project
-    @project = Project.find( params[:project_id] )
+    @project = Project.find(params[:project_id])
   end
 end

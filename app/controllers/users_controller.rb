@@ -44,9 +44,9 @@ private
   end
   
   def find_groups
-    @groups = Group.find( :all, :conditions => { :name => current_user.group.groups } ).map { |c| [ c.name, c.id ] }
+    @groups = Group.find(:all, :conditions => { :name => current_user.group.groups }).map { |c| [c.name, c.id] }
     if @user and not @user.new_record? and @user != current_user
-      @groups << [ @user.group.name, @user.group.id ]
+      @groups << [@user.group.name, @user.group.id]
     end
     @groups.uniq!
   end

@@ -14,7 +14,6 @@ describe DashboardController, "user without 'user' privileges viewing the projec
   it "redirects to the dashboard path" do
     response.should redirect_to(dashboard_path)
   end
-  
 end
 
 describe DashboardController, "user with 'user' privileges viewing the project page" do
@@ -33,11 +32,4 @@ describe DashboardController, "user with 'user' privileges viewing the project p
   it "assigns projects to the logged in users projects" do
     assigns[:projects].should == @user.projects
   end
-  
 end
-
-
-
-
-
-

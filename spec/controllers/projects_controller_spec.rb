@@ -29,22 +29,6 @@ describe ProjectsController, "#index" do
       response.should render_template('index')
     end
   end
-  
-  describe "when the request is an xml request" do
-    before do
-      @projects.stub!(:to_xml).and_return(:projects_as_xml)
-    end
-    
-    it "asks the @projects for its corresponding xml representation" do
-      @projects.should_receive(:to_xml)
-      get_index :format => "xml"
-    end
-    
-    it "renders the @project's xml" do
-      controller.expect_render(:xml => :projects_as_xml)
-      get_index :format => "xml"
-    end
-  end
 end
 
 describe ProjectsController, "#new" do
@@ -163,13 +147,6 @@ describe ProjectsController, "#create" do
         response.should redirect_to(project_path(@project))
       end
     end
-    
-    describe "when the request is an xml request" do
-      it "redirects to the newly created project's show page as an xml resource" do
-        controller.should_receive(:head).with(:created, :location => project_path(@project))
-        post_create :format => "xml"
-      end
-    end
   end
 
   describe "when the project fails to save" do
@@ -181,18 +158,6 @@ describe ProjectsController, "#create" do
       it "renders the projects/new template" do
         post_create
         response.should render_template("projects/new")
-      end
-    end
-    
-    describe "when the request is an xml request" do
-      before do
-        @errors = stub("errors", :to_xml => :errors_as_xml)
-      end
-      
-      it "renders project's errors as xml" do
-        @project.should_receive(:errors).and_return(@errors)
-        controller.expect_render(:xml => :errors_as_xml)
-        post_create :format => "xml"
       end
     end
   end
@@ -246,13 +211,6 @@ describe ProjectsController, '#update' do
           response.should redirect_to(project_path(@project))
         end
       end
-    
-      describe "when the request is an xml request" do
-        it "renders an ok response" do
-          controller.should_receive(:head).with(:ok)
-          put_update :format => "xml"
-        end
-      end
     end
     
     describe "when the project fails to update" do
@@ -269,18 +227,6 @@ describe ProjectsController, '#update' do
         it "renders the projects/edit template" do
           put_update
           response.should render_template("projects/edit")
-        end
-      end
-      
-      describe "when the request is an xml request" do
-        before do
-          @errors = stub("errors", :to_xml => :errors_as_xml)
-        end
-      
-        it "renders project's errors as xml" do
-          @project.should_receive(:errors).and_return(@errors)
-          controller.expect_render(:xml => :errors_as_xml)
-          put_update :format => "xml"
         end
       end
     end
@@ -374,13 +320,6 @@ describe ProjectsController, '#destroy' do
         assert_redirected_to projects_path    
       end    
     end
-
-    describe "when the request is an xml request" do
-      it "renders an ok response" do
-        controller.should_receive(:head).with(:ok)
-        delete_destroy :format => "xml"
-      end
-    end
   end
   
   describe "when the user doesn't have access to the project" do
@@ -394,4 +333,3 @@ describe ProjectsController, '#destroy' do
     end
   end
 end
-

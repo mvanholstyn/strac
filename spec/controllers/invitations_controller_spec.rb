@@ -84,5 +84,4 @@ describe InvitationsController, "#create" do
 
     post_create
   end
-  
 end
