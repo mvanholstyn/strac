@@ -9,7 +9,7 @@ class FakeController < ApplicationController
   end
   
   def raise_access_denied
-    raise Strac::AccessDenied
+    raise AccessDenied
   end
 
   def rescue_action(e)
@@ -17,7 +17,7 @@ class FakeController < ApplicationController
   end
 end
 
-describe ApplicationController, 'when Strac::AccessDenied is raised' do
+describe ApplicationController, 'when AccessDenied is raised' do
   controller_name 'Fake'
 
   after do

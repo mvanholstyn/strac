@@ -9,11 +9,11 @@ describe ProjectsController, "#index" do
     @user = mock_model(User)
     login_as @user
     @projects = stub("projects")
-    Strac::ProjectManager.stub!(:all_projects_for_user).and_return(@projects)
+    ProjectManager.stub!(:all_projects_for_user).and_return(@projects)
   end
   
   it "asks the project manager for all projects for the current user" do
-    Strac::ProjectManager.should_receive(:all_projects_for_user).with(@user).and_return(@projects)
+    ProjectManager.should_receive(:all_projects_for_user).with(@user).and_return(@projects)
     get_index
   end
   
@@ -57,18 +57,18 @@ describe ProjectsController, "#show" do
   before do
     @user = mock_model(User)
     @project = mock_model(Project)
-    Strac::ProjectManager.stub!(:get_project_for_user).and_return(@project)
+    ProjectManager.stub!(:get_project_for_user).and_return(@project)
     login_as @user
   end
 
   it "asks the ProjectManager to find the requested project for the current user" do
-    Strac::ProjectManager.should_receive(:get_project_for_user).with(@project.id.to_s, @user)
+    ProjectManager.should_receive(:get_project_for_user).with(@project.id.to_s, @user)
     get_show
   end
   
   describe "a user with proper privileges" do
     before do
-      Strac::ProjectManager.stub!(:get_project_for_user).and_return(@project)      
+      ProjectManager.stub!(:get_project_for_user).and_return(@project)      
     end
     
     it "assigns the requested project" do
@@ -85,7 +85,7 @@ describe ProjectsController, "#show" do
   
   describe "a user without proper privileges" do
     before do
-      Strac::ProjectManager.stub!(:get_project_for_user).and_raise(Strac::AccessDenied)
+      ProjectManager.stub!(:get_project_for_user).and_raise(AccessDenied)
     end
     
     it "redirects to the 401 access denied page" do
@@ -174,18 +174,18 @@ describe ProjectsController, '#update' do
     @project = mock_model(Project)
     @project_params = { 'name' => "Project HRM" }
     @users_params = [1,2,3,4]
-    Strac::ProjectManager.stub!(:update_project_for_user)
+    ProjectManager.stub!(:update_project_for_user)
   end
   
   it "asks the ProjectManager to update the project for the current user" do
-    Strac::ProjectManager.should_receive(:update_project_for_user).with(@project.id.to_s, @user, @project_params, @users_params)
+    ProjectManager.should_receive(:update_project_for_user).with(@project.id.to_s, @user, @project_params, @users_params)
     put_update
   end
   
   describe "when a user with proper privileges updates a project" do
     before do
       @project_update = stub("project update", :success => nil, :failure => nil)
-      Strac::ProjectManager.stub!(:update_project_for_user).and_yield(@project_update)
+      ProjectManager.stub!(:update_project_for_user).and_yield(@project_update)
       @project_update.stub!(:failure).and_yield(@project)
     end
 
@@ -234,7 +234,7 @@ describe ProjectsController, '#update' do
   
   describe "when a user without proper privileges tries to update a project" do
     before do
-      Strac::ProjectManager.stub!(:update_project_for_user).and_raise(Strac::AccessDenied)
+      ProjectManager.stub!(:update_project_for_user).and_raise(AccessDenied)
     end
     
     it "redirects to the access denied page" do
@@ -253,11 +253,11 @@ describe ProjectsController, '#edit' do
     @user = mock_model(User)
     login_as @user
     @project = mock_model(Project)
-    Strac::ProjectManager.stub!(:get_project_for_user).and_return(@project)
+    ProjectManager.stub!(:get_project_for_user).and_return(@project)
   end
   
   it "asks the ProjectManager for the project for the current the current user" do
-    Strac::ProjectManager.get_project_for_user(@project.id.to_s, @user)
+    ProjectManager.get_project_for_user(@project.id.to_s, @user)
     get_edit
   end
   
@@ -276,7 +276,7 @@ describe ProjectsController, '#edit' do
   
   describe "when the user doesn't have access to the project" do
     before do
-      Strac::ProjectManager.stub!(:get_project_for_user).and_raise(Strac::AccessDenied)
+      ProjectManager.stub!(:get_project_for_user).and_raise(AccessDenied)
     end
     
     it "redirects to the access denied page" do
@@ -295,11 +295,11 @@ describe ProjectsController, '#destroy' do
     @user = mock_model(User)
     login_as @user
     @project = mock_model(Project, :destroy => nil)
-    Strac::ProjectManager.stub!(:get_project_for_user).and_return(@project)
+    ProjectManager.stub!(:get_project_for_user).and_return(@project)
   end
   
   it "asks the ProjectManager for the project for the current the current user" do
-    Strac::ProjectManager.get_project_for_user(@project.id.to_s, @user)
+    ProjectManager.get_project_for_user(@project.id.to_s, @user)
     delete_destroy
   end
   
@@ -324,7 +324,7 @@ describe ProjectsController, '#destroy' do
   
   describe "when the user doesn't have access to the project" do
     before do
-      Strac::ProjectManager.stub!(:get_project_for_user).and_raise(Strac::AccessDenied)
+      ProjectManager.stub!(:get_project_for_user).and_raise(AccessDenied)
     end
     
     it "redirects to the access denied page" do

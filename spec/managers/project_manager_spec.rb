@@ -1,8 +1,8 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe Strac::ProjectManager, '.all_projects_for_user' do
+describe ProjectManager, '.all_projects_for_user' do
   def all_projects_for_user
-    Strac::ProjectManager.all_projects_for_user @user
+    ProjectManager.all_projects_for_user @user
   end
   
   before do
@@ -17,9 +17,9 @@ describe Strac::ProjectManager, '.all_projects_for_user' do
   end
 end
 
-describe Strac::ProjectManager, '.get_project_for_user' do
+describe ProjectManager, '.get_project_for_user' do
   def get_project_for_user
-    Strac::ProjectManager.get_project_for_user(@project.id, @user)
+    ProjectManager.get_project_for_user(@project.id, @user)
   end
   
   before do
@@ -41,7 +41,7 @@ describe Strac::ProjectManager, '.get_project_for_user' do
     it "raise an AccessDenied exception" do
       lambda{
         get_project_for_user
-      }.should raise_error(Strac::AccessDenied)
+      }.should raise_error(AccessDenied)
     end
   end
   
@@ -56,9 +56,9 @@ describe Strac::ProjectManager, '.get_project_for_user' do
   end
 end
 
-describe Strac::ProjectManager, ".update_project_for_user" do
+describe ProjectManager, ".update_project_for_user" do
   def update_project_for_user(&blk)
-    Strac::ProjectManager.update_project_for_user(@project.id, @user, @project_attrs, @user_ids, &blk)
+    ProjectManager.update_project_for_user(@project.id, @user, @project_attrs, @user_ids, &blk)
   end
   
   before do
@@ -81,7 +81,7 @@ describe Strac::ProjectManager, ".update_project_for_user" do
     it "raise an AccessDenied exception" do
       lambda{
         update_project_for_user
-      }.should raise_error(Strac::AccessDenied)
+      }.should raise_error(AccessDenied)
     end
   end
 

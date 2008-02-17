@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
     redirect_to dashboard_path
   end
   
-  rescue_from Strac::AccessDenied do |exception|
+  rescue_from AccessDenied do |exception|
     redirect_to "/access_denied.html"
   end
 

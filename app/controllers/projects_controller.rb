@@ -2,11 +2,11 @@ class ProjectsController < ApplicationController
   restrict_to :user
   
   def index
-    @projects = Strac::ProjectManager.all_projects_for_user current_user
+    @projects = ProjectManager.all_projects_for_user current_user
   end
 
   def show
-    @project = Strac::ProjectManager.get_project_for_user(params[:id], current_user)
+    @project = ProjectManager.get_project_for_user(params[:id], current_user)
   end
 
   def new
@@ -14,7 +14,7 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    @project = Strac::ProjectManager.get_project_for_user(params[:id], current_user)
+    @project = ProjectManager.get_project_for_user(params[:id], current_user)
   end
 
   def create
@@ -30,7 +30,7 @@ class ProjectsController < ApplicationController
   end
 
   def update
-    Strac::ProjectManager.update_project_for_user(params[:id], current_user, params[:project], params[:users]) do |project_update|
+    ProjectManager.update_project_for_user(params[:id], current_user, params[:project], params[:users]) do |project_update|
       project_update.success do |project|
         @project = project
         flash[:notice] = 'Project was successfully updated.'
@@ -45,7 +45,7 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
-    @project = Strac::ProjectManager.get_project_for_user(params[:id], current_user)
+    @project = ProjectManager.get_project_for_user(params[:id], current_user)
     @project.destroy
     redirect_to projects_path
   end

@@ -25,7 +25,8 @@ Rails::Initializer.run do |config|
   config.load_paths += %W( #{RAILS_ROOT}/app/observers 
                            #{RAILS_ROOT}/app/mailers 
                            #{RAILS_ROOT}/app/managers
-                           #{RAILS_ROOT}/app/presenters )
+                           #{RAILS_ROOT}/app/presenters
+                           #{RAILS_ROOT}/app/exceptions )
 
   # Force all environments to use the same logger level
   # (by default production uses :info, the others :debug)
@@ -87,7 +88,3 @@ end
 
 require 'metaid'
 require 'constructor'
-require 'strac_exceptions'
-
-# load the managers
-Dir["#{RAILS_ROOT}/app/managers/**/*.rb"].each { |f| require f }
