@@ -22,7 +22,10 @@ Rails::Initializer.run do |config|
   config.plugins = [ :acts_as_textiled, :has_many_polymorphs, :all ]
 
   # Add additional load paths for your own custom dirs
-  config.load_paths += %W( #{RAILS_ROOT}/app/observers #{RAILS_ROOT}/app/mailers #{RAILS_ROOT}/app/managers )
+  config.load_paths += %W( #{RAILS_ROOT}/app/observers 
+                           #{RAILS_ROOT}/app/mailers 
+                           #{RAILS_ROOT}/app/managers
+                           #{RAILS_ROOT}/app/presenters )
 
   # Force all environments to use the same logger level
   # (by default production uses :info, the others :debug)
