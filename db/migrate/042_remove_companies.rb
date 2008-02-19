@@ -1,7 +1,10 @@
 class RemoveCompanies < ActiveRecord::Migration
+  class ProjectPermission < ActiveRecord::Base ; end
+  
   def self.up
     remove_column :users, :company_id
     drop_table :companies
+    ProjectPermission.delete_all "accessor_type = 'Company'"
   end
 
   def self.down
