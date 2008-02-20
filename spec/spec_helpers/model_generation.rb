@@ -80,8 +80,12 @@ class Generate
   def self.story(attributes={})
     @story_count ||= 0
     summary ||= attributes.delete(:summary) || "Summary #{@story_count+=1}"
-    if attributes[:project].nil?
-      attributes[:project] = Generate.project("Project for #{summary}")
+    if attributes[:project].nil? 
+      if attributes[:bucket].nil?
+        attributes[:project] = Generate.project("Project for #{summary}")
+      else
+        attributes[:project] = attributes[:bucket].project
+      end
     end
     Story.create!(attributes.merge(:summary => summary))
   end
