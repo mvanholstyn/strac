@@ -1,4 +1,17 @@
 var Strac = {};
+
+Strac.Login = {};
+Strac.Login.Form = Class.create();
+Strac.Login.Form.prototype = {
+  initialize: function(form){
+    this.login_form = $(form);
+  },
+  
+  toggle: function(){
+    this.login_form.toggle();
+  }
+};
+
 Object.extend(Strac, {
   toggleLoginAndSignupVisibility: function(){
     var login_form_container = $('login_form_container');
@@ -14,21 +27,23 @@ Object.extend(Strac, {
   
   // This inserts <a class="close"><span></span></a> into the passed in element
   setupCloseButtonForElement: function(element){
-    var anchor = document.createElement("a");
-    anchor.addClassName("close");
-    anchor.appendChild(document.createElement("span"));
-    element.insertBefore(anchor, element.firstChild);
+    if(element){
+      var anchor = document.createElement("a");
+      anchor.addClassName("close");
+      anchor.appendChild(document.createElement("span"));
+      element.insertBefore(anchor, element.firstChild);
     
-    var close = element.down('a');  
-    close.observe('click', function(){
-      element.hide();
-    });
-    element.observe("mouseover", function(){
-      close.down("span").setStyle({visibility: 'visible'});
-    });  
-    element.observe("mouseout", function(){
-      close.down("span").setStyle({visibility: 'hidden'});
-    });  
+      var close = element.down('a');  
+      close.observe('click', function(){
+        element.hide();
+      });
+      element.observe("mouseover", function(){
+        close.down("span").setStyle({visibility: 'visible'});
+      });  
+      element.observe("mouseout", function(){
+        close.down("span").setStyle({visibility: 'hidden'});
+      });  
+    }
   }
 });
 
