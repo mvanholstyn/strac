@@ -42,7 +42,8 @@ class Generate
   end
 
   def self.iteration(name, attributes={})
-    raise ArgumentError, "requires project" unless attributes[:project]
+    @iteration_count = 0
+    attributes[:project] ||= Generate.project "Project for generated iteration #{@iteration_count+=1}"
     attributes[:start_date] = Date.today unless attributes[:start_date]
     attributes[:end_date] = attributes[:start_date] + 6.days unless attributes[:end_date]
     Iteration.create!(attributes.merge(:name => name))

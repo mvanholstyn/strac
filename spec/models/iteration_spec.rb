@@ -49,7 +49,7 @@ describe Iteration do
     @second_iteration.should_not be_valid
   end
       
-  they "should never overlap" do
+  it "should never overlap another iteration" do
     @second_iteration.errors.on(:base).should == "Iterations cannot overlap"
 
     @second_iteration.start_date = Date.today + 3
@@ -62,48 +62,108 @@ describe Iteration do
   end
 end
 
-describe Iteration, "with no stories" do
+describe Iteration, "#points_completed" do
   fixtures :statuses
 
-  before do
-    Iteration.destroy_all
-    Story.destroy_all
-    @iteration = Iteration.create!(:project_id => 1, :start_date => Date.today, :end_date => Date.today+1, :budget => 25, :name => "Iteration 1")
+  def points_completed
+    @iteration.points_completed
   end
 
-  it "should have 0 points" do
-    @iteration.points_completed.should == 0    
+  before do
+    @iteration = Iteration.create!(:project_id => 1, :start_date => Date.today, :end_date => Date.today+1, :budget => 25, :name => "Iteration 1")    
+  end
+  
+  describe "with no stories" do
+    before do
+      Iteration.destroy_all
+      Story.destroy_all
+    end
+
+    it "returns 0" do
+      points_completed.should == 0    
+    end
+  end
+  
+  describe "with no completed stories" do
+    before do
+      @iteration.stories << Story.create!(:status_id=>Status.blocked.id, :points=>10, :project_id=>@iteration.project_id, :summary=>"Story 1")
+      @iteration.stories << Story.create!(:status_id=>Status.rejected.id, :points=>7, :project_id=>@iteration.project_id, :summary=>"Story 2")
+      @iteration.stories << Story.create!(:status_id=>Status.defined.id, :points=>5, :project_id=>@iteration.project_id, :summary=>"Story 3")
+      @iteration.stories << Story.create!(:status_id=>Status.in_progress.id, :points=>5, :project_id=>@iteration.project_id, :summary=>"Story 3")
+    end
+    
+    it "returns 0" do
+      points_completed.should == 0    
+    end
+  end
+  
+  describe "with completed stories" do
+    before do
+      @iteration.stories << Story.create!(:status_id=>Status.complete.id, :points=>10, :project_id=>@iteration.project_id, :summary=>"Story 1")
+      @iteration.stories << Story.create!(:status_id=>Status.complete.id, :points=>7, :project_id=>@iteration.project_id, :summary=>"Story 2")
+      @iteration.stories << Story.create!(:status_id=>Status.complete.id, :points=>5, :project_id=>@iteration.project_id, :summary=>"Story 3")
+    end
+
+    it "returns the sum of completed story points" do
+      points_completed.should == 22
+    end
+  end
+
+end
+
+describe Iteration, '#total_points' do
+  fixtures :statuses
+
+  def total_points
+    @iteration.total_points
+  end
+
+  before do
+    @iteration = Generate.iteration(:start_date => Date.today, :end_date => Date.today+1.week, :budget => 25, :name => "Iteration 1")
+    @iteration.stories << Story.create!(:status_id=>Status.complete.id, :points=>10, :project_id=>@iteration.project_id, :summary=>"Story 1")
+    @iteration.stories << Story.create!(:status_id=>Status.defined.id, :points=>5, :project_id=>@iteration.project_id, :summary=>"Story 2")
+  end
+
+  it "returns the total number of story points" do
+    total_points.should == 15
   end
 end
 
-describe "Iteration with stories" do
+describe Iteration, '#points_remaining' do
   fixtures :statuses
+  
+  def points_remaining
+    @iteration.points_remaining
+  end
 
   before do
-    Iteration.destroy_all
-    Story.destroy_all
-    @iteration = Iteration.create!(:project_id => 1, :start_date => Date.today, :end_date => Date.today+1, :budget => 25, :name => "Iteration 1")
-    @iteration.stories << Story.create!(:status_id=>Status.complete.id, :points=>10, :project_id=>1, :summary=>"Story 1")
-    @iteration.stories << Story.create!(:status_id=>Status.defined.id, :points=>5, :project_id=>1, :summary=>"Story 2")
-  end
-
-  it "should compute the total number of story points" do
-    @iteration.total_points.should == 15
-  end
-
-  it "should sum the number of completed story points" do
-    @iteration.points_completed.should == 10
-  end
-
-  it "should compute the number of remaining story points" do
-    @iteration.points_remaining.should == 5
+    @iteration = Generate.iteration(:start_date => Date.today, :end_date => Date.today+1.week, :budget => 25, :name => "Iteration 1")
+    @iteration.stories << Story.create!(:status_id=>Status.complete.id, :points=>10, :project_id=>@iteration.project_id, :summary=>"Story 1")
+    @iteration.stories << Story.create!(:status_id=>Status.defined.id, :points=>5, :project_id=>@iteration.project_id, :summary=>"Story 2")
   end
   
-  it "should create the number of story points that existed before the iteration start date" do
+  it "returns the number of remaining story points" do
+    points_remaining.should == 5
+  end
+end
+
+describe Iteration, '#points_before_iteration' do
+  fixtures :statuses
+  
+  def points_before_iteration
+    @iteration.points_before_iteration
+  end
+  
+  before do
+    @iteration = Generate.iteration(:start_date => Date.today, :end_date => Date.today+1.week, :budget => 25, :name => "Iteration 1")
+    @iteration.stories << Story.create!(:status_id=>Status.complete.id, :points=>10, :project_id=>@iteration.project_id, :summary=>"Story 1")
+    @iteration.stories << Story.create!(:status_id=>Status.defined.id, :points=>5, :project_id=>@iteration.project_id, :summary=>"Story 2")
     Story.create!(:created_at=>Date.today-1, :status_id=>Status.complete.id, :points=>2, :project_id=>1, :summary=>"Story from yesterday")
     Story.create!(:created_at=>Date.today-7, :status_id=>Status.defined.id, :points=>3, :project_id=>1, :summary=>"Story from last week")
-    
-    @iteration.points_before_iteration.should == 5
+  end
+  
+  it "returns the number story points that existed before the iteration's start date" do
+    points_before_iteration.should == 5
   end
 end
 

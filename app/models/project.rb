@@ -78,10 +78,10 @@ class Project < ActiveRecord::Base
   end
   
   def average_velocity
-    velocity = completed_iterations.inject(0) do |sum,iteration|
-      sum + iteration.completed_stories.sum{ |story| story.points.blank? ? 0 : story.points }
+    points = previous_iterations.inject([]) do |points, iteration|
+      points << iteration.points_completed
     end
-    completed_iterations.empty? ? 0 : velocity.to_f / completed_iterations.size.to_f
+    VelocityCalculator.compute_weighted_average(points) 
   end
   
   def estimated_remaining_iterations
@@ -113,5 +113,16 @@ class Project < ActiveRecord::Base
     member_ids.each do |member|
       self.users << User.find(member)
     end
+  end
+  
+private
+
+  def previous_iterations
+    current = iterations.find_or_build_current
+    iterations.find(
+      :all, 
+      :conditions=>["end_date < ? ", current.start_date], 
+      :order => "start_date ASC"
+    )
   end
 end
