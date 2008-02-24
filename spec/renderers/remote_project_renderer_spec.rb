@@ -10,6 +10,21 @@ describe RemoteProjectRenderer do
     @page = stub("remote page", :[] => @page_element)
     @project = mock_model(Project)
   end
+
+  describe '#draw_current_iteration_velocity_marker' do
+    def draw_current_iteration_velocity_marker
+      remote_project_renderer.draw_current_iteration_velocity_marker @average_velocity
+    end
+    
+    before do
+      @average_velocity = 20
+    end
+    
+    it "tells the page to draw the current iteration velocity marker with the passed in average velocity" do
+      @page.should_receive(:call).with("Strac.Iteration.drawCurrentIterationVelocityMarker", @average_velocity)
+      draw_current_iteration_velocity_marker
+    end
+  end
   
   describe '#update_project_summary' do
     def update_project_summary 

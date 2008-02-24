@@ -8,7 +8,7 @@ describe StoriesController, '#update_points' do
   before do
     stub_before_filters! :except => [:find_project]
     stub_login_for StoriesController
-    @project = mock_model(Project)
+    @project = mock_model(Project, :average_velocity => 10)
     @project_manager = stub("project manager instance", :update_story_points => nil)
     @story = mock_model(Story, :project => @project, :summary => "FooBaz")
     @points = '11'
@@ -21,7 +21,8 @@ describe StoriesController, '#update_points' do
       :update_project_summary => nil, 
       :update_story_points => nil, 
       :render_notice => nil,
-      :render_error => nil
+      :render_error => nil,
+      :draw_current_iteration_velocity_marker => nil
     )
     RemoteProjectRenderer.stub!(:new).and_return(@remote_project_renderer)    
   end
@@ -63,6 +64,16 @@ describe StoriesController, '#update_points' do
     
     it "tells the renderer to update the project's summary" do
       @remote_project_renderer.should_receive(:update_project_summary)
+      xhr_update_points
+    end
+    
+    it "asks the project for it's average velocity" do
+      @project.should_receive(:average_velocity)
+      xhr_update_points
+    end
+    
+    it "tells the renderer to draw the current iteration velocity marker" do
+      @remote_project_renderer.should_receive(:draw_current_iteration_velocity_marker).with(@project.average_velocity)
       xhr_update_points
     end
   end

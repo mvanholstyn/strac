@@ -135,10 +135,12 @@ class StoriesController < ApplicationController
       project_manager = ProjectManager.new(params[:project_id], current_user)
       project_manager.update_story_points(params[:id], params[:story][:points]) do |story_update|
         story_update.success do |story|
-          renderer = RemoteProjectRenderer.new(:page => page, :project => story.project)
+          project = story.project
+          renderer = RemoteProjectRenderer.new(:page => page, :project => project)
           renderer.render_notice %("#{story.summary} was successfully updated.")
           renderer.update_story_points(story)
           renderer.update_project_summary
+          renderer.draw_current_iteration_velocity_marker(project.average_velocity)
         end
         
         story_update.failure do |story|
