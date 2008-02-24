@@ -13,3 +13,4 @@ page.sortable bucket_id, :url => reorder_stories_path(@project), :method => :put
 
 @story = Story.new :bucket_id => @story.bucket_id # we want a fresh form
 page["#{bucket_id}_story_new"].replace_html :partial => 'stories/new', :locals => { :story => @story }
+page.call "Strac.Iteration.drawCurrentIterationVelocityMarker"

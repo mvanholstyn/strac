@@ -70,7 +70,12 @@ Strac.Iteration.prototype = {
     for(var i=0, story=stories[i] ; i<stories.size() ; i++, story=stories[i]){
       points += story.points();
       if(points > velocity){
-        story.element().insert( {before: '<div class="velocity_marker">STOP</div>'});
+        story.element().insert({
+          before: '<div class="velocity_marker">' +
+            '<img src="/images/bullet_error_big.png" />' +
+            '<p>Based on the project\'s average velocity the development team won\'t get beyond this point this iteration.</p>' +
+          '</div>'
+        });
         break;
       }
     }
