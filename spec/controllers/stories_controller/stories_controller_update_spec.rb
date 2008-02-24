@@ -1,109 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
-
-describe StoriesController, "user with privileges requesting #index " do
-  def get_index(attrs={})
-    get :index, {:project_id=>'1'}.merge(attrs), {:current_user_id=>2}    
-  end
-
-  before do
-    @user = mock_model(User)
-    @project = mock_model(Project)
-    StoriesController.login_model.stub!(:find).and_return(@user)
-    @user.stub!(:has_privilege?).and_return(true)
-    @stories_index_presenter = stub("story index presenter")
-    StoriesIndexPresenter.stub!(:new).and_return(@stories_index_presenter)
-    Project.stub!(:find).and_return(@project)
-  end
-
-  it "returns successful" do
-    get_index
-    response.should be_success
-  end
-
-  it "creates a StoriesIndexPresenter" do
-    StoriesIndexPresenter.should_receive(:new).with(
-      anything
-    ).and_return(@stories_index_presenter)
-    get_index
-  end
-  
-  it "assigns @project" do
-    get_index
-    assigns[:project].should == @project
-  end
-  
-  it "assigns @stories_presenter" do
-    StoriesIndexPresenter.stub!(:new).and_return(@stories_index_presenter)
-    get_index
-    assigns[:stories_presenter].should == @stories_index_presenter
-  end
-  
-  it "renders the index.html.erb template" do
-    get_index
-    response.should render_template("index")
-  end
-  
-  describe "creating the StoriesIndexPresenter" do
-    it "passes in a the current @project into the StoriesIndexPresenter constructor" do
-      StoriesIndexPresenter.should_receive(:new).with(
-        has_entry(:project, @project)
-      ).and_return(@stories_index_presenter)
-      get_index
-    end
-
-    describe "when a :view parameter is passed in" do
-      it "passes params['view'] into the StoriesIndexPresenter constructor" do
-        view = "foo"
-        StoriesIndexPresenter.should_receive(:new).with(
-          has_entry(:view, view)
-        ).and_return(@stories_index_presenter)
-        get_index :view => view
-      end
-    end
-  end
- 
-end
-
-describe StoriesController, '#edit' do
-  def get_edit(attrs={})
-    get :edit, {:project_id => '1', :id => '2'}.merge(attrs)
-  end
-  
-  before do
-    stub_login_for StoriesController
-    @project = stub("project")
-    @stories = stub("stories", :find => nil)
-    Project.stub!(:find).and_return(@project)
-    @project.stub!(:stories).and_return(@stories)
-  end
-  
-  it "finds the requested story" do
-    @project.should_receive(:stories).and_return(@stories)
-    @stories.should_receive(:find).with('2', :include => :tags)
-    get_edit
-  end
-  
-  it "assigns @story" do
-    story = stub("story")
-    @stories.stub!(:find).and_return(story)
-    get_edit
-    assigns[:story].should == story
-  end
-  
-  describe StoriesController, 'html request' do
-    it "renders the 'edit' template" do
-      get_edit
-      response.should render_template('edit')
-    end
-  end
-  
-  describe StoriesController, 'xhr request' do
-    it "renders the 'edit.js.rjs' template" do
-      xhr :get, :edit, :project_id => '1', :id => '2'
-      response.should render_template('stories/edit')
-    end
-  end
-end
+require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe StoriesController, '#update' do
   def put_update(attrs={})
@@ -116,7 +11,7 @@ describe StoriesController, '#update' do
     @stories = stub("stories", :find => @story)
     @project = stub("project", :stories => @stories)
     @story_params = { 'summary' => 'foo' }
-    Project.stub!(:find).and_return(@project)
+    ProjectManager.stub!(:get_project_for_user).and_return(@project)
   end
   
   it "finds the requested story" do
@@ -209,4 +104,3 @@ describe StoriesController, '#update' do
 
   end
 end
-

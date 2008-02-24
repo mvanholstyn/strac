@@ -139,5 +139,92 @@ describe ProjectManager, ".update_project_for_user" do
 end
 
 
+describe ProjectManager, 'constructor' do
+  before do
+    @user = mock_model(User)
+  end
+  
+  it "finds the project for the passed in project_id and user" do
+    ProjectManager.should_receive(:get_project_for_user).with('11', @user)
+    ProjectManager.new '11', @user
+  end
+end
 
+describe ProjectManager, '#update_story_points' do
+  def update_story_points(&blk)
+    ProjectManager.new(@project.id, @user).update_story_points(@story.id, @points, &blk)
+  end
+  
+  before do
+    @user = mock_model(User)
+    @story = mock_model(Story, :update_attribute => nil)
+    @points = 1000
+    @stories = stub("stories", :find => @story)
+    @project = mock_model(Project, :stories => @stories)
+    ProjectManager.stub!(:get_project_for_user).and_return(@project)
+  end
+
+  it "finds the story matching the passed in story_id" do
+    @project.should_receive(:stories).and_return(@stories)
+    @stories.should_receive(:find).with(@story.id).and_return(@story)
+    update_story_points
+  end
+  
+  describe "when the story is not be found" do
+    before do
+      @stories.stub!(:find).and_return(nil)
+    end
+    
+    it "raises an ResourceNotFoundError" do
+      lambda{ 
+        update_story_points
+      }.should raise_error(ResourceNotFoundError)
+    end
+  end
+  
+  describe "when the story is found" do
+    before do
+      @stories.stub!(:find).and_return(@story)
+    end
+    
+    it "updates the story's points to the passed in points" do
+      @story.should_receive(:update_attribute).with(:points, @points)
+      update_story_points
+    end
+  
+    describe "when the story update is successful" do
+      before do
+        @story.stub!(:update_attribute).and_return(true)
+      end
+    
+      it "yields a Multiblock signifying success which passes in the story" do
+        success = false
+        update_story_points do |story_update|
+          story_update.success { |story| 
+            story.should == @story
+            success = true
+          }
+        end
+        success.should be_true
+      end
+    end
+  
+    describe "when the story update fails" do
+      before do
+        @story.stub!(:update_attribute).and_return(false)
+      end
+    
+      it "yields a Multiblock signifying failure which passes in the story" do
+        failed = false
+        update_story_points do |story_update|
+          story_update.failure { |story| 
+            story.should == @story
+            failed = true
+          }
+        end
+        failed.should be_true
+      end
+    end
+  end
+end
 

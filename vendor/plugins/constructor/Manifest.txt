@@ -1,0 +1,6 @@
+History.txt
+Manifest.txt
+README.txt
+Rakefile
+lib/constructor.rb
+specs/constructor_spec.rb
