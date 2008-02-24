@@ -13,15 +13,15 @@ describe RemoteProjectRenderer do
 
   describe '#draw_current_iteration_velocity_marker' do
     def draw_current_iteration_velocity_marker
-      remote_project_renderer.draw_current_iteration_velocity_marker @average_velocity
+      remote_project_renderer.draw_current_iteration_velocity_marker
     end
     
     before do
       @average_velocity = 20
     end
     
-    it "tells the page to draw the current iteration velocity marker with the passed in average velocity" do
-      @page.should_receive(:call).with("Strac.Iteration.drawCurrentIterationVelocityMarker", @average_velocity)
+    it "tells the page to draw the current iteration velocity marker" do
+      @page.should_receive(:call).with("Strac.Iteration.drawCurrentIterationVelocityMarker")
       draw_current_iteration_velocity_marker
     end
   end

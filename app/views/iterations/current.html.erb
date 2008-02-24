@@ -17,6 +17,9 @@
   	<div id="iteration_<%= @iteration.id %>" class="story_list">
   	  <%= render :partial  => 'stories/list', :locals => { :stories => @iteration.stories.find( :all, :order => :position ) } %>
   	</div>
+    <% javascript_tag do %>
+      Strac.Iteration.drawCurrentIterationVelocityMarker();
+    <% end %>
   <% end -%>
 
   <br />
@@ -38,7 +41,10 @@
   <% for iteration in iteration_list_ids -%>
     <%= sortable_element iteration,
                          :url => reorder_stories_path(@project), :method => :put,
-                         :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => iteration_list_ids -%>
+                         :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, 
+                         :containment => iteration_list_ids,
+                         :onChange =>  "Strac.Iteration.drawCurrentIterationVelocityMarker"
+                          -%>
   <% end -%>
 
 </div>

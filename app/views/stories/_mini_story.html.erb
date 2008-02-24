@@ -14,8 +14,7 @@
 
 <%= image_tag "move.gif", :class => 'draggable', :title => "drag to move", :onclick => "Event.stop(event);" %>
 
-<b>Points:</b> <span id="story_<%= story.id %>_points" class="inplaceeditor-field"><%= story.points ? h( story.points ) : "&infin;" %></span>
- - <%= "S#{story.id}" %> - <%=h story.summary %>
+<b>Points:</b> <span id="story_<%= story.id %>_points" class="inplaceeditor-field points"><%= story.points ? h( story.points ) : "&infin;" %></span> - <%= "S#{story.id}" %> - <%=h story.summary %>
 
 <%= in_place_editor "story_#{story.id}_points", 
       :url => update_points_story_path( @project, story ), 

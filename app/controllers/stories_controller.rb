@@ -140,7 +140,7 @@ class StoriesController < ApplicationController
           renderer.render_notice %("#{story.summary} was successfully updated.")
           renderer.update_story_points(story)
           renderer.update_project_summary
-          renderer.draw_current_iteration_velocity_marker(project.average_velocity)
+          renderer.draw_current_iteration_velocity_marker
         end
         
         story_update.failure do |story|
