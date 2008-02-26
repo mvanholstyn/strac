@@ -652,20 +652,25 @@ span.logged_in a{
 }
 
 .story_list .velocity_marker{
-  margin-top: 2px;
-  border: 2px solid #FF8C00;
-  padding: 2px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  font-size: 0.9em;
+  background-color: #428C1A;
+  color: white;
+  padding: 2px 4px 2px 4px;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 
-.story_list .velocity_marker img{
-  float: left;
+.story_list .velocity_marker .left{
+  text-align: left;
+  width: 50%;
+  background: url(/images/arrow_up.png) no-repeat;
+  padding-left: 15px;
 }
 
-.story_list .velocity_marker p{
-  line-height: 1em;
-  margin: 0;
-  padding: 10px 0 10px 0;
+.story_list .velocity_marker .right{
+  text-align: right;
+  width: 50%;
+  float: right;
+  background: url(/images/arrow_down.png) no-repeat right;
+  padding-right: 15px;
 }
+

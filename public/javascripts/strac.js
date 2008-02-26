@@ -72,8 +72,7 @@ Strac.Iteration.prototype = {
       if(points > velocity){
         story.element().insert({
           before: '<div class="velocity_marker">' +
-            '<img src="/images/bullet_error_big.png" />' +
-            '<p>Based on the project\'s average velocity the development team won\'t get beyond this point this iteration.</p>' +
+            '<div class="right">Backlog</div><div class="left">Expected this iteration</div>' +
           '</div>'
         });
         break;
