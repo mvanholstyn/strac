@@ -58,8 +58,11 @@ class Story < ActiveRecord::Base
     
     bucket_id = options[:bucket_id]
     values = []
-    ids.each_with_index do |id, index|
-      values << [id, index+1, bucket_id]
+    counter = 0
+    ids.each do |id|
+      unless id.blank?
+        values << [id, counter+=1, bucket_id]
+      end
     end
     
     columns2import = [:id, :position, :bucket_id]
