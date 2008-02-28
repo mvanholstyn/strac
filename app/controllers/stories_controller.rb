@@ -87,19 +87,15 @@ class StoriesController < ApplicationController
   end
 
   def reorder
-    respond_to do |format|
-      #TODO: Update zebra striping...
-      #TODO: This will fail if complete stories are hidden..."
-      param_to_use = params.select { |k,v| k =~ /^iteration_(\d+|nil)$/ }.first
-      if Story.reorder(param_to_use.last, :bucket_id => eval(param_to_use.first.scan(/^iteration_(\d+|nil)$/).flatten.first))
-        format.js { render_notice "Priorities have been successfully updated." }
+    render :update do |page|
+      iteration_string, story_ids = params.select { |k,v| k =~ /^iteration_(\d+|nil)$/ }.first
+      iteration_id = iteration_string.scan(/^iteration_(\d+|nil)$/).flatten.first
+      story_ids.delete_if{ |id| id.blank? }
+      renderer = RemoteSiteRenderer.new :page => page
+      if Story.reorder(story_ids, :bucket_id => iteration_id )
+        renderer.render_notice "Priorities have been successfully updated."
       else
-        format.js do
-          render_error "There was an error while updating priorties. If the problem persists, please contact technical support." do |page|
-            #TODO: If unsuccessful, replace the stories list
-            #page.replace_html "stories", ""
-          end
-        end
+        renderer.render_error "There was an error while updating priorties. If the problem persists, please contact technical support."
       end
     end
   end
