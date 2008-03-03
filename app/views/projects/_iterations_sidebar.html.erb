@@ -2,7 +2,7 @@
   <% for iteration in project.iterations.find( :all, :order => "start_date DESC" ) -%>
     <li>
       <%= link_to iteration.name, iteration_path( project, iteration ) %>
-      <% if project.iterations.find_current == iteration -%>
+      <% if project.iterations.current == iteration -%>
         (<%= link_to "current", current_iterations_path( project ) %>) 
       <% end -%>
     </li>
