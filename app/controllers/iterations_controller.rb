@@ -1,18 +1,6 @@
 class IterationsController < ApplicationController
   before_filter :find_project
 
-  def stories
-    @iterations = IterationsPresenter.new(:iterations => @project.iterations, :backlog => @project.backlog_iteration)
-    if params[:id] =~ /backlog/
-      @iteration = BacklogIterationPresenter.new(@project.backlog_iteration)
-    else
-      @iteration = IterationPresenter.new(@project.iterations.find(params[:id]))
-    end
-    @stories = @iteration.stories
-
-    respond_to :js
-  end
-
   def index
     @iterations = @project.iterations.find(:all, :order => "start_date DESC")
   end

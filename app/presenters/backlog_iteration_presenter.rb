@@ -10,10 +10,6 @@ class BacklogIterationPresenter < PresentationObject
       'iteration_nil'
     end
     
-    declare :show? do
-      true
-    end
-    
     declare :stories do
       project.backlog_stories
     end

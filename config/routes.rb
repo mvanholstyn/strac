@@ -13,8 +13,7 @@ ActionController::Routing::Routes.draw do |map|
     project_map.resources :phases
     project_map.resources :invitations
     project_map.resources :iterations, :name_prefix => nil, 
-                          :collection => { :current => :get },
-                          :member => { :stories => :get }
+                          :collection => { :current => :get }
     project_map.resources :stories, :name_prefix => nil,
                           :collection => { :reorder => :put },
                           :member => { :update_points => :put, :update_status => :put, 
