@@ -1,0 +1,24 @@
+RspecOnRailsRenderAndReceive
+=====================
+
+At this point this plugin is an experiment. There are no tests at this point, think of it
+as a spike. ;)
+
+Author: Zach Dennis
+Website: http://www.continuousthinking.com 
+Email: zach.dennis@gmail.com
+
+
+Examples
+=======
+
+during_render do
+  @event.should render_and_receive(:name)
+end
+
+during_render do
+  @event.should stub_and_receive(:name)
+end
+
+
+Copyright (c) 2007 Zach Dennis, released under the MIT license

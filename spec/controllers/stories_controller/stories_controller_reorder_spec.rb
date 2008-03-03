@@ -2,13 +2,12 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe StoriesController, '#reorder' do
   def xhr_put_reorder(attrs={})
-    xhr :put, :reorder, {:project_id => @project.id, "iteration_#{@bucket_id}" => @story_ids}.merge(attrs)
+    xhr :put, :reorder, {:project_id => @project.id, "iteration_nil" => @story_ids}.merge(attrs)
   end
   
   before do
     stub_login_for StoriesController
     @project = mock_model(Project)
-    @bucket_id = "184"
     @story_ids = [ "3", "2", "", "1"]
     @renderer = mock("remote site renderer", :render_notice => nil, :render_error => nil)
     ProjectManager.stub!(:get_project_for_user).and_return(@project)
@@ -24,7 +23,7 @@ describe StoriesController, '#reorder' do
 
   it "reorders the story ids for the bucket" do
     expected_story_ids = @story_ids.select{ |id| !id.blank? }
-    Story.should_receive(:reorder).with(expected_story_ids, :bucket_id => @bucket_id)
+    Story.should_receive(:reorder).with(expected_story_ids, :bucket_id => nil)
     xhr_put_reorder
   end
   

@@ -88,11 +88,9 @@ class StoriesController < ApplicationController
 
   def reorder
     render :update do |page|
-      iteration_string, story_ids = params.select { |k,v| k =~ /^iteration_(\d+|nil)$/ }.first
-      iteration_id = iteration_string.scan(/^iteration_(\d+|nil)$/).flatten.first
-      story_ids.delete_if{ |id| id.blank? }
+      story_ids = params["iteration_nil"].delete_if{ |id| id.blank? }
       renderer = RemoteSiteRenderer.new :page => page
-      if Story.reorder(story_ids, :bucket_id => iteration_id )
+      if Story.reorder(story_ids, :bucket_id => nil )
         renderer.render_notice "Priorities have been successfully updated."
       else
         renderer.render_error "There was an error while updating priorties. If the problem persists, please contact technical support."

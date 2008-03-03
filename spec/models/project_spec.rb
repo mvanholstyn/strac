@@ -414,3 +414,37 @@ describe '#average_velocity' do
   end
 end
 
+describe Project, '#incomplete_stories' do
+  def incomplete_stories
+    @project.incomplete_stories
+  end
+  
+  before do
+    @project = Generate.project
+    @incomplete_stories = []
+    story_count = 3
+    story_count.times do |i|
+      @incomplete_stories << Generate.story(:project => @project) 
+      @incomplete_stories.last.update_attribute(:position, story_count - i)
+    end
+    @sorted_incomplete_stories = @incomplete_stories.sort_by{ |story| story.position }
+  end
+  
+  it "returns incomplete stories ordered by position" do
+    incomplete_stories.should == @sorted_incomplete_stories
+    incomplete_stories.zip(@sorted_incomplete_stories) do |actual, expected|
+      actual.should == expected
+    end
+  end
+  
+  describe "when stories are completed" do
+    before do
+      @completed_stories = []
+      3.times { @completed_stories << Generate.story(:project => @project, :status => Status.complete) }
+    end
+    
+    it "does not include completed stories" do
+      incomplete_stories.should == @sorted_incomplete_stories
+    end
+  end
+end

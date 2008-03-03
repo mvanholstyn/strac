@@ -58,11 +58,6 @@ class IterationsController < ApplicationController
     redirect_to iterations_url(@project)
   end
   
-  def current
-    @iteration = @project.iterations.find_or_build_current
-    @stories = @project.stories.find(:all, :conditions => { :bucket_id => nil }, :order => :position)
-  end
-
 private
 
   def find_project
