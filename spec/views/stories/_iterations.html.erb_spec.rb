@@ -27,17 +27,6 @@ describe "/stories/_iterations.html.erb" do
     @iterations[1].stub!(:unique_id).and_return("iteration_2")
     @iterations[1].stub!(:project).and_return(@project)
     
-    template.should_receive(:sortable_element).
-      with(
-        @backlog.unique_id, 
-        :url => reorder_stories_path(@backlog.project),
-        :method => :put,
-        :tag => 'div',
-        :handle => 'draggable',
-        :dropOnEmpty => true,
-        :containment => ["containment ids"]).
-      and_return(%|<p id="sortable-elements-helper" />|)
-        
     assigns[:project] = @project
     assigns[:iteration] = @iteration
 
@@ -54,9 +43,4 @@ describe "/stories/_iterations.html.erb" do
   it "renders the iterations/list" do
     response.should have_tag("#iterations-list-partial1")
   end
-
-  it "renders each iteration as a sortable element" do
-    response.should have_tag("#sortable-elements-helper")
-  end
-  
 end
