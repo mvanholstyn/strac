@@ -2,7 +2,8 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 def build_iteration_presenter
   @iteration = mock("iteration1")
-  @iteration_presenter = IterationPresenter.new @iteration  
+  @stories = []
+  @iteration_presenter = IterationPresenter.new @iteration, []
 end
 
 describe IterationPresenter, "#unique_id" do
@@ -80,11 +81,4 @@ describe IterationPresenter, "defaults" do
     @iteration.should_receive(:display_name).and_return(@display_name)
     @iteration_presenter.display_name.should == @display_name
   end
-
-  it "delegates #stories to the passed in iteration" do
-    @stories = mock "stories"
-    @iteration.should_receive(:stories).and_return(@stories)
-    @iteration_presenter.stories.should == @stories
-  end
-
 end

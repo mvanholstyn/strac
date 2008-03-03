@@ -44,32 +44,43 @@ describe StoriesIndexPresenter, '#tags?' do
   end
 end
 
+describe StoriesIndexPresenter, '#iteration' do
+  it "defaults to recent" do
+    presenter = StoriesIndexPresenter.new
+    presenter.iteration.should == "recent"
+  end
+
+  it "is set by the search parameter" do
+    presenter = StoriesIndexPresenter.new :search => { :iteration => "all" }
+    presenter.iteration.should == "all"
+  end
+end
+
+describe StoriesIndexPresenter, "#stories" do
+  before do
+    @stories = stub("stories", :search => [])
+    @project = stub("project", :stories => @stories)
+    @presenter = StoriesIndexPresenter.new :project => @project
+  end
+  
+  it "finds all stories for the search criteria" do
+    @project.should_receive(:stories).and_return(@stories)
+    @stories.should_receive(:search).with(:iteration => "recent").and_return([])
+    @presenter.stories
+  end
+end
+
 describe StoriesIndexPresenter, '#iterations' do
   before do
-    @project = stub("project", 
-      :iterations_ordered_by_start_date => nil, 
-      :backlog_iteration => nil)
+    @stories = stub("stories", :search => [])
+    @project = stub("project", :stories => @stories)
     @presenter = StoriesIndexPresenter.new :project => @project
     IterationsPresenter.stub!(:new)
   end
   
-  it "finds all iterations ordered by start date" do
-    @project.should_receive(:iterations_ordered_by_start_date)
-    @presenter.iterations
-  end
-  
-  it "finds the backlog iteration" do
-    @project.should_receive(:backlog_iteration)
-    @presenter.iterations
-  end
-  
   it "creates a new IterationsPresenter" do
-    iterations, backlog_iteration = stub("iterations"), stub("backlog_iterations")
-    @project.stub!(:iterations_ordered_by_start_date).and_return(iterations)
-    @project.stub!(:backlog_iteration).and_return(backlog_iteration)
     IterationsPresenter.should_receive(:new).with(
-      :iterations => iterations, 
-      :backlog => backlog_iteration,
+      :stories => [],
       :project => @project)
     @presenter.iterations
   end

@@ -1,5 +1,9 @@
 class BacklogIterationPresenter < PresentationObject
-  def initialize(iteration)
+  attr_accessor :stories
+  
+  def initialize(iteration, stories)
+    @stories = stories
+    
     delegate :name, :project, :to => iteration
     
     declare :id do
@@ -8,10 +12,6 @@ class BacklogIterationPresenter < PresentationObject
     
     declare :unique_id do
       'iteration_nil'
-    end
-    
-    declare :stories do
-      project.backlog_stories
     end
   end
 end

@@ -14,7 +14,22 @@ class Project < ActiveRecord::Base
   
   has_many :invitations
   has_many :time_entries
-  has_many :stories
+  has_many :stories do
+    def search(params)
+      joins, conditions, values = [], [], []
+    
+      case params && params[:iteration]
+        when "recent"
+          conditions << "stories.bucket_id IN(?)"
+          values << [proxy_owner.iterations.previous, proxy_owner.iterations.current, proxy_owner.iterations.backlog]
+        else
+          joins << "LEFT JOIN buckets ON stories.bucket_id = buckets.id"
+          conditions << "(buckets.type = 'Iteration' OR buckets.id IS NULL)"
+      end
+    
+      find(:all, :joins => joins.join(" "), :conditions => [conditions.join(" AND "), *values])
+    end
+  end
   has_many :activities
   has_many :project_permissions, :dependent => :destroy
   has_many_polymorphs :accessors, :through => :project_permissions, :from => [:users]

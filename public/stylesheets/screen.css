@@ -281,7 +281,11 @@ label {
 	font-weight:bold;
 	color:#444;
 	margin:5px 0;
+}
 
+label.radio {
+  display: inline;
+  cursor: pointer;
 }
 
 /* Layout above this line */

@@ -18,7 +18,6 @@ describe "/stories/_iterations.html.erb" do
     @iterations[0].stub!(:stories).and_return(mock("stories0"))
     @iterations[1].stub!(:stories).and_return(mock("stories1"))
     @backlog.stub!(:stories).and_return(mock("backlog stories"))
-    @iterations.stub!(:containment_ids).and_return(["containment ids"])
 
     @iterations.stub!(:backlog).and_return(@backlog)    
     @backlog.stub!(:unique_id).and_return("iteration_nil")
@@ -28,7 +27,6 @@ describe "/stories/_iterations.html.erb" do
     @iterations[1].stub!(:unique_id).and_return("iteration_2")
     @iterations[1].stub!(:project).and_return(@project)
     
-    @iterations.should_receive(:each_with_backlog).and_yield(@backlog)
     template.should_receive(:sortable_element).
       with(
         @backlog.unique_id, 

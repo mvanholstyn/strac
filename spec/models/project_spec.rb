@@ -360,7 +360,7 @@ describe Project, '#update_members' do
   end    
 end
 
-describe '#average_velocity' do
+describe Project, '#average_velocity' do
   def average_velocity
     @project.average_velocity
   end
@@ -414,7 +414,7 @@ describe '#average_velocity' do
   end
 end
 
-describe Project, "iterations" do
+describe Project, "#iterations" do
   
   before(:each) do
     @project = Generate.project
@@ -436,4 +436,9 @@ describe Project, "iterations" do
   it "can returns the iteration with the second latest start date as the previous iteration" do
     @project.iterations.previous.should == @previous_iteration
   end
+end
+
+describe Project, "#stories" do
+  it "can be find all stories"
+  it "can find recent stories (in the previous iteration, the current iteration or the backlog)"
 end

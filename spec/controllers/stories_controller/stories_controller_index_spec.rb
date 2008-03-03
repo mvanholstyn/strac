@@ -60,6 +60,14 @@ describe StoriesController, "user with privileges requesting #index " do
         get_index :view => view
       end
     end
+    
+    it "passes in a the current serach parameters into the StoriesIndexPresenter constructor" do
+      search_params = { "iteration" => "recent" }
+      StoriesIndexPresenter.should_receive(:new).with(
+        has_entry(:search, search_params)
+      ).and_return(@stories_index_presenter)
+      get_index :story => search_params
+    end
   end
  
 end
