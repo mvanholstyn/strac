@@ -414,3 +414,26 @@ describe '#average_velocity' do
   end
 end
 
+describe Project, "iterations" do
+  
+  before(:each) do
+    @project = Generate.project
+    @old_iteration = Generate.iteration "Iteration 1", :project => @project, :start_date => 3.weeks.ago, :end_date => 2.weeks.ago
+    @previous_iteration = Generate.iteration "Iteration 2", :project => @project, :start_date => 2.weeks.ago, :end_date => 1.weeks.ago
+    @current_iteration = Generate.iteration "Iteration 3", :project => @project, :start_date => 1.weeks.ago, :end_date => 1.day.from_now
+  end
+  
+  it "can generate a dummy backlog iteration" do
+    backlog = @project.iterations.backlog
+    backlog.id.should be_nil
+    backlog.name.should == "Backlog"
+  end
+  
+  it "can returns the iteration with the latest start date as the current iteration" do
+    @project.iterations.current.should == @current_iteration
+  end
+  
+  it "can returns the iteration with the second latest start date as the previous iteration" do
+    @project.iterations.previous.should == @previous_iteration
+  end
+end
