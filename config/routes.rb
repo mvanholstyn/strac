@@ -12,8 +12,6 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :projects, :member => { :workspace => :get } do |project_map|
     project_map.resources :phases
     project_map.resources :invitations
-    project_map.resources :iterations, :name_prefix => nil, 
-                          :member => { :stories => :get }
     project_map.resources :stories, :name_prefix => nil,
                           :collection => { :reorder => :put },
                           :member => { :update_points => :put, :update_status => :put, 
