@@ -475,4 +475,7 @@ end
 describe Project, "#stories" do
   it "can be find all stories"
   it "can find recent stories (in the previous iteration, the current iteration or the backlog)"
+  it "can find stories by summary"
+  it "can find stories by description"
+  it "can find stories by tags"
 end
