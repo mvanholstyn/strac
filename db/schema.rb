@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 45) do
+ActiveRecord::Schema.define(:version => 47) do
 
   create_table "activities", :force => true do |t|
     t.integer  "actor_id"
@@ -102,6 +102,7 @@ ActiveRecord::Schema.define(:version => 45) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "iteration_length"
   end
 
   create_table "statuses", :force => true do |t|

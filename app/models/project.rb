@@ -41,7 +41,7 @@ class Project < ActiveRecord::Base
     end
     
     def current
-      find(:first, :order => "start_date DESC")
+      find(:first, :conditions => ["start_date < ? AND end_date IS NULL", Date.today])
     end
     
     def backlog
