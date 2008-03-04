@@ -1,9 +1,4 @@
 module Spec::Example::ExampleGroupMethods
-  alias_method :they, :it
-  alias_method :is, :it
-end
-
-module Spec::Example::ExampleGroupMethods
   def it_delegates(*args)
     options = args.extract_options!
     methods = args
@@ -259,6 +254,27 @@ class Spec::Rails::Example::ControllerExampleGroup
     end
   end
   
+  def self.it_renders_the_default_template(*args) #method, action, *options)
+    if args.size == 3
+      method, action, params = args
+    elsif args.size ==4
+      method = args[0..1]
+      action, params = args[2..-1]
+    else
+      raise ArgumentError, "takes parameters: [method, action, params] or [xhr, method, action, params]"
+    end
+
+    it "renders the #{action} template" do
+      send *args
+      response.should render_template(action)
+    end
+  
+    it "is successful" do
+      send *args
+      response.should be_success
+    end
+  end
+  
   def self.it_requires_login(method, action, params={})
     describe controller_class, "#{method} ##{action} requires login" do
       before do
@@ -268,7 +284,7 @@ class Spec::Rails::Example::ControllerExampleGroup
       describe controller_class, "when not logged in" do
         it "redirects to signup" do
           send method, action, params
-          response.should redirect_to(signup_path)
+          response.should redirect_to(login_path)
         end
     
         it "does not call the action" do
@@ -279,7 +295,7 @@ class Spec::Rails::Example::ControllerExampleGroup
   
       describe controller_class, "when logged in" do
         before do
-          login_with_user
+          stub_login_for controller_class
         end
         
         it "calls the action" do
