@@ -14,19 +14,54 @@ class Project < ActiveRecord::Base
   
   has_many :invitations
   has_many :time_entries
-  has_many :stories
+  has_many :stories do
+    def search(params)
+      joins, conditions, values = [], [], []
+    
+      unless params[:text].blank?
+        joins << "LEFT JOIN taggings ON taggings.taggable_id = stories.id AND taggings.taggable_type = 'Story'"
+        joins << "LEFT JOIN tags ON tags.id = taggings.tag_id"
+        
+        ored_conditions = []
+        ["stories.summary", "stories.description", "tags.name"].each do |attribute|
+          ored_conditions << "#{attribute} LIKE ?"
+          values << "%#{params[:text]}%"
+        end
+        conditions << "(#{ored_conditions.join(' OR ')})"
+      end
+    
+      case params && params[:iteration]
+        when "recent"
+          conditions << "stories.bucket_id IN(?)"
+          values << [proxy_owner.iterations.previous, proxy_owner.iterations.current, proxy_owner.iterations.backlog]
+        else
+          joins << "LEFT JOIN buckets ON buckets.id = stories.bucket_id"
+          conditions << "(buckets.type = 'Iteration' OR buckets.id IS NULL)"
+      end
+    
+      find(:all, :joins => joins.join(" "), :conditions => [conditions.join(" AND "), *values], :group => "stories.id")
+    end
+  end
   has_many :activities
   has_many :project_permissions, :dependent => :destroy
   has_many_polymorphs :accessors, :through => :project_permissions, :from => [:users]
   has_many :buckets
   has_many :phases 
   has_many :iterations do 
-    def find_current
-      find :first, :conditions => [ "? BETWEEN start_date AND end_date", Date.today ]
+    def previous
+      find(:all, :order => "start_date DESC", :limit => 2)[1]
+    end
+    
+    def current
+      find(:first, :conditions => ["start_date < ? AND end_date IS NULL", Date.today])
+    end
+    
+    def backlog
+      build(:name => "Backlog")
     end
   
     def find_or_build_current
-      find_current || build( :name => "Iteration #{size + 1}", :start_date => Date.today, :end_date =>  Date.today + 7 )
+      current || build( :name => "Iteration #{size + 1}", :start_date => Date.today, :end_date =>  Date.today + 7 )
     end
   end
   has_many :completed_iterations, :source => :iterations, :class_name => Iteration.name, :conditions => [ "end_date < ?", Date.today ]
@@ -48,6 +83,9 @@ class Project < ActiveRecord::Base
       projects.id = #{id} AND
       taggings.taggable_id IS NULL'
 
+  def incomplete_stories
+    stories.find(:all, :conditions => ["status_id NOT IN(?) OR status_id IS NULL", Status.complete], :order => "position ASC")
+  end
   
   def iterations_ordered_by_start_date
     iterations.find(:all, :order => :start_date)
@@ -78,10 +116,10 @@ class Project < ActiveRecord::Base
   end
   
   def average_velocity
-    velocity = completed_iterations.inject(0) do |sum,iteration|
-      sum + iteration.completed_stories.sum{ |story| story.points.blank? ? 0 : story.points }
+    points = previous_iterations.inject([]) do |points, iteration|
+      points << iteration.points_completed
     end
-    completed_iterations.empty? ? 0 : velocity.to_f / completed_iterations.size.to_f
+    VelocityCalculator.compute_weighted_average(points) 
   end
   
   def estimated_remaining_iterations
@@ -113,5 +151,16 @@ class Project < ActiveRecord::Base
     member_ids.each do |member|
       self.users << User.find(member)
     end
+  end
+  
+private
+
+  def previous_iterations
+    current = iterations.find_or_build_current
+    iterations.find(
+      :all, 
+      :conditions=>["end_date < ? ", current.start_date], 
+      :order => "start_date ASC"
+    )
   end
 end

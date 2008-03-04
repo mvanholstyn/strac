@@ -65,39 +65,42 @@ describe Story do
 end
 
 # TODO - move Story.reorder to Iteration#reorder
-describe "Reordering stories" do
-  before(:each) do
-    @story1 = Story.create!(:summary=>"Story1", :project_id=>2, :bucket_id=>1)
-    @story2 = Story.create!(:summary=>"Story2", :project_id=>2, :bucket_id=>1)
-        
-    @story1.position.should == 1 ; @story1.bucket_id.should == 1
-    @story2.position.should == 2 ; @story2.bucket_id.should == 1
+describe Story, ".reorder" do
+  def reorder(story_ids, options={})
+    Story.reorder(story_ids, options)
+  end
+ 
+  before do
+    Story.delete_all
+    @stories = [ Generate.story, Generate.story, Generate.story ]
   end
   
-  it "should require an iteration id" do
-    lambda {
-      Story.reorder( [@story2.id], {})
-    }.should raise_error(ArgumentError)
-  end
-  
-  it "should update story positions" do
-    Story.reorder( [@story2.id, @story1.id], :bucket_id=>1 )
-    @story1.reload.position.should == 2
-    @story2.reload.position.should == 1    
+  it "reorders the stories matching the passed in story ids to be in the same position" do
+    reorder([ @stories[2].id, @stories[1].id, @stories[0].id], :bucket_id => 1 )
+    @stories.reverse.each_with_index do |story, i|
+      story.reload.position.should == i+1
+    end
   end
 
-  it "should set the story's iteration when the updated story iteration is not nil" do
-    Story.reorder( [@story2.id ], :bucket_id => 2 )
-    @story1.reload.bucket_id.should == 1
-    @story2.reload.bucket_id.should == 2
+  describe "when given a :bucket_id option" do
+    it "moves each story to the passed in :bucket_id option" do
+      reorder(@stories, :bucket_id => 2 )
+      @stories.each{ |story| story.reload.bucket_id.should == 2 }
+      reorder(@stories, :bucket_id => 3 )
+      @stories.each{ |story| story.reload.bucket_id.should == 3 }
+      reorder(@stories, :bucket_id => nil )
+      @stories.each{ |story| story.reload.bucket_id.should == nil }
+    end
   end
   
-  it "should set the Story's iteration to nil when the updated story iteration is nil" do
-    Story.reorder( [@story2.id ], :bucket_id => nil )
-    @story1.reload.bucket_id.should == 1
-    @story2.reload.bucket_id.should == nil
+  describe "when a blank entry is given inside the story_ids array" do
+    it "ignores it, and does not use it when reordering" do
+      reorder(["", @stories.first.id, "", @stories.last.id, "", @stories[1].id], :bucket_id => 99)
+      @stories.first.reload.position.should == 1
+      @stories.last.reload.position.should == 2
+      @stories[1].reload.position.should == 3
+    end
   end
-
 end
 
 describe Story, "complete" do

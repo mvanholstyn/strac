@@ -1,3 +1,8 @@
+def follow_all_redirects
+  follow_redirect! while response.redirect?
+  true
+end
+
 def go_to_the_dashboard
   get dashboard_path
   follow_redirect! if response.redirect?

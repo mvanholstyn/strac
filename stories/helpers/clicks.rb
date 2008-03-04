@@ -26,6 +26,7 @@ def click_link(text, select = '')
   end
 
   get path, {}, { 'HTTP_REFERER' => request.request_uri }
+  follow_all_redirects
 end
 
 
@@ -51,4 +52,8 @@ end
 
 def click_tags_view_link
   click_link ".tags_view"
+end
+
+def click_logout_link
+  click_link logout_path
 end

@@ -1,6 +1,8 @@
 class StoriesIndexPresenter < PresentationObject
+  attr_writer :text
+  
   VIEWS = %w( iterations tags )
-  constructor :project, :view, :strict => false
+  constructor :project, :view, :search, :strict => false
   
   VIEWS.each do |the_view|
     declare "#{the_view}?" do
@@ -11,11 +13,22 @@ class StoriesIndexPresenter < PresentationObject
   declare :view do
     VIEWS.include?(@view) ? @view : VIEWS.first
   end
+  
+  declare :iteration do
+    @search && @search[:iteration] ? @search[:iteration] : "recent"
+  end
+  
+  declare :text do
+    @search  && @search[:text] ? @search[:text] : nil
+  end
+
+  declare :stories do
+    @project.stories.search(:iteration => iteration, :text => text)
+  end
     
   declare :iterations do
     IterationsPresenter.new(
-      :iterations => @project.iterations_ordered_by_start_date,
-      :backlog => @project.backlog_iteration,
+      :stories => stories,
       :project => @project)
   end
   

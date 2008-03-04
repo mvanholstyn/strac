@@ -10,10 +10,3 @@
 </table>
 
 <%= render :partial => "iterations/stories", :locals=>{:iteration=>iterations.backlog, :stories => iterations.backlog.stories} %>
-
-<% iterations.each_with_backlog do |iteration| -%>
-  <%= sortable_element iteration.unique_id,
-                       :url => reorder_stories_path(iteration.project), :method => :put,
-                       :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => iterations.containment_ids -%>
-<% end -%>
-

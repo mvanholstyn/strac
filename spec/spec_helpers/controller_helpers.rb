@@ -16,6 +16,7 @@ class Spec::Rails::Example::ControllerExampleGroup
     controller.stub!(:current_user).and_return(@user)
     controller_klass.login_model.stub!(:find).and_return(@user)
     @user.stub!(:has_privilege?).and_return(true)
+    @user
   end
   
   def login_as(user)
@@ -40,6 +41,7 @@ class Spec::Rails::Example::ControllerExampleGroup
     controller.class.send!("#{type}_filters").each do |filter_name|
       next if options[:except].respond_to?(:include?) && options[:except].include?(filter_name)
       next if options[:except] == filter_name
+      next if filter_name.is_a?(Proc)
       controller.stub!(filter_name).and_return(true)
     end    
   end

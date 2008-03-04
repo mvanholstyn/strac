@@ -42,9 +42,10 @@ class Generate
   end
 
   def self.iteration(name, attributes={})
-    raise ArgumentError, "requires project" unless attributes[:project]
+    @iteration_count = 0
+    attributes[:project] ||= Generate.project "Project for generated iteration #{@iteration_count+=1}"
     attributes[:start_date] = Date.today unless attributes[:start_date]
-    attributes[:end_date] = attributes[:start_date] + 6.days unless attributes[:end_date]
+    attributes[:end_date] = attributes[:start_date] + 6.days unless attributes.has_key?(:end_date)
     Iteration.create!(attributes.merge(:name => name))
   end
   
@@ -79,8 +80,12 @@ class Generate
   def self.story(attributes={})
     @story_count ||= 0
     summary ||= attributes.delete(:summary) || "Summary #{@story_count+=1}"
-    if attributes[:project].nil?
-      attributes[:project] = Generate.project("Project for #{summary}")
+    if attributes[:project].nil? 
+      if attributes[:bucket].nil?
+        attributes[:project] = Generate.project("Project for #{summary}")
+      else
+        attributes[:project] = attributes[:bucket].project
+      end
     end
     Story.create!(attributes.merge(:summary => summary))
   end

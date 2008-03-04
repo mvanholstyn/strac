@@ -13,7 +13,7 @@ class CommentsController < ApplicationController
   
   def create
     @comment = @story.comments.build(params[:comment])
-    @comment.commenter = User.current_user
+    @comment.commenter = current_user
 
     respond_to do |format|
       if @comment.save

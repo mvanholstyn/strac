@@ -138,6 +138,7 @@ class FullMigrationTest < ActionController::IntegrationTest
       s.table "projects" do |t|
         t.column "id", :integer
         t.column "name", :string
+        t.column "iteration_length", :string
         t.column "created_at", :datetime
         t.column "updated_at", :datetime
       end

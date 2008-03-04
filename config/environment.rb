@@ -26,7 +26,8 @@ Rails::Initializer.run do |config|
                            #{RAILS_ROOT}/app/mailers 
                            #{RAILS_ROOT}/app/managers
                            #{RAILS_ROOT}/app/presenters
-                           #{RAILS_ROOT}/app/exceptions )
+                           #{RAILS_ROOT}/app/exceptions
+                           #{RAILS_ROOT}/app/renderers )
 
   # Force all environments to use the same logger level
   # (by default production uses :info, the others :debug)

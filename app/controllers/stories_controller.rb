@@ -3,13 +3,13 @@ class StoriesController < ApplicationController
   
   in_place_edit_for :story, :points
   
-  before_filter :find_project
+  before_filter :find_project, :except => [ :update_points ]
   before_filter :find_priorities_and_statuses, :only => [ :new, :edit ]
 
   helper :comments
 
   def index
-    @stories_presenter = StoriesIndexPresenter.new(:project => @project, :view => params['view'])
+    @stories_presenter = StoriesIndexPresenter.new(:project => @project, :view => params['view'], :search => params[:story])
   end
 
   def show
@@ -87,19 +87,13 @@ class StoriesController < ApplicationController
   end
 
   def reorder
-    respond_to do |format|
-      #TODO: Update zebra striping...
-      #TODO: This will fail if complete stories are hidden..."
-      param_to_use = params.select { |k,v| k =~ /^iteration_(\d+|nil)$/ }.first
-      if Story.reorder(param_to_use.last, :bucket_id => eval(param_to_use.first.scan(/^iteration_(\d+|nil)$/).flatten.first))
-        format.js { render_notice "Priorities have been successfully updated." }
+    render :update do |page|
+      story_ids = params["iteration_nil"].delete_if{ |id| id.blank? }
+      renderer = RemoteSiteRenderer.new :page => page
+      if Story.reorder(story_ids, :bucket_id => nil )
+        renderer.render_notice "Priorities have been successfully updated."
       else
-        format.js do
-          render_error "There was an error while updating priorties. If the problem persists, please contact technical support." do |page|
-            #TODO: If unsuccessful, replace the stories list
-            #page.replace_html "stories", ""
-          end
-        end
+        renderer.render_error "There was an error while updating priorties. If the problem persists, please contact technical support."
       end
     end
   end
@@ -131,17 +125,22 @@ class StoriesController < ApplicationController
   end
   
   def update_points
-    @story = @project.stories.find(params[:id])
-    @story.points = params[:story][:points]
-  
-    if @story.save
-      render_notice %("#{@story.summary}" was successfully updated.) do |page|
-        page["story_#{@story.id}_points"].replace_html(@story.points || "&infin;")
-        page[:project_summary].replace :partial => "projects/summary", :locals => { :project => @project }
-      end
-    else
-      render_error %("#{@story.summary}" was not successfully updated.) do |page|
-        page["story_#{@story.id}_points"].replace_html(@story.reload.points || "&infin;")
+    render :update do |page|
+      project_manager = ProjectManager.new(params[:project_id], current_user)
+      project_manager.update_story_points(params[:id], params[:story][:points]) do |story_update|
+        story_update.success do |story|
+          project = story.project
+          renderer = RemoteProjectRenderer.new(:page => page, :project => project)
+          renderer.render_notice %("#{story.summary} was successfully updated.")
+          renderer.update_story_points(story)
+          renderer.update_project_summary
+          renderer.draw_current_iteration_velocity_marker
+        end
+        
+        story_update.failure do |story|
+          renderer = RemoteProjectRenderer.new(:page => page, :project => story.project)
+          renderer.render_error %("#{story.summary}" was not successfully updated.)
+        end
       end
     end
   end
@@ -185,6 +184,6 @@ private
   end
 
   def find_project
-    @project = Project.find(params[:project_id])#, :include => { :iterations => { :stories => :tags } })
+    @project = ProjectManager.get_project_for_user(params[:project_id], current_user)
   end
 end

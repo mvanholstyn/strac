@@ -2,7 +2,8 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 def build_iteration_presenter
   @iteration = mock("iteration1")
-  @iteration_presenter = IterationPresenter.new @iteration  
+  @stories = []
+  @iteration_presenter = IterationPresenter.new @iteration, []
 end
 
 describe IterationPresenter, "#unique_id" do
@@ -19,54 +20,6 @@ describe IterationPresenter, "#unique_id" do
   it "returns a unique string identifer for the passed in iteration using the string 'nil' when it is a new record" do
     @iteration.should_receive(:new_record?).and_return(true)
     @iteration_presenter.unique_id.should == "iteration_nil"
-  end
-end
-
-describe IterationPresenter, "#show?" do
-  it "returns true when the iteration's end date is greater then or equal to today's dates" do
-    build_iteration_presenter
-    
-    @iteration.should_receive(:end_date).and_return(Date.today)
-    @iteration_presenter.should be_show
-
-    build_iteration_presenter
-    @iteration.should_receive(:end_date).and_return(Date.today+1.week)
-    @iteration_presenter.should be_show
-
-    build_iteration_presenter
-    @iteration.should_receive(:end_date).and_return(Date.today+1.year)
-    @iteration_presenter.should be_show
-  end
-  
-  it "returns false when the iteratin's end date is less then today's date" do
-    build_iteration_presenter
-    @iteration.stub!(:stories).and_return([])
-    @iteration.should_receive(:end_date).and_return(Date.today-1)
-    @iteration_presenter.should_not be_show
-
-    build_iteration_presenter
-    @iteration.stub!(:stories).and_return([])
-    @iteration.should_receive(:end_date).and_return(Date.today-1.week)
-    @iteration_presenter.should_not be_show
-
-    build_iteration_presenter
-    @iteration.stub!(:stories).and_return([])
-    @iteration.should_receive(:end_date).and_return(Date.today-1.year)
-    @iteration_presenter.should_not be_show
-  end
-  
-  it "returns false when the iteratin's end date is less then today's date and all stories are complete?" do
-    build_iteration_presenter
-    @iteration.stub!(:stories).and_return([stub("story", :incomplete? => false)])
-    @iteration.should_receive(:end_date).and_return(Date.today-1)
-    @iteration_presenter.should_not be_show
-  end
-  
-  it "returns true when the iteratin's end date is less then today's date and a story is incomplete?" do
-    build_iteration_presenter
-    @iteration.stub!(:stories).and_return([stub("story", :incomplete? => true)])
-    @iteration.should_receive(:end_date).and_return(Date.today-1)
-    @iteration_presenter.should be_show
   end
 end
 
@@ -128,11 +81,4 @@ describe IterationPresenter, "defaults" do
     @iteration.should_receive(:display_name).and_return(@display_name)
     @iteration_presenter.display_name.should == @display_name
   end
-
-  it "delegates #stories to the passed in iteration" do
-    @stories = mock "stories"
-    @iteration.should_receive(:stories).and_return(@stories)
-    @iteration_presenter.stories.should == @stories
-  end
-
 end

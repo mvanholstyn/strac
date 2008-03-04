@@ -2,7 +2,8 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 def build_backlog_iteration
   @iteration = mock "iteration"
-  @backlog = BacklogIterationPresenter.new @iteration
+  @stories = []
+  @backlog = BacklogIterationPresenter.new @iteration, @stories
 end
 
 describe BacklogIterationPresenter, "defaults" do
@@ -27,20 +28,6 @@ describe BacklogIterationPresenter, "defaults" do
   end
 end
 
-describe BacklogIterationPresenter, "#stories" do
-  before do
-    build_backlog_iteration
-  end
-
-  it "returns the project's backlog stories" do
-    project = mock "project"
-    stories = mock "stories"
-    @iteration.should_receive(:project).and_return(project)
-    project.should_receive(:backlog_stories).and_return(stories)
-    @backlog.stories.should == stories
-  end
-end
-
 describe BacklogIterationPresenter, "#unique_id" do
   before do
     build_backlog_iteration
@@ -48,15 +35,5 @@ describe BacklogIterationPresenter, "#unique_id" do
 
   it "returns 'iteration_nil'" do
     @backlog.unique_id.should == 'iteration_nil'
-  end
-end
-
-describe BacklogIterationPresenter, "display" do
-  before do
-    build_backlog_iteration
-  end
-
-  it "is shown" do
-    @backlog.should be_show
   end
 end

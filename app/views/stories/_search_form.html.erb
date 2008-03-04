@@ -1,0 +1,18 @@
+<% form_for :story, @stories_presenter, :html => { :method => :get } do |form| -%>
+  <% field_set_tag "Search", :class => "search" do -%>
+    <p>
+      <%= form.label :text, "Summary / Description / Tags" %>
+      <%= form.text_field :text %>
+    </p>
+    
+    <p>
+      <%= form.label :iterations %>
+      <%= form.radio_button :iteration, "all" %> <%= form.label :iteration_all, "all", :class => "radio light" %>
+      <%= form.radio_button :iteration, "recent" %> <%= form.label :iteration_recent, "last, current, and future", :class => "radio light" %>
+    </p>
+    
+    <p>
+      <%= form.submit "Search" %>
+    </p>
+  <% end -%>
+<% end %>

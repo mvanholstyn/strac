@@ -49,4 +49,9 @@ class ProjectsController < ApplicationController
     @project.destroy
     redirect_to projects_path
   end
+  
+  def workspace
+    @project = ProjectManager.get_project_for_user(params[:id], current_user)
+    @stories = @project.incomplete_stories
+  end
 end

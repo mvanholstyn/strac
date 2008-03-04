@@ -11,12 +11,8 @@ describe "/projects/_navigation.html.erb" do
     response.should have_tag("a[href=?]", project_path(@project))
   end
   
-  it "displays a link to the project's current iteration" do
-    response.should have_tag("a[href=?]", current_iterations_path(@project))
-  end
-  
-  it "displays a link to the project's iterations" do
-    response.should have_tag("a[href=?]", iterations_path(@project))
+  it "displays a link to the project's workspace" do
+    response.should have_tag("a[href=?]", workspace_project_path(@project))
   end
   
   it "displays a link to the project's stories" do

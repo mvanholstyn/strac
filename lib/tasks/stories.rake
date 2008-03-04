@@ -3,3 +3,7 @@ namespace :spec do
     system "ruby stories/all.rb"
   end
 end
+
+task :spec do
+  Rake::Task['spec:stories'].invoke
+end

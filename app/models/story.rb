@@ -51,6 +51,14 @@ class Story < ActiveRecord::Base
     self.responsible_party_type = type ? type.camelize : nil
   end
 
+  def complete?
+    status && (status.name =~ /complete/ || status.name =~ /rejected/)
+  end
+  
+  def incomplete?
+    !complete?
+  end
+  
   #TODO: Is there a better way to put this into a single SQL statement?
   def self.reorder ids, options={}
     options = options.symbolize_keys
@@ -58,8 +66,11 @@ class Story < ActiveRecord::Base
     
     bucket_id = options[:bucket_id]
     values = []
-    ids.each_with_index do |id, index|
-      values << [id, index+1, bucket_id]
+    counter = 0
+    ids.each do |id|
+      unless id.blank?
+        values << [id, counter+=1, bucket_id]
+      end
     end
     
     columns2import = [:id, :position, :bucket_id]
@@ -72,13 +83,5 @@ class Story < ActiveRecord::Base
     with_scope :find => options do
       find :all, :conditions => { :bucket_id => nil }
     end
-  end
-  
-  def complete?
-    status && (status.name =~ /complete/ || status.name =~ /rejected/)
-  end
-  
-  def incomplete?
-    !complete?
   end
 end
