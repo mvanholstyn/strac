@@ -40,54 +40,50 @@
     }
 
     var describes = [];
-    var nested_describe_depth = 0;
     var setups = [];
-    var original_setup;
+    var specDescriptions = [];
+    var setups = [];
+
+    function setup(setupFunc){
+      setups.push(setupFunc);
+    }
+    
+    function it(name, specFunc){
+      var logName = name.gsub(/\W/,'_') + 'Log';
+      name = "it " + name;
+
+      var label = document.createElement('h1');
+      label.innerHTML = specDescriptions.join("");
+      $('logs').appendChild(label);
+
+      var log = document.createElement('div');
+      log.setAttribute('id', logName);
+      $('logs').appendChild(log);
+      
+      spec = {}
+      var my_setups = setups.clone();
+      spec['setup'] = function(){ 
+        var self = this;
+        my_setups.each(function(f){ f.bind(self)();
+      })};
+      spec[name] = specFunc;
+      
+      describes.push({
+        logName: logName,
+        spec: spec,
+        name: name
+      });
+    }
+
+    var depth = 0;
     function describe(name, spec) {
-      var added = 0;
-      if(nested_describe_depth > 0){
-        if(!setups.include(this.setup)){
-           setups.push(this.setup);
-           added++;
-         }
-        if(spec['setup'] ){
-          setups.push(spec['setup']);
-          added++;
-        }
+      specDescriptions.push(name);
+      depth++;
+      spec();
+      if( depth-- == 0 ){
+       setups = []; 
       }
-
-      if(typeof spec == "function"){
-        if(setups.size() == 0) original_setup = this.setup;
-        nested_describe_depth += 1;
-        spec();
-        while(added-- >= 0){
-          setups.pop();
-        }
-      } else {
-        var logName = name.gsub(/\W/,'_') + 'Log';
-
-        var label = document.createElement('h1');
-        label.innerHTML = name
-        $('logs').appendChild(label);
-
-        var log = document.createElement('div');
-        log.setAttribute('id', logName);
-        $('logs').appendChild(log);
-        
-        if(nested_describe_depth > 0){
-          my_setups = setups.clone();
-          spec.setup = function(){
-            my_setups.each(function(s){
-              if(s) s();
-            });
-          }
-        }
-        describes.push({
-          logName: logName,
-          spec: spec,
-          name: name
-        });
-      }
+      specDescriptions.pop();
     }
 
     var requiredFiles = [];

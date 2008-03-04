@@ -80,7 +80,7 @@ Event.simulateKeys = function(element, command) {
 
 var Test = {}
 Test.Unit = {};
-Test.Unit.testPattern = /^(\.|#|test|should|will|can|has)/i;
+Test.Unit.testPattern = /^(\.|#|test|should|will|can|has|it)/i;
 
 // security exception workaround
 Test.Unit.inspect = Object.inspect;
