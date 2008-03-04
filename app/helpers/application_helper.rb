@@ -37,7 +37,6 @@ module ApplicationHelper
         @conversions ||= {
           :S => new( :S, Story, [ :story, :project_id, :id ] ),
           :B => new( :B, Bucket ),
-          :I => new( :I, Iteration, [ :iteration, :project_id, :id ] ),
           :USER => new( :USER, User ),
           :P => new( :P, Project, [ :project, :id ] ),
           :STATUS =>new( :STATUS, Status ),
