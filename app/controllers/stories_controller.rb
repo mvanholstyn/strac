@@ -9,7 +9,7 @@ class StoriesController < ApplicationController
   helper :comments
 
   def index
-    @stories_presenter = StoriesIndexPresenter.new(:project => @project, :view => params['view'])
+    @stories_presenter = StoriesIndexPresenter.new(:project => @project, :view => params['view'], :search => params[:story])
   end
 
   def show
