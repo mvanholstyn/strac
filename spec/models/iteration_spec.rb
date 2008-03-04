@@ -21,10 +21,6 @@ describe Iteration do
     assert_validates_presence_of @iteration, :start_date
   end
 
-  it "should always have a end date" do
-    assert_validates_presence_of @iteration, :end_date
-  end
-  
   it "should have have a start date that comes before its end date" do
     @iteration.start_date = Date.today
     @iteration.end_date = Date.today - 1

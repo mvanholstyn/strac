@@ -420,7 +420,7 @@ describe Project, "#iterations" do
     @project = Generate.project
     @old_iteration = Generate.iteration "Iteration 1", :project => @project, :start_date => 3.weeks.ago, :end_date => 2.weeks.ago
     @previous_iteration = Generate.iteration "Iteration 2", :project => @project, :start_date => 2.weeks.ago, :end_date => 1.weeks.ago
-    @current_iteration = Generate.iteration "Iteration 3", :project => @project, :start_date => 1.weeks.ago, :end_date => 1.day.from_now
+    @current_iteration = Generate.iteration "Iteration 3", :project => @project, :start_date => 1.weeks.ago, :end_date => nil
   end
   
   it "can generate a dummy backlog iteration" do

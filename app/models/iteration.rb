@@ -15,7 +15,7 @@
 
 class Iteration < Bucket
 
-  validates_presence_of :start_date, :end_date
+  validates_presence_of :start_date
   validate :validate_iterations_do_not_overlap
   validate :validate_start_date_is_before_end_date
 
