@@ -284,8 +284,17 @@ label {
 }
 
 label.radio {
+  vertical-align: middle;
   display: inline;
   cursor: pointer;
+}
+
+input[type=radio] {
+  vertical-align: middle;
+}
+
+label.light {
+  font-weight: normal;
 }
 
 /* Layout above this line */
@@ -678,3 +687,12 @@ span.logged_in a{
   padding-right: 15px;
 }
 
+fieldset.search { 
+  border: 1px solid #ccc;
+  padding: 0 1em;
+}
+
+fieldset.search legend { 
+  font-size: 1.5em;
+  font-weight: bold;
+}

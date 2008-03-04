@@ -60,12 +60,12 @@ describe StoriesIndexPresenter, "#stories" do
   before do
     @stories = stub("stories", :search => [])
     @project = stub("project", :stories => @stories)
-    @presenter = StoriesIndexPresenter.new :project => @project
+    @presenter = StoriesIndexPresenter.new :project => @project, :search => { :text => "ruby" }
   end
   
   it "finds all stories for the search criteria" do
     @project.should_receive(:stories).and_return(@stories)
-    @stories.should_receive(:search).with(:iteration => "recent").and_return([])
+    @stories.should_receive(:search).with(:iteration => "recent", :text => "ruby").and_return([])
     @presenter.stories
   end
 end
