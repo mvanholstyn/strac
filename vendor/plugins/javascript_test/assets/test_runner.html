@@ -67,7 +67,14 @@
         my_setups.each(function(f){ f.bind(self)();
       })};
       spec[name] = specFunc;
-      
+
+      if(describes.any(function(e){ return e.name == name; })){
+        alert("Test duplication: '"
+              + name 
+              + "' has already been defined inside of the context describe '" 
+              + specDescriptions.first() + "'"
+        ); 
+      }
       describes.push({
         logName: logName,
         spec: spec,
