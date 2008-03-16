@@ -62,42 +62,57 @@ Object.extend(Strac.ProjectStats, {
 /* Iteration */
 Strac.Iteration = Class.create();
 Object.extend(Strac.Iteration, {
-  drawCurrentIterationVelocityMarker: function(){
-    Strac.Iteration.removeCurrentIterationVelocityMarker();
-    new Strac.Iteration($$(".section .story_list:first")[0]).drawEstimatedCompletionLine(Strac.ProjectStats.averageVelocity());    
+  drawWorkspaceVelocityMarkers: function(){
+    Strac.Iteration.removeVelocityMarkers();
+    new Strac.Iteration(
+      $$(".section .story_list:first")[0]
+    ).drawEstimatedVelocityMarkers(Strac.ProjectStats.averageVelocity());    
   },
   
-  removeCurrentIterationVelocityMarker: function(){
-    $$('.story_list .velocity_marker').each(function(el){
-      el.remove();
-    });
+  removeVelocityMarkers: function(){
+    $$('.story_list .velocity_marker').invoke("remove");
   }
 });
 Strac.Iteration.prototype = {
   initialize: function(story_list_element) {
     this.story_list_element = story_list_element;
   },
-  // Number($$('.average_velocity')[0].textContent)
-  drawEstimatedCompletionLine: function(velocity){
+
+  drawCurrentIterationEstimationLine: function(story){
+    story.element().insert({
+      before: '<div class="velocity_marker">' +
+        '<div class="right">Next Iteration</div><div class="left">Expected this iteration</div>' +
+      '</div>'
+    });
+  },
+  
+  drawFutureIterationEstimationLine: function(story){
+    story.element().insert({
+      before: '<div class="future velocity_marker">' +
+        '<div class="left">Future Iteration</div><br class="clearfix"/></div>'
+    });    
+  },
+
+  drawEstimatedVelocityMarkers: function(velocity){
     var points = 0;
-    var stories = this.stories();
-    var story;
-    for(var i=0, story=stories[i] ; i<stories.size() ; i++, story=stories[i]){
+    var drawn_current = false;
+    this.stories().each(function(story){
       points += story.points();
-      if(points > velocity){
-        story.element().insert({
-          before: '<div class="velocity_marker">' +
-            '<div class="right">Backlog</div><div class="left">Expected this iteration</div>' +
-          '</div>'
-        });
-        break;
+      if(points > velocity && !drawn_current){
+        this.drawCurrentIterationEstimationLine(story);
+        points = story.points();
+        drawn_current = true;
+      } else if(drawn_current && points > velocity) {
+        this.drawFutureIterationEstimationLine(story);
+        points = story.points();
       }
-    }
+    }.bind(this));
   },
   
   stories: function(){
     return this.story_list_element.select(".story_card").map(function(el){
       return new Strac.Story(el);
+      Object.extend(el, Strac.Story);
     });
   }
 };
@@ -125,7 +140,8 @@ Strac.Story.prototype = {
 };
 
 /* Window Load Events */
-Event.observe(window, 'load', function(){
+document.observe('dom:loaded', function(){
   Strac.setupCloseButtonForElement($('notice'));
   Strac.setupCloseButtonForElement($('error'));
+  Strac.Iteration.drawWorkspaceVelocityMarkers();
 });

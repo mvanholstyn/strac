@@ -33,7 +33,7 @@ describe "/projects/workspace.html.erb" do
          :tag => 'div', 
          :handle => 'draggable', 
          :dropOnEmpty => true, 
-         :onChange =>  "Strac.Iteration.drawCurrentIterationVelocityMarker"
+         :onChange =>  "Strac.Iteration.drawWorkspaceVelocityMarkers"
       )
     end
   end

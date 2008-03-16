@@ -1,5 +1,4 @@
-<div class="section">
-
+<div class="section workspace">
   <table width="100%">
     <tr>
       <td><b>Workspace</b></td>
@@ -10,14 +9,10 @@
   <div id="iteration_nil" class="story_list">
   	<%= render :partial  => 'stories/list', :locals => { :stories => @stories } %>
   </div>
-  <% javascript_tag do %>
-    Strac.Iteration.drawCurrentIterationVelocityMarker();
-  <% end %>
-
 
   <%= sortable_element "iteration_nil",
                        :url => reorder_stories_path(@project), :method => :put,
                        :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, 
-                       :onChange =>  "Strac.Iteration.drawCurrentIterationVelocityMarker"
+                       :onChange =>  "Strac.Iteration.drawWorkspaceVelocityMarkers"
                         -%>
 </div>

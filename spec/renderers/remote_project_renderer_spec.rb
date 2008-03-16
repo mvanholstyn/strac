@@ -21,7 +21,7 @@ describe RemoteProjectRenderer do
     end
     
     it "tells the page to draw the current iteration velocity marker" do
-      @page.should_receive(:call).with("Strac.Iteration.drawCurrentIterationVelocityMarker")
+      @page.should_receive(:call).with("Strac.Iteration.drawWorkspaceVelocityMarkers")
       draw_current_iteration_velocity_marker
     end
   end

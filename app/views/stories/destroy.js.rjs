@@ -5,4 +5,4 @@ page.visual_effect :appear, :notice
 page.delay( 5 ) {  page.visual_effect :fade, :notice }
 
 page["story_#{@story.id}"].remove
-page.call "Strac.Iteration.drawCurrentIterationVelocityMarker"
+page.call "Strac.Iteration.drawWorkspaceVelocityMarkers"

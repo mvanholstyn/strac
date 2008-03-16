@@ -675,16 +675,25 @@ span.logged_in a{
 .story_list .velocity_marker .left{
   text-align: left;
   width: 50%;
-  background: url(/images/arrow_up.png) no-repeat;
-  padding-left: 15px;
+  background: url(/images/arrow_up.png) no-repeat center left;
+  padding-left: 13px;
 }
 
 .story_list .velocity_marker .right{
   text-align: right;
   width: 50%;
   float: right;
-  background: url(/images/arrow_down.png) no-repeat right;
+  background: url(/images/arrow_down.png) no-repeat center right;
   padding-right: 15px;
+}
+
+.story_list .future.velocity_marker {
+  background-color: #999;
+  color: #FFF;
+}
+
+.story_list .future.velocity_marker .left{
+  background: url(/images/arrow_down.png) no-repeat center left;
 }
 
 fieldset.search { 

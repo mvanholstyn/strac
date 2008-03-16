@@ -30,4 +30,4 @@ end
 
 page[:project_summary].replace :partial => "projects/summary", :locals => { :project => @project }
 page[:project_summary].replace :partial => "projects/summary", :locals => { :project => @project }
-page.call "Strac.Iteration.drawCurrentIterationVelocityMarker"
+page.call "Strac.Iteration.drawWorkspaceVelocityMarkers"

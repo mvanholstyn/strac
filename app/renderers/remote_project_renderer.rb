@@ -2,7 +2,7 @@ class RemoteProjectRenderer < RemoteSiteRenderer
   constructor :page, :project
   
   def draw_current_iteration_velocity_marker
-    @page.call "Strac.Iteration.drawCurrentIterationVelocityMarker"
+    @page.call "Strac.Iteration.drawWorkspaceVelocityMarkers"
   end
   
   def update_project_summary
