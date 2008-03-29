@@ -1,7 +1,5 @@
-.gitignore
 .DS_Store
 config/database.yml
-db/schema.rb
 log/*
 coverage/*
 nginx.conf
