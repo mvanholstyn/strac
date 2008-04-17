@@ -1,9 +1,5 @@
-You've been invited to the below project:
-  <%= @invitation.project.name %>
-
-To participate in this project please click the below link:
- <%= @invitation.accept_invitation_url %>
- 
-The sender of this invitation says:
+You've been invited to <%= @invitation.project.name %>!
 
 <%= @invitation.message %>
+
+To participate in this project, please visit <%= @invitation.accept_invitation_url %>

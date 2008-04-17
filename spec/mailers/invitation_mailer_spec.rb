@@ -23,7 +23,7 @@ describe InvitationMailer, "#create_invitation" do
   
   it "has a subject from the project" do
     create_invitation_email
-    @email.subject.should == "You've been invited to '#{@invitation.project.name}'!"
+    @email.subject.should == "You've been invited to #{@invitation.project.name}!"
   end
   
   it "contains the invitation message in the email body" do
