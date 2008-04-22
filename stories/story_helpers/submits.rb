@@ -36,6 +36,10 @@ module LwtTesting
     def submit_edit_phase_form(&blk)
       submit_form_by_id 'edit_form', &blk
     end
+    
+    def submit_login_form(&blk)
+      submit_form_by_id 'login_form', &blk
+    end
   end  
 end
 
