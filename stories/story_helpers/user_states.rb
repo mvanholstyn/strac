@@ -1,5 +1,9 @@
 module LwtTesting
   module UserStates
+    def a_user_at_the_login_page
+      get login_path
+    end
+
     def a_user_viewing_a_project(options={})
       reset!
       @__user_count ||= 0

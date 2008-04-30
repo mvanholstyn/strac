@@ -1,5 +1,21 @@
 module LwtTesting
   module Sees
+    def see_signup_form
+      response.should have_tag("form[action=?]", signup_path)
+    end
+    
+    def see_signup_or_login_page
+      response.should have_tag("form[action=?]", login_path)
+    end
+    
+    def see_logout_link
+      response.should have_tag("a[href=?]", logout_path)
+    end
+
+    def see_the_project_invitation_form
+      response.should have_tag("form#new_invitation")
+    end
+
     def see_empty_stories_list
       assert_select '.stories .story_card', false
     end
@@ -59,6 +75,23 @@ module LwtTesting
     def see_project_phase_description(description=nil)
       description ||= @project.description
       response.should have_text(description.to_regexp)
+    end
+
+    def in_stories_tag_for(tag_id, &blk)
+      assert_select %|#stories #tag_#{tag_id}.story_list|, &blk
+    end
+
+    def see_stories_under_tag(stories, tag_name)
+      tag = Tag.find_by_name(tag_name)
+      in_stories_tag_for(tag.id) do
+        stories.each do |story|
+          see_story_card_for(story.id)
+        end      
+      end
+    end
+  
+    def see_tag_header_for(text)
+      see_stories_header text
     end
     
   end

@@ -44,6 +44,14 @@ module LwtTesting
       click_link(new_project_phase_path(project))
     end
 
+    def click_on_invite_people_link(project)
+      click_link new_project_invitation_path(project)
+    end
+
+    def click_signup_link
+      click_link signup_path
+    end
+  
     def click_story(story)
       click_link
     end
