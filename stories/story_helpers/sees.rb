@@ -72,6 +72,23 @@ module LwtTesting
       description ||= @project.description
       response.should have_text(description.to_regexp)
     end
+
+    def in_stories_tag_for(tag_id, &blk)
+      assert_select %|#stories #tag_#{tag_id}.story_list|, &blk
+    end
+
+    def see_stories_under_tag(stories, tag_name)
+      tag = Tag.find_by_name(tag_name)
+      in_stories_tag_for(tag.id) do
+        stories.each do |story|
+          see_story_card_for(story.id)
+        end      
+      end
+    end
+  
+    def see_tag_header_for(text)
+      see_stories_header text
+    end
     
   end
 end
