@@ -1,6 +1,6 @@
 require File.expand_path(File.dirname(__FILE__) + "/helper")
 
-Story "Project Stats", %|
+Story "Project Stats w/Completed Stories", %|
   As a user 
   I should be able to view project statistics
   so that I can view important information about my project quickly.|, 
@@ -14,7 +14,7 @@ Story "Project Stats", %|
     Then "they will see the sum of total points for the project" 
     And "they will the correct number of completed points for the project" 
     And "they will see the correct number of remaining points for the project"
-    And "they will see one completed iterations"
+    And "they will see 1 completed iterations"
     And "they will see the sum of completed points for the iteration as the average velocity for the project" 
     And "they will see the correct number of estimated remaining iterations for the project"
     And "they will see the correct estimated completion date based on a 1 week iteration" 

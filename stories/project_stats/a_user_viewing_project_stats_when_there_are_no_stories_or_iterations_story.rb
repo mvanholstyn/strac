@@ -1,41 +1,23 @@
 require File.expand_path(File.dirname(__FILE__) + "/helper")
 
-Story "Project Stats", %|
+Story "Project Stats w/No Stories or Iterations", %|
   As a user 
   I should be able to view project statistics
   so that I can view important information about my project quickly.|, 
+  :steps_for => [:a_user_viewing_project_stats_when_there_are_no_stories_or_iterations, :project_stats],
   :type => RailsStory do
   extend ProjectStatsStoryHelper
 
   Scenario "a project with no stories or iterations" do
-    Given "there are no iterations or stories which belong to that project" do
-      destroy_stories_and_iterations
-      @project = Generate.project
-    end
-    When "a user views the project summary" do
-      a_user_viewing_a_project :project => @project
-    end
-    Then "they will see zero total points for the project" do
-      see_zero_total_points
-    end
-    And "they will see zero completed points for the project" do
-      see_zero_completed_points
-    end
-    And "they will see zero remaining points for the project" do
-      see_zero_remaining_points
-    end
-    And "they will see zero completed iterations" do
-      see_zero_completed_iterations
-    end
-    And "they will see zero as the average velocity for the project" do
-      see_zero_average_velocity
-    end
-    And "they will zero estimated remaining iterations for the project" do
-      see_zero_estimated_remaining_iterations
-    end
-    And "they will see today the estimated completion date for the project" do
-      see_today_as_the_estimated_completion_date
-    end
+    Given "there are no iterations or stories which belong to that project"
+    When "a user views the project summary" 
+    Then "they will see 0 total points for the project" 
+    And "they will see 0 completed points for the project"
+    And "they will see 0 remaining points for the project"
+    And "they will see 0 completed iterations"
+    And "they will see 0 as the average velocity for the project"
+    And "they will see 0 estimated remaining iterations for the project" 
+    And "they will see today the estimated completion date for the project"
   end
 
 end

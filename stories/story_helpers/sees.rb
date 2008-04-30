@@ -7,6 +7,10 @@ module LwtTesting
     def see_signup_or_login_page
       response.should have_tag("form[action=?]", login_path)
     end
+    
+    def see_logout_link
+      response.should have_tag("a[href=?]", logout_path)
+    end
 
     def see_the_project_invitation_form
       response.should have_tag("form#new_invitation")

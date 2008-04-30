@@ -13,9 +13,14 @@ steps_for :project_stats do
     @phase = Generate.phase "Another Day Another Phase", :description => "woohah"
     @story = Generate.story :summary => "story1", :project => @phase.project, :points => 10
   end
+  Given "there is a project with no stories or iterations" do
+    destroy_stories_and_iterations
+    @project = Generate.project    
+  end
 
 
   When "a user views the project summary" do
+    (click_logout_link rescue nil)
     a_user_viewing_a_project :project => @project
   end
   When "they move the completed story to a phase" do
@@ -38,17 +43,23 @@ steps_for :project_stats do
     updated_remaining_points = grab_project_summary(".remaining_points").to_i
     updated_remaining_points.should == @remaining_points - @story.points 
   end
-  Then "they will see zero completed iterations" do
-    see_zero_completed_iterations
+  Then /they will see (\d+) completed iteration.?/ do |num|
+    see_completed_iterations num
   end
-  Then "they will see zero completed points for the project" do
-    see_completed_points 0
+  Then /they will see (\d+) completed points for the project/ do |num|
+    see_completed_points num
   end
-  Then "they will see zero as the average velocity for the project" do
-    see_zero_average_velocity
+  Then /they will see (\d+) remaining points for the project/ do |num|
+    see_remaining_points num
   end
-  Then "they will zero estimated remaining iterations for the project" do
-    see_zero_estimated_remaining_iterations
+  Then /they will see (\d+) total points for the project/ do |num|
+    see_total_points num
+  end
+  Then /they will see (\d+) as the average velocity for the project/ do |num|
+    see_average_velocity num
+  end
+  Then /they will see (\d+) estimated remaining iterations for the project/ do |num|
+    see_estimated_remaining_iterations num
   end
   Then "they will see today the estimated completion date for the project" do
     see_today_as_the_estimated_completion_date
@@ -66,5 +77,4 @@ steps_for :project_stats do
     see_remaining_points @stories.sum(&:points)
   end
 
-  
 end

@@ -1,9 +1,9 @@
 require File.expand_path(File.dirname(__FILE__) + "/helper")
 
-Story "Project Stats", %|
+Story "Project Stats Summary", %|
   As a user 
   I should be able to create and assign stories to phases 
-  so that I can manage a wishlist of features for the future.|, 
+  so that I can manage a wishlist of features for the future2.|, 
   :steps_for => [:navigation, :project_stats],
   :type => RailsStory do
     

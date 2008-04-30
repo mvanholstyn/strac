@@ -14,7 +14,7 @@ steps_for :a_user_viewing_project_stats_when_there_are_completed_stories_added_t
     @remaining_points = @incomplete_stories.sum(&:points)
     see_remaining_points @remaining_points
   end
-  Then "they will see one completed iterations" do
+  Then "they will see 1 completed iterations" do
     see_completed_iterations 1
   end
   Then "they will see the sum of completed points for the iteration as the average velocity for the project" do
