@@ -12,7 +12,7 @@ Story "Project Stats", %|
       destroy_stories_and_iterations
       @project = Generate.project
     end
-    When "the user views the project summary" do
+    When "a user views the project summary" do
       a_user_viewing_a_project :project => @project
     end
     Then "they will see zero total points for the project" do

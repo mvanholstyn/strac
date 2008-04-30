@@ -15,7 +15,7 @@ Story "Project Stats", %|
       @stories = generate_unestimated_stories_for_project @project
       move_stories_to_iteration @stories, @iteration
     end
-    When "the user views the project summary" do
+    When "a user views the project summary" do
       a_user_viewing_a_project :project => @project
     end
     Then "they will see zero total points for the project" do
