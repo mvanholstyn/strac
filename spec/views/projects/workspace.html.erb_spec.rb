@@ -15,7 +15,7 @@ describe "/projects/workspace.html.erb" do
   
   it "renders a link to create a story for the project" do
     render_it
-    response.should have_remote_link(:href => new_story_path(@project))
+    response.should have_remote_link(:onclick => new_story_path(@project))
   end
   
   it "renders the stories/list partial" do

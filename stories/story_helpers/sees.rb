@@ -12,6 +12,17 @@ module LwtTesting
       response.should have_tag("a[href=?]", logout_path)
     end
 
+    def see_link_to_project(project)
+      response.should have_tag('a[href=?]', project_path(project))
+    end
+
+    def see_link_to_destroy_project(project)
+      response.should have_remote_link(
+        :href => project_path(project),
+        :onclick=>"('name', '_method'); m.setAttribute('value', 'delete')"
+      )
+    end
+
     def see_the_project_invitation_form
       response.should have_tag("form#new_invitation")
     end

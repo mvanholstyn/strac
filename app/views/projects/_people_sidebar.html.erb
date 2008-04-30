@@ -1,5 +1,5 @@
 <ul>
-  <% for user in project.users.find(:all) -%>
+  <% project.users.each do |user| -%>
     <li>
       <%= user.full_name %>
     </li>

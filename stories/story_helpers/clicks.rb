@@ -26,10 +26,29 @@ module LwtTesting
       get path, {}, { 'HTTP_REFERER' => request.request_uri }
       follow_all_redirects
     end
-
-
+    
+    def click_dashboard_link
+      click_link dashboard_path
+    end
+    
+    def click_projects_link
+      click_link projects_path
+    end
+    
+    def click_new_project_link
+      click_link new_project_path
+    end
+    
     def click_project_link_for(project)
       click_link project_path(project)
+    end
+    
+    def click_edit_project_link(project)
+      click_link edit_project_path(project)
+    end
+    
+    def click_destroy_project_link(project)
+      click_link project_path(project), ".destroy"
     end
 
     def click_phase_link(phase)

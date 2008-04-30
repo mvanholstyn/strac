@@ -36,6 +36,17 @@ module LwtTesting
     def submit_edit_phase_form(&blk)
       submit_form_by_id 'edit_form', &blk
     end
+
+    def submit_new_project_form(&blk)
+      submit_form_by_id 'new_project' do |form|
+        form.project.name = "some project"
+        yield form if block_given?
+      end
+    end
+    
+    def submit_project_form(project, &blk)
+      submit_form_by_id dom_id(project, 'edit'), &blk
+    end
     
     def submit_login_form(&blk)
       submit_form_by_id 'login_form', &blk

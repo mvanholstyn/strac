@@ -1,0 +1,35 @@
+MhsTesting
+==========
+
+This plugin is a compilation of testing helpers that we use at Mutually Human Software. Documentation
+may be sparse.
+
+If you wish to use the selenium test helpers please see README.Selenium.
+
+ First, in config/environment.rb find this line:
+  require File.join(File.dirname(__FILE__), 'boot')
+
+and put this line after it:
+  require File.join(RAILS_ROOT, %w[vendor plugins mhs_testing lib selenium at_exit])
+
+Secondly, put this in spec_helper.rb:
+  require File.join(RAILS_ROOT, *%w[vendor plugins mhs_testing lib selenium example_group])
+
+Thirdly, make a config/selenium/ directory and put osx.rb file in there with the below contents:
+  Selenium::configure do |config|
+    config.browser 'firefox'
+    # config.browser 'safari'
+    # config.browser 'iexplore'
+
+    # config.close_browser_at_exit = true
+    config.stop_selenium_server = false
+    config.stop_test_server = false
+  end
+
+Lastly, put spec files in spec/selenium/ directory and then all of your describes will automatically run in "selenium" test mode.
+
+Examples
+=======
+See README.examples
+
+Copyright (c) 2007 Mutually Human Software, released under the MIT license

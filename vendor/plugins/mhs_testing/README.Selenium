@@ -1,0 +1,52 @@
+MhsTesting provides two distinct selenium helpers:
+ - SeleniumExampleGroup
+ - RailsSeleniumStory
+ 
+In order to use either of these you'll need to perform the three following steps. 
+
+First, in RAILS_ROOT/config/environment.rb find this line:
+  require File.join(File.dirname(__FILE__), 'boot')
+
+and put this line after it:
+  require File.join(RAILS_ROOT, %w[vendor plugins mhs_testing lib selenium at_exit])
+
+Secondly, make a RAILS_ROOT/config/selenium/ directory and put osx.rb file in there with the below contents:
+  Selenium::configure do |config|
+    config.browser 'firefox'
+    # config.browser 'safari'
+    # config.browser 'iexplore'
+
+    # config.close_browser_at_exit = true
+    config.stop_selenium_server = false
+    config.stop_test_server = false
+  end
+  
+And lastly, you will need to tell RSpec to not use transactional fixtures. Put the below in stories/helper.rb. This is currently done putting the below in your stories/helper.rb file:
+
+  class ActiveRecordSafetyListener
+    include Singleton
+    def scenario_started(*args)
+      # override this so we don't use transactions
+    end
+
+    def scenario_succeeded(*args)
+      # override this so we don't use transactions
+    end
+    alias :scenario_pending :scenario_succeeded
+    alias :scenario_failed :scenario_succeeded
+  end
+
+
+SeleniumExampleGroup
+====================
+The SeleniumExampleGroup give you the ability to write normal RSpec specifications that use Selenium. These should go inside of spec/selenium/. They will automatically be up as Selenium-based specifications.
+
+RailsSeleniumStory
+====================
+The RailsSeleniumStory give you the ability to write higher level integration/user-acceptance-test stories with Selenium. To use these give your story a type of RailsSeleniumStory. A group of helpers have been provided inside of the MhsTesting plugin, just look in the mhs_testing/lib/selenium/helpers/ directory.
+
+Be sure to add the following line inside of your stories/helper.rb file:
+   Spec::Story::Runner.register_listener RailsSeleniumStoryListener.new
+
+In order to run the stories be sure to start the selenium and test servers. This can be done with the below rake command:
+  rake spec:selenium:server:start
