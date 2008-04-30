@@ -1,5 +1,13 @@
 module LwtTesting
   module Sees
+    def see_signup_or_login_page
+      response.should have_tag("form#login_form")
+    end
+
+    def see_the_project_invitation_form
+      response.should have_tag("form#new_invitation")
+    end
+
     def see_empty_stories_list
       assert_select '.stories .story_card', false
     end
