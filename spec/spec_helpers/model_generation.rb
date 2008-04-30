@@ -76,6 +76,14 @@ class Generate
       end
     end
   end
+
+  def self.stories(attributes={})
+    stories = []
+    attributes.delete(:count).times do 
+      stories << Generate.story(attributes)
+    end
+    stories
+  end
   
   def self.story(attributes={})
     @story_count ||= 0

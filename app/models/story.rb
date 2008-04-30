@@ -81,7 +81,7 @@ class Story < ActiveRecord::Base
   
   def self.find_backlog options = {}
     with_scope :find => options do
-      find :all, :conditions => { :bucket_id => nil }
+      find :all, :conditions => "bucket_id IS NULL"
     end
   end
 end
