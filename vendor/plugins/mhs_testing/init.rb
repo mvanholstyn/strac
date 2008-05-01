@@ -1,5 +1,4 @@
 if RAILS_ENV == "test"
-  require 'constructor'
   config.after_initialize do
     require 'spec'
     require 'spec/rails'
