@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../test_helper') 
+require File.expand_path(File.dirname(__FILE__) + '/../spec_helper') 
 
 #
 # This excercises the full set of migrations for your Rails app.
