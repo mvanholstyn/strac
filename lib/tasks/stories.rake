@@ -1,9 +1,5 @@
-namespace :spec do
-  task :stories do
-    system "ruby stories/all.rb"
-  end
-end
+task :ci => [:spec, :stories]
 
-task :spec do
-  Rake::Task['spec:stories'].invoke
+task :stories do
+  system "ruby stories/all.rb"
 end
