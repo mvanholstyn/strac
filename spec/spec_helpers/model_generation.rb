@@ -121,8 +121,10 @@ class Generate
     end
     
     User.create!(
-      options.merge(
+      options.reverse_merge(
         :email_address => email_address,
+        :first_name => "Fname#{@user_count}",
+        :last_name => "Lname#{@user_count}",
         :password => "password",
         :password_confirmation => "password",
         :active => true
