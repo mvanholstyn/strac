@@ -1,6 +1,6 @@
 steps_for :project_stats do
   Given "a completed story exists that does not belong to a phase" do
-    @phase = Generate.phase "Another Day Another Phase", :description => "woohah"
+    @phase = Generate.phase :name => "Another Day Another Phase", :description => "woohah"
     @story = Generate.story :summary => "story1", :project => @phase.project, :points => 10, :status => Status.complete
   end
   Given "a user viewing that story's project" do
@@ -10,7 +10,7 @@ steps_for :project_stats do
     @remaining_points = grab_project_summary(".remaining_points").to_i
   end
   Given "an incomplete story exists that has been estimated" do
-    @phase = Generate.phase "Another Day Another Phase", :description => "woohah"
+    @phase = Generate.phase :name => "Another Day Another Phase", :description => "woohah"
     @story = Generate.story :summary => "story1", :project => @phase.project, :points => 10
   end
   Given "there is a project with no stories or iterations" do

@@ -19,7 +19,7 @@ steps_for :a_user_logging_in do
     get login_path
   end
   When "they login successfully" do
-    @user = Generate.active_user("newuser3@jones.com", :password=>"password", :password_confirmation=>"password")
+    @user = Generate.active_user(:email_address => "newuser3@jones.com", :password=>"password", :password_confirmation=>"password")
     submit_login_form do |form|
       form.user.email_address = @user.email_address
       form.user.password = "password"

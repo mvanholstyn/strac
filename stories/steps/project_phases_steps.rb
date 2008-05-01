@@ -3,7 +3,7 @@ steps_for :project_phases do
     a_user_viewing_the_phase_list_for_a_project
   end  
   Given "a phase with no stories exists in the system" do
-    @phase = Generate.phase "Phazaloopa", :description => "El Phazaloopa"
+    @phase = Generate.phase :name => "Phazaloopa", :description => "El Phazaloopa"
     @phase.stories.should be_empty    
   end
   Given "a story exists in the system for the same project" do

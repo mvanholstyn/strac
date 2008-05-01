@@ -10,7 +10,7 @@ require dir + "/../spec/spec_helpers/model_generation"
 Dir[dir + "/story_helpers/**/*.rb"].each { |f| require f }
 Dir["#{dir}/steps/**/*.rb"].each { |f| require f }
 
-Generate.group("Developer")
+Generate.group(:name => "Developer")
 
 class RailsStory
   include ActionView::Helpers::RecordIdentificationHelper

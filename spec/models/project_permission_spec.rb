@@ -12,9 +12,9 @@ end
 
 describe ProjectPermission, "User that has permissions on two projects" do
   before do
-    @group = Generate.group("GroupA")
-    @user = Generate.user("jabba the hut", :group => @group)
-    @projects = [ Generate.project("ProjectA"), Generate.project("ProjectB") ]
+    @group = Generate.group(:name => "GroupA")
+    @user = Generate.user(:email_address => "jabba the hut", :group => @group)
+    @projects = [ Generate.project(:name => "ProjectA"), Generate.project(:name => "ProjectB") ]
     @projects.each do |project|
       project.users << @user
     end
@@ -38,9 +38,9 @@ end
 
 describe ProjectPermission, "User without project permissions" do
   before do
-    @group = Generate.group("GroupA")
-    @user = Generate.user("jabba the hut", :group => @group)
-    @projects = [ Generate.project("ProjectA"), Generate.project("ProjectB") ]
+    @group = Generate.group(:name => "GroupA")
+    @user = Generate.user(:email_address => "jabba the hut", :group => @group)
+    @projects = [ Generate.project(:name => "ProjectA"), Generate.project(:name => "ProjectB") ]
   end
   
   it "should return nil when no project permission is found for a given project" do

@@ -2,9 +2,9 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe InvitationsController, "#new" do
   before do
-    @project = Generate.project "Project A"
+    @project = Generate.project :name => "Project A"
     
-    @user = Generate.user "user@exmaple.com"
+    @user = Generate.user :email_address => "user@exmaple.com"
     @user.projects << @project
     
     @invitation = stub("Invitation")

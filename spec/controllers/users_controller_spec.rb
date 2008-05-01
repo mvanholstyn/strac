@@ -35,7 +35,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 #   end
 #   
 #   before do
-#     @user = Generate.user("bob@example.com")
+#     @user = Generate.user(:email_address => "bob@example.com")
 #     InvitationManager.stub!(:accept_pending_invitations)
 #   end
 #   

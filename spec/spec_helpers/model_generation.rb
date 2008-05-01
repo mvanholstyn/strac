@@ -1,13 +1,15 @@
 class Generate
 
-  def self.active_user(email, attributes={})
-    user email, attributes.merge(:active=>true)
+  def self.active_user(options={})
+    Generate.user options.merge(:active=>true)
   end
   
-  def self.activity(action, attributes={})
-    raise ArgumentError, "requires actor and affected" unless attributes[:actor] && attributes[:affected]
-    attributes[:actor] = Generate.user(attributes[:actor]) unless attributes[:actor].is_a?(ActiveRecord::Base)
-    Activity.create!(attributes.merge(:action=>action))
+  def self.activity(options={})
+    @activity_count ||= 0
+    action = options[:action] || "activity #{@activity_count+=1}"
+    raise ArgumentError, "requires actor and affected" unless options[:actor] && options[:affected]
+    options[:actor] = Generate.user(:email_address => options[:actor]) unless options[:actor].is_a?(ActiveRecord::Base)
+    Activity.create!(options.merge(:action=>action))
   end
 
   def self.bucket(options={})
@@ -17,108 +19,121 @@ class Generate
     Bucket.create!(:name => name, :project_id => project_id)
   end
       
-  def self.group(name, attributes={})
-    privilege = Generate.privilege("user")
-    group = Group.create!(attributes.merge(:name=>name))
-    
+  def self.group(options={})
+    @group_count ||= 0
+    name = options[:name] || "Group #{@group_count+=1}"
+    privilege = Generate.privilege(:name => "user")
+    group = Group.create!(options.merge(:name=>name))
     group.privileges << privilege
-    
     group
   end
 
-  def self.invitation(recipient, attributes={})
-    if attributes[:project].nil?
-      attributes[:project] = Generate.project("Invitation Project")
+  def self.invitation(options={})
+    @invitation_count ||= 0
+    recipient = options[:recipient] || "invitation_recipient#{@invitation_count+=1}@example.com"
+    if options[:project].nil?
+      options[:project] = Generate.project(:name => "Invitation Project")
     end
-    if attributes[:inviter].nil?
+    if options[:inviter].nil?
       @inviter_count ||= 0
-      attributes[:inviter] = Generate.user(
-        "inviter#{@inviter_count+=1}@foo.com", 
+      options[:inviter] = Generate.user(
+        :email_address => "inviter#{@inviter_count+=1}@foo.com", 
         :first_name => "Henry", 
         :last_name => "James")
     end
     
-    Invitation.create!(attributes.reverse_merge(:recipient => recipient, :message => "Come and join!"))
+    Invitation.create!(options.reverse_merge(:recipient => recipient, :message => "Come and join!"))
   end
 
-  def self.iteration(name, attributes={})
+  def self.iteration(options={})
     @iteration_count = 0
-    attributes[:project] ||= Generate.project "Project for generated iteration #{@iteration_count+=1}"
-    attributes[:start_date] = Date.today unless attributes[:start_date]
-    attributes[:end_date] = attributes[:start_date] + 6.days unless attributes.has_key?(:end_date)
-    Iteration.create!(attributes.merge(:name => name))
+    options[:project] ||= Generate.project :name => "Project for generated iteration #{@iteration_count+=1}"
+    options[:start_date] = Date.today unless options[:start_date]
+    options[:end_date] = options[:start_date] + 6.days unless options.has_key?(:end_date)
+    Iteration.create!(options.merge(:name => name))
   end
   
-  def self.project_permission(attributes)
-    raise ArgumentError, "requires project" unless attributes[:project]
-    raise ArgumentError, "requires accessor" unless attributes[:accessor]
-    ProjectPermission.create! :project => attributes[:project], :accessor => attributes[:accessor]
+  def self.project_permission(options)
+    raise ArgumentError, "requires :project" unless options[:project]
+    raise ArgumentError, "requires :accessor" unless options[:accessor]
+    ProjectPermission.create! :project => options[:project], :accessor => options[:accessor]
   end
   
-  def self.privilege(name, attributes={})
-    Privilege.create!(attributes.merge(:name=>name))
+  def self.privilege(options={})
+    raise ArgumentError, "requires :name" unless options[:name]
+    Privilege.create!(options.merge(:name=>options[:name]))
   end
   
-  def self.phase(name, attributes={})
-    if attributes[:project].nil?
-      attributes[:project] = Generate.project("Project for phase #{name}")
+  def self.phase(options={})
+    @phase_count ||= 0
+    name = options[:name] || "phase #{phase_count+=1}"
+    if options[:project].nil?
+      options[:project] = Generate.project(:name => "Project for phase #{name}")
     end
-    Phase.create!(attributes.merge(:name=>name))
+    Phase.create!(options.merge(:name=>name))
   end
   
-  def self.project(name=nil, attributes={})
+  def self.project(options={})
     @project_count ||= 0
-    name ||= "Project #{@project_count+=1}"
-    members = attributes.delete(:members)
-    returning Project.create!(attributes.merge(:name=>name)) do |project|
+    name = options[:name] || "Project #{@project_count+=1}"
+    members = options.delete(:members)
+    returning Project.create!(options.merge(:name=>name)) do |project|
       if members
         members.each { |member| Generate.project_permission(:project => project, :accessor => member)}
       end
     end
   end
 
-  def self.stories(attributes={})
+  def self.stories(options={})
     stories = []
-    attributes.delete(:count).times do 
-      stories << Generate.story(attributes)
+    options.delete(:count).times do 
+      stories << Generate.story(options)
     end
     stories
   end
   
-  def self.story(attributes={})
+  def self.story(options={})
     @story_count ||= 0
-    summary ||= attributes.delete(:summary) || "Summary #{@story_count+=1}"
-    if attributes[:project].nil? 
-      if attributes[:bucket].nil?
-        attributes[:project] = Generate.project("Project for #{summary}")
+    summary ||= options.delete(:summary) || "Summary #{@story_count+=1}"
+    if options[:project].nil? 
+      if options[:bucket].nil?
+        options[:project] = Generate.project(:name => "Project for #{summary}")
       else
-        attributes[:project] = attributes[:bucket].project
+        options[:project] = options[:bucket].project
       end
     end
-    Story.create!(attributes.merge(:summary => summary))
+    Story.create!(options.merge(:summary => summary))
   end
   
-  def self.time_entry(hours, date, attributes={})
-    TimeEntry.create!(attributes.merge(:hours => hours, :date => date))
+  def self.time_entry(options={})
+    raise ArgumentError, "requires :hours" unless options[:hours]
+    raise ArgumentError, "requires :date" unless options[:date]
+    TimeEntry.create!(options)
   end
   
-  def self.user(email_address=nil, attributes={})
+  def self.user(options={})
     @user_count ||= 0
-    email_address ||= "generic#{@user_count+=1}@example.com"
-    if attributes[:group].nil?
-      attributes[:group] = Generate.group("some group")
-    elsif ! attributes[:group].is_a?(Group)
-      attributes[:group] = Generate.group(attributes[:group])
+    email_address = options[:email_address] || "generic#{@user_count+=1}@example.com"
+    if options[:group].nil?
+      options[:group] = Generate.group(:name => "some group")
+    elsif ! options[:group].is_a?(Group)
+      options[:group] = Generate.group(:name => options[:group])
     end
     
     User.create!(
-      attributes.merge(
+      options.merge(
         :email_address => email_address,
         :password => "password",
         :password_confirmation => "password",
         :active => true
       )
     )
+  end
+  
+  def self.users(num)
+    returning([]) do |arr|
+      num.times{ arr << Generate.user }
+    end
   end
   
 end

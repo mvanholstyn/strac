@@ -69,7 +69,7 @@ end
 describe Project, "#total_points" do
   before do
     Story.delete_all
-    @project = Generate.project "foo"
+    @project = Generate.project :name => "foo"
     @stories = [
       Generate.story(:summary => "story 1", :project => @project, :points => 1),
       Generate.story(:summary => "story 2", :project => @project, :points => 2),
@@ -107,7 +107,7 @@ describe Project, "#total_points" do
   
   describe "with stories that belong to an iteration" do
     it "includes the points that belong to stories attached to an iteration in the returned sum" do
-      iteration = Generate.iteration "iteration1", :project => @project
+      iteration = Generate.iteration :name => "iteration1", :project => @project
       story = Generate.story :summary => "story that belongs to iteration", :project => @project, :bucket => iteration, :points => 10
       @project.total_points.should == @stories.map(&:points).sum + story.points
     end
@@ -115,7 +115,7 @@ describe Project, "#total_points" do
   
   describe "with stories that belong to a phase" do
     it "does not include points that belong to stories attached to a phase in the returned sum" do
-      phase = Generate.phase "phase1", :project => @project
+      phase = Generate.phase :name => "phase1", :project => @project
       story = Generate.story :summary => "story that belongs to phase", :project => @project, :bucket => phase, :points => 10
       @project.total_points.should == @stories.map(&:points).sum
     end
@@ -125,7 +125,7 @@ end
 describe Project, "#completed_points" do
   before do
     Story.delete_all
-    @project = Generate.project "foo"
+    @project = Generate.project :name => "foo"
     @completed_stories = [
       Generate.story(:summary => "story 1", :project => @project, :points => 1, :status => Status.complete),
       Generate.story(:summary => "story 2", :project => @project, :points => 2, :status => Status.complete),
@@ -160,14 +160,14 @@ describe Project, "#completed_points" do
 
   describe "with stories that belong to an iteration" do
     it "includes the points that belong to completed stories attached to an iteration in the returned sum" do
-      iteration = Generate.iteration "iteration1", :project => @project
+      iteration = Generate.iteration :name => "iteration1", :project => @project
       story = Generate.story :summary => "story that belongs to iteration", :project => @project, :bucket => iteration, :points => 10, :status => Status.complete
       sum = @completed_stories.map(&:points).sum + story.points
       @project.completed_points.should == sum
     end
     
     it "ignores points that belong to incomplete stories attached to an iteration in the returned sum" do
-      iteration = Generate.iteration "iteration1", :project => @project
+      iteration = Generate.iteration :name => "iteration1", :project => @project
       story = Generate.story :summary => "story that belongs to iteration", :project => @project, :bucket => iteration, :points => 10
       @project.completed_points.should == @completed_stories.map(&:points).sum
     end
@@ -175,7 +175,7 @@ describe Project, "#completed_points" do
   
   describe "with stories that belong to a phase" do
     it "ignores points that belong to stories attached to a phase in the returned sum" do
-      phase = Generate.phase "phase1", :project => @project
+      phase = Generate.phase :name => "phase1", :project => @project
       story = Generate.story :summary => "story that belongs to phase", :project => @project, :bucket => phase, :points => 10
       story = Generate.story :summary => "story2 that belongs to phase", :project => @project, :bucket => phase, :points => 10, :status => Status.complete
       @project.completed_points.should == @completed_stories.map(&:points).sum
@@ -186,7 +186,7 @@ end
 describe Project, "#remaining_points" do
   before do
     Story.delete_all
-    @project = Generate.project "foo"
+    @project = Generate.project :name => "foo"
     @complete_stories = [
       Generate.story(:summary => "story 1", :project => @project, :points => 1, :status => Status.complete),
       Generate.story(:summary => "story 2", :project => @project, :points => 2, :status => Status.complete),
@@ -227,7 +227,7 @@ describe Project, "#remaining_points" do
   
   describe "with stories that belong to an iteration" do
     it "includes points that belong to incomplete stories attached to an iteration in the returned sum" do
-      iteration = Generate.iteration "iteration1", :project => @project
+      iteration = Generate.iteration :name => "iteration1", :project => @project
       story = Generate.story :summary => "story that belongs to iteration", :project => @project, :bucket => iteration, :points => 10
       @project.remaining_points.should == @remaining_stories.map(&:points).sum + story.points
     end
@@ -235,7 +235,7 @@ describe Project, "#remaining_points" do
   
   describe "with stories that belong to a phase" do
     it "ignores points that belong to stories attached to a phase in the returned sum" do
-      phase = Generate.phase "phase1", :project => @project
+      phase = Generate.phase :name => "phase1", :project => @project
       story = Generate.story :summary => "story that belongs to phase", :project => @project, :bucket => phase, :points => 10
       @project.remaining_points.should == @remaining_stories.map(&:points).sum
     end
@@ -246,11 +246,11 @@ describe Project, '#completed_iterations' do
   before do
     @project = Project.create :name=>"Project w/Activities"
     @completed_iterations = [
-      Generate.iteration("iteration 1", :project => @project, :start_date => 4.weeks.ago, :end_date => 3.weeks.ago),
-      Generate.iteration("iteration 2", :project => @project, :start_date => 2.weeks.ago, :end_date => 1.week.ago)
+      Generate.iteration(:name => "iteration 1", :project => @project, :start_date => 4.weeks.ago, :end_date => 3.weeks.ago),
+      Generate.iteration(:name => "iteration 2", :project => @project, :start_date => 2.weeks.ago, :end_date => 1.week.ago)
     ]
-    Generate.iteration "iteration 3", :project => @project, :start_date => Time.now, :end_date => 1.week.from_now
-    Generate.iteration "iteration 4", :project => @project, :start_date => 2.weeks.from_now, :end_date => 3.weeks.from_now
+    Generate.iteration :name => "iteration 3", :project => @project, :start_date => Time.now, :end_date => 1.week.from_now
+    Generate.iteration :name => "iteration 4", :project => @project, :start_date => 2.weeks.from_now, :end_date => 3.weeks.from_now
   end
 
   it "returns only iterations whose end_date are before today" do
@@ -301,10 +301,10 @@ end
 
 describe Project, "iterations_ordered_by_start_date" do
   before do
-    @project = Generate.project "ProjectA"
-    @iteration1 = (Generate.iteration "Iteration5", :project => @project, :start_date => Date.today - 3.weeks)
-    @iteration3 = (Generate.iteration "Iteration5", :project => @project, :start_date => Date.today - 1.week)
-    @iteration2 = (Generate.iteration "Iteration5", :project => @project, :start_date => Date.today - 2.weeks)
+    @project = Generate.project :name => "ProjectA"
+    @iteration1 = (Generate.iteration :name => "Iteration5", :project => @project, :start_date => Date.today - 3.weeks)
+    @iteration3 = (Generate.iteration :name => "Iteration5", :project => @project, :start_date => Date.today - 1.week)
+    @iteration2 = (Generate.iteration :name => "Iteration5", :project => @project, :start_date => Date.today - 2.weeks)
     @project.iterations = [ @iteration1, @iteration3, @iteration2 ]
     @project.save!
   end
@@ -316,8 +316,8 @@ end
 
 describe Project, "#backlog_stories" do
   before do
-    @project = Generate.project "ProjectA"
-    @iteration = Generate.iteration "Iteration1", :project => @project
+    @project = Generate.project :name => "ProjectA"
+    @iteration = Generate.iteration :name => "Iteration1", :project => @project
     
     @story1 = Generate.story :summary => "story1", :project => @project
     @story2 = Generate.story :summary => "story2", :project => @project
@@ -332,7 +332,7 @@ end
 
 describe Project, "#backlog_iteration" do
   before do
-    @project = Generate.project "ProjectA"
+    @project = Generate.project :name => "ProjectA"
     @backlog = @project.backlog_iteration
   end
   
@@ -350,7 +350,7 @@ end
 describe Project, '#update_members' do
   before do
     @members = [ Generate.user, Generate.user, Generate.user ]
-    @project = Generate.project "Foo", :members => @members
+    @project = Generate.project :name => "Foo", :members => @members
     @project.users.should == @members
   end
   
@@ -452,9 +452,9 @@ end
 describe Project, "#iterations" do
   before do
     @project = Generate.project
-    @old_iteration = Generate.iteration "Iteration 1", :project => @project, :start_date => 3.weeks.ago, :end_date => 2.weeks.ago
-    @previous_iteration = Generate.iteration "Iteration 2", :project => @project, :start_date => 2.weeks.ago, :end_date => 1.weeks.ago
-    @current_iteration = Generate.iteration "Iteration 3", :project => @project, :start_date => 1.weeks.ago, :end_date => nil
+    @old_iteration = Generate.iteration :name => "Iteration 1", :project => @project, :start_date => 3.weeks.ago, :end_date => 2.weeks.ago
+    @previous_iteration = Generate.iteration :name => "Iteration 2", :project => @project, :start_date => 2.weeks.ago, :end_date => 1.weeks.ago
+    @current_iteration = Generate.iteration :name => "Iteration 3", :project => @project, :start_date => 1.weeks.ago, :end_date => nil
   end
 
   it "can generate a dummy backlog iteration" do

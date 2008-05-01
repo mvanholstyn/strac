@@ -25,8 +25,8 @@ describe TimeEntry do
   
   describe "#timeable - polymorphic association" do
     it "associates with another model" do
-      @user = Generate.user("Sally Jane")
-      @time_entry = Generate.time_entry(10.hours, Time.now, :timeable=>@user)
+      @user = Generate.user(:email_address => "Sally Jane")
+      @time_entry = Generate.time_entry(:hours => 10.hours, :date => Date.today, :timeable=>@user)
       @time_entry.timeable.should be(@user)
     end
   end

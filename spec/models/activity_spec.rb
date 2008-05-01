@@ -39,8 +39,8 @@ describe Activity do
   
   describe "#affected - polymorphic association" do
     it "associates with another model" do
-      @user = Generate.user("Sally Jane")
-      @activity = Generate.activity("some action", :actor=>"some user", :affected=>@user)
+      @user = Generate.user(:email_address => "Sally Jane")
+      @activity = Generate.activity(:action => "some action", :actor=>"some user", :affected=>@user)
       @activity.affected.should be(@user)
     end
   end

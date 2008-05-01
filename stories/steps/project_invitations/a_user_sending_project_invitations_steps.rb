@@ -34,7 +34,7 @@ steps_for :a_user_sending_project_invitations do
     go_to_the_dashboard
   end
   When "they click on the invitation acceptance link" do
-    @user_accepting_the_project_invitation = Generate.user("bob@example.com")
+    @user_accepting_the_project_invitation = Generate.user(:email_address => "bob@example.com")
     invitations = Invitation.find(:all)
     get login_url(:code => invitations.first.code)
   end

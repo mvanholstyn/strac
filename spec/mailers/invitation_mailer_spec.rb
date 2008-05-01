@@ -8,7 +8,7 @@ describe InvitationMailer, "#create_invitation" do
   end
   
   before do
-    @invitation = Generate.invitation("joe@foo.com")
+    @invitation = Generate.invitation(:recipient => "joe@foo.com")
   end
   
   it "sends the email to invitation's recipient" do
@@ -54,7 +54,7 @@ describe InvitationMailer, "#deliver_invitation" do
     ActionMailer::Base.perform_deliveries = true
     ActionMailer::Base.deliveries = []
 
-    @invitation = Generate.invitation("joe@foo.com")
+    @invitation = Generate.invitation(:recipient => "joe@foo.com")
     @invitation.accept_invitation_url = "some invitation url"
   end
 

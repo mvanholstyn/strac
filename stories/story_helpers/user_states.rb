@@ -7,9 +7,9 @@ module LwtTesting
     def a_user_who_just_logged_in(options={})
       reset!
       @__user_count ||= 0
-      options[:user] ||= Generate.user("joe#{@__user_count+=1}@blow.com")
+      options[:user] ||= Generate.user(:email_address => "joe#{@__user_count+=1}@blow.com")
       user = options[:user]
-  
+
       get login_path
       login_as user.email_address, "password"
       user
@@ -18,8 +18,8 @@ module LwtTesting
     def a_user_viewing_a_project(options={})
       reset!
       @__user_count ||= 0
-      options[:project] ||= Generate.project("ProjectA")
-      options[:user] ||= Generate.user("joe#{@__user_count+=1}@blow.com")
+      options[:project] ||= Generate.project(:name => "ProjectA")
+      options[:user] ||= Generate.user(:email_address => "joe#{@__user_count+=1}@blow.com")
       @project = options[:project]
       @user = options[:user]
       @user.projects << @project

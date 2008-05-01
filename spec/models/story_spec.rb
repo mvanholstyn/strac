@@ -29,8 +29,8 @@ describe Story do
   
   describe "#responsible_party - polymorphic association" do
     it "associates with another model" do
-      @user = Generate.user("some user")
-      @project = Generate.project("Some Project")
+      @user = Generate.user(:email_address => "some user")
+      @project = Generate.project(:name => "Some Project")
       @story = Generate.story(:summary => "story summary", :responsible_party => @user)
       @story.responsible_party.should be(@user)
     end
@@ -135,31 +135,4 @@ describe Story, "complete" do
     story = Story.new :status => statuses(:blocked)
     story.should be_incomplete
   end
-end
-
-describe Story, '.find_backlog' do
-=begin  def self.find_backlog options = {}
-    with_scope :find => options do
-      find :all, :conditions => "bucket_id IS NULL"
-    end
-  end
-=end
-
-  before do
-    bucket = Generate.bucket
-    @stories_without_a_bucket = Generate.stories :count => 2, :bucket => nil
-    @stories_with_a_bucket = Generate.stories :count => 2, :bucket => bucket
-  end
-
-  it "finds all stories which don't belong to a bucket" do
-    Story.find_backlog.should == @stories_without_a_bucket
-  end
-  
-  it "uses the passed in find options to help refine the search while still only including stories without a bucket" do
-    @stories_without_a_bucket.first.update_attribute(:description, "BAZ")
-    Story.find_backlog(
-      :conditions => "description = 'BAZ'"
-    ).should == [@stories_without_a_bucket.first]
-  end
-
 end

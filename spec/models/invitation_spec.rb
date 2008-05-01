@@ -37,7 +37,7 @@ describe Invitation, "#accept_invitation_url" do
   end
   
   it "is not saved to the database" do
-    invitation = Generate.invitation "foo@blah.com"
+    invitation = Generate.invitation(:recipient => "foo@blah.com")
     invitation.accept_invitation_url = "http://some url here"
     invitation.save!
     invitation2 = Invitation.find(invitation.id)
