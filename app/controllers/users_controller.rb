@@ -9,10 +9,17 @@ class UsersController < ApplicationController
   end
 
   after_successful_signup do
-    set_current_user @user
-    accepted_project_name = InvitationManager.accept_pending_invitations(session, current_user)
-    if accepted_project_name
-      flash[:notice] = "You have been added to project: #{accepted_project_name}"
+    set_current_user @user    
+    
+    pending_invite_code = session[:pending_invite_code]
+    if pending_invite_code
+      session[:pending_invite_code] = nil
+      invitation = Invitation.find_by_code(pending_invite_code)
+      project = Project.find(invitation.project_id)
+      if project
+        current_user.projects << project
+        flash[:notice] = "You have been added to project: #{project.name}"
+      end
     end
   end
   
@@ -27,9 +34,17 @@ private
 
   def process_invitation
     if request.get?
-      InvitationManager.store_pending_invitation_acceptance(session, params[:code])
+      session[:pending_invite_code] = params[:code]
     elsif request.post? && current_user
-      accepted_project_name = InvitationManager.accept_pending_invitations(session, current_user)
+      pending_invite_code = session[:pending_invite_code]
+      if pending_invite_code
+        session[:pending_invite_code] = nil
+        invitation = Invitation.find_by_code(pending_invite_code)
+        project = Project.find(invitation.project_id)
+        current_user.projects << project
+        accepted_project_name = project.name
+      end
+
       if accepted_project_name
         flash[:notice] = "You have been added to project: #{accepted_project_name}"
       end
