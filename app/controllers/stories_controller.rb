@@ -184,6 +184,9 @@ private
   end
 
   def find_project
-    @project = ProjectManager.get_project_for_user(params[:project_id], current_user)
+    unless @project=ProjectPermission.find_project_for_user(params[:project_id], current_user)
+      redirect_to "/access_denied.html"
+      false
+    end
   end
 end

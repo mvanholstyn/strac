@@ -1,9 +1,5 @@
 class ProjectManager
   class << self
-    def all_projects_for_user(user)
-      ProjectPermission.find_all_projects_for_user(user)
-    end
-    
     def get_project_for_user(project_id, user)
       if project=ProjectPermission.find_project_for_user(project_id, user)
         project

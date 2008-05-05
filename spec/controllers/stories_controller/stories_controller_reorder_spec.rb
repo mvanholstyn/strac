@@ -10,7 +10,7 @@ describe StoriesController, '#reorder' do
     @project = mock_model(Project)
     @story_ids = [ "3", "2", "", "1"]
     @renderer = mock("remote site renderer", :render_notice => nil, :render_error => nil)
-    ProjectManager.stub!(:get_project_for_user).and_return(@project)
+    ProjectPermission.stub!(:find_project_for_user).and_return(@project)
     RemoteSiteRenderer.stub!(:new).and_return(@renderer)
     Story.stub!(:reorder)
     controller.expect_render(:update).and_yield(@page)    
