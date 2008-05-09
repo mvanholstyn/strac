@@ -9,11 +9,11 @@ describe ProjectsController, "#index" do
     @user = mock_model(User)
     login_as @user
     @projects = stub("projects")
-    ProjectPermission.stub!(:find_all_projects_for_user).and_return(@projects)
+    ProjectManager.stub!(:all_projects_for_user).and_return(@projects)
   end
   
   it "asks the project manager for all projects for the current user" do
-    ProjectPermission.stub!(:find_all_projects_for_user).with(@user).and_return(@projects)
+    ProjectManager.should_receive(:all_projects_for_user).with(@user).and_return(@projects)
     get_index
   end
   
@@ -57,18 +57,18 @@ describe ProjectsController, "#show" do
   before do
     @user = mock_model(User)
     @project = mock_model(Project)
-    ProjectPermission.stub!(:find_project_for_user).and_return(@project)
+    ProjectManager.stub!(:get_project_for_user).and_return(@project)
     login_as @user
   end
 
-  it "asks the ProjectPermission to find the requested project for the current user" do
-    ProjectPermission.should_receive(:find_project_for_user).with(@project.id.to_s, @user)
+  it "asks the ProjectManager to find the requested project for the current user" do
+    ProjectManager.should_receive(:get_project_for_user).with(@project.id.to_s, @user)
     get_show
   end
   
   describe "a user with proper privileges" do
     before do
-      ProjectPermission.stub!(:find_project_for_user).and_return(@project)      
+      ProjectManager.stub!(:get_project_for_user).and_return(@project)      
     end
     
     it "assigns the requested project" do
@@ -85,7 +85,7 @@ describe ProjectsController, "#show" do
   
   describe "a user without proper privileges" do
     before do
-      ProjectPermission.stub!(:find_project_for_user).and_return(nil)
+      ProjectManager.stub!(:get_project_for_user).and_raise(AccessDenied)
     end
     
     it "redirects to the 401 access denied page" do
@@ -253,11 +253,11 @@ describe ProjectsController, '#edit' do
     @user = mock_model(User)
     login_as @user
     @project = mock_model(Project)
-    ProjectPermission.stub!(:find_project_for_user).and_return(@project)
+    ProjectManager.stub!(:get_project_for_user).and_return(@project)
   end
   
-  it "asks the ProjectPermission for the project for the current the current user" do
-    ProjectPermission.should_receive(:find_project_for_user).with(@project.id.to_s, @user)
+  it "asks the ProjectManager for the project for the current the current user" do
+    ProjectManager.get_project_for_user(@project.id.to_s, @user)
     get_edit
   end
   
@@ -276,7 +276,7 @@ describe ProjectsController, '#edit' do
   
   describe "when the user doesn't have access to the project" do
     before do
-      ProjectPermission.stub!(:find_project_for_user).and_return(nil)
+      ProjectManager.stub!(:get_project_for_user).and_raise(AccessDenied)
     end
     
     it "redirects to the access denied page" do
@@ -295,11 +295,11 @@ describe ProjectsController, '#destroy' do
     @user = mock_model(User)
     login_as @user
     @project = mock_model(Project, :destroy => nil)
-    ProjectPermission.stub!(:find_project_for_user).and_return(@project)
+    ProjectManager.stub!(:get_project_for_user).and_return(@project)
   end
-
-  it "asks the ProjectPermission for the project for the current the current user" do
-    ProjectPermission.find_project_for_user(@project.id.to_s, @user)
+  
+  it "asks the ProjectManager for the project for the current the current user" do
+    ProjectManager.get_project_for_user(@project.id.to_s, @user)
     delete_destroy
   end
   
@@ -324,47 +324,11 @@ describe ProjectsController, '#destroy' do
   
   describe "when the user doesn't have access to the project" do
     before do
-      ProjectPermission.stub!(:find_project_for_user).and_raise(AccessDenied)
+      ProjectManager.stub!(:get_project_for_user).and_raise(AccessDenied)
     end
     
     it "redirects to the access denied page" do
       delete_destroy
-      response.should redirect_to("/access_denied.html")
-    end
-  end
-end
-
-describe ProjectsController, '#workspace' do
-  def get_workspace(params={})
-    get :workspace, params.reverse_merge(:id => @project.id)
-  end
-  
-  before do
-    @user = mock_model(User)
-    login_as @user
-  end
-  
-  describe 'when the user has access to the project' do
-    before do
-      @project = mock_model(Project, :incomplete_stories => [])
-      ProjectPermission.stub!(:find_project_for_user).and_return(@project)
-    end
-    
-    it "assigns @stories" do
-      @stories = mock(:stories)
-      @project.should_receive(:incomplete_stories).with().and_return(@stories)
-      get_workspace
-      assigns(:stories).should == @stories
-    end
-  end
-  
-  describe 'when the user does not have access to the project' do
-    before do
-      ProjectPermission.stub!(:find_project_for_user).and_return(nil)
-    end
-    
-    it "redirects to access_denied" do
-      get_workspace
       response.should redirect_to("/access_denied.html")
     end
   end

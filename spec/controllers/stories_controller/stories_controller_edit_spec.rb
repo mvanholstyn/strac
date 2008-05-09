@@ -9,7 +9,7 @@ describe StoriesController, '#edit' do
     stub_login_for StoriesController
     @project = stub("project")
     @stories = stub("stories", :find => nil)
-    ProjectPermission.stub!(:find_project_for_user).and_return(@project)
+    ProjectManager.stub!(:get_project_for_user).and_return(@project)
     @project.stub!(:stories).and_return(@stories)
   end
   

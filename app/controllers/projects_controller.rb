@@ -2,15 +2,11 @@ class ProjectsController < ApplicationController
   restrict_to :user
   
   def index
-    @projects = ProjectPermission.find_all_projects_for_user(current_user)
+    @projects = ProjectManager.all_projects_for_user current_user
   end
 
   def show
-    if @project=ProjectPermission.find_project_for_user(params[:id], current_user)
-      @project
-    else
-      raise AccessDenied
-    end
+    @project = ProjectManager.get_project_for_user(params[:id], current_user)
   end
 
   def new
@@ -18,11 +14,7 @@ class ProjectsController < ApplicationController
   end
 
   def edit
-    if @project=ProjectPermission.find_project_for_user(params[:id], current_user)
-      @project
-    else
-      redirect_to "/access_denied.html"
-    end
+    @project = ProjectManager.get_project_for_user(params[:id], current_user)
   end
 
   def create
@@ -53,20 +45,13 @@ class ProjectsController < ApplicationController
   end
 
   def destroy
-    if @project=ProjectPermission.find_project_for_user(params[:id], current_user)
-      @project
-    else
-      redirect_to "/access_denied.html"
-    end
+    @project = ProjectManager.get_project_for_user(params[:id], current_user)
     @project.destroy
     redirect_to projects_path
   end
   
   def workspace
-    if @project=ProjectPermission.find_project_for_user(params[:id], current_user)
-      @stories = @project.incomplete_stories
-    else
-      redirect_to "/access_denied.html"
-    end
+    @project = ProjectManager.get_project_for_user(params[:id], current_user)
+    @stories = @project.incomplete_stories
   end
 end

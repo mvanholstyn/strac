@@ -11,7 +11,7 @@ describe StoriesController, '#update' do
     @stories = stub("stories", :find => @story)
     @project = stub("project", :stories => @stories)
     @story_params = { 'summary' => 'foo' }
-    ProjectPermission.stub!(:find_project_for_user).and_return(@project)
+    ProjectManager.stub!(:get_project_for_user).and_return(@project)
   end
   
   it "finds the requested story" do

@@ -12,7 +12,7 @@ describe StoriesController, "user with privileges requesting #index " do
     @user.stub!(:has_privilege?).and_return(true)
     @stories_index_presenter = stub("story index presenter")
     StoriesIndexPresenter.stub!(:new).and_return(@stories_index_presenter)
-    ProjectPermission.stub!(:find_project_for_user).and_return(@project)
+    ProjectManager.stub!(:get_project_for_user).and_return(@project)
   end
 
   it "returns successful" do
