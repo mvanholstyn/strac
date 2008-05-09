@@ -5,12 +5,23 @@ require File.dirname(__FILE__) + '/../spec_helper'
 #     get :login, {}.merge(params)
 #   end
 #   
+#   setup do
+#     InvitationManager.stub!(:store_pending_invitation_acceptance)
+#   end
+#   
+#   it "stores a pending invitation for whatever invitation code is passed in" do
+#     InvitationManager.
+#       should_receive(:store_pending_invitation_acceptance).
+#       with(controller.session, "abc1234")
+#     get_login :code => "abc1234"
+#   end
+# 
 #   it "renders the login template" do
 #     get_login
 #     response.should render_template("login")
 #   end
 # end
-#  
+# 
 # describe UsersController, "#login - post request without a successful user login" do
 #   it "does nothing" do
 #     InvitationManager.should_not_receive(:accept_pending_invitations)
@@ -55,12 +66,12 @@ require File.dirname(__FILE__) + '/../spec_helper'
 # 
 
 describe UsersController, "#signup - post request with a successful user signup" do
-  def post_signup(params={}, session={})
-    post :signup, { :user => {
+  def post_signup(params={})
+    post :signup, :user => {
         :email_address => "some email addy", 
         :password => "password",
         :password_confirmation => "password"
-      }.merge(params) }, session
+      }.merge(params)
   end
   
   before do
@@ -69,16 +80,12 @@ describe UsersController, "#signup - post request with a successful user signup"
     
     @reminder = mock_model(UserReminder, :token => nil)
     UserReminder.stub!(:create_for_user).and_return(@reminder)
+    
     UserReminderMailer.stub!(:deliver_signup)
-
-    Invitation.stub!(:find_by_code)
-    Project.stub!(:find)
-
+    
+    InvitationManager.stub!(:accept_pending_invitations)
     @group = stub("some group", :id => 99)
     Group.stub!(:find_by_name).with("Developer").and_return(@group)
-    
-    @project = mock_model(Project, :name => "ProjectFoo")
-    @invitation = mock_model(Invitation, :project_id => @project.id)
   end
   
   it "assigns the default group to the user" do
@@ -87,33 +94,23 @@ describe UsersController, "#signup - post request with a successful user signup"
     params[:user][:group_id].should == @group.id
   end
   
-  it "accepts any pending invitations for the current user" do
-    projects = []
-    Invitation.should_receive(:find_by_code).with("ABC123").and_return(@invitation)
-    Project.should_receive(:find).with(@invitation.project_id).and_return(@project)
-    @user.stub!(:projects).and_return(projects)
-    post_signup({}, {:pending_invite_code => "ABC123"})
-    projects.should == [@project]
+  it "accepts any pending invitations" do
+    InvitationManager.
+      should_receive(:accept_pending_invitations).
+      with(controller.session, @user)
+    post_signup
+  end
+  
+  it "sets the flash[:notice] to a message when an invitation is accepted" do
+    InvitationManager.stub!(:accept_pending_invitations).and_return("ProjectFoo")    
+    post_signup
+    flash[:notice].should == "You have been added to project: ProjectFoo"
   end
 
-  describe "when an invitation is accepted" do
-    before do
-      Invitation.stub!(:find_by_code).and_return(@invitation)
-      Project.stub!(:find).and_return(@project)
-      @user.stub!(:projects).and_return([])
-    end
-    
-    it "sets the flash[:notice] message telling the user they have been added to the project for the invitation" do
-      post_signup({}, {:pending_invite_code => "ABC123"})
-      flash[:notice].should == "You have been added to project: ProjectFoo"
-    end
-  end
-
-  describe "when an invitation is not accepted" do
-    it "sets the flash[:notice] message telling the user they have successfully signed up" do
-      post_signup({}, {:pending_invite_code => nil})
-      flash[:notice].should == "You have successfully signed up"
-    end
+  it "doesn't the flash[:notice] to a message when an invitation is not accepted" do
+    InvitationManager.stub!(:accept_pending_invitations).and_return(nil)        
+    post_signup
+    flash[:notice].should == "You have successfully signed up"
   end
 
   it "redirects to the dashboard path" do
@@ -145,12 +142,12 @@ describe UsersController, "#signup - post request which fails user signup" do
     Group.stub!(:find_by_name).with("Developer").and_return(@group)
   end
     
-  it "doesn't set the flash[:notice] message" do
+  it "doesn't the flash[:notice] to a message when an invitation is not accepted" do
     post_signup
     flash[:notice].should be_nil
   end
 
-  it "renders the users/signup template" do
+  it "redirects to the dashboard path" do
     post_signup
     response.should render_template("users/signup")
   end
