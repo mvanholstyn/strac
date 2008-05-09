@@ -95,10 +95,10 @@ class Generate
   def self.story(options={})
     @story_count ||= 0
     summary ||= options.delete(:summary) || "Summary #{@story_count+=1}"
-    if options[:project].nil? 
-      if options[:bucket].nil?
+    if !options.has_key?(:project)
+      if !options.has_key?(:bucket)
         options[:project] = Generate.project(:name => "Project for #{summary}")
-      else
+      elsif !options[:bucket]
         options[:project] = options[:bucket].project
       end
     end

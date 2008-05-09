@@ -10,7 +10,14 @@ describe "/projects/workspace.html.erb" do
   before do
     @project = mock_model(Project)
     @stories = [mock_model(Story), mock_model(Story)]
+    template.stub!(:current_iteration_name).and_return("")
     template.stub_render(:partial  => 'stories/list', :locals => { :stories => @stories })
+  end
+
+  it "renders the current iteration's name" do
+    template.should_receive(:current_iteration_name).and_return("Blah&Dazzle")
+    render_it
+    response.should have_text(h("Blah&Dazzle").to_regexp)
   end
   
   it "renders a link to create a story for the project" do
@@ -24,7 +31,7 @@ describe "/projects/workspace.html.erb" do
     response.should have_tag('p#stories-list-partial')
   end
 
-  it "create a sortable element for the backlog" do
+  it "creates a sortable element for the backlog" do
     during_render do
       template.should receive_and_render(:sortable_element).with(
         "iteration_nil",
@@ -36,5 +43,10 @@ describe "/projects/workspace.html.erb" do
          :onChange =>  "Strac.Iteration.drawWorkspaceVelocityMarkers"
       )
     end
+  end
+
+  it "renders a link to create an iteration" do
+    render_it
+    response.should have_tag('a[href=?][onclick *= post]', project_iterations_path(@project))
   end
 end

@@ -1,8 +1,10 @@
 <div class="section workspace">
   <table width="100%">
     <tr>
-      <td><b>Workspace</b></td>
-      <td align="right"><%= link_to_remote "create story", :url => new_story_path( @project ), :method => :get %></td>
+      <td><b>Workspace</b> | <%= h current_iteration_name() %></td>
+      <td align="right">
+      <%= link_to "start new iteration", project_iterations_path(@project), :method => "post" %> | 
+      <%= link_to_remote "create story", :url => new_story_path( @project ), :method => :get %></td>
     </tr>
   </table>
   <div id="iteration_nil_story_new"></div>

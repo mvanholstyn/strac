@@ -5,15 +5,35 @@ describe "/projects/_summary.html.erb" do
     render :partial => "projects/summary", :locals => { :project => @project }
   end
   
-  before(:each) do
+  before do
+    @current_iteration = mock_model(Iteration, :start_date => Date.today)
     @project = mock_model(Project, 
+      :iterations => mock("iterations", :current => @current_iteration),
       :total_points => 0, 
       :completed_points => 0, 
       :remaining_points => 0,
       :completed_iterations => [], 
       :average_velocity => 0, 
       :estimated_remaining_iterations => 0,
-      :estimated_completion_date => nil)
+      :estimated_completion_date => Date.today)
+  end
+  
+  describe "when a current iteration is supplied" do
+    it "displays the current iteration's start date" do
+      render_it
+      response.should have_tag(".current_iteration_started_on", @current_iteration.start_date.strftime("%m-%d-%Y").to_regexp)
+    end
+  end
+  
+  describe "when a current iteration is not supplied" do
+    before do
+      @project.iterations.stub!(:current).and_return(nil)
+    end
+    
+    it "still renders" do
+      render_it
+      response.should have_tag(".current_iteration_started_on")
+    end
   end
   
   it "renders the project's total points" do
@@ -54,8 +74,9 @@ describe "/projects/_summary.html.erb" do
   end
   
   it "renders the project's estimated completion date" do
-    @project.should_receive(:estimated_completion_date).and_return("today")
+    today = Date.today
+    @project.should_receive(:estimated_completion_date).and_return(today)
     render_it
-    response.should have_tag('.project_summary .estimated_completion_date', "today")  
+    response.should have_tag('.project_summary .estimated_completion_date', today.strftime("%m-%d-%Y"))  
   end
 end

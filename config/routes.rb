@@ -18,6 +18,7 @@ ActionController::Routing::Routes.draw do |map|
                                        :time => :any, :take => :put, :release => :put } do |story_map|
         story_map.resources :comments, :name_prefix => nil
     end
+    project_map.resources :iterations
   end
   map.textile_preview 'textile/preview', :controller => 'textile', :action => 'preview'
   map.connect "logged_exceptions/:action/:id", :controller => "logged_exceptions"

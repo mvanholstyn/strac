@@ -102,7 +102,7 @@ module ProjectStatsStoryHelper
   
   def see_estimated_completion_date(date)
     see_project_summary do
-      assert_select '.estimated_completion_date', date.strftime("%Y-%m-%d").to_regexp
+      assert_select '.estimated_completion_date', date.strftime("%m-%d-%Y").to_regexp
     end    
   end
 end

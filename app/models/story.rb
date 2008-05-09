@@ -37,6 +37,12 @@ class Story < ActiveRecord::Base
   validates_presence_of :summary, :project_id
   validates_numericality_of :points, :position, :allow_nil => true
 
+  before_save do |story|
+    if story.status == Status.complete && story.bucket_id.nil?
+      story.bucket = story.project.iterations.current
+    end
+  end
+
   def name
     summary
   end

@@ -1,5 +1,15 @@
 <table id="project_summary" class="project_summary">
   <tr>
+    <th>Iteration Started On:</th>
+    <td class="current_iteration_started_on">
+      <% if current_iteration=project.iterations.current %>
+        <%= h current_iteration.start_date.strftime("%m-%d-%Y") %>
+      <% else %>
+        No iterations
+      <% end %>
+    </td>
+  </tr>
+  <tr>
     <th>Total Points:</th>
     <td class="total_points"><%= project.total_points %></td>
   </tr>
@@ -25,7 +35,7 @@
   </tr>
   <tr>
     <th>Estimated Completion Date:</th>
-    <td class="estimated_completion_date"><%= project.estimated_completion_date %></td>
+    <td class="estimated_completion_date"><%= project.estimated_completion_date.strftime "%m-%d-%Y" %></td>
   </tr>
 </table>
 

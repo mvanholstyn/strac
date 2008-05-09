@@ -452,9 +452,6 @@ end
 describe Project, "#iterations" do
   before do
     @project = Generate.project
-    @old_iteration = Generate.iteration :name => "Iteration 1", :project => @project, :start_date => 3.weeks.ago, :end_date => 2.weeks.ago
-    @previous_iteration = Generate.iteration :name => "Iteration 2", :project => @project, :start_date => 2.weeks.ago, :end_date => 1.weeks.ago
-    @current_iteration = Generate.iteration :name => "Iteration 3", :project => @project, :start_date => 1.weeks.ago, :end_date => nil
   end
 
   it "can generate a dummy backlog iteration" do
@@ -463,17 +460,48 @@ describe Project, "#iterations" do
     backlog.name.should == "Backlog"
   end
 
-  it "can returns the iteration with the latest start date as the current iteration" do
-    @project.iterations.current.should == @current_iteration
+  describe "returning the current iteration" do
+    it "returns an iteration that started today and does not have an end date"do
+      iteration = Generate.iteration :project => @project, :start_date => Date.today, :end_date => nil
+      @project.iterations.current.should == iteration      
+    end
+    
+    it "returns an iteration that started before today and does not have an end date" do
+      iteration = Generate.iteration :project => @project, :start_date => 1.weeks.ago.to_date, :end_date => nil
+      @project.iterations.current.should == iteration
+    end
+    
+    it "does not return an iteration that has a start date" do
+      iteration = Generate.iteration :project => @project, :start_date => 1.weeks.ago.to_date, :end_date => Date.today
+      @project.iterations.current.should be_nil
+
+      @project.iterations.clear
+      iteration = Generate.iteration :project => @project, :start_date => Date.today, :end_date => Date.tomorrow
+      @project.iterations.current.should be_nil
+    end
   end
 
-  it "can returns the iteration with the second latest start date as the previous iteration" do
+  it "can return the iteration with the second latest start date as the previous iteration" do
+    @project.iterations.clear
+    @previous_iteration = Generate.iteration :project => @project, :start_date => 2.weeks.ago, :end_date => 1.weeks.ago
+    current_iteration = Generate.iteration :project => @project, :start_date => Date.today, :end_date => nil
     @project.iterations.previous.should == @previous_iteration
+  end
+  
+  it "can find or build the current iteration" do
+    current_iteration = Generate.iteration :project => @project, :start_date => Date.yesterday, :end_date => nil
+    @project.iterations.find_or_build_current.should == current_iteration
+    
+    @project.iterations.clear
+    @project.iterations.should be_empty
+    iteration = @project.iterations.find_or_build_current
+    iteration.start_date.should == Date.today
+    iteration.end_date.should be_nil
   end
 end
 
 describe Project, "#stories" do
-  it "can be find all stories"
+  it "can find all stories"
   it "can find recent stories (in the previous iteration, the current iteration or the backlog)"
   it "can find stories by summary"
   it "can find stories by description"

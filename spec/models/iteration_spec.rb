@@ -154,8 +154,8 @@ describe Iteration, '#points_before_iteration' do
     @iteration = Generate.iteration(:start_date => Date.today, :end_date => Date.today+1.week, :budget => 25, :name => "Iteration 1")
     @iteration.stories << Story.create!(:status_id=>Status.complete.id, :points=>10, :project_id=>@iteration.project_id, :summary=>"Story 1")
     @iteration.stories << Story.create!(:status_id=>Status.defined.id, :points=>5, :project_id=>@iteration.project_id, :summary=>"Story 2")
-    Story.create!(:created_at=>Date.today-1, :status_id=>Status.complete.id, :points=>2, :project_id=>1, :summary=>"Story from yesterday")
-    Story.create!(:created_at=>Date.today-7, :status_id=>Status.defined.id, :points=>3, :project_id=>1, :summary=>"Story from last week")
+    Story.create!(:created_at=>Date.today-1, :status_id=>Status.complete.id, :points=>2, :project_id=>1, :summary=>"Story from yesterday", :project => @iteration.project)
+    Story.create!(:created_at=>Date.today-7, :status_id=>Status.defined.id, :points=>3, :project_id=>1, :summary=>"Story from last week", :project => @iteration.project)
   end
   
   it "returns the number story points that existed before the iteration's start date" do

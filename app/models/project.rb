@@ -53,7 +53,7 @@ class Project < ActiveRecord::Base
     end
     
     def current
-      find(:first, :conditions => ["start_date < ? AND end_date IS NULL", Date.today])
+      find(:first, :conditions => ["start_date <= ? AND end_date IS NULL", Date.today])
     end
     
     def backlog
@@ -61,7 +61,7 @@ class Project < ActiveRecord::Base
     end
   
     def find_or_build_current
-      current || build( :name => "Iteration #{size + 1}", :start_date => Date.today, :end_date =>  Date.today + 7 )
+      current || build( :name => "Iteration #{size + 1}", :start_date => Date.today )
     end
   end
   has_many :completed_iterations, :source => :iterations, :class_name => Iteration.name, :conditions => [ "end_date < ?", Date.today ]

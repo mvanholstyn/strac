@@ -86,6 +86,10 @@ module LwtTesting
     def click_logout_link
       click_link logout_path
     end
+    
+    def click_workspace_link(project)
+      click_link workspace_project_path(project)
+    end
   end
 end
 

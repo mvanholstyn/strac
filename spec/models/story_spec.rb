@@ -136,3 +136,37 @@ describe Story, "complete" do
     story.should be_incomplete
   end
 end
+
+describe Story, "when a story is completed" do
+  before do
+    @story = Generate.story
+    @project = @story.project
+  end
+  
+  describe "when there is a current iteration for the story's project" do
+    before do
+      @iteration = Generate.iteration :project => @project, :start_date => Date.yesterday, :end_date => nil      
+    end
+    
+    it "assigns the story to the currently running iteration" do
+      @story.bucket.should be_nil
+      @story.status = Status.complete
+      @story.save!
+      @story.bucket.should == @iteration
+    end
+  end
+
+  describe "when there is no current iteration for the story's project" do
+    before do
+      @project.iterations.clear
+    end
+    
+    it "assigns the story to the currently running iteration" do
+      @story.bucket.should be_nil
+      @story.status = Status.complete
+      @story.save!
+      @story.bucket.should be_nil
+    end
+  end
+
+end
