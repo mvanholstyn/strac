@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 48) do
+ActiveRecord::Schema.define(:version => 49) do
 
   create_table "activities", :force => true do |t|
     t.integer  "actor_id"
@@ -103,6 +103,18 @@ ActiveRecord::Schema.define(:version => 48) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "iteration_length"
+  end
+
+  create_table "snapshots", :force => true do |t|
+    t.integer  "total_points"
+    t.integer  "completed_points"
+    t.integer  "remaining_points"
+    t.float    "average_velocity"
+    t.float    "estimated_remaining_iterations"
+    t.date     "estimated_completion_date"
+    t.integer  "bucket_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "statuses", :force => true do |t|

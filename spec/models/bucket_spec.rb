@@ -5,11 +5,13 @@ describe Bucket do
   before do
     @bucket = Bucket.new
   end
-  
-  it "has many stories ordered by position which are nullified on destroy" do
-    assert_association Bucket, :has_many, :stories, Story, :order => :position, :dependent => :nullify
+
+  describe "associations" do
+    it_belongs_to :project
+    it_has_many :stories, :order => :position, :dependent => :nullify
+    it_has_one :snapshot, :dependent => :destroy
   end
-    
+  
   it "should always belong to a project" do
     assert_validates_presence_of @bucket, :project_id
   end

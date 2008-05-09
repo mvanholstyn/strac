@@ -119,7 +119,7 @@ class Project < ActiveRecord::Base
     points = previous_iterations.inject([]) do |points, iteration|
       points << iteration.points_completed
     end
-    VelocityCalculator.compute_weighted_average(points) 
+    VelocityCalculator.compute_weighted_average(points)
   end
   
   def estimated_remaining_iterations

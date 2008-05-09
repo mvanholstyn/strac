@@ -8,9 +8,21 @@ describe IterationsController, '#create' do
   before do
     @user = stub_login_for IterationsController
     @current_iteration = mock_model(Iteration, :start_date => nil, :update_attribute => nil)
-    @new_current_iteration = mock_model(Iteration, :save! => nil, :name => nil)
-    @iterations = mock("iterations", :current => @current_iteration, :find_or_build_current => @new_current_iteration)
-    @project = mock_model(Project, :iterations => @iterations)
+    @new_current_iteration = mock_model(Iteration, 
+      :build_snapshot => nil,
+      :name => nil,
+      :save! => nil )
+    @iterations = mock("iterations", 
+      :current => @current_iteration, 
+      :find_or_build_current => @new_current_iteration)
+    @project = mock_model(Project, 
+      :total_points => 10,
+      :completed_points => 11,
+      :remaining_points => 12,
+      :average_velocity => 13,
+      :estimated_remaining_iterations => 14,
+      :estimated_completion_date => Date.yesterday,
+      :iterations => @iterations )
     ProjectPermission.stub!(:find_project_for_user).and_return(@project)
   end
 
@@ -67,6 +79,17 @@ describe IterationsController, '#create' do
       @project.should_receive(:iterations).and_return(@iterations)
       @iterations.should_receive(:find_or_build_current).and_return(@new_current_iteration)
       @new_current_iteration.should_receive(:save!)
+      post_create
+    end
+    
+    it "creates a snapshot of the current project stats" do
+      @new_current_iteration.should_receive(:build_snapshot).with(
+        :total_points => @project.total_points,
+        :completed_points => @project.completed_points,
+        :remaining_points => @project.remaining_points,
+        :average_velocity => @project.average_velocity,
+        :estimated_remaining_iterations => @project.estimated_remaining_iterations,
+        :estimated_completion_date => @project.estimated_completion_date)
       post_create
     end
     

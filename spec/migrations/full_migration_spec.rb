@@ -142,6 +142,19 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "created_at", :datetime
         t.column "updated_at", :datetime
       end
+      
+      s.table "snapshots" do |t|
+        t.column "id", :integer
+        t.column "bucket_id", :integer
+        t.column "total_points", :integer
+        t.column "completed_points", :integer
+        t.column "remaining_points", :integer
+        t.column "average_velocity", :float
+        t.column "estimated_remaining_iterations", :float
+        t.column "estimated_completion_date", :date
+        t.column "created_at", :datetime
+        t.column "updated_at", :datetime
+      end
 
       s.table "statuses" do |t|
         t.column "id", :integer

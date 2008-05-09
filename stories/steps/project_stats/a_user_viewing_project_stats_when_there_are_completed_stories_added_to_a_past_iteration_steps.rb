@@ -22,12 +22,12 @@ steps_for :a_user_viewing_project_stats_when_there_are_completed_stories_added_t
     see_average_velocity @average_velocity
   end
   Then "they will see the correct number of estimated remaining iterations for the project" do
-    @remaining_iterations = @stories.sum(&:points) / @completed_stories.sum(&:points) 
-    see_estimated_remaining_iterations @remaining_iterations
+    @estimated_remaining_iterations = @remaining_points.to_f / @average_velocity
+    see_estimated_remaining_iterations @estimated_remaining_iterations.ceil
   end
   Then "they will see the correct estimated completion date based on a 1 week iteration" do
-    @remaining_iterations = @remaining_points.to_f / @average_velocity.to_f
-    date = Date.today + @remaining_iterations * 7 
+    @estimated_remaining_iterations = @remaining_points.to_f / @average_velocity.to_f
+    date = Date.today + @estimated_remaining_iterations * 7 
     see_estimated_completion_date date
   end
 
