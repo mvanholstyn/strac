@@ -6,7 +6,7 @@ describe "/projects/_summary.html.erb" do
   end
   
   before do
-    @current_iteration = mock_model(Iteration, :start_date => Date.today)
+    @current_iteration = mock_model(Iteration, :name => "Iteration & 1099")
     @project = mock_model(Project, 
       :iterations => mock("iterations", :current => @current_iteration),
       :total_points => 0, 
@@ -19,9 +19,9 @@ describe "/projects/_summary.html.erb" do
   end
   
   describe "when a current iteration is supplied" do
-    it "displays the current iteration's start date" do
+    it "displays the current iteration name" do
       render_it
-      response.should have_tag(".current_iteration_started_on", @current_iteration.start_date.strftime("%m-%d-%Y").to_regexp)
+      response.should have_tag(".current_iteration", h(@current_iteration.name).to_regexp)
     end
   end
   
@@ -32,7 +32,7 @@ describe "/projects/_summary.html.erb" do
     
     it "still renders" do
       render_it
-      response.should have_tag(".current_iteration_started_on")
+      response.should have_tag(".current_iteration")
     end
   end
   

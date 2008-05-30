@@ -246,14 +246,14 @@ describe Project, '#completed_iterations' do
   before do
     @project = Project.create :name=>"Project w/Activities"
     @completed_iterations = [
-      Generate.iteration(:name => "iteration 1", :project => @project, :start_date => 4.weeks.ago, :end_date => 3.weeks.ago),
-      Generate.iteration(:name => "iteration 2", :project => @project, :start_date => 2.weeks.ago, :end_date => 1.week.ago)
+      Generate.iteration(:name => "iteration 1", :project => @project, :started_at => 4.weeks.ago, :ended_at => 3.weeks.ago),
+      Generate.iteration(:name => "iteration 2", :project => @project, :started_at => 2.weeks.ago, :ended_at => 1.week.ago)
     ]
-    Generate.iteration :name => "iteration 3", :project => @project, :start_date => Time.now, :end_date => 1.week.from_now
-    Generate.iteration :name => "iteration 4", :project => @project, :start_date => 2.weeks.from_now, :end_date => 3.weeks.from_now
+    Generate.iteration :name => "iteration 3", :project => @project, :started_at => Time.now, :ended_at => 1.week.from_now
+    Generate.iteration :name => "iteration 4", :project => @project, :started_at => 2.weeks.from_now, :ended_at => 3.weeks.from_now
   end
 
-  it "returns only iterations whose end_date are before today" do
+  it "returns only iterations whose ended_at are before today" do
     @project.completed_iterations.size.should == @completed_iterations.size
     @completed_iterations.each do |iteration|
       @project.completed_iterations.should include(iteration)
@@ -299,18 +299,18 @@ describe Project, "#recent_activities" do
   end
 end
 
-describe Project, "iterations_ordered_by_start_date" do
+describe Project, "iterations_ordered_by_started_at" do
   before do
     @project = Generate.project :name => "ProjectA"
-    @iteration1 = (Generate.iteration :name => "Iteration5", :project => @project, :start_date => Date.today - 3.weeks)
-    @iteration3 = (Generate.iteration :name => "Iteration5", :project => @project, :start_date => Date.today - 1.week)
-    @iteration2 = (Generate.iteration :name => "Iteration5", :project => @project, :start_date => Date.today - 2.weeks)
+    @iteration1 = (Generate.iteration :name => "Iteration5", :project => @project, :started_at => Date.today - 3.weeks)
+    @iteration3 = (Generate.iteration :name => "Iteration5", :project => @project, :started_at => Date.today - 1.week)
+    @iteration2 = (Generate.iteration :name => "Iteration5", :project => @project, :started_at => Date.today - 2.weeks)
     @project.iterations = [ @iteration1, @iteration3, @iteration2 ]
     @project.save!
   end
   
   it "returns all iterations ordered by their start date" do
-    @project.iterations_ordered_by_start_date.should == [ @iteration1, @iteration2, @iteration3 ]
+    @project.iterations_ordered_by_started_at.should == [ @iteration1, @iteration2, @iteration3 ]
   end
 end
 
@@ -367,7 +367,7 @@ describe '#average_velocity' do
   
   before do
     @project = Generate.project
-    @current_iteration = stub("current iteration", :start_date => Time.now)
+    @current_iteration = stub("current iteration", :started_at => Time.now)
     @past_iterations = [stub("past iteration 1", :points_completed => 0), stub("past iteration 2", :points_completed => 0)]
     @iterations = []
     @iterations.stub!(:find_or_build_current).and_return(@current_iteration)
@@ -384,8 +384,8 @@ describe '#average_velocity' do
   it "finds all previous iterations, ending before the start of the current iteration" do
     @project.iterations.should_receive(:find).with(
       :all, 
-      :conditions=>["end_date < ? ", @current_iteration.start_date], 
-      :order => "start_date ASC"
+      :conditions=>["ended_at < ? ", @current_iteration.started_at], 
+      :order => "started_at ASC"
     ).and_return(@past_iterations)
     average_velocity
   end
@@ -461,42 +461,44 @@ describe Project, "#iterations" do
   end
 
   describe "returning the current iteration" do
-    it "returns an iteration that started today and does not have an end date"do
-      iteration = Generate.iteration :project => @project, :start_date => Date.today, :end_date => nil
+    it "returns an iteration that started today and does not have an end date" do
+      iteration = Generate.iteration :project => @project, :started_at => Time.now, :ended_at => nil
       @project.iterations.current.should == iteration      
     end
     
     it "returns an iteration that started before today and does not have an end date" do
-      iteration = Generate.iteration :project => @project, :start_date => 1.weeks.ago.to_date, :end_date => nil
+      iteration = Generate.iteration :project => @project, :started_at => 1.weeks.ago, :ended_at => nil
       @project.iterations.current.should == iteration
     end
     
     it "does not return an iteration that has a start date" do
-      iteration = Generate.iteration :project => @project, :start_date => 1.weeks.ago.to_date, :end_date => Date.today
+      iteration = Generate.iteration :project => @project, :started_at => 1.weeks.ago, :ended_at => Time.now
       @project.iterations.current.should be_nil
 
       @project.iterations.clear
-      iteration = Generate.iteration :project => @project, :start_date => Date.today, :end_date => Date.tomorrow
+      iteration = Generate.iteration :project => @project, :started_at => Time.now, :ended_at => 1.day.from_now
       @project.iterations.current.should be_nil
     end
   end
 
   it "can return the iteration with the second latest start date as the previous iteration" do
     @project.iterations.clear
-    @previous_iteration = Generate.iteration :project => @project, :start_date => 2.weeks.ago, :end_date => 1.weeks.ago
-    current_iteration = Generate.iteration :project => @project, :start_date => Date.today, :end_date => nil
+    @previous_iteration = Generate.iteration :project => @project, :started_at => 2.weeks.ago, :ended_at => 1.weeks.ago
+    current_iteration = Generate.iteration :project => @project, :started_at => Date.today, :ended_at => nil
     @project.iterations.previous.should == @previous_iteration
   end
-  
+
   it "can find or build the current iteration" do
-    current_iteration = Generate.iteration :project => @project, :start_date => Date.yesterday, :end_date => nil
+    now = Time.now
+    Time.stub!(:now).and_return(now)
+    current_iteration = Generate.iteration :project => @project, :started_at => 1.day.ago, :ended_at => nil
     @project.iterations.find_or_build_current.should == current_iteration
     
     @project.iterations.clear
     @project.iterations.should be_empty
     iteration = @project.iterations.find_or_build_current
-    iteration.start_date.should == Date.today
-    iteration.end_date.should be_nil
+    iteration.started_at.should == now
+    iteration.ended_at.should be_nil
   end
 end
 

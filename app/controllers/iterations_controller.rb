@@ -4,16 +4,7 @@ class IterationsController < ApplicationController
       iterations = @project.iterations
       current_iteration = iterations.current
       if current_iteration 
-        if current_iteration.start_date == Date.today
-          flash[:error] = "You'll have to wait for two days to start another iteration."
-          redirect_to workspace_project_path(@project)
-          return
-        elsif current_iteration.start_date == Date.yesterday
-          flash[:error] = "You'll have to wait for one day to start another iteration."          
-          redirect_to workspace_project_path(@project)
-          return
-        end
-        current_iteration.update_attribute(:end_date, Date.yesterday)  
+        current_iteration.update_attribute(:ended_at, Time.now - 1.second)
       end
       new_current_iteration = iterations.find_or_build_current
       new_current_iteration.build_snapshot(

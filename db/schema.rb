@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 49) do
+ActiveRecord::Schema.define(:version => 50) do
 
   create_table "activities", :force => true do |t|
     t.integer  "actor_id"
@@ -22,8 +22,8 @@ ActiveRecord::Schema.define(:version => 49) do
   end
 
   create_table "buckets", :force => true do |t|
-    t.date     "start_date"
-    t.date     "end_date"
+    t.datetime "started_at"
+    t.datetime "ended_at"
     t.integer  "project_id"
     t.string   "name"
     t.integer  "budget",      :default => 0

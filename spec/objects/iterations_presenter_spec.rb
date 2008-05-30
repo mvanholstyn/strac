@@ -36,7 +36,7 @@ describe IterationsPresenter, "Enumerable functionality" do
   end
   
   it "iterates over only the passed in iterations with #each" do
-    wrapped_iterations = [ mock("iteration presenter 1", :start_date => 10.days.ago), mock("iteration presenter 2", :start_date => 5.days.ago) ]
+    wrapped_iterations = [ mock("iteration presenter 1", :started_at => 10.days.ago), mock("iteration presenter 2", :started_at => 5.days.ago) ]
     IterationPresenter.should_receive(:new).with(@iterations.first, [@stories.first]).and_return(wrapped_iterations.first)
     IterationPresenter.should_receive(:new).with(@iterations.last, [@stories.last]).and_return(wrapped_iterations.last)
     @iterations_presenter.each do |iter|

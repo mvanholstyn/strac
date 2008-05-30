@@ -1,7 +1,7 @@
 steps_for :a_user_completing_a_story do
   Given "there is a project with a running iteration and incomplete stories" do
     @project = Generate.project
-    @iteration = Generate.iteration :start_date => Date.yesterday, :end_date => nil, :project => @project
+    @iteration = Generate.iteration :started_at => Date.yesterday, :ended_at => nil, :project => @project
     @stories = Generate.stories :count => 10, :project => @project, :status => Status.defined
   end
   Given "a logged in user accesses the project" do

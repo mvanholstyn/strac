@@ -5,7 +5,7 @@ steps_for :a_user_viewing_project_stats_when_there_are_completed_stories_added_t
     @stories = generate_estimated_stories_for_project @project
     @completed_stories = make_stories_completed @stories[0..1]
     @incomplete_stories = @stories[2..-1]
-    @iteration = Generate.iteration(:name => "Iteration 1", :project => @project, :start_date => 1.week.ago, :end_date => Time.now.yesterday)
+    @iteration = Generate.iteration(:name => "Iteration 1", :project => @project, :started_at => 1.week.ago, :ended_at => Time.now.yesterday)
     move_stories_to_iteration @completed_stories, @iteration
   end
   

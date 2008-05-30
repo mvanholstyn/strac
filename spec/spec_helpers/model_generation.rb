@@ -45,11 +45,15 @@ class Generate
     Invitation.create!(options.reverse_merge(:recipient => recipient, :message => "Come and join!"))
   end
 
+  def self.current_iteration(options={})
+    Generate.iteration(options.merge(:ended_at => nil))
+  end
+
   def self.iteration(options={})
     @iteration_count = 0
     options[:project] ||= Generate.project :name => "Project for generated iteration #{@iteration_count+=1}"
-    options[:start_date] = Date.today unless options[:start_date]
-    options[:end_date] = options[:start_date] + 6.days unless options.has_key?(:end_date)
+    options[:started_at] = Date.today unless options[:started_at]
+    options[:ended_at] = options[:started_at] + 6.days unless options.has_key?(:ended_at)
     Iteration.create!(options.merge(:name => name))
   end
   

@@ -34,16 +34,16 @@ describe IterationPresenter, "defaults" do
     @iteration_presenter.id.should == @id
   end
 
-  it "delegates #start_date to the passed in iteration" do
-    @start_date = mock "start date"
-    @iteration.should_receive(:start_date).and_return(@start_date)
-    @iteration_presenter.start_date.should == @start_date
+  it "delegates #started_at to the passed in iteration" do
+    @started_at = mock "start date"
+    @iteration.should_receive(:started_at).and_return(@started_at)
+    @iteration_presenter.started_at.should == @started_at
   end
 
-  it "delegates #end_date to the passed in iteration" do
-    @end_date = mock "end date"
-    @iteration.should_receive(:end_date).and_return(@end_date)
-    @iteration_presenter.end_date.should == @end_date
+  it "delegates #ended_at to the passed in iteration" do
+    @ended_at = mock "end date"
+    @iteration.should_receive(:ended_at).and_return(@ended_at)
+    @iteration_presenter.ended_at.should == @ended_at
   end
 
   it "delegates #project to the passed in iteration" do

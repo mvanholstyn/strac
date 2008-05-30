@@ -9,21 +9,21 @@ describe Iteration do
     Iteration.new.should be_kind_of(Bucket)
   end
 
-  it "is valid with a name, project_id, start_date and end_date" do
+  it "is valid with a name, project_id, started_at and ended_at" do
     @iteration.name = "Iteration 1"
     @iteration.project_id = 1
-    @iteration.start_date = Date.today
-    @iteration.end_date = Date.today + 1
+    @iteration.started_at = Date.today
+    @iteration.ended_at = Date.today + 1
     @iteration.should be_valid
   end
 
   it "should always have a start date" do
-    assert_validates_presence_of @iteration, :start_date
+    assert_validates_presence_of @iteration, :started_at
   end
 
   it "should have have a start date that comes before its end date" do
-    @iteration.start_date = Date.today
-    @iteration.end_date = Date.today - 1
+    @iteration.started_at = Date.today
+    @iteration.ended_at = Date.today - 1
     @iteration.should_not be_valid
     @iteration.errors.on(:base).should include("start date must be before end date")
   end
@@ -38,21 +38,21 @@ describe Iteration do
   before do
     Iteration.destroy_all
     Story.destroy_all
-    @first_iteration = Iteration.create!( :project_id => 1, :start_date => Date.today, :end_date => Date.today + 7, :name => "Iteration 1" )
+    @first_iteration = Iteration.create!( :project_id => 1, :started_at => Date.today, :ended_at => Date.today + 7, :name => "Iteration 1" )
     @first_iteration.should be_valid
     
-    @second_iteration = Iteration.new( :project_id => 1, :start_date => Date.today, :end_date => Date.today+14, :name => "Iteration 1" )
+    @second_iteration = Iteration.new( :project_id => 1, :started_at => Date.today, :ended_at => Date.today+14, :name => "Iteration 1" )
     @second_iteration.should_not be_valid
   end
       
   it "should never overlap another iteration" do
     @second_iteration.errors.on(:base).should == "Iterations cannot overlap"
 
-    @second_iteration.start_date = Date.today + 3
+    @second_iteration.started_at = Date.today + 3
     @second_iteration.should_not be_valid
     @second_iteration.errors.on(:base).should == "Iterations cannot overlap"
 
-    @second_iteration.start_date = Date.today + 7
+    @second_iteration.started_at = Date.today + 7
     @second_iteration.should_not be_valid
     @second_iteration.errors.on(:base).should == "Iterations cannot overlap"
   end
@@ -66,7 +66,7 @@ describe Iteration, "#points_completed" do
   end
 
   before do
-    @iteration = Iteration.create!(:project_id => 1, :start_date => Date.today, :end_date => Date.today+1, :budget => 25, :name => "Iteration 1")    
+    @iteration = Iteration.create!(:project_id => 1, :started_at => Date.today, :ended_at => Date.today+1, :budget => 25, :name => "Iteration 1")    
   end
   
   describe "with no stories" do
@@ -115,7 +115,7 @@ describe Iteration, '#total_points' do
   end
 
   before do
-    @iteration = Generate.iteration(:start_date => Date.today, :end_date => Date.today+1.week, :budget => 25, :name => "Iteration 1")
+    @iteration = Generate.iteration(:started_at => Date.today, :ended_at => Date.today+1.week, :budget => 25, :name => "Iteration 1")
     @iteration.stories << Story.create!(:status_id=>Status.complete.id, :points=>10, :project_id=>@iteration.project_id, :summary=>"Story 1")
     @iteration.stories << Story.create!(:status_id=>Status.defined.id, :points=>5, :project_id=>@iteration.project_id, :summary=>"Story 2")
   end
@@ -133,7 +133,7 @@ describe Iteration, '#points_remaining' do
   end
 
   before do
-    @iteration = Generate.iteration(:start_date => Date.today, :end_date => Date.today+1.week, :budget => 25, :name => "Iteration 1")
+    @iteration = Generate.iteration(:started_at => Date.today, :ended_at => Date.today+1.week, :budget => 25, :name => "Iteration 1")
     @iteration.stories << Story.create!(:status_id=>Status.complete.id, :points=>10, :project_id=>@iteration.project_id, :summary=>"Story 1")
     @iteration.stories << Story.create!(:status_id=>Status.defined.id, :points=>5, :project_id=>@iteration.project_id, :summary=>"Story 2")
   end
@@ -151,7 +151,7 @@ describe Iteration, '#points_before_iteration' do
   end
   
   before do
-    @iteration = Generate.iteration(:start_date => Date.today, :end_date => Date.today+1.week, :budget => 25, :name => "Iteration 1")
+    @iteration = Generate.iteration(:started_at => Date.today, :ended_at => Date.today+1.week, :budget => 25, :name => "Iteration 1")
     @iteration.stories << Story.create!(:status_id=>Status.complete.id, :points=>10, :project_id=>@iteration.project_id, :summary=>"Story 1")
     @iteration.stories << Story.create!(:status_id=>Status.defined.id, :points=>5, :project_id=>@iteration.project_id, :summary=>"Story 2")
     Story.create!(:created_at=>Date.today-1, :status_id=>Status.complete.id, :points=>2, :project_id=>1, :summary=>"Story from yesterday", :project => @iteration.project)
@@ -165,30 +165,30 @@ end
 
 describe Iteration, '#display_name' do
   before do
-    @start_date = Time.now.yesterday
-    @end_date = Time.now
+    @started_at = Time.now.yesterday
+    @ended_at = Time.now
   end
   
   describe "with a blank name" do
     before do
-      @iteration = Iteration.new :start_date => @start_date, :end_date => @end_date
+      @iteration = Iteration.new :started_at => @started_at, :ended_at => @ended_at
     end
     
     it "returns a string in the form of 'YY-MM-DD through YY-MM-DD" do
       n = @iteration.display_name
-      n.should == @start_date.strftime( "%Y-%m-%d" ) + " through " + @end_date.strftime( "%Y-%m-%d" )
+      n.should == @started_at.strftime( "%Y-%m-%d" ) + " through " + @ended_at.strftime( "%Y-%m-%d" )
     end
   end
   
   describe "with a name" do
     before do
       @name = "FooBaz"
-      @iteration = Iteration.new :name => @name, :start_date => @start_date, :end_date => @end_date
+      @iteration = Iteration.new :name => @name, :started_at => @started_at, :ended_at => @ended_at
     end
     
     it "returns a string in the form of 'name (YY-MM-DD through YY-MM-DD)" do
       n = @iteration.display_name
-      n.should == "#{@name} (#{@start_date.strftime( "%Y-%m-%d" )} through #{@end_date.strftime( "%Y-%m-%d" )})"    
+      n.should == "#{@name} (#{@started_at.strftime( "%Y-%m-%d" )} through #{@ended_at.strftime( "%Y-%m-%d" )})"    
     end
   end
 end

@@ -10,7 +10,7 @@ class IterationsPresenter < PresentationObject
         if iteration
           IterationPresenter.new(iteration, stories)
         end
-      end.compact.sort_by(&:start_date)
+      end.compact.sort_by(&:started_at)
     end
 
     declare :backlog do

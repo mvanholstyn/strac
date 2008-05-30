@@ -7,7 +7,7 @@ describe IterationsController, '#create' do
   
   before do
     @user = stub_login_for IterationsController
-    @current_iteration = mock_model(Iteration, :start_date => nil, :update_attribute => nil)
+    @current_iteration = mock_model(Iteration, :started_at => nil, :update_attribute => nil)
     @new_current_iteration = mock_model(Iteration, 
       :build_snapshot => nil,
       :name => nil,
@@ -44,60 +44,38 @@ describe IterationsController, '#create' do
   end
   
   describe "when the project has a current iteration" do
-    it "gives the current iteration for the project an end date" do
+    it "sets the current iteration's for the project an end date" do
+      now = Time.now
+      Time.stub!(:now).and_return(now)
       @project.should_receive(:iterations).and_return(@iterations)
-      @iterations.should_receive(:current).and_return(@current_iteration)      
-      @current_iteration.should_receive(:update_attribute).with(:end_date, Date.yesterday)
+      @iterations.should_receive(:current).and_return(@current_iteration)
+      @current_iteration.should_receive(:update_attribute).with(:ended_at, now - 1.second)
       post_create
     end
   end
-    
-  describe "when the current iteration started today" do
-    before do
-      @current_iteration.stub!(:start_date).and_return(Date.today)
-    end
-    
-    it "sets the flash[:error] message telling the user they can't create another iteration" do
-      post_create
-      flash[:error].should == "You'll have to wait for two days to start another iteration."
-    end
-  end  
-
-  describe "when the current iteration started yesterday" do
-    before do
-      @current_iteration.stub!(:start_date).and_return(Date.yesterday)
-    end
-    
-    it "sets the flash[:error] message telling the user they can't create another iteration" do
-      post_create
-      flash[:error].should == "You'll have to wait for one day to start another iteration."
-    end
-  end  
-    
-  describe "when the current iteration did not start today" do
-    it "creates a new current iteration for the project" do
-      @project.should_receive(:iterations).and_return(@iterations)
-      @iterations.should_receive(:find_or_build_current).and_return(@new_current_iteration)
-      @new_current_iteration.should_receive(:save!)
-      post_create
-    end
-    
-    it "creates a snapshot of the current project stats" do
-      @new_current_iteration.should_receive(:build_snapshot).with(
-        :total_points => @project.total_points,
-        :completed_points => @project.completed_points,
-        :remaining_points => @project.remaining_points,
-        :average_velocity => @project.average_velocity,
-        :estimated_remaining_iterations => @project.estimated_remaining_iterations,
-        :estimated_completion_date => @project.estimated_completion_date)
-      post_create
-    end
-    
-    it "sets the flash[:notice] message telling the user the iteration was successfully created" do
-      @new_current_iteration.should_receive(:name).and_return("Iteration 8")
-      post_create
-      flash[:notice].should == %|Successfully started "Iteration 8".|
-    end
+        
+  it "creates a new current iteration for the project" do
+    @project.should_receive(:iterations).and_return(@iterations)
+    @iterations.should_receive(:find_or_build_current).and_return(@new_current_iteration)
+    @new_current_iteration.should_receive(:save!)
+    post_create
+  end
+  
+  it "creates a snapshot of the current project stats" do
+    @new_current_iteration.should_receive(:build_snapshot).with(
+      :total_points => @project.total_points,
+      :completed_points => @project.completed_points,
+      :remaining_points => @project.remaining_points,
+      :average_velocity => @project.average_velocity,
+      :estimated_remaining_iterations => @project.estimated_remaining_iterations,
+      :estimated_completion_date => @project.estimated_completion_date)
+    post_create
+  end
+  
+  it "sets the flash[:notice] message telling the user the iteration was successfully created" do
+    @new_current_iteration.should_receive(:name).and_return("Iteration 8")
+    post_create
+    flash[:notice].should == %|Successfully started "Iteration 8".|
   end
   
   it "redirects to the project's workspace page" do

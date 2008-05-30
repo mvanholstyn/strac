@@ -49,11 +49,11 @@ class Project < ActiveRecord::Base
   has_many :phases 
   has_many :iterations do 
     def previous
-      find(:all, :order => "start_date DESC", :limit => 2)[1]
+      find(:all, :order => "started_at DESC", :limit => 2)[1]
     end
     
     def current
-      find(:first, :conditions => ["start_date <= ? AND end_date IS NULL", Date.today])
+      find(:first, :conditions => ["started_at <= ? AND ended_at IS NULL", Time.now])
     end
     
     def backlog
@@ -61,10 +61,10 @@ class Project < ActiveRecord::Base
     end
   
     def find_or_build_current
-      current || build( :name => "Iteration #{size + 1}", :start_date => Date.today )
+      current || build( :name => "Iteration #{size + 1}", :started_at => Time.now )
     end
   end
-  has_many :completed_iterations, :source => :iterations, :class_name => Iteration.name, :conditions => [ "end_date < ?", Date.today ]
+  has_many :completed_iterations, :source => :iterations, :class_name => Iteration.name, :conditions => [ "ended_at < ?", Date.today ]
   has_many :story_tags, :class_name => Tag.name, :finder_sql => '
     SELECT tags.*
     FROM projects
@@ -87,8 +87,8 @@ class Project < ActiveRecord::Base
     stories.find(:all, :conditions => ["status_id NOT IN(?) OR status_id IS NULL", Status.complete], :order => "position ASC")
   end
   
-  def iterations_ordered_by_start_date
-    iterations.find(:all, :order => :start_date)
+  def iterations_ordered_by_started_at
+    iterations.find(:all, :order => :started_at)
   end
   
   def total_points
@@ -159,8 +159,8 @@ private
     current = iterations.find_or_build_current
     iterations.find(
       :all, 
-      :conditions=>["end_date < ? ", current.start_date], 
-      :order => "start_date ASC"
+      :conditions=>["ended_at < ? ", current.started_at], 
+      :order => "started_at ASC"
     )
   end
 end

@@ -3,8 +3,8 @@ project1_iteration1:
   id: 1
   project_id: 1
   name: Iteration 1
-  start_date: 2007-05-18 20:41:00
-  end_date: 2007-05-28 20:41:00
+  started_at: 2007-05-18 20:41:00
+  ended_at: 2007-05-28 20:41:00
   created_at: 
   updated_at: 
   type: Iteration
@@ -12,8 +12,8 @@ project1_iteration2:
   id: 2
   project_id: 1
   name: Iteration 1
-  start_date: 2007-05-29 20:41:00
-  end_date: 2007-06-09 20:41:00
+  started_at: 2007-05-29 20:41:00
+  ended_at: 2007-06-09 20:41:00
   created_at: 
   updated_at: 
   type: Iteration

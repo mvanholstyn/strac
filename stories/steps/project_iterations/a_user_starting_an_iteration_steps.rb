@@ -18,7 +18,7 @@ steps_for :a_user_starting_an_iteration do
   end
   Given "there is a project with a current iteration that has incomplete and complete stories" do
     @project = Generate.project :iterations => []
-    @iteration = Generate.iteration :project => @project, :start_date => 1.week.ago.to_date
+    @iteration = Generate.current_iteration :project => @project, :started_at => 1.week.ago
     @complete_stories = Generate.stories :count => 5, :project => @project, :status => Status.complete, :bucket => @iteration
     @incomplete_stories = Generate.stories :count => 5, :project => @project, :status => Status.defined, :bucket => @iteration
     (@complete_stories + @incomplete_stories).each_with_index do |story, i|
@@ -30,18 +30,15 @@ steps_for :a_user_starting_an_iteration do
   
   When "they click on the start iteration link" do
     click_link project_iterations_path(@project)
-    @current_iteration = @project.iterations.current
+    @current_iteration = @project.iterations.reload.current
   end
   
     
-  Then "they will see that the current iteration started today" do
-    response.should have_tag(".current_iteration_started_on", Date.today.strftime("%m-%d-%Y").to_regexp)
+  Then "they will see that the current iteration just started" do
+    response.should have_tag(".current_iteration", @current_iteration.name)
   end
-  Then "they will see an error telling them they have to wait until tomorrow to do that" do
-    response.should have_tag('#error', "You'll have to wait for two days to start another iteration.".to_regexp)
-  end
-  Then "the previous iteration will have been updated to have ended yesterday" do
-    @iteration.reload.end_date.should == Date.yesterday
+  Then "the previous iteration will have been updated to have ended just moments ago" do
+    @iteration.reload.ended_at.should be_in(@current_iteration.started_at-5.seconds .. @current_iteration.started_at)
   end
   Then "the current iteration will create a snapshot of the total number of points for the project" do
     @current_iteration.snapshot.total_points.should == @project.total_points
@@ -63,3 +60,4 @@ steps_for :a_user_starting_an_iteration do
   end
   
 end
+

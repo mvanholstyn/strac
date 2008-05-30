@@ -57,7 +57,7 @@
           <td>
             
             <%= 
-                bucket_hash = @project.buckets.find(:all, :order => :start_date).group_by(&:type)
+                bucket_hash = @project.buckets.find(:all, :order => :started_at).group_by(&:type)
                 buckets = bucket_hash.keys.inject([]) do |arr,key| 
                   values = bucket_hash[key]
                   def values.name ; first.type; end

@@ -145,7 +145,7 @@ describe Story, "when a story is completed" do
   
   describe "when there is a current iteration for the story's project" do
     before do
-      @iteration = Generate.iteration :project => @project, :start_date => Date.yesterday, :end_date => nil      
+      @iteration = Generate.iteration :project => @project, :started_at => Date.yesterday, :ended_at => nil      
     end
     
     it "assigns the story to the currently running iteration" do

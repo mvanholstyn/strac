@@ -87,8 +87,8 @@ class FullMigrationTest < ActionController::IntegrationTest
 
       s.table "buckets" do |t|
         t.column "id", :integer
-        t.column "start_date", :date
-        t.column "end_date", :date
+        t.column "started_at", :datetime
+        t.column "ended_at", :datetime
         t.column "project_id", :integer
         t.column "name", :string
         t.column "description", :text

@@ -4,7 +4,7 @@ class IterationPresenter < PresentationObject
   def initialize(iteration, stories)
     @stories = stories
     
-    delegate :id, :start_date, :end_date, :name, 
+    delegate :id, :started_at, :ended_at, :name, 
              :project, :budget, :points_completed, 
              :points_remaining, :display_name, :to => iteration
 

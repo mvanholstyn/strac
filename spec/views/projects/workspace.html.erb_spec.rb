@@ -14,12 +14,6 @@ describe "/projects/workspace.html.erb" do
     template.stub_render(:partial  => 'stories/list', :locals => { :stories => @stories })
   end
 
-  it "renders the current iteration's name" do
-    template.should_receive(:current_iteration_name).and_return("Blah&Dazzle")
-    render_it
-    response.should have_text(h("Blah&Dazzle").to_regexp)
-  end
-  
   it "renders a link to create a story for the project" do
     render_it
     response.should have_remote_link(:onclick => new_story_path(@project))

@@ -1,9 +1,9 @@
 <table id="project_summary" class="project_summary">
   <tr>
-    <th>Iteration Started On:</th>
-    <td class="current_iteration_started_on">
+    <th>Iteration:</th>
+    <td class="current_iteration">
       <% if current_iteration=project.iterations.current %>
-        <%= h current_iteration.start_date.strftime("%m-%d-%Y") %>
+        <%= h current_iteration.name %>
       <% else %>
         No iterations
       <% end %>

@@ -4,8 +4,8 @@
 # Table name: iterations
 #
 #  id         :integer(11)   not null, primary key
-#  start_date :date          
-#  end_date   :date          
+#  started_at :date          
+#  ended_at   :date          
 #  project_id :integer(11)   
 #  name       :string(255)   
 #  budget     :integer(11)   default(0)
@@ -15,13 +15,13 @@
 
 class Iteration < Bucket
 
-  validates_presence_of :start_date
+  validates_presence_of :started_at
   validate :validate_iterations_do_not_overlap
-  validate :validate_start_date_is_before_end_date
+  validate :validate_started_at_is_before_ended_at
 
   def points_before_iteration
     Story.sum( :points, 
-      :conditions => ["created_at < :start_date", { :start_date => self.start_date } ] ) || 0
+      :conditions => ["created_at < :started_at", { :started_at => self.started_at } ] ) || 0
   end
   
   def points_completed
@@ -38,9 +38,9 @@ class Iteration < Bucket
   
   def display_name
     if name.blank?
-      start_date.strftime( "%Y-%m-%d" ) + " through " + end_date.strftime( "%Y-%m-%d" )
+      started_at.strftime( "%Y-%m-%d" ) + " through " + ended_at.strftime( "%Y-%m-%d" )
     else
-      "#{name} (#{start_date.strftime( "%Y-%m-%d" ) + " through " + end_date.strftime( "%Y-%m-%d" )})"
+      "#{name} (#{started_at.strftime( "%Y-%m-%d" ) + " through " + ended_at.strftime( "%Y-%m-%d" )})"
     end
   end
 
@@ -48,8 +48,8 @@ class Iteration < Bucket
   
   def validate_iterations_do_not_overlap
     iterations = Iteration.count( :all, :conditions => [ "id #{id ? "!=" : "IS NOT"} ? AND project_id = ? " <<
-      "AND ( ? BETWEEN start_date AND end_date OR ? BETWEEN start_date AND end_date )", 
-      id, project_id, start_date, end_date ] )
+      "AND ( ? BETWEEN started_at AND ended_at OR ? BETWEEN started_at AND ended_at )", 
+      id, project_id, started_at, ended_at ] )
     
     if not iterations.zero?
       errors.add_to_base "Iterations cannot overlap"
@@ -59,9 +59,9 @@ class Iteration < Bucket
     true
   end
   
-  def validate_start_date_is_before_end_date
-    if start_date and end_date
-      if end_date <= start_date
+  def validate_started_at_is_before_ended_at
+    if started_at and ended_at
+      if ended_at <= started_at
         errors.add_to_base "start date must be before end date"
         return false
       end
