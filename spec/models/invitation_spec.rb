@@ -6,11 +6,11 @@ describe Invitation do
   end
   
   it "should belong to an inviter" do
-    assert_association Invitation, :belongs_to, :inviter, User, :class_name => "User", :foreign_key => "inviter_id"
+
   end
   
   it "should belong to a project" do
-    assert_association Invitation, :belongs_to, :project, Project
+
   end  
   
   it "should always have a project" do

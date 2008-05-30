@@ -1,4 +1,6 @@
 class PhasesController < ApplicationController
+  restrict_to :user
+
   before_filter :find_project
 
   def index

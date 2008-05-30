@@ -10,7 +10,7 @@ describe Project, "#new with no attributes" do
   end
 
   it "has many invitations" do
-    assert_association Project, :has_many, :invitations, Invitation
+
   end    
 end
 
@@ -358,6 +358,13 @@ describe Project, '#update_members' do
     @project.update_members [@members.first.id, @members.last.id]
     @project.users.reload.should == [@members.first, @members.last]
   end    
+  
+  it "does nothing when passed a blank value" do
+    @project.update_members ""
+    @project.users.should == @members
+    @project.update_members nil
+    @project.users.should == @members
+  end
 end
 
 describe '#average_velocity' do

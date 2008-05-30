@@ -4,6 +4,10 @@ class StoryTagsPresenter < PresentationObject
   constructor :tags, :project
 
   delegate :tagless_stories, :to => :@project
+
+  declare :empty? do
+    @tags.empty? 
+  end
   
   declare :tagless do
     Tag.new :name => "Stories without tags"

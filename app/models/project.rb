@@ -147,6 +147,7 @@ class Project < ActiveRecord::Base
   end
 
   def update_members(member_ids)
+    return if member_ids.blank?
     self.users.clear
     member_ids.each do |member|
       self.users << User.find(member)

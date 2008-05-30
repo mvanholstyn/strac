@@ -20,7 +20,7 @@ describe TimeEntry do
   end
   
   it "belongs to a Project" do
-    assert_association TimeEntry, :belongs_to, :project, Project
+
   end
   
   describe "#timeable - polymorphic association" do

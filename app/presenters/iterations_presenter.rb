@@ -4,6 +4,10 @@ class IterationsPresenter < PresentationObject
   def initialize(opts={})
     raise ArgumentError.new("Requires :stories") unless opts[:stories]
     orig_stories, orig_project = opts[:stories], opts[:project]
+
+    declare :empty? do
+      orig_stories.empty?
+    end
     
     declare :iterations do
       orig_stories.group_by(&:bucket).map do |iteration, stories|

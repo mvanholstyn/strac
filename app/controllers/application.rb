@@ -8,9 +8,7 @@ class ApplicationController < ActionController::Base
   include ExceptionLoggable
   
   helper :all
-  
-  restrict_to :user, :except => { :users => [ :login, :logout, :reminder, :reminder_login, :signup ] }
-  
+    
   on_permission_denied do
     flash[:error] = "You do not have the proper privileges to access this page."
     redirect_to dashboard_path

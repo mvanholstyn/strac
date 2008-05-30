@@ -143,6 +143,10 @@ class FullMigrationTest < ActionController::IntegrationTest
         t.column "updated_at", :datetime
       end
       
+      s.table "schema_migrations" do |t|
+        t.column "version", :string
+      end
+      
       s.table "snapshots" do |t|
         t.column "id", :integer
         t.column "bucket_id", :integer

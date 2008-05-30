@@ -1,4 +1,6 @@
 class CommentsController < ApplicationController
+  restrict_to :user
+
   before_filter :find_story
       
   def index

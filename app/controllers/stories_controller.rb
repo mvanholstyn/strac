@@ -1,4 +1,5 @@
 class StoriesController < ApplicationController
+  restrict_to :user
   include ERB::Util
   
   in_place_edit_for :story, :points

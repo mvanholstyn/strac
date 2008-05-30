@@ -30,11 +30,11 @@ describe Activity do
   end
 
   it "belongs to a Project" do
-    assert_association Activity, :belongs_to, :project, Project
+
   end
 
   it "belongs to an Actor (User)" do
-    assert_association Activity, :belongs_to, :actor, User, :class_name=>"User", :foreign_key => "actor_id"
+
   end
   
   describe "#affected - polymorphic association" do

@@ -11,6 +11,17 @@ describe IterationsPresenter, "#backlog" do
   end
 end
 
+describe IterationsPresenter, "#empty?" do
+  it "is empty with no stories" do
+    @iterations_presenter = IterationsPresenter.new :stories=>[], :project => Project.new
+    @iterations_presenter.empty?.should be_true
+  end
+  
+  it "is not empty with stories" do
+    @iterations_presenter = IterationsPresenter.new :stories=>["story1", "story2"], :project => Project.new
+    @iterations_presenter.empty?.should be_false
+  end
+end
 
 describe IterationsPresenter, "#project" do
   before do

@@ -1,4 +1,6 @@
 class InvitationsController < ApplicationController
+  restrict_to :user
+
   before_filter :find_project
 
   def create

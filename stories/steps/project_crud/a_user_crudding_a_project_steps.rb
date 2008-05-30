@@ -6,7 +6,26 @@ steps_for :a_user_crudding_a_project_steps do
     @user = a_user_who_just_logged_in
   end
   
-  
+  When "they try to view a project they don't have permission to access" do
+    project = Generate.project
+    get project_path(project)
+  end
+  When "they try to edit a project they don't have permission to access" do
+    project = Generate.project
+    get edit_project_path(project)
+  end
+  When "they try to destroy a project they don't have permission to access" do
+    project = Generate.project
+    delete project_path(project)
+  end
+  When "they try to update a project they don't have permission to access" do
+    project = Generate.project
+    put project_path(project)
+  end
+  When "they try to view a project's workspace they don't have permission to access" do
+    project = Generate.project
+    get workspace_project_path(project)    
+  end
   When "they click the projects link" do
     click_projects_link
   end
@@ -48,6 +67,9 @@ steps_for :a_user_crudding_a_project_steps do
     click_destroy_project_link @project
   end
   
+  Then "they will see an error telling them they can't access the resource" do
+    response.should redirect_to("/access_denied.html")
+  end
   Then "they will see an empty projects list" do
     response.should_not have_tag('.projects .project')
   end
@@ -60,7 +82,7 @@ steps_for :a_user_crudding_a_project_steps do
     see_message "Project was successfully created."
   end
   Then "they will see the project" do
-    response.should have_text(@project.name.to_regexp)
+    response.should have_text(@project.reload.name.to_regexp)
   end
   Then "they will see the project in the project list" do
     response.should have_tag('.projects .project .name', @project.name.to_regexp)
@@ -80,4 +102,5 @@ steps_for :a_user_crudding_a_project_steps do
   Then "they will not see the destroyed project in the projects list" do
     response.should_not have_tag('.projects .project .name', @project.name.to_regexp)
   end
+
 end

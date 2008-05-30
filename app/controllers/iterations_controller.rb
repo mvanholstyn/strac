@@ -1,4 +1,6 @@
 class IterationsController < ApplicationController
+  restrict_to :user
+
   def create
     if @project=ProjectPermission.find_project_for_user(params[:project_id], current_user)
       iterations = @project.iterations

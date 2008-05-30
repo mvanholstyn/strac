@@ -15,15 +15,15 @@ describe Group do
   end
 
   it "should have many Users" do
-    assert_association Group, :has_many, :users, User
+
   end
   
   it "should have many Privilege" do
-    assert_association Group, :has_many, :privileges, Privilege, :through => :group_privileges
+
   end
   
   it "should have many Group Privileges" do
-    assert_association Group, :has_many, :group_privileges, GroupPrivilege, :dependent=>:destroy
+
   end
 
 end

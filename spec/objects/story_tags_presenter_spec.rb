@@ -19,6 +19,19 @@ describe StoryTagsPresenter, '#each' do
   end
 end
 
+describe StoryTagsPresenter, "#empty?" do
+  it "is empty with no tags" do
+    @iterations_presenter = StoryTagsPresenter.new :tags=>[], :project => Project.new
+    @iterations_presenter.empty?.should be_true
+  end
+  
+  it "is not empty with tags" do
+    @iterations_presenter = StoryTagsPresenter.new :tags=>["tag1"], :project => Project.new
+    @iterations_presenter.empty?.should be_false
+  end
+end
+
+
 describe StoryTagsPresenter, '#tagless' do
   before do
     @presenter = StoryTagsPresenter.new :tags => nil, :project => nil

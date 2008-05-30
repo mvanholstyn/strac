@@ -88,6 +88,11 @@ describe UsersController, "#signup - post request with a successful user signup"
     Group.stub!(:find_by_name).with("Developer").and_return(@group)
   end
   
+  it "redirects to the dashboard path" do
+    post_signup
+    response.should redirect_to(dashboard_path)
+  end  
+  
   it "assigns the default group to the user" do
     Group.should_receive(:find_by_name).with("Developer").and_return(@group)
     post_signup
@@ -111,11 +116,6 @@ describe UsersController, "#signup - post request with a successful user signup"
     InvitationManager.stub!(:accept_pending_invitations).and_return(nil)        
     post_signup
     flash[:notice].should == "You have successfully signed up"
-  end
-
-  it "redirects to the dashboard path" do
-    post_signup
-    response.should redirect_to(dashboard_path)
   end
 
   it "sets the current user" do

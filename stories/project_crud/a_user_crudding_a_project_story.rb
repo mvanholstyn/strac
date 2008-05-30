@@ -23,6 +23,12 @@ Story "Creating/Updating/Reading/Destroying a Project", %|
     When "they click the projects link"
     Then "they will see the project in the project list"
   end
+
+  Scenario "a user trying to view a project who doesn't have permission" do
+    Given "a logged in user"
+    When "they try to view a project they don't have permission to access"
+    Then "they will see an error telling them they can't access the resource"
+  end
   
   Scenario "Updating a project" do
     GivenScenario "a user creating a project"
@@ -37,6 +43,18 @@ Story "Creating/Updating/Reading/Destroying a Project", %|
     
     When "they click the projects link"
     Then "they will see the project in the project list"
+  end
+  
+  Scenario "a user trying to edit a project who doesn't have permission" do
+    Given "a logged in user"
+    When "they try to edit a project they don't have permission to access"
+    Then "they will see an error telling them they can't access the resource"
+  end
+  
+  Scenario "a user trying to update a project who doesn't have permission" do
+    Given "a logged in user"
+    When "they try to update a project they don't have permission to access"
+    Then "they will see an error telling them they can't access the resource"
   end
   
   Scenario "Accessing a project through the dashboard" do
@@ -65,6 +83,18 @@ Story "Creating/Updating/Reading/Destroying a Project", %|
     When "they click on the link to destroy the project"
     Then "they will see the projects list"
     And "they will not see the destroyed project in the projects list"
+  end
+  
+  Scenario "a user trying to destroy a project who doesn't have permission" do
+    Given "a logged in user"
+    When "they try to destroy a project they don't have permission to access"
+    Then "they will see an error telling them they can't access the resource"
+  end
+  
+  Scenario "a user trying to view a project's workspace who doesn't have permission" do
+    Given "a logged in user"
+    When "they try to view a project's workspace they don't have permission to access"
+    Then "they will see an error telling them they can't access the resource"
   end
 
 end

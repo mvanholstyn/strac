@@ -12,19 +12,19 @@ describe Story do
   end
 
   it "belongs to a Bucket" do
-    assert_association Story, :belongs_to, :bucket, Bucket
+
   end
   
   it "belongs to a Project" do
-    assert_association Story, :belongs_to, :project, Project
+
   end
 
   it "belongs to a Status" do
-    assert_association Story, :belongs_to, :status, Status
+
   end  
     
   it "belongs to a Priority" do
-    assert_association Story, :belongs_to, :priority, Priority
+
   end
   
   describe "#responsible_party - polymorphic association" do
@@ -37,15 +37,15 @@ describe Story do
   end
   
   it "should have many Time Entries" do
-    assert_association Story, :has_many, :time_entries, TimeEntry, :as => :timeable
+
   end
   
   it "should have many Comments" do
-    assert_association Story, :has_many, :comments, Comment, :as => :commentable
+
   end
   
   it "should have many Activities" do
-    assert_association Story, :has_many, :activities, Activity, :as => :affected 
+
   end
   
   it "should require a summary" do
