@@ -11,6 +11,7 @@ module LwtTesting
   
     def move_story_to_phase(story, phase)
       go_to_edit_story(story.project, story)
+    
       submit_edit_phase_form do |form|
         form.story.bucket_id = phase.id.to_s
       end

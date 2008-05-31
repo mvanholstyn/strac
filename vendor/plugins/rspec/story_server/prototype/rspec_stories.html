@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html 
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Stories</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Expires" content="-1" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <script src="javascripts/prototype.js" type="text/javascript"></script>
+    <script src="javascripts/scriptaculous.js" type="text/javascript"></script>
+    <script src="javascripts/rspec.js" type="text/javascript"></script>
+    <link href="stylesheets/rspec.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div id="container">
+      <dl class="story passed">
+        <dt>Story: Nested example groups</dt>
+        <dd>
+          <p>
+            As an RSpec user<br />I want to nest examples groups<br />So that I can better organize my examples
+          </p>
+          <dl class="passed">
+            <dt>Scenario: Run with ruby</dt>
+            <dd>
+              <ul class="steps">
+                <li class="passed">Given the file <span class="param">../../examples/pure/stack_spec_with_nested_example_groups.rb</span></li>
+                <li class="passed">When I run it with the <span class="param">ruby interpreter -fs</span></li>
+                <li class="passed">Then the <span class="param">stdout</span> should match <span class="param">/Stack \(empty\)/</span></li>
+                <li class="passed">Then the <span class="param">stdout</span> should match <span class="param">/Stack \(full\)/</span></li>
+              </ul>
+            </dd>
+          </dl>
+          <dl class="passed">
+            <dt>Scenario: Run with ruby</dt>
+            <dd>
+              <ul class="steps">
+                <li class="passed">Given the file <span class="param">../../examples/pure/stack_spec_with_nested_example_groups.rb</span></li>
+                <li class="passed">When I run it with the <span class="param">spec script -fs</span></li>
+                <li class="passed">Then the <span class="param">stdout</span> should match <span class="param">/Stack \(empty\)/</span></li>
+                <li class="passed">Then the <span class="param">stdout</span> should match <span class="param">/Stack \(full\)/</span></li>
+              </ul>
+            </dd>
+          </dl>
+        </dd>
+      </dl>
+      <dl class="story passed">
+        <dt>Story: Spec and test together</dt>
+        <dd>
+          <p>
+            As an RSpec adopter with existing Test::Unit tests<br />I want to run a few specs alongside my existing Test::Unit tests<br />So that I can experience a smooth, gradual migration path
+          </p>
+          <dl class="passed">
+            <dt>Scenario: Run with ruby</dt>
+            <dd>
+              <ul class="steps">
+                <li class="passed">Given the file <span class="param">test/spec_and_test_together.rb</span></li>
+                <li class="passed">When I run it with the <span class="param">ruby interpreter -fs</span></li>
+                <li class="passed">Then the exit code should be <span class="param">256</span></li>
+                <li class="passed">Then the <span class="param">stdout</span> should match <span class="param">"ATest"</span></li>
+                <li class="passed">Then the <span class="param">stdout</span> should match <span class="param">"Test::Unit::AssertionFailedError in 'An Example should fail with assert'"</span></li>
+                <li class="passed">Then the <span class="param">stdout</span> should match <span class="param">"'An Example should fail with should' FAILED"</span></li>
+                <li class="passed">Then the <span class="param">stdout</span> should match <span class="param">"10 examples, 6 failures"</span></li>
+                <li class="passed">Then the <span class="param">stdout</span> should match <span class="param">/expected: 40,\s*got: 4/m</span></li>
+                <li class="passed">Then the <span class="param">stdout</span> should match <span class="param">/expected: 50,\s*got: 5/m</span></li>
+              </ul>
+            </dd>
+          </dl>
+          <dl class="passed">
+            <dt>Scenario: Run with spec</dt>
+            <dd>
+              <ul class="steps">
+                <li class="passed">Given the file <span class="param">test/spec_and_test_together.rb</span></li>
+                <li class="passed">When I run it with the <span class="param">spec script -fs</span></li>
+                <li class="passed">Then the exit code should be <span class="param">256</span></li>
+                <li class="passed">Then the <span class="param">stdout</span> should match <span class="param">"Test::Unit::AssertionFailedError in 'An Example should fail with assert'"</span></li>
+                <li class="passed">Then the <span class="param">stdout</span> should match <span class="param">"'An Example should fail with should' FAILED"</span></li>
+                <li class="passed">Then the <span class="param">stdout</span> should match <span class="param">"10 examples, 6 failures"</span></li>
+                <li class="passed">Then the <span class="param">stdout</span> should match <span class="param">/expected: 40,\s*got: 4/m</span></li>
+                <li class="passed">Then the <span class="param">stdout</span> should match <span class="param">/expected: 50,\s*got: 5/m</span></li>
+              </ul>
+            </dd>
+          </dl>
+        </dd>
+      </dl>
+      <dl class="story passed">
+        <dt>Story: Test::Unit::TestCase extended by rspec with should methods</dt>
+        <dd>
+          <p>
+            As an RSpec adopter with existing Test::Unit tests<br />I want to use should_* methods in a Test::Unit::TestCase<br />So that I use RSpec with classes and methods that look more like RSpec examples
+          </p>
+          <dl class="passed">
+            <dt>Scenario: Run with ruby</dt>
+            <dd>
+              <ul class="steps">
+                <li class="passed">Given the file <span class="param">test/test_case_with_should_methods.rb</span></li>
+                <li class="passed">When I run it with the <span class="param">ruby interpreter</span></li>
+                <li class="passed">Then the exit code should be <span class="param">256</span></li>
+                <li class="passed">Then the <span class="param">stdout</span> should match <span class="param">"5 examples, 3 failures"</span></li>
+              </ul>
+            </dd>
+          </dl>
+          <dl class="passed">
+            <dt>Scenario: Run with spec</dt>
+            <dd>
+              <ul class="steps">
+                <li class="passed">Given the file <span class="param">test/test_case_with_should_methods.rb</span></li>
+                <li class="passed">When I run it with the <span class="param">spec script</span></li>
+                <li class="passed">Then the exit code should be <span class="param">256</span></li>
+                <li class="passed">Then the <span class="param">stdout</span> should match <span class="param">"5 examples, 3 failures"</span></li>
+              </ul>
+            </dd>
+          </dl>
+        </dd>
+      </dl>
+      <ul id="stock_steps" style="display: none;">
+        <li>I run it with the $interpreter</li>
+        <li>the $stream should match $regex</li>
+        <li>the exit code should be $exit_code</li>
+        <li>the file $relative_path</li>
+      </ul>
+    </div>
+  </body>
+</head>

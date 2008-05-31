@@ -112,7 +112,7 @@ module Spec
           defaults = { :layout => false }
           options = defaults.merge options
 
-          @controller.instance_variable_set :@params, @request.parameters
+          @controller.send(:params).reverse_merge! @request.parameters
 
           @controller.send :initialize_current_url
 
@@ -147,6 +147,11 @@ module Spec
         end
 
         Spec::Example::ExampleGroupFactory.register(:view, self)
+
+        protected
+        def _assigns_hash_proxy
+          @_assigns_hash_proxy ||= AssignsHashProxy.new @controller
+        end
       end
 
       class ViewExampleGroupController < ApplicationController #:nodoc:

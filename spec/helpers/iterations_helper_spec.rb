@@ -6,12 +6,12 @@ describe IterationsHelper, "#display_stories_list_for_iteration given an iterati
     @stories = mock "stories"
     
     @iteration.should_receive(:stories).and_return(@stories)
-    self.should_receive(:render).with(
+    helper.should_receive(:render).with(
       :partial => 'stories/list', 
       :locals => { :stories => @stories }
     ).and_return("RENDERED LIST")
 
-    display_stories_list_for_iteration(@iteration).should == "RENDERED LIST"
+    helper.display_stories_list_for_iteration(@iteration).should == "RENDERED LIST"
   end
 end
 

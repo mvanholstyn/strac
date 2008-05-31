@@ -52,6 +52,7 @@ module Spec
           self
         end
       end
+      alias :context :describe
 
       # Use this to pull in examples from shared example groups.
       # See Spec::Runner for information about shared example groups.
@@ -158,10 +159,12 @@ module Spec
         @description_text = ExampleGroupMethods.description_text(*args)
         @spec_path = File.expand_path(options[:spec_path]) if options[:spec_path]
         if described_type.class == Module
-          include described_type
+          @described_module = described_type
         end
         self
       end
+      
+      attr_reader :described_module
 
       def examples #:nodoc:
         examples = example_objects.dup

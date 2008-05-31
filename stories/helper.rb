@@ -15,3 +15,8 @@ Generate.group(:name => "Developer")
 class RailsStory
   include ActionView::Helpers::RecordIdentificationHelper
 end
+
+# global fixtures for stories
+%w(statuses priorities).each do |story|
+  Fixtures.create_fixtures("#{RAILS_ROOT}/spec/fixtures", story)
+end
