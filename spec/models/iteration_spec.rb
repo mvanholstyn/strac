@@ -59,22 +59,15 @@ describe Iteration do
 end
 
 describe Iteration, "#points_completed" do
-  fixtures :statuses
-
   def points_completed
     @iteration.points_completed
   end
 
   before do
-    @iteration = Iteration.create!(:project_id => 1, :started_at => Date.today, :ended_at => Date.today+1, :budget => 25, :name => "Iteration 1")    
+    @iteration = Generate.iteration    
   end
   
   describe "with no stories" do
-    before do
-      Iteration.destroy_all
-      Story.destroy_all
-    end
-
     it "returns 0" do
       points_completed.should == 0    
     end
@@ -82,10 +75,10 @@ describe Iteration, "#points_completed" do
   
   describe "with no completed stories" do
     before do
-      @iteration.stories << Story.create!(:status_id=>Status.blocked.id, :points=>10, :project_id=>@iteration.project_id, :summary=>"Story 1")
-      @iteration.stories << Story.create!(:status_id=>Status.rejected.id, :points=>7, :project_id=>@iteration.project_id, :summary=>"Story 2")
-      @iteration.stories << Story.create!(:status_id=>Status.defined.id, :points=>5, :project_id=>@iteration.project_id, :summary=>"Story 3")
-      @iteration.stories << Story.create!(:status_id=>Status.in_progress.id, :points=>5, :project_id=>@iteration.project_id, :summary=>"Story 3")
+      @iteration.stories << Generate.story(:status_id=>Status.blocked.id, :points=>10, :project=>@iteration.project, :summary=>"Story 1")
+      @iteration.stories << Generate.story(:status_id=>Status.rejected.id, :points=>7, :project=>@iteration.project, :summary=>"Story 2")
+      @iteration.stories << Generate.story(:status_id=>Status.defined.id, :points=>5, :project=>@iteration.project, :summary=>"Story 3")
+      @iteration.stories << Generate.story(:status_id=>Status.in_progress.id, :points=>5, :project=>@iteration.project, :summary=>"Story 3")
     end
     
     it "returns 0" do
@@ -95,29 +88,26 @@ describe Iteration, "#points_completed" do
   
   describe "with completed stories" do
     before do
-      @iteration.stories << Story.create!(:status_id=>Status.complete.id, :points=>10, :project_id=>@iteration.project_id, :summary=>"Story 1")
-      @iteration.stories << Story.create!(:status_id=>Status.complete.id, :points=>7, :project_id=>@iteration.project_id, :summary=>"Story 2")
-      @iteration.stories << Story.create!(:status_id=>Status.complete.id, :points=>5, :project_id=>@iteration.project_id, :summary=>"Story 3")
+      @iteration.stories << Generate.story(:status_id=>Status.complete.id, :points=>10, :project=>@iteration.project, :summary=>"Story 1")
+      @iteration.stories << Generate.story(:status_id=>Status.complete.id, :points=>7, :project=>@iteration.project, :summary=>"Story 2")
+      @iteration.stories << Generate.story(:status_id=>Status.complete.id, :points=>5, :project=>@iteration.project, :summary=>"Story 3")
     end
 
     it "returns the sum of completed story points" do
       points_completed.should == 22
     end
   end
-
 end
 
 describe Iteration, '#total_points' do
-  fixtures :statuses
-
   def total_points
     @iteration.total_points
   end
 
   before do
     @iteration = Generate.iteration(:started_at => Date.today, :ended_at => Date.today+1.week, :budget => 25, :name => "Iteration 1")
-    @iteration.stories << Story.create!(:status_id=>Status.complete.id, :points=>10, :project_id=>@iteration.project_id, :summary=>"Story 1")
-    @iteration.stories << Story.create!(:status_id=>Status.defined.id, :points=>5, :project_id=>@iteration.project_id, :summary=>"Story 2")
+    @iteration.stories << Generate.story(:status_id=>Status.complete.id, :points=>10, :project=>@iteration.project, :summary=>"Story 1")
+    @iteration.stories << Generate.story(:status_id=>Status.defined.id, :points=>5, :project=>@iteration.project, :summary=>"Story 2")
   end
 
   it "returns the total number of story points" do
@@ -126,16 +116,14 @@ describe Iteration, '#total_points' do
 end
 
 describe Iteration, '#points_remaining' do
-  fixtures :statuses
-  
   def points_remaining
     @iteration.points_remaining
   end
 
   before do
     @iteration = Generate.iteration(:started_at => Date.today, :ended_at => Date.today+1.week, :budget => 25, :name => "Iteration 1")
-    @iteration.stories << Story.create!(:status_id=>Status.complete.id, :points=>10, :project_id=>@iteration.project_id, :summary=>"Story 1")
-    @iteration.stories << Story.create!(:status_id=>Status.defined.id, :points=>5, :project_id=>@iteration.project_id, :summary=>"Story 2")
+    @iteration.stories << Generate.story(:status_id=>Status.complete.id, :points=>10, :project=>@iteration.project, :summary=>"Story 1")
+    @iteration.stories << Generate.story(:status_id=>Status.defined.id, :points=>5, :project=>@iteration.project, :summary=>"Story 2")
   end
   
   it "returns the number of remaining story points" do
@@ -144,18 +132,16 @@ describe Iteration, '#points_remaining' do
 end
 
 describe Iteration, '#points_before_iteration' do
-  fixtures :statuses
-  
   def points_before_iteration
     @iteration.points_before_iteration
   end
   
   before do
     @iteration = Generate.iteration(:started_at => Date.today, :ended_at => Date.today+1.week, :budget => 25, :name => "Iteration 1")
-    @iteration.stories << Story.create!(:status_id=>Status.complete.id, :points=>10, :project_id=>@iteration.project_id, :summary=>"Story 1")
-    @iteration.stories << Story.create!(:status_id=>Status.defined.id, :points=>5, :project_id=>@iteration.project_id, :summary=>"Story 2")
-    Story.create!(:created_at=>Date.today-1, :status_id=>Status.complete.id, :points=>2, :project_id=>1, :summary=>"Story from yesterday", :project => @iteration.project)
-    Story.create!(:created_at=>Date.today-7, :status_id=>Status.defined.id, :points=>3, :project_id=>1, :summary=>"Story from last week", :project => @iteration.project)
+    @iteration.stories << Generate.story(:status_id=>Status.complete.id, :points=>10, :project=>@iteration.project, :summary=>"Story 1")
+    @iteration.stories << Generate.story(:status_id=>Status.defined.id, :points=>5, :project=>@iteration.project, :summary=>"Story 2")
+    Generate.story(:created_at=>Date.today-1, :status_id=>Status.complete.id, :points=>2, :project_id=>1, :summary=>"Story from yesterday", :project => @iteration.project)
+    Generate.story(:created_at=>Date.today-7, :status_id=>Status.defined.id, :points=>3, :project_id=>1, :summary=>"Story from last week", :project => @iteration.project)
   end
   
   it "returns the number story points that existed before the iteration's start date" do
@@ -164,14 +150,14 @@ describe Iteration, '#points_before_iteration' do
 end
 
 describe Iteration, '#display_name' do
-  before do
+  before(:each) do
     @started_at = Time.now.yesterday
     @ended_at = Time.now
   end
   
-  describe "with a blank name" do
-    before do
-      @iteration = Iteration.new :started_at => @started_at, :ended_at => @ended_at
+  describe "an iteration with a blank name that has been completed" do
+    before(:each) do
+      @iteration = Iteration.new :started_at => @started_at, :ended_at => @ended_at, :name => ""
     end
     
     it "returns a string in the form of 'YY-MM-DD through YY-MM-DD" do
@@ -179,9 +165,20 @@ describe Iteration, '#display_name' do
       n.should == @started_at.strftime( "%Y-%m-%d" ) + " through " + @ended_at.strftime( "%Y-%m-%d" )
     end
   end
+
+  describe "an iteration with a blank name that is still in progress" do
+    before(:each) do
+      @iteration = Iteration.new :started_at => @started_at, :ended_at => nil, :name => ""
+    end
+    
+    it "returns a string in the form of 'YY-MM-DD through Now" do
+      n = @iteration.display_name
+      n.should == @started_at.strftime( "%Y-%m-%d" ) + " through Now"
+    end
+  end
   
-  describe "with a name" do
-    before do
+  describe "an iteration with a name that has been completed" do
+    before(:each) do
       @name = "FooBaz"
       @iteration = Iteration.new :name => @name, :started_at => @started_at, :ended_at => @ended_at
     end
@@ -191,5 +188,19 @@ describe Iteration, '#display_name' do
       n.should == "#{@name} (#{@started_at.strftime( "%Y-%m-%d" )} through #{@ended_at.strftime( "%Y-%m-%d" )})"    
     end
   end
+
+
+  describe "an iteration with a name that is still in progress" do
+    before(:each) do
+      @name = "FooBaz"
+      @iteration = Iteration.new :name => @name, :started_at => @started_at, :ended_at => nil
+    end
+    
+    it "returns a string in the form of 'name (YY-MM-DD through Now)" do
+      n = @iteration.display_name
+      n.should == "#{@name} (#{@started_at.strftime( "%Y-%m-%d" )} through Now)"    
+    end
+  end
 end
+
 

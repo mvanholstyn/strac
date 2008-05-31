@@ -1,7 +1,9 @@
 <h2><%=h @project.name %></h2>
 
-<h3>Project Statistics</h3>
-<%= image_tag chart_project_path(@project) %>
+<% if @project.display_chart? %>
+  <h3>Project Statistics</h3>
+  <%= image_tag chart_project_path(@project) %>
+<% end %>
 
 <h3>Last Week of Activities</h3>
 <%= render :partial => "activities/list", :locals => { :project => @project, :activities => @project.recent_activities(1.week) } %>

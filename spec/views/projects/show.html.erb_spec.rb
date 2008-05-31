@@ -7,7 +7,10 @@ describe "/projects/show.html.erb" do
   end
   
   before do
-    @project = mock_model(Project, :name => "Foo", :recent_activities => nil)
+    @project = mock_model(Project, 
+      :display_chart? => false,
+      :name => "Foo", 
+      :recent_activities => nil)
     template.stub_render(:partial => "activities/list", :locals => anything)
   end
 
@@ -16,9 +19,26 @@ describe "/projects/show.html.erb" do
     response.should have_text("Foo".to_regexp)
   end
   
-  it "displays a project chart image" do
-    render_it
-    response.should have_tag("img[src=?]", chart_project_path(@project))
+  describe "when the project chart should be displayed" do
+    before do 
+      @project.stub!(:display_chart?).and_return(true)
+    end
+  
+    it "displays a project chart image" do
+      render_it
+      response.should have_tag("img[src=?]", chart_project_path(@project))
+    end
+  end
+  
+  describe "when the project chart should not be displayed" do
+    before do 
+      @project.stub!(:display_chart?).and_return(false)
+    end
+
+    it "does not display a project chart image" do
+      render_it
+      response.should_not have_tag("img[src=?]", chart_project_path(@project))
+    end    
   end
   
   it "renders the last week of activities" do

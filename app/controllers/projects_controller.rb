@@ -22,7 +22,9 @@ class ProjectsController < ApplicationController
   end
 
   def show
-    @project = ProjectManager.get_project_for_user(params[:id], current_user)
+    @project = ProjectPresenter.new(
+      :project => ProjectManager.get_project_for_user(params[:id], current_user)
+    )
   end
 
   def new

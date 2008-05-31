@@ -37,10 +37,14 @@ class Iteration < Bucket
   end
   
   def display_name
+    started = started_at.strftime( "%Y-%m-%d" )
+    ended = ended_at.blank? ? "Now" : ended_at.strftime( "%Y-%m-%d" )
+    msg = "#{started} through #{ended}"
+    
     if name.blank?
-      started_at.strftime( "%Y-%m-%d" ) + " through " + ended_at.strftime( "%Y-%m-%d" )
+      msg
     else
-      "#{name} (#{started_at.strftime( "%Y-%m-%d" ) + " through " + ended_at.strftime( "%Y-%m-%d" )})"
+      "#{name} (#{msg})"
     end
   end
 

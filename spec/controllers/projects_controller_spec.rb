@@ -58,6 +58,7 @@ describe ProjectsController, "#show" do
     @user = mock_model(User)
     @project = mock_model(Project)
     ProjectManager.stub!(:get_project_for_user).and_return(@project)
+    ProjectPresenter.stub!(:new)
     login_as @user
   end
 
@@ -72,8 +73,11 @@ describe ProjectsController, "#show" do
     end
     
     it "assigns the requested project" do
+      ProjectPresenter.should_receive(:new).with(
+        :project => @project
+      ).and_return("presenter")
       get_show
-      assigns[:project].should == @project
+      assigns[:project].should == "presenter"
     end
 
     it "renders show template" do
