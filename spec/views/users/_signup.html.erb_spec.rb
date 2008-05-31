@@ -19,6 +19,20 @@ describe "/users/_signup.html.erb" do
     render_it  
     see_the_signup_form
   end
+
+  it "has a first name text field" do
+    render_it
+    in_the_signup_form do
+      response.should have_text_field(:id => "user_first_name")
+    end
+  end
+
+  it "has a last name text field" do
+    render_it
+    in_the_signup_form do
+      response.should have_text_field(:id => "user_last_name")
+    end
+  end
   
   it "has a email address text field" do
     render_it

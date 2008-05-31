@@ -14,7 +14,7 @@ module LwtTesting
       login_as user.email_address, "password"
       user
     end
-    
+        
     def a_user_viewing_a_project(options={})
       reset!
       @__user_count ||= 0
@@ -27,6 +27,7 @@ module LwtTesting
       get login_path
       login_as @user.email_address, "password"
       click_project_link_for @project
+      @user
     end
 
     def a_user_viewing_the_stories_page_of_a_project

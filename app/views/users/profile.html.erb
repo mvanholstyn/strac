@@ -3,7 +3,7 @@
 
   <%= error_messages_for :user %>
 
-  <% form_for(:user, current_user, :html => { :method => :put }) do |form| %>
+  <% form_for(:user, current_user, :html => { :method => :put, :id => "user_form" }) do |form| %>
     <p>
       <b>First name</b><br />
       <%= form.text_field :first_name %>

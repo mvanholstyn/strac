@@ -2,8 +2,16 @@ module LwtTesting
   module Submits
     
     def submit_signup_form(opts={})
-      opts.reverse_merge!(:email_address=>"chrisrittersdorf@gmail.com", :password=>"secret", :password_confirmation=>"secret")
+      opts = opts.reverse_merge(
+        :email_address => "chrisrittersdorf@gmail.com", 
+        :first_name => "Joe",
+        :last_name => "Smoe",
+        :password => "secret", 
+        :password_confirmation => "secret"
+      )
       submit_form "signup" do |form|
+        form.user.first_name = opts[:first_name]
+        form.user.last_name = opts[:last_name]
         form.user.email_address = opts[:email_address]
         form.user.password = opts[:password]
         form.user.password_confirmation = opts[:password_confirmation]
@@ -46,6 +54,10 @@ module LwtTesting
     
     def submit_project_form(project, &blk)
       submit_form_by_id dom_id(project, 'edit'), &blk
+    end
+    
+    def submit_profile_form(user, &blk)
+      submit_form_by_id 'user_form', &blk
     end
     
     def submit_login_form(&blk)

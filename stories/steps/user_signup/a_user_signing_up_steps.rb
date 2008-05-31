@@ -11,7 +11,11 @@ steps_for :a_user_signing_up do
     click_signup_link
   end
   When "they submit the form with acceptable data" do
-    submit_signup_form :email_address => "zach.dennis@gmail.com"
+    submit_signup_form(
+      :email_address => "zach.dennis@gmail.com",
+      :first_name => "Joe",
+      :last_name => "Smoe"
+    )
   end
 
 

@@ -2,6 +2,16 @@
 
 <% form_for :user, :url => signup_path, :html =>{:id => "signup"} do |form| -%>
 	<p>
+  	<b>First Name</b><br />
+		<%= form.text_field :first_name %>
+  </p>
+
+	<p>
+  	<b>Last Name</b><br />
+		<%= form.text_field :last_name %>
+  </p>
+
+	<p>
   	<b>Email Address</b><br />
 		<%= form.text_field :email_address %>
   </p>
