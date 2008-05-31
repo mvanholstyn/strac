@@ -3,40 +3,15 @@ class ProjectsController < ApplicationController
   
   def chart
     @project=ProjectPermission.find_project_for_user(params[:id], current_user)
-    total_points = []
-    points_completed = []
-    points_remaining = []
-    
-    iterations = @project.iterations.sort_by{ |iteration| iteration.started_at }
-    iterations.each do |iteration|
-      points_completed << iteration.snapshot.completed_points
-      points_remaining << iteration.snapshot.remaining_points
-      total_points << iteration.snapshot.total_points
-    end
-    points_completed << @project.completed_points
-    points_remaining << @project.remaining_points
-    total_points << @project.total_points
-
-    step_count = 6
-    min = 0
-    max = (points_completed + total_points + points_remaining).max
-    step = max / step_count.to_f
-    ylabels = []
-    min.step(max, step) { |f| ylabels << f.round }
-    xlabels = iterations.map{ |e| iterations.index(e) } + ["current"]
-
-    red = 'FF0000'
-    yellow = 'FFFF00'
-    green = '00FF00'
-    blue = '0000FF'
+    @chart = Project::Chart.new @project
     
     chart = Gchart.new(
-     :data =>       [total_points, points_remaining, points_completed], 
-     :bar_colors => [blue,         green,            yellow],
+     :data =>       @chart.data, 
+     :bar_colors => @chart.colors,
      :size => "600x200",
      :axis_with_labels => ["x", "y"],
-     :axis_labels => [xlabels, ylabels],
-     :legend => ["Total Points", "Points Remaining", "Total Points Completed"]
+     :axis_labels => [@chart.xlabels, @chart.ylabels],
+     :legend => @chart.legend
     )
     
     render :text => chart.send!(:fetch)

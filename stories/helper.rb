@@ -10,13 +10,15 @@ require dir + "/../spec/spec_helpers/model_generation"
 Dir[dir + "/story_helpers/**/*.rb"].each { |f| require f }
 Dir["#{dir}/steps/**/*.rb"].each { |f| require f }
 
-Generate.group(:name => "Developer")
-
 class RailsStory
   include ActionView::Helpers::RecordIdentificationHelper
 end
+
+Generate.group :name => "Developer"
+
 
 # global fixtures for stories
 %w(statuses priorities).each do |story|
   Fixtures.create_fixtures("#{RAILS_ROOT}/spec/fixtures", story)
 end
+

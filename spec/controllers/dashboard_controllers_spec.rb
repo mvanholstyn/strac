@@ -1,35 +1,30 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe DashboardController, "user without 'user' privileges viewing the project page" do
-  fixtures :users, :groups_privileges, :privileges, :groups
-
   before do
-    @user = old_login_as :user_without_privileges
-    @user.has_privilege?(:user).should_not be_true
-  
-    get :index
+    @user = stub_login_for DashboardController
+    @user.stub!(:has_privilege?).with(:user).and_return(false)  
   end
   
-  # TODO - shouldn't this redirect to the login path?
   it "redirects to the dashboard path" do
+    get :index
     response.should redirect_to(dashboard_path)
   end
 end
 
 describe DashboardController, "user with 'user' privileges viewing the project page" do
-  fixtures :users, :groups_privileges, :privileges, :groups
 
   before do
-    @user = old_login_as :joe
-    @user.has_privilege?(:user).should be_true
-    @user.projects.destroy_all
-    @project = Project.create! :name => "Test Project"
-    @user.projects << @project
-  
-    get :index
+    @user = stub_login_for DashboardController
+    @user.stub!(:has_privilege?).with(:user).and_return(true)
+    @user.stub!(:projects).and_return([])
+    @project = mock_model(Project)
+    ProjectPermission.stub!(:find_all_projects_for_user).and_return(@project)
   end
   
   it "assigns projects to the logged in users projects" do
-    assigns[:projects].should == @user.projects
+    ProjectPermission.should_receive(:find_all_projects_for_user).and_return(@project)
+    get :index
+    assigns[:projects].should == @project
   end
 end

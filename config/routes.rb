@@ -9,7 +9,7 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.resources :tags, :collection => { :auto_complete => :any }
-  map.resources :projects, :member => { :workspace => :get } do |project_map|
+  map.resources :projects, :member => { :workspace => :get, :chart => :get } do |project_map|
     project_map.resources :phases
     project_map.resources :invitations
     project_map.resources :stories, :name_prefix => nil,
