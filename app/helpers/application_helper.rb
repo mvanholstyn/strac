@@ -52,6 +52,7 @@ module ApplicationHelper
   
   # TODO - come up with a great way to test this or extract it out in a couple objects or methods and test those
   def expand_ids( data )
+    return unless data
     data.gsub( /(^|\W)((#{Conversion.conversions.map{ |k,c| k.to_s }.join( '|' )})(\d+))(\W|$)/ ) do |match|
       conversion = Conversion.conversions[$3.to_sym]
       object = conversion.model.find_by_id( $4 )

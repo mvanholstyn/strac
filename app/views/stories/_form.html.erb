@@ -32,7 +32,13 @@
           <td>
 						<%= form.text_field :tag_list, :size => 41, :id => "story_#{story.id || "nil"}_tag_list" %>
 						<div id="story_<%= story.id || "nil" %>_tag_list_auto_complete" class="auto_complete_results"></div>
-						<%= auto_complete_field "story_#{story.id || "nil"}_tag_list", :url => auto_complete_tags_path, :tokens => ",", :param_name => 'tag' %>
+						<%= auto_complete_field(
+  						  "story_#{story.id || "nil"}_tag_list", 
+  						  :url => auto_complete_tags_path, 
+  						  :tokens => ",", 
+  						  :param_name => 'tag',
+  						  :method=>"get")
+						 %>
           </td>
         </tr>
       </table>
@@ -57,7 +63,7 @@
           <td>
             
             <%= 
-                bucket_hash = @project.buckets.find(:all, :order => :started_at).group_by(&:type)
+                bucket_hash = @project.buckets.group_by(&:type)
                 buckets = bucket_hash.keys.inject([]) do |arr,key| 
                   values = bucket_hash[key]
                   def values.name ; first.type; end
@@ -82,7 +88,7 @@
             <b>Status</b>
           </td>
           <td>
-						<%= form.select :status_id, @statuses %>
+						<%= form.collection_select :status_id, story.possible_statuses, :id, :name %>
           </td>
         </tr>
         <tr>
@@ -90,7 +96,7 @@
             <b>Priority</b>
           </td>
           <td>
-						<%= form.select :priority_id, @priorities %>
+						<%= form.collection_select :priority_id, story.possible_priorities, :id, :name %>
           </td>
         </tr>
       </table>

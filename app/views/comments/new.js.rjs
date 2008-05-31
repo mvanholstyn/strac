@@ -1,2 +1,2 @@
-page["story_#{@story.id}_new_comment"].replace_html :partial => 'new'
+page.replace_html "story_#{@story.id}_new_comment", :partial => 'new', :locals => { :story => @story }
 page.call "show_with_smart_loading", "story_#{@story.id}_new_comment", true

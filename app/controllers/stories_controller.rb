@@ -14,7 +14,7 @@ class StoriesController < ApplicationController
   end
 
   def show
-    @story = @project.stories.find(params[:id], :include => [:tags, :comments] )
+    @story = StoryPresenter.new :story => @project.stories.find(params[:id], :include => [:tags, :comments] )
     @comments = @story.comments
     should_render_comment_links = false
 
@@ -22,12 +22,12 @@ class StoriesController < ApplicationController
   end
 
   def new
-    @story = @project.stories.build :bucket_id => params[:bucket_id]
+    @story = StoryPresenter.new :story => @project.stories.build(:bucket_id => params[:bucket_id])
     respond_to :js
   end
   
   def edit
-    @story = @project.stories.find(params[:id], :include => :tags)
+    @story = StoryPresenter.new(:story => @project.stories.find(params[:id], :include => :tags))
     respond_to do |format|
       format.html
       format.js { render :action => 'edit' }
@@ -35,11 +35,12 @@ class StoriesController < ApplicationController
   end
 
   def create
-    @story = @project.stories.build(params[:story])
-
+    story = @project.stories.build(params[:story])
+    @story = StoryPresenter.new :story => story
     respond_to do |format|
-      if @story.save
+      if story.save
         format.js do
+          # TODO HERE
           find_priorities_and_statuses
         end
       else
@@ -52,14 +53,15 @@ class StoriesController < ApplicationController
   end
 
   def update
-    @story = @project.stories.find(params[:id], :include => :tags)
-
+    story = @project.stories.find(params[:id], :include => :tags)
+    @story = StoryPresenter.new :story => story
+    
     respond_to do |format|
-      if @story.update_attributes(params[:story])
+      if story.update_attributes(params[:story])
         #TODO: If this stories iteration is changed, then it should move
         format.html do 
-          flash[:notice] = %("#{h(@story.summary)}" was successfully updated.)
-          redirect_to story_path(@project, @story)
+          flash[:notice] = %("#{h(story.summary)}" was successfully updated.)
+          redirect_to story_path(@project, story)
         end
         format.js { render :template => "stories/update.js.rjs" }
       else

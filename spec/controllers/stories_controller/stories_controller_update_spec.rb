@@ -12,6 +12,7 @@ describe StoriesController, '#update' do
     @project = stub("project", :stories => @stories)
     @story_params = { 'summary' => 'foo' }
     ProjectManager.stub!(:get_project_for_user).and_return(@project)
+    StoryPresenter.stub!(:new)
   end
   
   it "finds the requested story" do
@@ -22,8 +23,10 @@ describe StoriesController, '#update' do
   
   it "assigns @story" do
     @stories.stub!(:find).and_return(@story)
+    story_presenter = mock "StoryPresenter"
+    StoryPresenter.should_receive(:new).with(:story => @story).and_return(story_presenter)
     put_update
-    assigns[:story].should == @story
+    assigns[:story].should == story_presenter
   end
   
   it "updates the story" do

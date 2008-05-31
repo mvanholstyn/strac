@@ -27,7 +27,7 @@ class Story < ActiveRecord::Base
   belongs_to :responsible_party, :polymorphic => true
   has_many :time_entries, :as => :timeable
   has_many :comments, :as => :commentable
-  has_many :activities, :as => :affected 
+  has_many :activities, :as => :affected
 
   acts_as_list :scope => :bucket_id
   acts_as_taggable

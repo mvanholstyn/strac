@@ -7,10 +7,10 @@ describe StoriesController, '#edit' do
   
   before do
     stub_login_for StoriesController
-    @project = stub("project")
     @stories = stub("stories", :find => nil)
+    @project = stub("project", :stories => @stories)
     ProjectManager.stub!(:get_project_for_user).and_return(@project)
-    @project.stub!(:stories).and_return(@stories)
+    StoryPresenter.stub!(:new)
   end
   
   it "finds the requested story" do
@@ -21,9 +21,11 @@ describe StoriesController, '#edit' do
   
   it "assigns @story" do
     story = stub("story")
+    story_presenter = stub("story presenter")
     @stories.stub!(:find).and_return(story)
+    StoryPresenter.should_receive(:new).with(:story => story).and_return(story_presenter)
     get_edit
-    assigns[:story].should == story
+    assigns[:story].should == story_presenter
   end
   
   describe StoriesController, 'html request' do

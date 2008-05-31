@@ -1,6 +1,6 @@
 page[:notice].replace_html %("#{@story.summary}" was successfully created.)
-page[:error].hide
-page[:notice].show
+page.hide :error
+page.show :notice
 page.visual_effect :appear, :notice
 page.delay( 5 ) {  page.visual_effect :fade, :notice }
 
@@ -11,6 +11,7 @@ iteration_list_ids = [ "iteration_nil" ] + @project.iterations.map{ |i| "iterati
 page.sortable bucket_id, :url => reorder_stories_path(@project), :method => :put,
                             :tag => 'div', :handle => 'draggable', :dropOnEmpty => true, :containment => iteration_list_ids
 
-@story = Story.new :bucket_id => @story.bucket_id # we want a fresh form
+@story = StoryPresenter.new :story =>Story.new(:bucket_id => @story.bucket_id, :project => @story.project)
 page["#{bucket_id}_story_new"].replace_html :partial => 'stories/new', :locals => { :story => @story }
+
 page.call "Strac.Iteration.drawWorkspaceVelocityMarkers"
