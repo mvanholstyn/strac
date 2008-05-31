@@ -63,13 +63,7 @@
           <td>
             
             <%= 
-                bucket_hash = @project.buckets.group_by(&:type)
-                buckets = bucket_hash.keys.inject([]) do |arr,key| 
-                  values = bucket_hash[key]
-                  def values.name ; first.type; end
-                  def values.group ; self ; end
-                  arr << values
-                end
+                buckets = story.possible_buckets
                 select_tag "story[bucket_id]", 
                   "<option></option>" + option_groups_from_collection_for_select(buckets, :group, :name, :id, :name, story.bucket_id)
                   %>

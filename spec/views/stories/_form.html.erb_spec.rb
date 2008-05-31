@@ -16,6 +16,7 @@ describe "/stories/_form.html.erb" do
       :bucket_id => 90,
       :description => nil,
       :points => 100,
+      :possible_buckets => [],
       :possible_priorities => [],
       :possible_statuses => [],
       :priority_id => 105,
@@ -25,7 +26,7 @@ describe "/stories/_form.html.erb" do
       :tag_list => nil
     )
     @users = stub("users", :find => [])
-    @project = mock_model(Project, :buckets => [], :users => @users)
+    @project = mock_model(Project, :users => @users)
     @priorities = []
   end
 
@@ -107,19 +108,21 @@ describe "/stories/_form.html.erb" do
   end
   
   it "has a bucket dropdown select" do
-    my_buckets = [
-      mock_model(Bucket, :name => "Iteration 1", :type => "Iteration"), 
-      mock_model(Bucket, :name => "Phase 1", :type => "Phase")
+    iteration_bucket = mock_model(Bucket, :name => "Iteration 1")
+    phase_bucket = mock_model(Bucket, :name => "Phase 1")
+    bucket_groups = [ 
+      OpenStruct.new(:name => "Iteration", :group => [iteration_bucket]),
+      OpenStruct.new(:name => "Phase", :group => [phase_bucket])
     ]
-    @project.should_receive(:buckets).and_return(my_buckets)
-    @story.stub!(:bucket_id).and_return(my_buckets.last.id)
+    @story.should_receive(:possible_buckets).and_return(bucket_groups)
+    @story.should_receive(:bucket_id).and_return(phase_bucket.id)
     render_it
     response.should have_tag('select[name=?]', 'story[bucket_id]') do
       with_tag('optgroup[label=?]',"Iteration") do
-        with_tag('option[value=?]', my_buckets.first.id, "Iteration 1")
+        with_tag('option[value=?]', iteration_bucket.id, "Iteration 1")
       end
       with_tag('optgroup[label=?]',"Phase") do
-        with_tag('option[value=?][selected=selected]', my_buckets.last.id, "Phase 1")
+        with_tag('option[value=?][selected=selected]', phase_bucket.id, "Phase 1")
       end
     end
     
