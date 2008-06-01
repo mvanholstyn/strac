@@ -1,15 +1,8 @@
 class InvitationsController < ApplicationController
-  restrict_to :user
-
   before_filter :find_project
 
   def create
-    email_addresses = params[:email_addresses].split(/\s*,\s*/)
-    invitations = email_addresses.map do |recipient|
-      Invitation.create!(:project => @project, :inviter => current_user, :recipient => recipient, 
-                         :code => UniqueCodeGenerator.generate(recipient),
-                         :message => params[:email_body])
-    end
+    invitations = Invitation.create_for(@project, current_user, params[:email_addresses], params[:email_body])
     invitations.each do |invitation|
       invitation.accept_invitation_url = login_url(:code => invitation.code)
       InvitationMailer.deliver_invitation invitation
