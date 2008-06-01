@@ -12,15 +12,32 @@ describe "/stories/index.html.erb" do
   before do
     @iterations = mock "iterations presenter"
     @tags = mock "tags presenter"
-    @stories_presenter = stub("stories presenter", :iterations => @iterations, :tags => @tags)
+    @stories_presenter = stub("stories presenter", 
+      :iterations? => false,
+      :iterations => @iterations, 
+      :tags? => false,
+      :tags => @tags)
     @project = mock_model(Project)
+    template.stub_render(:partial => "stories/search_form")
+  end
+
+  it "hides the draggable markers on the stories" do
+    render_it
+    response.should have_text(%|$$('#stories .draggable').invoke("hide")|.to_regexp)
+  end
+  
+  it "renders the stories/search_form" do
+    template.expect_render(
+      :partial => "stories/search_form"
+    ).and_return(%|<p id="search_form_partial" />|)
+    render_it
+    response.should have_tag('p#search_form_partial')
   end
   
   describe "when the the stories presenter is presenting on iterations" do
     before do
       @stories_presenter.stub!(:iterations?).and_return(true)
       template.expect_render(:partial => "stories/iterations", :locals => {:iterations=>@iterations}).and_return(%|<p id="iterations-partial" />|)
-      template.expect_render(:partial => "search_form").and_return(%|<p id="search-form" />|)
     end
     
     it "renders a link to the tag-based view of the stories" do
@@ -33,10 +50,6 @@ describe "/stories/index.html.erb" do
       response.should have_tag("#iterations-partial")
     end
 
-    it "renders the search form" do
-      render_it
-      response.should have_tag("#search-form")
-    end
   end
   
   describe "when the the stories presenter is presenting on tags" do
@@ -44,7 +57,6 @@ describe "/stories/index.html.erb" do
       @stories_presenter.stub!(:iterations?).and_return(false)
       @stories_presenter.stub!(:tags?).and_return(true)
       template.expect_render(:partial => "stories/tags", :locals => {:tags=>@tags}).and_return(%|<p id="tags-partial" />|)
-      template.expect_render(:partial => "search_form").and_return(%|<p id="search-form" />|)
     end
 
     it "renders a link to the iteration-based view of the stories" do
@@ -56,11 +68,7 @@ describe "/stories/index.html.erb" do
       render_it
       response.should have_tag("#tags-partial")
     end
-
-    it "renders the search form" do
-      render_it
-      response.should have_tag("#search-form")
-    end
   end
+
 end
 

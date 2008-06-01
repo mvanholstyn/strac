@@ -43,4 +43,9 @@ describe "/projects/workspace.html.erb" do
     render_it
     response.should have_tag('a[href=?][onclick *= post]', project_iterations_path(@project))
   end
+  
+  it "draws the workspace velocity markers" do
+    render_it
+    response.should have_text("Strac.Iteration.drawWorkspaceVelocityMarkers()".to_regexp)
+  end
 end

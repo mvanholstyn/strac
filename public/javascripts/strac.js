@@ -143,5 +143,4 @@ Strac.Story.prototype = {
 document.observe('dom:loaded', function(){
   Strac.setupCloseButtonForElement($('notice'));
   Strac.setupCloseButtonForElement($('error'));
-  Strac.Iteration.drawWorkspaceVelocityMarkers();
 });

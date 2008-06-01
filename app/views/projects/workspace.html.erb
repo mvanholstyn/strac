@@ -18,3 +18,9 @@
                        :onChange =>  "Strac.Iteration.drawWorkspaceVelocityMarkers"
                         -%>
 </div>
+
+<%- javascript_tag do -%>
+  document.observe('dom:loaded', function(){
+    Strac.Iteration.drawWorkspaceVelocityMarkers();
+  });
+<%- end -%>

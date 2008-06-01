@@ -8,7 +8,7 @@
   </div>
   <h2>Stories</h2>
   
-  <%= render :partial => "search_form" %>
+  <%= render :partial => "stories/search_form" %>
 
   <div id="stories" class="section_content">
     <% if @stories_presenter.iterations? %>
@@ -18,3 +18,9 @@
     <% end %>
   </div>
 </div>
+
+<%- javascript_tag do -%>
+  document.observe('dom:loaded', function(){
+    $$('#stories .draggable').invoke("hide");
+  });
+<%- end -%>
