@@ -23,7 +23,7 @@ describe "/stories/index.html.erb" do
 
   it "hides the draggable markers on the stories" do
     render_it
-    response.should have_text(%|$$('#stories .draggable').invoke("hide")|.to_regexp)
+    response.should have_text(%|$$('#stories .draggable', '#stories .iteration .actions').invoke("hide")|.to_regexp)
   end
   
   it "renders the stories/search_form" do

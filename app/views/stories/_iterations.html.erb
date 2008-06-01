@@ -1,11 +1,11 @@
 <%= render :partial => "iterations/list", :locals => {:iterations=>iterations} %>
 
 <table width="100%">
-	<tr>
+	<tr class="iteration">
 		<td>
      	<b>Backlog</b>
     </td>
-   	<td align="right"><%= link_to_remote "create story", :url => new_story_path( iterations.backlog.project.id ), :method => :get, :html=>{:class=>"create-story"} %></td>
+   	<td align="right" class="actions"><%= link_to_remote "create story", :url => new_story_path( iterations.backlog.project.id ), :method => :get, :html=>{:class=>"create-story"} %></td>
   </tr>
 </table>
 

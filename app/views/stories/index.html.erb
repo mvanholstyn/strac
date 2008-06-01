@@ -21,6 +21,6 @@
 
 <%- javascript_tag do -%>
   document.observe('dom:loaded', function(){
-    $$('#stories .draggable').invoke("hide");
+    $$('#stories .draggable', '#stories .iteration .actions').invoke("hide");
   });
 <%- end -%>

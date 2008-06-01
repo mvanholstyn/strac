@@ -1,9 +1,9 @@
 <table width="100%">
-  <tr>
+  <tr class="iteration">
     <td>
 			<%= render :partial => 'iterations/header', :locals => { :iteration => iteration } %>
     </td>
-    <td align="right">
+    <td align="right" class="actions">
       <%= link_to_remote "create story", 
         :url => new_story_path(:project_id => iteration.project.id, :bucket_id => iteration.id ), 
         :method => :get,
