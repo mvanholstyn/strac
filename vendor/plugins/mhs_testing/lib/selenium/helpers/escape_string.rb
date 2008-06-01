@@ -1,6 +1,7 @@
 module RailsSeleniumStory::Helpers::EscapeString
-  def escape_string string
-    string.gsub(/('|")/, '\\\\\1')
+  def escape_string string, num=1
+    slashes = '\\\\' * num
+    string.gsub(/('|")/, slashes + '\1')
   end
   
   def escape_regex string_or_regex

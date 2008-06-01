@@ -11,5 +11,11 @@ Story "User Profile", %|
     When "they update their profile successfully"
     Then "they'll be notified of the successful update"
   end
+  
+  Scenario "a user failing to update their profile" do
+    Given "a user at the profile page"
+    When "they update their profile without first and last name"
+    Then "they'll be notified of errors regarding their profile"
+  end
 
 end

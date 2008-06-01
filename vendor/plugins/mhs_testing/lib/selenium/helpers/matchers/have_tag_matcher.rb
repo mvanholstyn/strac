@@ -7,7 +7,7 @@ module RailsSeleniumStory::Matchers
   
     def initialize(tag, content=nil, &block)
       @@scopes ||= []
-      @tag = tag
+      @tag = escape_string(tag, 2)
       @content = content
       @block = block
       @@scopes << self
@@ -39,7 +39,6 @@ module RailsSeleniumStory::Matchers
         %|selenium.browserbot.getCurrentWindow().eval("#{@js}");|,
         10_000
       )
-      true
     end
     
     def failure_message

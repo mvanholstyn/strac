@@ -5,20 +5,31 @@ describe User do
     @user = User.new
   end
   
-  it "requires a unique email address"
+  describe "validations" do
+    it "can be valid" do
+      user = User.new(
+        :group_id => 1,
+        :email_address =>"me@example.com",
+        :first_name => "Bob",
+        :last_name => "Joe"
+      )
+    end
+    
+    it "requires a first name" do
+      @user.should validate_presence_of(:first_name)
+    end
 
-  it "should be valid" do
-    @user.group_id = 1
-    @user.email_address = "me@me.com"
-    @user.should be_valid
+    it "requires a last name" do
+      @user.should validate_presence_of(:last_name)
+    end
+    
+    it "requires a group_id" do
+      @user.should validate_presence_of(:group_id)
+    end
+    
+    it "requires an email address" do
+      @user.should validate_presence_of(:email_address)      
+    end
   end
-  
-  it "should always have a group id" do
-    assert_validates_presence_of @user, :group_id
-  end
-  
-  it "should always have an email address" do
-    assert_validates_presence_of @user, :email_address
-  end
-  
+    
 end

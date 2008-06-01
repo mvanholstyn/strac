@@ -7,22 +7,28 @@ class ActiveRecord::Base
   # Unfortunately Selenium execution seems to be one step ahead of the actual
   # test server processing. This method should be used if you are looking for
   # a newly created record after a Selenium based form submission.
+  #
+  # This can be used with a block to provide an additional condition.
+  # For example, to find an Expense which was recently created with an amount of 1.99"
+  #   Expense.find_newly_created { |expense| expense.amount == 1.99 }
+  #
   def self.find_newly_created
     now = Time.now
     record = self.last
     c = 0
     loop do
-      begin
-        if Spec::Matchers::BeClose.new(now.to_i, 5.seconds).matches?(record.created_at.to_i)
-          break
+      if Spec::Matchers::BeClose.new(now.to_i, 5.seconds).matches?(record.created_at.to_i)
+        if block_given?
+          break if yield(record)
         else
-          record = self.last
-          sleep 0.3
-          c+=1
+          break
         end
-     end
+      end
+      record = self.last
+      sleep 2
+      c+=1
+      raise "the record was not created in a timely fashion" if c == 10
     end
-    raise "the record was not created in a timely fashion" if c == 10
     record
   end
 
@@ -37,8 +43,13 @@ class ActiveRecord::Base
     updated_at = record.updated_at
     c = 0
     loop do
-      break if record.reload.updated_at != updated_at
-      sleep 0.3
+      record.reload
+      if block_given?
+        break if yield(record)
+      elsif record.updated_at != updated_at
+        break
+      end
+      sleep 2
       c+=1
       raise "the expense was not updated in a timely fashion" if c == 10
     end
