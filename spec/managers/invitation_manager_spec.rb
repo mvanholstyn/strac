@@ -1,5 +1,30 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+describe InvitationManager do
+  it "can create project invitations for a list of recipients" do
+    project = mock_model(Project)
+    inviter = mock_model(User)
+    recipients = "bob@example.com, frank@example.com"
+    message = "please come to the party!"
+    
+    UniqueCodeGenerator.should_receive(:generate).with("bob@example.com").and_return("code1")
+    UniqueCodeGenerator.should_receive(:generate).with("frank@example.com").and_return("code2")
+    
+    Invitation.should_receive(:create!).with(
+      :project => project, :inviter => inviter, :recipient => "bob@example.com",
+      :code => "code1", :message => message
+    ).and_return("invitation 1")
+    
+    Invitation.should_receive(:create!).with(
+      :project => project, :inviter => inviter, :recipient => "frank@example.com",
+      :code => "code2", :message => message
+    ).and_return("invitation 2")
+
+    invitations = InvitationManager.create_for project, inviter, recipients, message
+    invitations.should == [ "invitation 1", "invitation 2" ]
+  end
+end
+
 describe InvitationManager, ".store_pending_invitation_acceptance" do
   it "should call #store_pending_invitation_acceptance on the instance" do
     session = stub("session")

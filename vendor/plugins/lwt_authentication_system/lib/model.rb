@@ -144,6 +144,7 @@ module LWT
         # - :match_all - If set to true, returns true if this user has ALL of the 
         #   passed in privileges. Default: false
         def has_privilege? *requested_privileges
+          group.privileges.reload # some weird issue where privileges are loading correctly
           options = requested_privileges.last.is_a?(Hash) ? requested_privileges.pop : {}
           matched_privileges = requested_privileges.map(&:to_s) & group.privileges.map(&:name)
           options[:match_all] ? matched_privileges.size == requested_privileges.size : !matched_privileges.empty?

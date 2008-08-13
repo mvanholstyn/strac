@@ -16,7 +16,7 @@ module LwtTesting
         form.user.password = opts[:password]
         form.user.password_confirmation = opts[:password_confirmation]
       end
-      follow_redirect! if response.redirected_to
+      follow_all_redirects
     end
     
     def submit_form_by_id(id)

@@ -22,7 +22,7 @@ describe InvitationsController, "#new" do
     response.should be_success
   end
   
-  it "renders the new tmplate" do
+  it "renders the new template" do
     get_new
     response.should render_template('new')
   end
@@ -48,7 +48,7 @@ describe InvitationsController, "#create" do
   
   before do
     @project = mock_model(Project)
-    @user = Generate.user :email_address => "user@exmaple.com"
+    @user = Generate.user :email_address => "user@example.com"
     @user.projects << @project
     login_as @user
 
@@ -60,7 +60,7 @@ describe InvitationsController, "#create" do
     end
 
     Project.stub!(:find).and_return(@project)
-    Invitation.stub!(:create_for).and_return([])
+    InvitationManager.stub!(:create_for).and_return([])
     InvitationMailer.stub!(:deliver_invitation)
   end
   
@@ -70,7 +70,7 @@ describe InvitationsController, "#create" do
   end
 
   it "creates and sends an invitation with an accept_invitation_url for each email address" do
-    Invitation.should_receive(:create_for).with(@project, @user, @emails.join(","), @email_body).and_return(@invitations)
+    InvitationManager.should_receive(:create_for).with(@project, @user, @emails.join(","), @email_body).and_return(@invitations)
 
     code1 = stub("invitation code 1")
     code2 = stub("invitation code 2")

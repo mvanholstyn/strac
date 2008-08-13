@@ -2,6 +2,15 @@ require 'singleton'
 
 class InvitationManager
   include Singleton
+
+  def self.create_for(project, inviter, recipients, message)
+    recipients.split(/\s*,\s*/).map do |recipient|
+      Invitation.create!(:project => project, :inviter => inviter, :recipient => recipient, 
+                         :code => UniqueCodeGenerator.generate(recipient),
+                         :message => message)
+    end
+  end
+
   
   def self.accept_pending_invitations(session, user)
     instance.accept_pending_invitations(session, user)
