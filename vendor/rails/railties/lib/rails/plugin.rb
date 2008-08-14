@@ -87,34 +87,30 @@ module Rails
       end
 
       def evaluate_init_rb(initializer)
-         if has_init_file?
-           silence_warnings do
-             # Allow plugins to reference the current configuration object
-             config = initializer.configuration
-             
-             eval(IO.read(init_path), binding, init_path)
-           end
-         end
+        if has_init_file?
+          silence_warnings do
+            # Allow plugins to reference the current configuration object
+            config = initializer.configuration
+            
+            eval(IO.read(init_path), binding, init_path)
+          end
+        end
       end               
   end
 
-  # This Plugin subclass represents a Gem plugin. It behaves exactly like a
-  # "traditional" Rails plugin, but doesn't expose any additional load paths,
-  # since RubyGems has already taken care of things.
+  # This Plugin subclass represents a Gem plugin. Although RubyGems has already
+  # taken care of $LOAD_PATHs, it exposes its load_paths to add them
+  # to Dependencies.load_paths.
   class GemPlugin < Plugin
-
     # Initialize this plugin from a Gem::Specification.
-    def initialize(spec)
-      super(File.join(spec.full_gem_path, "rails"))
+    def initialize(spec, gem)
+      directory = (gem.frozen? && gem.unpacked_paths.first) || File.join(spec.full_gem_path)
+      super(directory)
       @name = spec.name
     end
 
-    def valid?
-      true
-    end
-
-    def load_paths
-      []
+    def init_path
+      File.join(directory, 'rails', 'init.rb')
     end
   end
 end

@@ -136,7 +136,9 @@ describe Story, "when a story is completed" do
   describe "when the story belongs to a non-iteration bucket and the story is completed" do
     it "assigns the story to the currently running iteration" do
       iteration = Generate.iteration :project => @project, :started_at => Date.yesterday, :ended_at => nil
-      @story.update_attribute :bucket, Generate.bucket
+      bucket = Generate.bucket
+      @story.update_attribute :bucket, bucket
+      @story.bucket.should == bucket
       @story.status = Status.complete
       @story.save!
       @story.bucket.should == iteration      

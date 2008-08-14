@@ -1,6 +1,19 @@
-* InstanceTag#default_time_from_options overflows to DateTime [Geoff Buesing]
+*2.1.1 (next release)*
 
-*2.1.0 RC1 (May 11th, 2008)*
+* Deprecate the limited follow_redirect in functional tests.  If you wish to follow redirects, use integration tests. [Michael Koziarski]
+
+* Deprecate define_javascript_functions, javascript_include_tag and friends are much better [Michael Koziarski]
+
+* Fix polymorphic_url with singleton resources.  #461 [Tammer Saleh]
+
+* Deprecate ActionView::Base.erb_variable. Use the concat helper method instead of appending to it directly.  [Jeremy Kemper]
+
+* Fixed Request#remote_ip to only raise hell if the HTTP_CLIENT_IP and HTTP_X_FORWARDED_FOR doesn't match (not just if they're both present) [Mark Imbriaco, Bradford Folkens]
+
+
+*2.1.0 (May 31st, 2008)*
+
+* InstanceTag#default_time_from_options overflows to DateTime [Geoff Buesing]
 
 * Fixed that forgery protection can be used without session tracking (Peter Jones) [#139]
 

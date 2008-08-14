@@ -103,10 +103,10 @@ module ActiveRecord
         associated_records = reflection.klass.find(:all, :conditions => [conditions, ids],
         :include => options[:include],
         :joins => "INNER JOIN #{connection.quote_table_name options[:join_table]} as t0 ON #{reflection.klass.quoted_table_name}.#{reflection.klass.primary_key} = t0.#{reflection.association_foreign_key}",
-        :select => "#{options[:select] || table_name+'.*'}, t0.#{reflection.primary_key_name} as _parent_record_id",
+        :select => "#{options[:select] || table_name+'.*'}, t0.#{reflection.primary_key_name} as the_parent_record_id",
         :order => options[:order])
 
-        set_association_collection_records(id_to_record_map, reflection.name, associated_records, '_parent_record_id')
+        set_association_collection_records(id_to_record_map, reflection.name, associated_records, 'the_parent_record_id')
       end
 
       def preload_has_one_association(records, reflection, preload_options={})
@@ -188,7 +188,6 @@ module ActiveRecord
         through_records
       end
 
-      # FIXME: quoting
       def preload_belongs_to_association(records, reflection, preload_options={})
         options = reflection.options
         primary_key_name = reflection.primary_key_name
@@ -227,9 +226,19 @@ module ActiveRecord
 
           table_name = klass.quoted_table_name
           primary_key = klass.primary_key
-          conditions = "#{table_name}.#{primary_key} IN (?)"
+          conditions = "#{table_name}.#{connection.quote_column_name(primary_key)} IN (?)"
           conditions << append_conditions(options, preload_options)
-          associated_records = klass.find(:all, :conditions => [conditions, id_map.keys.uniq],
+          column_type = klass.columns.detect{|c| c.name == primary_key}.type
+          ids = id_map.keys.uniq.map do |id|
+            if column_type == :integer
+              id.to_i
+            elsif column_type == :float
+              id.to_f
+            else
+              id
+            end
+          end
+          associated_records = klass.find(:all, :conditions => [conditions, ids],
                                           :include => options[:include],
                                           :select => options[:select],
                                           :joins => options[:joins],

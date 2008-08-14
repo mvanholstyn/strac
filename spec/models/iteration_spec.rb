@@ -100,10 +100,6 @@ describe Iteration, "#points_completed" do
 end
 
 describe Iteration, '#total_points' do
-  def total_points
-    @iteration.total_points
-  end
-
   before do
     @iteration = Generate.iteration(:started_at => Date.today, :ended_at => Date.today+1.week, :budget => 25, :name => "Iteration 1")
     @iteration.stories << Generate.story(:status_id=>Status.complete.id, :points=>10, :project=>@iteration.project, :summary=>"Story 1")
@@ -111,7 +107,7 @@ describe Iteration, '#total_points' do
   end
 
   it "returns the total number of story points" do
-    total_points.should == 15
+    @iteration.total_points.should == 15
   end
 end
 

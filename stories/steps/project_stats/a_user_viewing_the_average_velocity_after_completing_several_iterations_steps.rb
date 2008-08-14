@@ -2,7 +2,7 @@ steps_for :a_user_viewing_the_average_velocity_after_completing_several_iteratio
   Given /the user completes an iteration worth (\d+) points/ do |num|
     @iteration_count ||= 0
     iteration = Generate.iteration :name => "iteration #{@iteration_count+=1}", :project => @project, :started_at => 18.weeks.ago, :ended_at => 17.weeks.ago
-    Generate.story :bucket => iteration, :points => num, :status => Status.complete, :project => @project
+    story = Generate.story :bucket => iteration, :points => num, :status => Status.complete, :project => @project
   end
   Given /the user completes another iteration worth (\d+) points/ do |num|
     last_iteration = Iteration.find(:first, :order => "id desc")

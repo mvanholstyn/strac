@@ -107,7 +107,13 @@ class Generate
 				options[:project] = options[:bucket].project
 			end
 		end
-		Story.create!(options.dup.merge(:summary => summary))
+		story = Story.create!(options.dup.merge(:summary => summary))
+    if options[:bucket]
+      # this gets around the story which always ensure a just completed story is added to the
+      # project's current iteration
+      Story.update_all "bucket_id = #{options[:bucket].id}", "id = #{story.id}"
+    end
+    story
 	end
 	
 	def self.time_entry(options={})

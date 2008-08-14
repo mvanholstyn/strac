@@ -40,20 +40,12 @@ class Story < ActiveRecord::Base
   before_save :assign_to_iteration 
   
   def assign_to_iteration
-    if status == Status.complete
-      # if project.iterations.current
-        self.bucket = project.iterations.current
+    if self.status_id_changed? && self.status == Status.complete
+      self.bucket = project.iterations.current
     end
   end
   
-  def status_with_check=(new_status)
-    # if self.status != Status.complete && new_status == Status.complete
-    #   @newly_completed = true
-    # end
-    self.status_without_check = new_status
-  end
-  alias_method_chain :status=, :check
-
+  
   def name
     summary
   end

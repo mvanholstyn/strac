@@ -57,6 +57,17 @@ module Rails
         end
 
         protected
+          def current_migration_number
+            Dir.glob("#{RAILS_ROOT}/#{@migration_directory}/[0-9]*_*.rb").inject(0) do |max, file_path|
+              n = File.basename(file_path).split('_', 2).first.to_i
+              if n > max then n else max end
+            end
+          end
+             
+          def next_migration_number
+            current_migration_number + 1
+          end
+               
           def migration_directory(relative_path)
             directory(@migration_directory = relative_path)
           end
@@ -70,7 +81,11 @@ module Rails
           end
 
           def next_migration_string(padding = 3)
-            Time.now.utc.strftime("%Y%m%d%H%M%S")
+            if ActiveRecord::Base.timestamped_migrations
+              Time.now.utc.strftime("%Y%m%d%H%M%S")
+            else
+              "%.#{padding}d" % next_migration_number
+            end
           end
 
           def gsub_file(relative_destination, regexp, *args, &block)
@@ -88,7 +103,7 @@ module Rails
                 Tempfile.open(File.basename(destination), File.dirname(dst)) do |temp|
                   temp.write render_file(src, file_options, &block)
                   temp.rewind
-                  $stdout.puts `#{diff_cmd} #{dst} #{temp.path}`
+                  $stdout.puts `#{diff_cmd} "#{dst}" "#{temp.path}"`
                 end
                 puts "retrying"
                 raise 'retry diff'
@@ -380,12 +395,14 @@ HELP
           # Thanks to Florian Gross (flgr).
           def raise_class_collision(class_name)
             message = <<end_message
-  The name '#{class_name}' is reserved by Ruby on Rails.
+  The name '#{class_name}' is either already used in your application or reserved by Ruby on Rails.
   Please choose an alternative and run this generator again.
 end_message
             if suggest = find_synonyms(class_name)
-              message << "\n  Suggestions:  \n\n"
-              message << suggest.join("\n")
+              if suggest.any?
+                message << "\n  Suggestions:  \n\n"
+                message << suggest.join("\n")
+              end
             end
             raise UsageError, message
           end
