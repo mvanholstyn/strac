@@ -12,11 +12,11 @@
 ActiveRecord::Schema.define(:version => 50) do
 
   create_table "activities", :force => true do |t|
-    t.integer  "actor_id",      :limit => 11
+    t.integer  "actor_id"
     t.string   "action"
     t.datetime "created_at"
-    t.integer  "project_id",    :limit => 11
-    t.integer  "affected_id",   :limit => 11
+    t.integer  "project_id"
+    t.integer  "affected_id"
     t.string   "affected_type"
     t.datetime "updated_at"
   end
@@ -24,9 +24,9 @@ ActiveRecord::Schema.define(:version => 50) do
   create_table "buckets", :force => true do |t|
     t.datetime "started_at"
     t.datetime "ended_at"
-    t.integer  "project_id",  :limit => 11
+    t.integer  "project_id"
     t.string   "name"
-    t.integer  "budget",      :limit => 11, :default => 0
+    t.integer  "budget",      :default => 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "type"
@@ -36,8 +36,8 @@ ActiveRecord::Schema.define(:version => 50) do
   create_table "comments", :force => true do |t|
     t.text     "content"
     t.datetime "created_at"
-    t.integer  "commenter_id",     :limit => 11
-    t.integer  "commentable_id",   :limit => 11
+    t.integer  "commenter_id"
+    t.integer  "commentable_id"
     t.string   "commentable_type"
     t.datetime "updated_at"
   end
@@ -49,16 +49,16 @@ ActiveRecord::Schema.define(:version => 50) do
   end
 
   create_table "groups_privileges", :force => true do |t|
-    t.integer  "group_id",     :limit => 11
-    t.integer  "privilege_id", :limit => 11
+    t.integer  "group_id"
+    t.integer  "privilege_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "invitations", :force => true do |t|
-    t.integer  "inviter_id", :limit => 11
+    t.integer  "inviter_id"
     t.string   "recipient"
-    t.integer  "project_id", :limit => 11
+    t.integer  "project_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "code"
@@ -79,7 +79,7 @@ ActiveRecord::Schema.define(:version => 50) do
   create_table "priorities", :force => true do |t|
     t.string   "name"
     t.string   "color"
-    t.integer  "position",   :limit => 11
+    t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -91,8 +91,8 @@ ActiveRecord::Schema.define(:version => 50) do
   end
 
   create_table "project_permissions", :force => true do |t|
-    t.integer  "project_id",    :limit => 11
-    t.integer  "accessor_id",   :limit => 11
+    t.integer  "project_id"
+    t.integer  "accessor_id"
     t.string   "accessor_type"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -106,13 +106,13 @@ ActiveRecord::Schema.define(:version => 50) do
   end
 
   create_table "snapshots", :force => true do |t|
-    t.integer  "total_points",                   :limit => 11
-    t.integer  "completed_points",               :limit => 11
-    t.integer  "remaining_points",               :limit => 11
+    t.integer  "total_points"
+    t.integer  "completed_points"
+    t.integer  "remaining_points"
     t.float    "average_velocity"
     t.float    "estimated_remaining_iterations"
     t.date     "estimated_completion_date"
-    t.integer  "bucket_id",                      :limit => 11
+    t.integer  "bucket_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -127,22 +127,22 @@ ActiveRecord::Schema.define(:version => 50) do
   create_table "stories", :force => true do |t|
     t.string   "summary"
     t.text     "description"
-    t.integer  "points",                 :limit => 11
-    t.integer  "position",               :limit => 11
-    t.integer  "bucket_id",              :limit => 11
-    t.integer  "project_id",             :limit => 11
-    t.integer  "responsible_party_id",   :limit => 11
+    t.integer  "points"
+    t.integer  "position"
+    t.integer  "bucket_id"
+    t.integer  "project_id"
+    t.integer  "responsible_party_id"
     t.string   "responsible_party_type"
-    t.integer  "status_id",              :limit => 11
-    t.integer  "priority_id",            :limit => 11
+    t.integer  "status_id"
+    t.integer  "priority_id"
     t.datetime "created_at"
     t.datetime "completed_at"
     t.datetime "updated_at"
   end
 
   create_table "taggings", :force => true do |t|
-    t.integer "tag_id",        :limit => 11
-    t.integer "taggable_id",   :limit => 11
+    t.integer "tag_id"
+    t.integer "taggable_id"
     t.string  "taggable_type"
   end
 
@@ -151,18 +151,18 @@ ActiveRecord::Schema.define(:version => 50) do
   end
 
   create_table "time_entries", :force => true do |t|
-    t.decimal  "hours",                       :precision => 10, :scale => 2
+    t.decimal  "hours",         :precision => 10, :scale => 2
     t.string   "comment"
     t.date     "date"
-    t.integer  "project_id",    :limit => 11
-    t.integer  "timeable_id",   :limit => 11
+    t.integer  "project_id"
+    t.integer  "timeable_id"
     t.string   "timeable_type"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "user_reminders", :force => true do |t|
-    t.integer  "user_id",    :limit => 11
+    t.integer  "user_id"
     t.string   "token"
     t.datetime "expires_at"
   end
@@ -172,7 +172,7 @@ ActiveRecord::Schema.define(:version => 50) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "email_address"
-    t.integer  "group_id",                     :limit => 11
+    t.integer  "group_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "active"

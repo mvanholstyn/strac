@@ -45,8 +45,10 @@ class CreateASingleBacklogAndMoveCurrentAndFutureIterationStories < ActiveRecord
       # reposition all stories that were in the backlog originally excluding the ones we just moved from other iterations
       Story.update_all "position = position + #{position_counter}", "bucket_id IS NULL AND project_id = #{project.id} AND id NOT IN(#{positioned_ids.join(',')})"
 
-      # delete the current and future iterations
-      project.current_iterations.each{ |iteration| iteration.destroy }
+      # remove the end_date for the current iteration
+      project.current_iterations.each{ |iteration| iteration.update_attribute(:end_date, nil) }
+
+      # delete the future iterations
       project.future_iterations.each{ |iteration| iteration.destroy }
     end
   end
