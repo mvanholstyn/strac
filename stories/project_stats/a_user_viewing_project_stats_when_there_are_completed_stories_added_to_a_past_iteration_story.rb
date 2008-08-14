@@ -12,7 +12,7 @@ Story "Project Stats w/Completed Stories", %|
     Given "that completed stories are added to a completed iteration"
     When "a user views the project summary"
     Then "they will see the sum of total points for the project" 
-    And "they will the correct number of completed points for the project" 
+    And "they will see the correct number of completed points for the project" 
     And "they will see the correct number of remaining points for the project"
     And "they will see 1 completed iterations"
     And "they will see the sum of completed points for the iteration as the average velocity for the project" 

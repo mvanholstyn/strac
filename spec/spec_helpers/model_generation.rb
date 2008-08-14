@@ -107,7 +107,7 @@ class Generate
 				options[:project] = options[:bucket].project
 			end
 		end
-		Story.create!(options.merge(:summary => summary))
+		Story.create!(options.dup.merge(:summary => summary))
 	end
 	
 	def self.time_entry(options={})

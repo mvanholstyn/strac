@@ -93,10 +93,10 @@ class StoriesController < ApplicationController
     render :update do |page|
       story_ids = params["iteration_nil"].delete_if{ |id| id.blank? }
       renderer = RemoteSiteRenderer.new :page => page
-      if Story.reorder(story_ids, :bucket_id => nil )
+      if Story.reorder(story_ids)
         renderer.render_notice "Priorities have been successfully updated."
       else
-        renderer.render_error "There was an error while updating priorties. If the problem persists, please contact technical support."
+        renderer.render_error "There was an error while updating priorities. If the problem persists, please contact technical support."
       end
     end
   end

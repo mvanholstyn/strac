@@ -23,7 +23,7 @@ describe StoriesController, '#reorder' do
 
   it "reorders the story ids for the bucket" do
     expected_story_ids = @story_ids.select{ |id| !id.blank? }
-    Story.should_receive(:reorder).with(expected_story_ids, :bucket_id => nil)
+    Story.should_receive(:reorder).with(expected_story_ids)
     xhr_put_reorder
   end
   
@@ -44,7 +44,7 @@ describe StoriesController, '#reorder' do
     end
     
     it "renders an error telling the user the priorities have not been updated" do
-      @renderer.should_receive(:render_error).with("There was an error while updating priorties. If the problem persists, please contact technical support.")
+      @renderer.should_receive(:render_error).with("There was an error while updating priorities. If the problem persists, please contact technical support.")
       xhr_put_reorder
     end
   end

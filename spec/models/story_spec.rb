@@ -10,22 +10,6 @@ describe Story do
     @story.project_id = 1
     @story.should be_valid
   end
-
-  it "belongs to a Bucket" do
-
-  end
-  
-  it "belongs to a Project" do
-
-  end
-
-  it "belongs to a Status" do
-
-  end  
-    
-  it "belongs to a Priority" do
-
-  end
   
   describe "#responsible_party - polymorphic association" do
     it "associates with another model" do
@@ -35,19 +19,7 @@ describe Story do
       @story.responsible_party.should be(@user)
     end
   end
-  
-  it "should have many Time Entries" do
-
-  end
-  
-  it "should have many Comments" do
-
-  end
-  
-  it "should have many Activities" do
-
-  end
-  
+    
   it "should require a summary" do
     assert_validates_presence_of @story, :summary
   end
@@ -90,6 +62,14 @@ describe Story, ".reorder" do
       @stories.each{ |story| story.reload.bucket_id.should == 3 }
       reorder(@stories, :bucket_id => nil )
       @stories.each{ |story| story.reload.bucket_id.should == nil }
+    end
+  end
+  
+  describe "when no :bucket_id option is supplied" do
+    it "does not change the story's bucket" do
+      @stories.each { |story| story.update_attribute(:bucket_id, 99) }
+      reorder(@stories)
+      @stories.each{ |story| story.reload.bucket_id.should == 99 }    
     end
   end
   
@@ -144,28 +124,22 @@ describe Story, "when a story is completed" do
   end
   
   describe "when there is a current iteration for the story's project" do
-    before do
-      @iteration = Generate.iteration :project => @project, :started_at => Date.yesterday, :ended_at => nil      
-    end
-    
     it "assigns the story to the currently running iteration" do
+      iteration = Generate.iteration :project => @project, :started_at => Date.yesterday, :ended_at => nil      
       @story.bucket.should be_nil
       @story.status = Status.complete
       @story.save!
-      @story.bucket.should == @iteration
+      @story.bucket.should == iteration
     end
   end
 
-  describe "when there is no current iteration for the story's project" do
-    before do
-      @project.iterations.clear
-    end
-    
+  describe "when the story belongs to a non-iteration bucket and the story is completed" do
     it "assigns the story to the currently running iteration" do
-      @story.bucket.should be_nil
+      iteration = Generate.iteration :project => @project, :started_at => Date.yesterday, :ended_at => nil
+      @story.update_attribute :bucket, Generate.bucket
       @story.status = Status.complete
       @story.save!
-      @story.bucket.should be_nil
+      @story.bucket.should == iteration      
     end
   end
 

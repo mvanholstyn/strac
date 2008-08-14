@@ -66,6 +66,24 @@ class Project < ActiveRecord::Base
     )
   end
 
+  def start_new_iteration!
+    current_iteration = iterations.current
+    if current_iteration 
+      current_iteration.update_attribute(:ended_at, Time.now - 1.second)
+    end
+    new_current_iteration = iterations.find_or_build_current
+    new_current_iteration.save!
+    snapshot = new_current_iteration.build_snapshot(
+      :total_points => self.total_points,
+      :completed_points => self.completed_points,
+      :remaining_points => self.remaining_points,
+      :average_velocity => self.average_velocity,
+      :estimated_remaining_iterations => self.estimated_remaining_iterations,
+      :estimated_completion_date => self.estimated_completion_date)
+    snapshot.save!
+    new_current_iteration
+  end
+
   def update_members(member_ids)
     return if member_ids.blank?
     self.users.clear

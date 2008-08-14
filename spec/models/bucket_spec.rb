@@ -23,23 +23,19 @@ describe Bucket do
 end
 
 describe Bucket, '#completed_stories' do
-  def completed_stories
-    @bucket.completed_stories
-  end
-  
   before do
+    Story.destroy_all
     @bucket = Generate.bucket
     @completed_stories = [
-      Generate.story(:status => Status.complete),
-      Generate.story(:status => Status.complete) ]
+      Generate.story(:status => Status.complete, :position => 2),
+      Generate.story(:status => Status.complete, :position => 1) ]
     @bucket.stories << @completed_stories
-    @completed_stories.first.update_attribute(:position, 2)
-    @completed_stories.last.update_attribute(:position, 1)
-    @completed_stories_in_order = [@completed_stories.last, @completed_stories.first]
+    Story.update_all "bucket_id = #{@bucket.id}", "id IN(#{@completed_stories.map(&:id).join(',')})"
+    @completed_stories_in_order = @completed_stories.sort_by{ |story| story.position }
   end
 
   it "returns stories which are complete ordered by position" do
-    completed_stories.should == @completed_stories_in_order
+    @bucket.completed_stories.should == @completed_stories_in_order
   end
   
   describe "when there are completed stories in other buckets" do
@@ -50,7 +46,7 @@ describe Bucket, '#completed_stories' do
     end
 
     it "only returns the completed stories" do
-      completed_stories.should == @completed_stories_in_order
+      @bucket.completed_stories.should == @completed_stories_in_order
     end
   end
 
@@ -63,7 +59,7 @@ describe Bucket, '#completed_stories' do
     end
     
     it "only returns the completed stories" do
-      completed_stories.should == @completed_stories_in_order
+      @bucket.completed_stories.should == @completed_stories_in_order
     end
   end
   

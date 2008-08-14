@@ -165,7 +165,6 @@ describe Project, "#completed_points" do
     it "ignores points that belong to stories attached to a phase in the returned sum" do
       phase = Generate.phase :name => "phase1", :project => @project
       story = Generate.story :summary => "story that belongs to phase", :project => @project, :bucket => phase, :points => 10
-      story = Generate.story :summary => "story2 that belongs to phase", :project => @project, :bucket => phase, :points => 10, :status => Status.complete
       @project.completed_points.should == @completed_stories.map(&:points).sum
     end
   end

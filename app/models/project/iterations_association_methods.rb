@@ -3,12 +3,12 @@ module Project::IterationsAssociationMethods
     find(:all, :order => "started_at DESC", :limit => 2)[1]
   end
   
-  def current
-    find(:first, :conditions => ["started_at <= ? AND ended_at IS NULL", Time.now])
-  end
-  
   def backlog
     build(:name => "Backlog")
+  end
+  
+  def current
+    find(:first, :conditions => ["started_at <= ? AND ended_at IS NULL", Time.now]) 
   end
 
   def find_or_build_current

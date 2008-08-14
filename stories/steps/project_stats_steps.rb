@@ -67,7 +67,7 @@ steps_for :project_stats do
   Then "they will see the sum of total points for the project" do
     see_total_points @stories.sum(&:points)
   end
-  Then "they will the correct number of completed points for the project" do
+  Then "they will see the correct number of completed points for the project" do
     see_completed_points @completed_stories.sum(&:points)
   end
   Then "they will see the correct number of remaining points for the project" do

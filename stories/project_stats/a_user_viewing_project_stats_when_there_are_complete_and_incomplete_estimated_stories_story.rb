@@ -12,7 +12,7 @@ Story "Project Stats w/Estimated Stories", %|
     Given "a project exists with both complete and incomplete stories"
     When "a user views the project summary"
     Then "they will see the sum of total points for the project"
-    And "they will the correct number of completed points for the project" 
+    And "they will see the correct number of completed points for the project" 
     And "they will see the correct number of remaining points for the project" 
     And "they will see 0 completed iterations"
     And "they will see 0 as the average velocity for the project"

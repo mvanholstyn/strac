@@ -18,7 +18,7 @@ class Iteration < Bucket
   validates_presence_of :started_at
   validate :validate_iterations_do_not_overlap
   validate :validate_started_at_is_before_ended_at
-
+  
   def points_before_iteration
     Story.sum( :points, 
       :conditions => ["created_at < :started_at", { :started_at => self.started_at } ] ) || 0

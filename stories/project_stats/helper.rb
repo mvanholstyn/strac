@@ -9,7 +9,7 @@ module ProjectStatsStoryHelper
 
   def move_stories_to_iteration(stories, iteration)
     stories.each do |story|
-      story.update_attribute :bucket, iteration
+      story.update_attributes! :bucket => iteration
     end
   end
 

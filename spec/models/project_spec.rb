@@ -8,10 +8,6 @@ describe Project, "#new with no attributes" do
   it "should not be valid" do
     @project.should_not be_valid
   end
-
-  it "has many invitations" do
-
-  end    
 end
 
 describe Project, "#new with name attribute" do
@@ -23,6 +19,52 @@ describe Project, "#new with name attribute" do
   it "should not be valid with an empty string for name" do
     @project = Project.new :name => ""
     @project.should_not be_valid    
+  end
+end
+
+describe Project, "starting a new iteration" do
+  it "creates a new iteration" do
+    project = Generate.project
+    lambda {
+      iteration = project.start_new_iteration!
+      project.iterations.current.should == iteration
+    }.should change(Iteration, :count).by(1)
+  end
+  
+  context "when a previous iteration exists" do
+    it "ends the previous iteration" do
+      project = Generate.project :iterations => []
+      project.iterations.find_or_build_current.save!
+      iteration = project.iterations.current
+      iteration.ended_at.should be_nil
+      
+      new_iteration = project.start_new_iteration!
+      iteration.reload
+      iteration.ended_at.should_not be_nil
+      iteration.ended_at.should <= new_iteration.started_at
+    end
+    
+    it "builds a snapshot for the previous iteration" do
+      project = Generate.project :iterations => []
+      iteration = project.iterations.find_or_build_current
+      iteration.save!
+      project.stub!(:total_points).and_return(1)
+      project.stub!(:completed_points).and_return(2)
+      project.stub!(:remaining_points).and_return(3)
+      project.stub!(:average_velocity).and_return(4)
+      project.stub!(:estimated_remaining_iterations).and_return(5)
+      project.stub!(:estimated_completion_date).and_return(1.year.ago.to_date)
+
+      new_iteration = project.start_new_iteration!
+
+      snapshot = new_iteration.snapshot
+      snapshot.total_points.should == 1
+      snapshot.completed_points.should == 2
+      snapshot.remaining_points.should == 3
+      snapshot.average_velocity.should == 4
+      snapshot.estimated_remaining_iterations.should == 5
+      snapshot.estimated_completion_date.should == 1.year.ago.to_date
+    end
   end
 end
 

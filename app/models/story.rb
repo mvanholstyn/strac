@@ -37,11 +37,22 @@ class Story < ActiveRecord::Base
   validates_presence_of :summary, :project_id
   validates_numericality_of :points, :position, :allow_nil => true
 
-  before_save do |story|
-    if story.status == Status.complete && story.bucket_id.nil?
-      story.bucket = story.project.iterations.current
+  before_save :assign_to_iteration 
+  
+  def assign_to_iteration
+    if status == Status.complete
+      # if project.iterations.current
+        self.bucket = project.iterations.current
     end
   end
+  
+  def status_with_check=(new_status)
+    # if self.status != Status.complete && new_status == Status.complete
+    #   @newly_completed = true
+    # end
+    self.status_without_check = new_status
+  end
+  alias_method_chain :status=, :check
 
   def name
     summary
@@ -68,19 +79,22 @@ class Story < ActiveRecord::Base
   #TODO: Is there a better way to put this into a single SQL statement?
   def self.reorder ids, options={}
     options = options.symbolize_keys
-    raise ArgumentError.new("bucket_id is required") unless options.has_key?(:bucket_id)
     
     bucket_id = options[:bucket_id]
     values = []
     counter = 0
     ids.each do |id|
       unless id.blank?
-        values << [id, counter+=1, bucket_id]
+        if options.has_key?(:bucket_id)
+          values << [id, counter+=1, bucket_id]
+        else
+          values << [id, counter+=1]
+        end
       end
     end
     
-    columns2import = [:id, :position, :bucket_id]
-    columns2update = [:position, :bucket_id]
+    columns2import = options.has_key?(:bucket_id) ? [:id, :position, :bucket_id] : [:id, :position]
+    columns2update = options.has_key?(:bucket_id) ? [:position, :bucket_id] : [:position]
     Story.import( columns2import, values, :on_duplicate_key_update=>columns2update, :validate=>false )
     true
   end

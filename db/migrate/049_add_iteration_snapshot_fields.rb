@@ -13,15 +13,6 @@ class AddIterationSnapshotFields < ActiveRecord::Migration
     
     Project.find(:all).each do |project|
       project.iterations.each do |iteration|
-              if project.name =~ /Quest/
-puts iteration.name
-        puts({    :total_points => iteration.total_points,
-          :completed_points => iteration.completed_points,
-          :remaining_points => iteration.remaining_points,
-          :average_velocity => iteration.average_velocity,
-          :estimated_remaining_iterations => iteration.estimated_remaining_iterations,
-          :estimated_completion_date => iteration.estimated_completion_date}.inspect)
-              end
         Snapshot.create!(
           :bucket => iteration,
           :total_points => iteration.total_points,
