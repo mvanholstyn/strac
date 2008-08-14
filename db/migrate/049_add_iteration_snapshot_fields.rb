@@ -16,7 +16,7 @@ class AddIterationSnapshotFields < ActiveRecord::Migration
         Snapshot.create!(
           :bucket => iteration,
           :total_points => iteration.total_points,
-          :completed_points => iteration.completed_points,
+          :completed_points => iteration.project_completed_points,
           :remaining_points => iteration.remaining_points,
           :average_velocity => iteration.average_velocity,
           :estimated_remaining_iterations => iteration.estimated_remaining_iterations,
@@ -93,6 +93,10 @@ class AddIterationSnapshotFields < ActiveRecord::Migration
         :conditions => [ "(b.type = ? OR b.type IS NULL) AND status_id IN (?)", 
           Iteration.name.split(/::/).last, [Status.complete.id] ] ) 
       sum || 0
+    end
+    
+    def project_completed_points
+      total_points - remaining_points
     end
   
     def remaining_points
